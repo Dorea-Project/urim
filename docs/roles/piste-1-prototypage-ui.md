@@ -9,7 +9,8 @@
 - Écrans « coquilles » : navigation, états visuels (loading / empty / error), responsive.
 
 ## Zones de fichiers
-- `lib/presentation/**` (widgets, pages, thème)
+- `lib/presentation/**` (widgets, pages, thème) — **sauf** les fichiers
+  `*_view_model.dart`, qui appartiennent à la piste 2
 - `assets/**`
 
 ## Hors périmètre
