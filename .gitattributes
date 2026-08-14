@@ -1,0 +1,24 @@
+# Normalise toutes les fins de ligne en LF dans le depot et dans les copies de
+# travail. Evite que `flutter pub get` (qui reecrit les registrants de plugins
+# generes en LF) fasse apparaitre ces fichiers comme modifies sous Windows.
+* text=auto eol=lf
+
+# Fichiers binaires : aucune conversion.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+*.jar binary
+*.keystore binary
+
+# Scripts et projets Windows : doivent rester en CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+*.sln text eol=crlf
+*.vcxproj text eol=crlf
