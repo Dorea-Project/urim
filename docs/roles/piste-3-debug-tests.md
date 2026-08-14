@@ -10,8 +10,11 @@
 
 ## Zones de fichiers
 - `test/**`, `integration_test/**`
-- Fichiers générés `*.g.dart`, `*.freezed.dart`, `*.mocks.dart`
+- Fichiers générés `*.g.dart`, `*.freezed.dart`
 - Correctifs ciblés partout ailleurs, à condition de rester minimaux.
+
+Les doubles de test s'écrivent avec **mocktail**, qui ne génère rien : pas de
+`*.mocks.dart` ni d'annotation `@GenerateMocks` dans ce projet.
 
 ## Commandes de référence
 ```bash
