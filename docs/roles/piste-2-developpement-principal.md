@@ -12,7 +12,8 @@
 - `lib/domain/**` (entités, use cases, interfaces de repository)
 - `lib/data/**` (implémentations, DTO, datasources)
 - `lib/core/**` (DI, config, erreurs, routage)
-- `lib/presentation/**/*_viewmodel.dart` (ViewModels uniquement)
+- `lib/presentation/**/*_view_model.dart` (ViewModels uniquement)
+- `ARCHITECTURE.md` et les `README.md` de couche sous `lib/`
 
 ## Hors périmètre
 - Design visuel et composants purement UI → piste 1 (`feat/ui-prototype`).
