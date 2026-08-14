@@ -2,8 +2,14 @@
 
 Clean Architecture à trois couches, présentation en MVVM.
 
-> Ce document décrit le **socle**, posé par la piste 2. Il ne présume d'aucune
-> fonctionnalité : aucune entité métier n'est encore définie.
+> Ce document décrit le **socle** et le **modèle de domaine**, posés par la
+> piste 2. Le détail des entités et des règles métier est dans
+> [`lib/domain/README.md`](lib/domain/README.md).
+
+Urim tient sur deux domaines reliés par la référence biblique : la **lecture
+du texte** (`entities/bible/`) et le **discernement pastoral**
+(`entities/pastoral/`) — consigner une question, les passages qui l'éclairent,
+et la décision qui en découle.
 
 ## Règle unique
 
@@ -103,11 +109,20 @@ Sans surcharge, `AppConfig.fromEnvironment()` retombe sur le profil `dev`.
 
 Le détail des contrats est dans le `README.md` de chaque couche.
 
-## Ce que le socle ne fait pas encore
+## Ce qui n'est pas encore fait
 
-- Aucune authentification : l'intercepteur Dio et le `redirect` du routeur sont
-  des emplacements réservés, pas des implémentations.
-- Aucune persistance locale : le choix (Drift, Isar, `shared_preferences`)
-  dépend des besoins fonctionnels, encore inconnus.
-- Aucune localisation : à décider par la piste 4 avant que les écrans ne se
-  multiplient.
+- **Aucune implémentation de `data/`.** Les deux dépôts du domaine
+  (`BibleRepository`, `PastoralQuestionRepository`) n'ont pas de mise en
+  œuvre : la provenance du texte biblique — embarqué, API, ou hybride avec
+  cache — n'est pas tranchée. Le domaine étant muet là-dessus, la décision
+  n'obligera à rien réécrire en amont.
+- **Aucune persistance locale choisie** (Drift, Isar, `shared_preferences`).
+  Le module décisionnel en aura besoin : ses données sont créées et
+  consultées hors ligne.
+- **Aucune authentification** : l'intercepteur Dio et le `redirect` du routeur
+  sont des emplacements réservés.
+- **Aucune localisation** : à décider par la piste 4 avant que les écrans ne
+  se multiplient. Les messages d'erreur du domaine sont techniques et ne sont
+  pas destinés à l'affichage tel quel.
+- **Aucun suivi de personnes.** Un module de communauté impliquerait des
+  données personnelles sensibles, à cadrer avant d'écrire la première ligne.
