@@ -5,6 +5,14 @@
 abstract final class AppRoutes {
   const AppRoutes._();
 
+  /// Écran de lancement. Point d'entrée : tant que l'on ignore si la
+  /// présentation a déjà été vue, on ne sait pas où aller.
+  static const String splashPath = '/lancement';
+  static const String splashName = 'splash';
+
+  static const String onboardingPath = '/presentation';
+  static const String onboardingName = 'onboarding';
+
   static const String homePath = '/';
   static const String homeName = 'home';
 }

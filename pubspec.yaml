@@ -40,6 +40,7 @@ dependencies:
   equatable: ^2.1.0
   json_annotation: ^4.12.0
   freezed_annotation: ^3.1.0
+  shared_preferences: ^2.5.5
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +67,15 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  fonts:
+    # Nova Cut porte l'identite : le monogramme et le logotype, rien d'autre.
+    # C'est une police d'affichage -- elle n'a ni les graisses ni le dessin
+    # qu'exigent un texte d'interface ou une lecture suivie.
+    # Licence SIL Open Font, redistribuee avec assets/fonts/OFL.txt.
+    - family: NovaCut
+      fonts:
+        - asset: assets/fonts/NovaCut-Regular.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:
