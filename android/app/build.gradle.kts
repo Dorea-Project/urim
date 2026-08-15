@@ -7,7 +7,11 @@ plugins {
 
 android {
     namespace = "com.example.urim"
-    compileSdk = flutter.compileSdkVersion
+    // Imposé par flutter_secure_storage 11, qui compile contre l'API 37 : le
+    // défaut de Flutter reste en dessous, et la compilation échoue sans autre
+    // explication qu'un « compileSdk trop bas ». À suivre le jour où le SDK par
+    // défaut rattrapera cette valeur.
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
