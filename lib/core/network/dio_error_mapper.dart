@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:urim/core/error/exceptions.dart';
+import 'package:urim/core/network/api_error.dart';
 
 /// Convertit une [DioException] en [AppException].
 ///
@@ -40,19 +41,40 @@ AppException mapDioException(DioException error) => switch (error.type) {
 
 AppException _mapBadResponse(DioException error) {
   final statusCode = error.response?.statusCode;
+  final api = ApiError.tryParse(error.response?.data);
+
+  // Le code du serveur est repris tel quel : c'est lui qui permet à l'écran de
+  // distinguer un code secret erroné d'un compte verrouillé, sans lire le
+  // message — qui, lui, changera au gré des relectures.
+  final code = api?.code ?? 'http_$statusCode';
+  final message = api?.message ?? 'Le serveur a répondu avec le statut $statusCode.';
 
   if (statusCode == 401 || statusCode == 403) {
-    return UnauthorizedException(
-      'Accès refusé.',
-      code: 'unauthorized',
+    return UnauthorizedException(message, code: code, cause: error);
+  }
+
+  if (statusCode == 422 || statusCode == 400 || statusCode == 409) {
+    return ValidationException(
+      message,
+      fieldErrors: api?.fieldErrors ?? const {},
+      code: code,
+      cause: error,
+    );
+  }
+
+  if (statusCode == 429) {
+    return ServerException(
+      message,
+      statusCode: statusCode,
+      code: code,
       cause: error,
     );
   }
 
   return ServerException(
-    'Le serveur a répondu avec le statut $statusCode.',
+    message,
     statusCode: statusCode,
-    code: 'bad_response',
+    code: code,
     cause: error,
   );
 }

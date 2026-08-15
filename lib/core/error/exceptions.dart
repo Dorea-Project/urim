@@ -36,3 +36,17 @@ final class CacheException extends AppException {
 final class UnauthorizedException extends AppException {
   const UnauthorizedException(super.message, {super.code, super.cause});
 }
+
+/// Requête refusée sur le fond : champ manquant, format invalide, règle métier
+/// non respectée (422, ou un 400 porteur d'un code d'erreur).
+final class ValidationException extends AppException {
+  const ValidationException(
+    super.message, {
+    this.fieldErrors = const {},
+    super.code,
+    super.cause,
+  });
+
+  /// Clé = nom du champ tel que le serveur le nomme, valeur = motif du rejet.
+  final Map<String, String> fieldErrors;
+}

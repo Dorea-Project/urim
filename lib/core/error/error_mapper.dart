@@ -15,5 +15,11 @@ extension AppExceptionMapper on AppException {
           NetworkFailure(message: message, code: code),
         CacheException(:final message, :final code) =>
           CacheFailure(message: message, code: code),
+        ValidationException(:final message, :final code, :final fieldErrors) =>
+          ValidationFailure(
+            message: message,
+            code: code,
+            fieldErrors: fieldErrors,
+          ),
       };
 }

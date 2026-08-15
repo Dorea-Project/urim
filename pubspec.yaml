@@ -42,6 +42,9 @@ dependencies:
   freezed_annotation: ^3.1.0
   shared_preferences: ^2.5.5
   crypto: ^3.0.7
+  # Jetons et identifiant d'appareil : trousseau matériel (Keystore / Keychain),
+  # jamais les préférences système.
+  flutter_secure_storage: ^11.0.0
 
 dev_dependencies:
   flutter_test:
