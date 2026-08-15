@@ -44,12 +44,35 @@ final class Recording extends Equatable {
     this.transcribedOnDevice = true,
     this.waveform = const [],
     this.filePath,
+    this.fragmentCount = 0,
+    this.fragmentsAcknowledged = 0,
+    this.audioDeletedOn,
   });
 
   final String id;
   final Duration duration;
   final RecordingStatus status;
   final bool transcribedOnDevice;
+
+  /// Nombre de tranches découpées à la capture.
+  ///
+  /// L'enregistrement ne part pas d'un bloc : il est écrit par morceaux, ce
+  /// qui permet de tenir quarante minutes sans réseau et de reprendre là où
+  /// l'on s'est arrêté.
+  final int fragmentCount;
+
+  /// Tranches dont le traitement est confirmé. Les autres attendent — elles
+  /// partiront seules, dans l'ordre.
+  final int fragmentsAcknowledged;
+
+  /// Date à laquelle l'audio a été effacé après transcription. Nulle tant
+  /// qu'il est encore là.
+  final DateTime? audioDeletedOn;
+
+  int get fragmentsPending =>
+      (fragmentCount - fragmentsAcknowledged).clamp(0, fragmentCount);
+
+  bool get isFullyAcknowledged => fragmentsPending == 0;
 
   /// Amplitudes normalisées entre 0 et 1, échantillonnées pour l'affichage.
   ///
@@ -64,8 +87,17 @@ final class Recording extends Equatable {
   bool get hasAudio => filePath != null;
 
   @override
-  List<Object?> get props =>
-      [id, duration, status, transcribedOnDevice, waveform, filePath];
+  List<Object?> get props => [
+        id,
+        duration,
+        status,
+        transcribedOnDevice,
+        waveform,
+        filePath,
+        fragmentCount,
+        fragmentsAcknowledged,
+        audioDeletedOn,
+      ];
 
   @override
   String toString() => 'Recording($id, ${duration.inSeconds}s, ${status.name})';

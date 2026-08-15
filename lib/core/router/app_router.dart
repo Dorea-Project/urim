@@ -11,7 +11,13 @@ import 'package:urim/presentation/home/home_page.dart';
 import 'package:urim/presentation/legal/privacy_policy_page.dart';
 import 'package:urim/presentation/onboarding/onboarding_page.dart';
 import 'package:urim/presentation/onboarding/onboarding_view_model.dart';
+import 'package:urim/presentation/preparation/new_preparation_page.dart';
+import 'package:urim/presentation/preparation/preparation_page.dart';
+import 'package:urim/presentation/profile/profile_page.dart';
+import 'package:urim/presentation/settings/settings_page.dart';
 import 'package:urim/presentation/splash/splash_page.dart';
+import 'package:urim/presentation/transcription/synthesis_page.dart';
+import 'package:urim/presentation/transcription/transcription_page.dart';
 
 /// Table de routage de l'application.
 ///
@@ -128,6 +134,42 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.homePath,
         name: AppRoutes.homeName,
         builder: (context, state) => const HomePage(),
+      ),
+      GoRoute(
+        path: AppRoutes.newPreparationPath,
+        name: AppRoutes.newPreparationName,
+        builder: (context, state) => const NewPreparationPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.preparationPath,
+        name: AppRoutes.preparationName,
+        builder: (context, state) => PreparationPage(
+          preparationId: state.pathParameters['id']!,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.transcriptionPath,
+        name: AppRoutes.transcriptionName,
+        builder: (context, state) => TranscriptionPage(
+          preparationId: state.pathParameters['id']!,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.synthesisPath,
+        name: AppRoutes.synthesisName,
+        builder: (context, state) => SynthesisPage(
+          preparationId: state.pathParameters['id']!,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.profilePath,
+        name: AppRoutes.profileName,
+        builder: (context, state) => const ProfilePage(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsPath,
+        name: AppRoutes.settingsName,
+        builder: (context, state) => const SettingsPage(),
       ),
     ],
     errorBuilder: (context, state) => _RouteErrorPage(error: state.error),
