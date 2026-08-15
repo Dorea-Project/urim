@@ -146,14 +146,26 @@ Une notification locale planifiée suffit, mais elle demande une permission
 système, une heure, et surtout une définition de « pas terminé » que le domaine
 ne connaît pas : une préparation n'a aujourd'hui aucun état d'achèvement.
 
-### Q13 — Créer un compte et se connecter, est-ce le même chemin ?
+### Q13 — Créer un compte et se connecter, est-ce le même chemin ? — **tranchée**
 
-La présentation propose deux portes — « Créer mon compte » et « J'ai déjà un
-compte » — alors que le parcours par SMS n'en a qu'une : le numéro est reconnu,
-ou il ne l'est pas. Les deux boutons mènent donc au même écran.
+**Deux portes.** Le backend en expose deux jeux de routes, et refuse de dire si
+un numéro est connu : répondre ferait de la route un annuaire des inscrits.
+C'est donc l'utilisateur qui choisit, depuis la présentation — les deux boutons
+de la maquette étaient déjà la bonne réponse.
 
-Soit on assume une seule porte et le second libellé disparaît, soit l'écran de
-connexion doit se présenter différemment selon celui qui arrive.
+- **Inscription** : `POST /auth/register` (numéro) → SMS → `verify-registration`
+  (numéro + code + **code secret** + appareil) → jetons.
+- **Connexion** : `POST /auth/login` (numéro + code secret + appareil) → jetons,
+  ou **202** si l'appareil est inconnu → SMS → `verify-device` → jetons.
+
+Les deux parcours sont écrits. Trois conséquences d'écran :
+
+- le consentement n'est demandé qu'à l'inscription — celui qui revient l'a donné
+  le jour où il a créé son compte ;
+- se connecter **pose la serrure locale** avec le code qui vient d'être validé,
+  plutôt que de le faire saisir deux fois de suite ;
+- « Code oublié ? » aboutit toujours, même sur un numéro inconnu, et l'écran ne
+  dit jamais le contraire.
 
 ### Q14 — D'où viennent les dix loci ?
 
@@ -222,13 +234,22 @@ synthèse validée, si.
 | D16 | Toute réponse d'Urim porte sa trace | « Comment j'en suis arrivé là » est ce qui distingue une proposition d'un oracle : sans elle, l'utilisateur ne peut ni vérifier ni contredire. |
 | D17 | Rien ne sort avant validation explicite | La synthèse n'existe que pour son auteur tant qu'il ne l'a pas validée. C'est le code qui le tient, pas l'intention : la lecture à voix haute est fermée tant que le drapeau est faux. |
 | D18 | Le verset n'est jamais réécrit par le modèle | Les capsules viennent d'un modèle, le texte biblique de la Bible. Les deux sont affichés séparément, et l'écran le dit. |
+| D19 | Le contrat vient du backend existant, pas d'une invention côté mobile | `app/contexts/auth` expose déjà le parcours complet. Les noms de champs (`phone_number`, `secret_code`, `device_id`) sont repris tels quels dans la couche data, et traduits une seule fois vers le vocabulaire du domaine. |
+| D20 | Le code secret est une donnée **serveur**, posée en même temps que le code SMS | Le serveur n'ouvre pas de compte sans serrure : `verify-registration` prend les deux. Le code reste aussi dérivé localement, pour déverrouiller sans réseau — deux usages, une seule saisie. |
+| D21 | Jetons et identifiant d'appareil au coffre matériel ; tout le reste aux préférences | Keystore / Keychain pour ce qui ouvre des portes, préférences pour ce qui n'a pas de valeur volée. La dette « la clé du code secret vit dans les préférences » se referme ici. |
+| D22 | L'identifiant d'appareil est tiré au hasard, jamais lu dans le matériel | IMEI et Android ID sont des données personnelles, pistables d'une application à l'autre. Urim n'a besoin que de savoir « c'est le même appareil qu'hier ». |
+| D23 | Un seul rafraîchissement à la fois, un seul rejeu par requête | Trois écrans qui échouent ensemble ne doivent pas déclencher trois rotations : la deuxième invaliderait le jeton de la première. Et une requête qui échoue deux fois signe une session morte, pas une boucle à retenter. |
 
 ## Dettes assumées
 
 | Dette | Échéance |
 |---|---|
-| `DevAuthDataSource` accepte un code vérifié localement — ne prouve rien | Avant toute mise en ligne |
-| La clé du code secret vit dans les préférences, non dans le trousseau matériel | Avant toute mise en ligne |
+| `DevAuthDataSource` accepte un code vérifié localement — ne prouve rien. Coupée par `--dart-define=USE_MOCK_AUTH=false`, interdite en production | À la première campagne contre le serveur |
+| Identifiants de démonstration en dur : numéro prérempli, code SMS fixe, code secret suggéré. Affichés seulement quand personne ne répond vraiment | Avec le vrai serveur SMS |
+| `applicationId` encore `com.example.urim`, APK signé avec la clé de debug | Avant toute distribution |
+| La dérivation locale du code secret vit dans les préférences ; les jetons, eux, sont au coffre matériel | Avant toute mise en ligne |
+| Le code secret existe à deux endroits — serveur et dérivation locale. Le changer d'un côté ne met pas l'autre à jour | Avant l'écran de changement de code |
+| Le changement de code secret depuis le profil n'existe pas : seul « code oublié » permet d'en changer, et il révoque les autres appareils | Avec l'écran de compte |
 | Les églises et les appareils du profil viennent d'un jeu d'exemple en mémoire | Q9 et Q11 |
 | Le fil guidé, la relecture et les capsules sont **scriptés** : aucun moteur ne les produit | Q1, Q2, Q3, Q14 |
 | Les préparations vivent en mémoire — fermer l'application les perd | Q4 |

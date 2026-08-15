@@ -34,7 +34,8 @@ Les arbitrages et les questions en attente vivent dans
 | Socle Clean Architecture / MVVM | Fait |
 | Charte graphique, jetons, Nova Cut | Fait |
 | Lancement et présentation animée | Fait |
-| Connexion SMS et code secret | Fait — **serveur simulé** |
+| Inscription, connexion, code oublié | Câblés sur le **vrai contrat** du backend |
+| Socle sécurité : jetons au coffre, rotation, identifiant d'appareil | Fait |
 | Politique de confidentialité | Fait |
 | Domaine des préparations | Fait |
 | Persistance des préparations | **Bloqué par Q4** |
