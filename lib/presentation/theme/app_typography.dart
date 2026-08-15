@@ -7,9 +7,10 @@ import 'package:flutter/material.dart';
 /// Les faire cohabiter dans la même police oblige à choisir laquelle des deux
 /// sera mal servie.
 ///
-/// Aucune police n'est embarquée pour l'instant : `fontFamily` est laissé nul,
-/// Flutter retombe donc sur la police système. Embarquer une famille est une
-/// décision à prendre avant de multiplier les écrans — voir le bas de fichier.
+/// Une troisième famille, **Nova Cut**, porte l'identité — et rien d'autre.
+/// C'est une police d'affichage : elle n'a ni les graisses ni le dessin
+/// qu'exigent un texte d'interface ou une lecture de plusieurs minutes. Elle
+/// est superbe à 96 pt sur le monogramme, illisible à 14 pt dans une liste.
 abstract final class AppTypography {
   const AppTypography._();
 
@@ -18,6 +19,24 @@ abstract final class AppTypography {
 
   /// Police de lecture. Une serif est préférable pour le texte suivi.
   static const String? readingFontFamily = null;
+
+  /// Police de marque. **Réservée au monogramme et au logotype.**
+  static const String brandFontFamily = 'NovaCut';
+
+  /// Monogramme « U » : écran de lancement et onboarding.
+  static const TextStyle monogram = TextStyle(
+    fontFamily: brandFontFamily,
+    fontSize: 120,
+    height: 1,
+  );
+
+  /// Logotype « Urim ».
+  static const TextStyle wordmark = TextStyle(
+    fontFamily: brandFontFamily,
+    fontSize: 52,
+    height: 1.1,
+    letterSpacing: 1,
+  );
 
   static const TextTheme textTheme = TextTheme(
     displaySmall: TextStyle(
