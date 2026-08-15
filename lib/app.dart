@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:urim/core/router/app_router.dart';
+import 'package:urim/presentation/theme/app_theme.dart';
 
 /// Racine de l'application.
 ///
-/// PISTE 1 : le thème ci-dessous est un minimum viable. Le design system
-/// (couleurs, typographie, composants) vous appartient — remplacez `theme` et
-/// `darkTheme` par ce que vous exposerez depuis `presentation/theme/`.
+/// Le thème vient entièrement de `presentation/theme/`. Aucune couleur, aucune
+/// taille et aucun espacement ne se décide ici.
 class UrimApp extends ConsumerWidget {
   const UrimApp({super.key});
 
@@ -18,14 +18,11 @@ class UrimApp extends ConsumerWidget {
       title: 'Urim',
       debugShowCheckedModeBanner: false,
       routerConfig: router,
-      theme: ThemeData(
-        colorSchemeSeed: const Color(0xFF3A5A98),
-        brightness: Brightness.light,
-      ),
-      darkTheme: ThemeData(
-        colorSchemeSeed: const Color(0xFF3A5A98),
-        brightness: Brightness.dark,
-      ),
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      // Suit le réglage du système tant qu'un choix explicite n'est pas
+      // proposé dans l'application.
+      themeMode: ThemeMode.system,
     );
   }
 }
