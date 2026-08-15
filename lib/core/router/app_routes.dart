@@ -25,8 +25,41 @@ abstract final class AppRoutes {
   static const String secretCodePath = '/code-secret';
   static const String secretCodeName = 'secretCode';
 
+  /// Politique de confidentialité. **Hors de [entryPaths]** : un texte à
+  /// portée juridique doit rester atteignable à tout moment, avant comme
+  /// après connexion.
+  static const String privacyPath = '/politique-confidentialite';
+  static const String privacyName = 'privacy';
+
   static const String homePath = '/';
   static const String homeName = 'home';
+
+  /// Ouverture d'une préparation écrite.
+  ///
+  /// Déclarée **avant** `/preparation/:id` dans la table : sans cela,
+  /// « nouvelle » serait pris pour un identifiant.
+  static const String newPreparationPath = '/preparation/nouvelle';
+  static const String newPreparationName = 'newPreparation';
+
+  /// Une préparation et son fil.
+  static const String preparationPath = '/preparation/:id';
+  static const String preparationName = 'preparation';
+
+  /// Relecture d'une prédication transcrite.
+  static const String transcriptionPath = '/preparation/:id/transcription';
+  static const String transcriptionName = 'transcription';
+
+  /// Synthèse d'une prédication, à valider.
+  static const String synthesisPath = '/preparation/:id/synthese';
+  static const String synthesisName = 'synthesis';
+
+  static const String profilePath = '/profil';
+  static const String profileName = 'profile';
+
+  /// Réglages. Chemin de premier niveau bien qu'on y entre par le profil : ils
+  /// ne dépendent pas de lui, et un lien direct doit rester possible.
+  static const String settingsPath = '/reglages';
+  static const String settingsName = 'settings';
 
   /// Routes du parcours d'entrée : inaccessibles une fois l'accès ouvert.
   static const Set<String> entryPaths = {

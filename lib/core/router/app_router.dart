@@ -8,9 +8,16 @@ import 'package:urim/presentation/auth/otp_page.dart';
 import 'package:urim/presentation/auth/phone_page.dart';
 import 'package:urim/presentation/auth/secret_code_page.dart';
 import 'package:urim/presentation/home/home_page.dart';
+import 'package:urim/presentation/legal/privacy_policy_page.dart';
 import 'package:urim/presentation/onboarding/onboarding_page.dart';
 import 'package:urim/presentation/onboarding/onboarding_view_model.dart';
+import 'package:urim/presentation/preparation/new_preparation_page.dart';
+import 'package:urim/presentation/preparation/preparation_page.dart';
+import 'package:urim/presentation/profile/profile_page.dart';
+import 'package:urim/presentation/settings/settings_page.dart';
 import 'package:urim/presentation/splash/splash_page.dart';
+import 'package:urim/presentation/transcription/synthesis_page.dart';
+import 'package:urim/presentation/transcription/transcription_page.dart';
 
 /// Table de routage de l'application.
 ///
@@ -35,6 +42,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     refreshListenable: refreshSignal,
     redirect: (context, state) {
       final location = state.matchedLocation;
+
+      // --- 0. Mentions légales ------------------------------------------------
+
+      // Jamais redirigée : la politique de confidentialité doit pouvoir être
+      // lue à n'importe quel moment du parcours, y compris avant d'avoir
+      // consenti à quoi que ce soit.
+      if (location == AppRoutes.privacyPath) return null;
 
       // --- 1. Présentation ---------------------------------------------------
 
@@ -112,9 +126,50 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const SecretCodeUnlockPage(),
       ),
       GoRoute(
+        path: AppRoutes.privacyPath,
+        name: AppRoutes.privacyName,
+        builder: (context, state) => const PrivacyPolicyPage(),
+      ),
+      GoRoute(
         path: AppRoutes.homePath,
         name: AppRoutes.homeName,
         builder: (context, state) => const HomePage(),
+      ),
+      GoRoute(
+        path: AppRoutes.newPreparationPath,
+        name: AppRoutes.newPreparationName,
+        builder: (context, state) => const NewPreparationPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.preparationPath,
+        name: AppRoutes.preparationName,
+        builder: (context, state) => PreparationPage(
+          preparationId: state.pathParameters['id']!,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.transcriptionPath,
+        name: AppRoutes.transcriptionName,
+        builder: (context, state) => TranscriptionPage(
+          preparationId: state.pathParameters['id']!,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.synthesisPath,
+        name: AppRoutes.synthesisName,
+        builder: (context, state) => SynthesisPage(
+          preparationId: state.pathParameters['id']!,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.profilePath,
+        name: AppRoutes.profileName,
+        builder: (context, state) => const ProfilePage(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsPath,
+        name: AppRoutes.settingsName,
+        builder: (context, state) => const SettingsPage(),
       ),
     ],
     errorBuilder: (context, state) => _RouteErrorPage(error: state.error),

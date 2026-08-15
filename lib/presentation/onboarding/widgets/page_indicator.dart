@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
 
-/// Indicateur de progression : la puce active s'allonge et se colore.
+/// Progression de la présentation : les étapes franchies s'encrent, les
+/// suivantes restent grises.
 ///
-/// La longueur, et pas seulement la couleur, porte l'information — les puces
-/// inactives sont grises et la puce active est brique, deux teintes que
-/// certains lecteurs ne distinguent pas.
+/// C'est le **nombre** de tirets encrés qui porte l'information, et non leur
+/// teinte : deux traits noirs sur trois se comptent, y compris pour un lecteur
+/// qui ne distingue pas les couleurs.
 class PageIndicator extends StatelessWidget {
   const PageIndicator({
     super.key,
@@ -18,23 +20,24 @@ class PageIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final colors = context.colors;
 
     return Semantics(
       label: 'Étape ${currentIndex + 1} sur $count',
       excludeSemantics: true,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: List.generate(count, (index) {
-          final isActive = index == currentIndex;
+          final isReached = index <= currentIndex;
+
           return AnimatedContainer(
-            duration: const Duration(milliseconds: 220),
+            duration: const Duration(milliseconds: 240),
             curve: Curves.easeOut,
-            margin: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
-            height: 8,
-            width: isActive ? 22 : 8,
+            margin: const EdgeInsets.only(right: AppSpacing.sm),
+            height: 4,
+            width: 26,
             decoration: BoxDecoration(
-              color: isActive ? scheme.primary : scheme.outlineVariant,
+              color: isReached ? colors.textPrimary : colors.border,
               borderRadius: BorderRadius.circular(AppRadius.pill),
             ),
           );

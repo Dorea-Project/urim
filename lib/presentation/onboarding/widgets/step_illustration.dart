@@ -1,16 +1,17 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:urim/presentation/common/brand_mark.dart';
 import 'package:urim/presentation/onboarding/onboarding_content.dart';
+import 'package:urim/presentation/theme/app_colors.dart';
 
-/// Motif animé entourant la marque de l'étape.
+/// Motif animé de l'étape.
 ///
-/// L'animation se joue **une fois**, à l'entrée. Rien ne tourne en boucle :
+/// L'animation se joue **une fois**, à l'entrée, et se construit : chaque
+/// figure se dessine dans l'ordre où elle se lit. Rien ne tourne en boucle —
 /// une boucle attirerait l'œil en permanence alors que le texte est ce qu'il
 /// faut lire, et empêcherait tout test d'atteindre un état stable.
 class StepIllustration extends StatefulWidget {
-  const StepIllustration({super.key, required this.step, this.size = 240});
+  const StepIllustration({super.key, required this.step, this.size = 220});
 
   final OnboardingStep step;
   final double size;
@@ -23,7 +24,7 @@ class _StepIllustrationState extends State<StepIllustration>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 900),
+    duration: const Duration(milliseconds: 1400),
   );
 
   bool _started = false;
@@ -51,246 +52,393 @@ class _StepIllustrationState extends State<StepIllustration>
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.primary;
+    final colors = context.colors;
 
-    return SizedBox(
-      width: widget.size,
-      height: widget.size,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) => CustomPaint(
-              size: Size.square(widget.size),
-              painter: _IllustrationPainter(
-                illustration: widget.step.illustration,
-                progress: _controller.value,
-                color: color,
-              ),
+    final palette = _IllustrationPalette(
+      ink: colors.textPrimary,
+      kept: colors.success,
+      asks: Theme.of(context).colorScheme.primary,
+      muted: colors.textMuted,
+    );
+
+    // Le dessin ne dit rien de plus que le titre : le lecteur d'écran n'a pas
+    // à l'annoncer.
+    return ExcludeSemantics(
+      child: SizedBox(
+        width: widget.size,
+        height: widget.size,
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) => CustomPaint(
+            size: Size.square(widget.size),
+            painter: _IllustrationPainter(
+              illustration: widget.step.illustration,
+              progress: _controller.value,
+              palette: palette,
             ),
           ),
-          _MarkEntrance(
-            controller: _controller,
-            child: switch (widget.step.mark) {
-              OnboardingMark.monogram => BrandMonogram(color: color, size: 96),
-              OnboardingMark.wordmark => BrandWordmark(color: color, size: 46),
-            },
-          ),
-        ],
+        ),
       ),
     );
   }
 }
 
-/// Apparition de la marque : fondu et léger agrandissement.
-class _MarkEntrance extends StatelessWidget {
-  const _MarkEntrance({required this.controller, required this.child});
+/// Rôles de couleur du trait.
+@immutable
+final class _IllustrationPalette {
+  const _IllustrationPalette({
+    required this.ink,
+    required this.kept,
+    required this.asks,
+    required this.muted,
+  });
 
-  final AnimationController controller;
-  final Widget child;
+  /// Trait principal.
+  final Color ink;
+
+  /// Ce qui est retenu.
+  final Color kept;
+
+  /// Ce qui interpelle ou résiste.
+  final Color asks;
+
+  /// Ce qui est écarté ou secondaire.
+  final Color muted;
 
   @override
-  Widget build(BuildContext context) {
-    final fade = CurvedAnimation(
-      parent: controller,
-      curve: const Interval(0, 0.55, curve: Curves.easeOut),
-    );
-    final scale = Tween<double>(begin: 0.82, end: 1).animate(
-      CurvedAnimation(
-        parent: controller,
-        curve: const Interval(0, 0.7, curve: Curves.easeOutBack),
-      ),
-    );
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is _IllustrationPalette &&
+          other.ink == ink &&
+          other.kept == kept &&
+          other.asks == asks &&
+          other.muted == muted;
 
-    return FadeTransition(
-      opacity: fade,
-      child: ScaleTransition(scale: scale, child: child),
-    );
-  }
+  @override
+  int get hashCode => Object.hash(ink, kept, asks, muted);
 }
 
+/// Dessine les trois figures.
+///
+/// Les coordonnées sont écrites dans un carré de 240 unités, puis mises à
+/// l'échelle : on raisonne sur une grille fixe plutôt qu'en fractions
+/// illisibles.
 class _IllustrationPainter extends CustomPainter {
   const _IllustrationPainter({
     required this.illustration,
     required this.progress,
-    required this.color,
+    required this.palette,
   });
 
   final OnboardingIllustration illustration;
   final double progress;
-  final Color color;
+  final _IllustrationPalette palette;
+
+  static const double _grid = 240;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final center = size.center(Offset.zero);
-    final radius = size.shortestSide / 2 - 6;
+    final scale = size.shortestSide / _grid;
+
+    canvas.save();
+    canvas.scale(scale);
 
     switch (illustration) {
-      case OnboardingIllustration.compass:
-        _paintCompass(canvas, center, radius);
-      case OnboardingIllustration.crossroads:
-        _paintCrossroads(canvas, center, radius);
-      case OnboardingIllustration.rays:
-        _paintRays(canvas, center, radius);
+      case OnboardingIllustration.weighing:
+        _paintWeighing(canvas);
+      case OnboardingIllustration.handback:
+        _paintHandback(canvas);
+      case OnboardingIllustration.resistance:
+        _paintResistance(canvas);
     }
+
+    canvas.restore();
   }
 
-  /// Interpolation d'un segment de l'animation, ramenée sur 0..1.
+  /// Segment de l'animation, ramené sur 0..1.
   double _phase(double start, double end) =>
       ((progress - start) / (end - start)).clamp(0, 1);
 
-  // --- Boussole --------------------------------------------------------------
+  /// L'opacité est bornée ici : les courbes à rebond (`easeOutBack`) dépassent
+  /// 1 en cours de route, et une couleur n'accepte pas cela.
+  Paint _stroke(Color color, double width, {double alpha = 1}) => Paint()
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = width
+    ..strokeCap = StrokeCap.round
+    ..strokeJoin = StrokeJoin.round
+    ..color = color.withValues(alpha: alpha.clamp(0, 1));
 
-  void _paintCompass(Canvas canvas, Offset center, double radius) {
-    final ringProgress = Curves.easeOutCubic.transform(_phase(0, 0.75));
-    final ring = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2
-      ..strokeCap = StrokeCap.round
-      ..color = color.withValues(alpha: 0.35);
-
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      -math.pi / 2,
-      2 * math.pi * ringProgress,
-      false,
-      ring,
-    );
-
-    // Graduations : une par tranche de 30°, révélées avec le tracé du cercle.
-    final tick = Paint()
-      ..strokeWidth = 2
-      ..strokeCap = StrokeCap.round
-      ..color = color.withValues(alpha: 0.5);
-
-    for (var i = 0; i < 12; i++) {
-      final revealed = (i + 1) / 12;
-      if (ringProgress < revealed) continue;
-
-      final angle = -math.pi / 2 + i * math.pi / 6;
-      final isCardinal = i % 3 == 0;
-      final inner = radius - (isCardinal ? 14 : 8);
-      final direction = Offset(math.cos(angle), math.sin(angle));
-
-      canvas.drawLine(
-        center + direction * inner,
-        center + direction * (radius - 2),
-        tick,
-      );
+  /// Trace le début d'un chemin, sur une fraction de sa longueur.
+  void _drawPortion(Canvas canvas, Path path, double t, Paint paint) {
+    if (t <= 0) return;
+    if (t >= 1) {
+      canvas.drawPath(path, paint);
+      return;
     }
 
-    // Aiguille : arrive en dernier et se cale au nord.
-    final needleProgress = Curves.easeOutBack.transform(_phase(0.45, 1));
-    if (needleProgress <= 0) return;
-
-    final angle = -math.pi / 2 - (1 - needleProgress) * math.pi / 3;
-    final tip = center +
-        Offset(math.cos(angle), math.sin(angle)) * (radius - 22) * needleProgress;
-    final tail = center -
-        Offset(math.cos(angle), math.sin(angle)) * (radius - 46) * needleProgress;
-
-    canvas.drawLine(
-      tail,
-      tip,
-      Paint()
-        ..strokeWidth = 3
-        ..strokeCap = StrokeCap.round
-        ..color = color.withValues(alpha: 0.85 * needleProgress),
-    );
+    for (final metric in path.computeMetrics()) {
+      canvas.drawPath(metric.extractPath(0, metric.length * t), paint);
+    }
   }
 
-  // --- Bifurcation -----------------------------------------------------------
+  void _drawDashed(
+    Canvas canvas,
+    Path path,
+    Paint paint, {
+    double dash = 7,
+    double gap = 5,
+  }) {
+    for (final metric in path.computeMetrics()) {
+      var travelled = 0.0;
+      while (travelled < metric.length) {
+        final end = math.min(travelled + dash, metric.length);
+        canvas.drawPath(metric.extractPath(travelled, end), paint);
+        travelled = end + gap;
+      }
+    }
+  }
 
-  void _paintCrossroads(Canvas canvas, Offset center, double radius) {
-    final trunk = Curves.easeOut.transform(_phase(0, 0.5));
-    final branches = Curves.easeOutCubic.transform(_phase(0.4, 1));
+  Path _line(Offset from, Offset to) => Path()
+    ..moveTo(from.dx, from.dy)
+    ..lineTo(to.dx, to.dy);
 
-    final bottom = center + Offset(0, radius);
-    final fork = center + Offset(0, radius * 0.15);
+  // --- 1. La balance ---------------------------------------------------------
+  //
+  // Une phrase est écrite en haut ; deux candidats pendent en dessous. Le
+  // retenu se ferme d'un trait plein, l'écarté reste en pointillé. La balance
+  // oscille une fois, puis revient à l'horizontale : elle a tranché.
 
-    final stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3
-      ..strokeCap = StrokeCap.round
-      ..color = color.withValues(alpha: 0.5);
+  void _paintWeighing(Canvas canvas) {
+    const stemTop = Offset(120, 42);
+    const pivot = Offset(120, 100);
 
-    canvas.drawLine(bottom, Offset.lerp(bottom, fork, trunk)!, stroke);
-
-    if (branches <= 0) return;
-
-    // La branche retenue est pleine, l'écartée reste en pointillé : une
-    // décision, c'est aussi ce qu'on laisse.
-    final chosen = fork + Offset(radius * 0.72, -radius * 0.72);
-    canvas.drawLine(
-      fork,
-      Offset.lerp(fork, chosen, branches)!,
-      stroke..color = color.withValues(alpha: 0.85),
-    );
-
-    final discarded = fork + Offset(-radius * 0.72, -radius * 0.72);
-    _drawDashedLine(
+    _drawPortion(
       canvas,
-      fork,
-      Offset.lerp(fork, discarded, branches)!,
-      Paint()
-        ..strokeWidth = 2
-        ..strokeCap = StrokeCap.round
-        ..color = color.withValues(alpha: 0.28),
+      _line(stemTop, pivot),
+      Curves.easeOut.transform(_phase(0, 0.25)),
+      _stroke(palette.muted, 2.5),
+    );
+
+    final swing = Curves.easeInOut.transform(_phase(0.55, 1));
+    final angle = -0.10 * math.sin(math.pi * swing);
+
+    canvas.save();
+    canvas.translate(pivot.dx, pivot.dy);
+    canvas.rotate(angle);
+    canvas.translate(-pivot.dx, -pivot.dy);
+
+    // Le fléau se déploie depuis le centre, vers les deux côtés à la fois.
+    final beam = Curves.easeOutCubic.transform(_phase(0.18, 0.45));
+    if (beam > 0) {
+      canvas.drawLine(
+        Offset(pivot.dx - 62 * beam, pivot.dy),
+        Offset(pivot.dx + 62 * beam, pivot.dy),
+        _stroke(palette.ink, 4),
+      );
+    }
+
+    final drop = Curves.easeOut.transform(_phase(0.4, 0.62));
+    for (final x in const [84.0, 156.0]) {
+      _drawPortion(
+        canvas,
+        _line(Offset(x, 100), Offset(x, 130)),
+        drop,
+        _stroke(palette.muted, 2),
+      );
+    }
+
+    _paintCandidate(
+      canvas,
+      center: const Offset(84, 164),
+      reveal: Curves.easeOutBack.transform(_phase(0.55, 0.82)),
+      kept: true,
+    );
+    _paintCandidate(
+      canvas,
+      center: const Offset(156, 164),
+      reveal: Curves.easeOut.transform(_phase(0.62, 0.9)),
+      kept: false,
+    );
+
+    canvas.restore();
+  }
+
+  /// Une fiche de texte : pleine si elle est retenue, en pointillé sinon.
+  void _paintCandidate(
+    Canvas canvas, {
+    required Offset center,
+    required double reveal,
+    required bool kept,
+  }) {
+    if (reveal <= 0) return;
+
+    final color = kept ? palette.kept : palette.muted;
+    final rect = Rect.fromCenter(
+      center: center.translate(0, 10 * (1 - reveal)),
+      width: 64,
+      height: 62,
+    );
+    final card = Path()
+      ..addRRect(RRect.fromRectAndRadius(rect, const Radius.circular(10)));
+
+    final border = _stroke(color, kept ? 2.5 : 2, alpha: reveal);
+
+    if (kept) {
+      canvas.drawPath(card, border);
+    } else {
+      _drawDashed(canvas, card, border, dash: 6, gap: 5);
+    }
+
+    final text = _stroke(color, 2.5, alpha: reveal * (kept ? 0.9 : 0.55));
+    canvas.drawLine(
+      Offset(rect.left + 12, rect.center.dy - 7),
+      Offset(rect.right - 12, rect.center.dy - 7),
+      text,
+    );
+    canvas.drawLine(
+      Offset(rect.left + 12, rect.center.dy + 7),
+      Offset(rect.right - 24, rect.center.dy + 7),
+      text,
     );
   }
 
-  void _drawDashedLine(Canvas canvas, Offset from, Offset to, Paint paint) {
-    const dash = 7.0;
-    const gap = 6.0;
-    final total = (to - from).distance;
-    if (total <= 0) return;
+  // --- 2. La main rendue -----------------------------------------------------
+  //
+  // Deux motifs cités s'écrivent l'un après l'autre, puis la barre de saisie
+  // se referme et le point rouge s'allume : la question revient à celui qui
+  // prêche.
 
-    final direction = (to - from) / total;
-    var travelled = 0.0;
+  void _paintHandback(Canvas canvas) {
+    _paintReason(canvas, top: 60, widths: const [104, 82], start: 0);
+    _paintReason(canvas, top: 98, widths: const [94, 70], start: 0.25);
 
-    while (travelled < total) {
-      final end = math.min(travelled + dash, total);
-      canvas.drawLine(
-        from + direction * travelled,
-        from + direction * end,
-        paint,
+    final box = Path()
+      ..addRRect(
+        RRect.fromRectAndRadius(
+          const Rect.fromLTRB(40, 142, 200, 198),
+          const Radius.circular(16),
+        ),
       );
-      travelled = end + gap;
+    _drawPortion(
+      canvas,
+      box,
+      Curves.easeOutCubic.transform(_phase(0.5, 0.82)),
+      _stroke(palette.ink, 3),
+    );
+
+    _drawPortion(
+      canvas,
+      _line(const Offset(62, 170), const Offset(128, 170)),
+      Curves.easeOut.transform(_phase(0.72, 0.88)),
+      _stroke(palette.ink, 3),
+    );
+
+    // Le point rouge : ce qui attend une réponse. Il arrive en dernier, et
+    // une onde s'en échappe une fois — juste assez pour qu'on le voie.
+    final dot = Curves.easeOutBack.transform(_phase(0.8, 1));
+    if (dot <= 0) return;
+
+    const dotCenter = Offset(168, 170);
+    canvas.drawCircle(
+      dotCenter,
+      12 * dot,
+      _stroke(palette.asks, 3, alpha: dot.clamp(0, 1)),
+    );
+
+    final wave = _phase(0.86, 1);
+    if (wave > 0 && wave < 1) {
+      canvas.drawCircle(
+        dotCenter,
+        12 + 14 * wave,
+        _stroke(palette.asks, 2, alpha: (1 - wave) * 0.5),
+      );
     }
   }
 
-  // --- Rayons ----------------------------------------------------------------
+  /// Un motif cité : le filet, puis les lignes qui s'écrivent.
+  void _paintReason(
+    Canvas canvas, {
+    required double top,
+    required List<double> widths,
+    required double start,
+  }) {
+    final rule = Curves.easeOut.transform(_phase(start, start + 0.15));
+    _drawPortion(
+      canvas,
+      _line(Offset(52, top), Offset(52, top + 24)),
+      rule,
+      _stroke(palette.ink, 3),
+    );
 
-  void _paintRays(Canvas canvas, Offset center, double radius) {
-    const count = 16;
+    for (var i = 0; i < widths.length; i++) {
+      final from = start + 0.08 + i * 0.08;
+      final written = Curves.easeOut.transform(_phase(from, from + 0.18));
+      if (written <= 0) continue;
 
-    for (var i = 0; i < count; i++) {
-      // Décalage progressif : les rayons ne jaillissent pas tous ensemble.
-      final start = 0.05 * (i % 4);
-      final reveal = Curves.easeOut.transform(_phase(start, start + 0.7));
-      if (reveal <= 0) continue;
-
-      final angle = i * 2 * math.pi / count;
-      final direction = Offset(math.cos(angle), math.sin(angle));
-      final isLong = i.isEven;
-      final inner = radius * 0.62;
-      final outer = inner + (isLong ? radius * 0.34 : radius * 0.18) * reveal;
-
+      final y = top + 6 + i * 14;
       canvas.drawLine(
-        center + direction * inner,
-        center + direction * outer,
-        Paint()
-          ..strokeWidth = isLong ? 3 : 2
-          ..strokeCap = StrokeCap.round
-          ..color = color.withValues(alpha: (isLong ? 0.7 : 0.4) * reveal),
+        Offset(68, y),
+        Offset(68 + widths[i] * written, y),
+        _stroke(palette.muted, 3, alpha: i == 0 ? 0.9 : 0.6),
       );
     }
+  }
+
+  // --- 3. Ce qui résiste -----------------------------------------------------
+  //
+  // La flèche descend dans le sens de la lecture ; l'arc rouge la traverse à
+  // contresens. La flèche recule d'un cheveu au moment du croisement — c'est
+  // toute l'idée de l'étape.
+
+  void _paintResistance(Canvas canvas) {
+    final ground = Curves.easeOut.transform(_phase(0, 0.18));
+    if (ground > 0) {
+      canvas.drawLine(
+        Offset(120 - 54 * ground, 202),
+        Offset(120 + 54 * ground, 202),
+        _stroke(palette.muted, 4, alpha: 0.6),
+      );
+    }
+
+    final recoil = -3 * math.sin(math.pi * _phase(0.7, 1));
+
+    canvas.save();
+    canvas.translate(0, recoil);
+
+    _drawPortion(
+      canvas,
+      _line(const Offset(120, 50), const Offset(120, 168)),
+      Curves.easeOutCubic.transform(_phase(0.15, 0.62)),
+      _stroke(palette.kept, 3),
+    );
+
+    final head = Path()
+      ..moveTo(98, 150)
+      ..lineTo(120, 176)
+      ..lineTo(142, 150);
+    _drawPortion(
+      canvas,
+      head,
+      Curves.easeOut.transform(_phase(0.55, 0.74)),
+      _stroke(palette.kept, 3),
+    );
+
+    canvas.restore();
+
+    final arc = Path()
+      ..moveTo(84, 100)
+      ..quadraticBezierTo(120, 56, 156, 98);
+    _drawPortion(
+      canvas,
+      arc,
+      Curves.easeOutCubic.transform(_phase(0.68, 1)),
+      _stroke(palette.asks, 3),
+    );
   }
 
   @override
   bool shouldRepaint(_IllustrationPainter oldDelegate) =>
       oldDelegate.progress != progress ||
-      oldDelegate.color != color ||
+      oldDelegate.palette != palette ||
       oldDelegate.illustration != illustration;
 }
