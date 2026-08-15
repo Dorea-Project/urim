@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/presentation/auth/auth_flow_view_model.dart';
+import 'package:urim/presentation/common/ruled_content.dart';
 import 'package:urim/presentation/legal/privacy_content.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
@@ -103,31 +104,22 @@ class _Commitment extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          width: 3,
-          margin: const EdgeInsets.only(right: AppSpacing.lg),
-          color: theme.colorScheme.primary,
-        ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(commitment.title, style: theme.textTheme.titleMedium),
-              const SizedBox(height: AppSpacing.xs),
-              Text(
-                commitment.body,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: context.colors.textSecondary,
-                  height: 1.5,
-                ),
-              ),
-            ],
+    return RuledContent(
+      color: theme.colorScheme.primary,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(commitment.title, style: theme.textTheme.titleMedium),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            commitment.body,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: context.colors.textSecondary,
+              height: 1.5,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
