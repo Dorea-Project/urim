@@ -191,8 +191,6 @@ class _AcceptBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(
@@ -206,14 +204,11 @@ class _AcceptBar extends StatelessWidget {
         border: Border(top: BorderSide(color: context.colors.border)),
       ),
       child: FilledButton(
-        // Orange, comme sur la maquette. Voir la note de charte : si l'orange
-        // devient la couleur d'action de toute l'application, il vaudra mieux
-        // permuter `primary` et `secondary` que d'habiller chaque bouton.
-        style: FilledButton.styleFrom(
-          backgroundColor: scheme.secondary,
-          foregroundColor: scheme.onSecondary,
-          minimumSize: const Size(0, 56),
-        ),
+        // Aucune couleur ici : le bouton prend la teinte d'action de la
+        // charte. Les maquettes le montrent en orange, mais elles ne font pas
+        // autorité sur les couleurs — sans quoi l'application finirait avec
+        // autant de teintes d'action que d'écrans.
+        style: FilledButton.styleFrom(minimumSize: const Size(0, 56)),
         onPressed: onAccept,
         child: const Text(PrivacyContent.accept),
       ),
