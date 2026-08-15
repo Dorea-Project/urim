@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:urim/presentation/common/brand_mark.dart';
 import 'package:urim/presentation/onboarding/onboarding_content.dart';
 import 'package:urim/presentation/onboarding/onboarding_view_model.dart';
 import 'package:urim/presentation/onboarding/widgets/page_indicator.dart';
+import 'package:urim/presentation/onboarding/widgets/step_illustration.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
 
@@ -167,31 +167,57 @@ class _StepView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
       child: Column(
         children: [
           const Spacer(flex: 3),
-          switch (step.mark) {
-            OnboardingMark.monogram =>
-              BrandMonogram(color: scheme.primary, size: 110),
-            OnboardingMark.wordmark =>
-              BrandWordmark(color: scheme.primary),
-          },
+          StepIllustration(step: step),
           const Spacer(flex: 4),
-          Text(
-            step.message,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: context.colors.textSecondary,
-                  height: 1.6,
-                ),
+          _MessageEntrance(
+            child: Text(
+              step.message,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: context.colors.textSecondary,
+                    height: 1.6,
+                  ),
+            ),
           ),
           const SizedBox(height: AppSpacing.xl),
         ],
       ),
+    );
+  }
+}
+
+/// Entrée du message : fondu et remontée, légèrement après le motif.
+///
+/// Le décalage n'est pas décoratif — il conduit le regard du dessin vers le
+/// texte, dans l'ordre où ils doivent être lus.
+class _MessageEntrance extends StatelessWidget {
+  const _MessageEntrance({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final immediate = MediaQuery.disableAnimationsOf(context);
+
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: immediate ? 1 : 0, end: 1),
+      duration: immediate
+          ? Duration.zero
+          : const Duration(milliseconds: 520),
+      curve: const Interval(0.35, 1, curve: Curves.easeOut),
+      builder: (context, value, child) => Opacity(
+        opacity: value,
+        child: Transform.translate(
+          offset: Offset(0, 16 * (1 - value)),
+          child: child,
+        ),
+      ),
+      child: child,
     );
   }
 }
