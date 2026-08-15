@@ -34,6 +34,30 @@ final class BibleTranslation extends Equatable {
   /// partage d'un extrait.
   bool get requiresAttribution => !isPublicDomain && copyright != null;
 
+  static const String louisSegond1910Id = 'lsg1910';
+
+  /// Louis Segond 1910 — la seule traduction qu'Urim puisse afficher
+  /// aujourd'hui sans négocier quoi que ce soit : elle est dans le domaine
+  /// public. Toute autre attend Q1 et une licence.
+  static const BibleTranslation louisSegond1910 = BibleTranslation(
+    id: louisSegond1910Id,
+    name: 'Louis Segond 1910',
+    abbreviation: 'LSG',
+    languageCode: 'fr',
+    isPublicDomain: true,
+  );
+
+  /// Traductions proposables. Une seule tant que Q1 n'est pas tranchée — la
+  /// liste existe pour que l'écran de choix n'ait pas à être réécrit quand
+  /// elle s'allongera.
+  static const List<BibleTranslation> available = [louisSegond1910];
+
+  /// La traduction correspondant à [id], ou [louisSegond1910] à défaut.
+  static BibleTranslation byId(String id) => available.firstWhere(
+        (translation) => translation.id == id,
+        orElse: () => louisSegond1910,
+      );
+
   @override
   List<Object?> get props =>
       [id, name, abbreviation, languageCode, copyright, isPublicDomain];
