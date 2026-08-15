@@ -8,6 +8,7 @@ import 'package:urim/presentation/auth/otp_page.dart';
 import 'package:urim/presentation/auth/phone_page.dart';
 import 'package:urim/presentation/auth/secret_code_page.dart';
 import 'package:urim/presentation/home/home_page.dart';
+import 'package:urim/presentation/legal/privacy_policy_page.dart';
 import 'package:urim/presentation/onboarding/onboarding_page.dart';
 import 'package:urim/presentation/onboarding/onboarding_view_model.dart';
 import 'package:urim/presentation/splash/splash_page.dart';
@@ -35,6 +36,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     refreshListenable: refreshSignal,
     redirect: (context, state) {
       final location = state.matchedLocation;
+
+      // --- 0. Mentions légales ------------------------------------------------
+
+      // Jamais redirigée : la politique de confidentialité doit pouvoir être
+      // lue à n'importe quel moment du parcours, y compris avant d'avoir
+      // consenti à quoi que ce soit.
+      if (location == AppRoutes.privacyPath) return null;
 
       // --- 1. Présentation ---------------------------------------------------
 
@@ -110,6 +118,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.secretCodePath,
         name: AppRoutes.secretCodeName,
         builder: (context, state) => const SecretCodeUnlockPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.privacyPath,
+        name: AppRoutes.privacyName,
+        builder: (context, state) => const PrivacyPolicyPage(),
       ),
       GoRoute(
         path: AppRoutes.homePath,

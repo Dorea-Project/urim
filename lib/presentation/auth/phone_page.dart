@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -104,11 +105,27 @@ class PhonePage extends ConsumerWidget {
   }
 }
 
-class _PrivacyConsent extends StatelessWidget {
+class _PrivacyConsent extends StatefulWidget {
   const _PrivacyConsent({required this.accepted, required this.onChanged});
 
   final bool accepted;
   final ValueChanged<bool> onChanged;
+
+  @override
+  State<_PrivacyConsent> createState() => _PrivacyConsentState();
+}
+
+class _PrivacyConsentState extends State<_PrivacyConsent> {
+  /// Doit être libéré à la main : un `TapGestureRecognizer` attaché à un
+  /// `TextSpan` n'est pas nettoyé par l'arbre de widgets.
+  late final TapGestureRecognizer _openPolicy = TapGestureRecognizer()
+    ..onTap = () => context.pushNamed(AppRoutes.privacyName);
+
+  @override
+  void dispose() {
+    _openPolicy.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,15 +138,16 @@ class _PrivacyConsent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Checkbox(
-          value: accepted,
-          onChanged: (value) => onChanged(value ?? false),
+          value: widget.accepted,
+          onChanged: (value) => widget.onChanged(value ?? false),
           visualDensity: VisualDensity.compact,
         ),
         Expanded(
-          // Toute la phrase est cliquable, pas seulement la case : viser une
-          // case de 18 pixels au pouce est une épreuve inutile.
+          // Cocher et lire sont deux gestes distincts : toucher la phrase
+          // coche, toucher le lien ouvre le texte. Viser une case de 18
+          // pixels au pouce serait une épreuve inutile.
           child: GestureDetector(
-            onTap: () => onChanged(!accepted),
+            onTap: () => widget.onChanged(!widget.accepted),
             child: Text.rich(
               TextSpan(
                 text: 'J\'ai lu et j\'accepte la ',
@@ -140,7 +158,10 @@ class _PrivacyConsent extends StatelessWidget {
                     style: textStyle?.copyWith(
                       color: scheme.primary,
                       fontWeight: FontWeight.w600,
+                      decoration: TextDecoration.underline,
+                      decorationColor: scheme.primary,
                     ),
+                    recognizer: _openPolicy,
                   ),
                 ],
               ),

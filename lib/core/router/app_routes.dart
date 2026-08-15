@@ -25,6 +25,12 @@ abstract final class AppRoutes {
   static const String secretCodePath = '/code-secret';
   static const String secretCodeName = 'secretCode';
 
+  /// Politique de confidentialité. **Hors de [entryPaths]** : un texte à
+  /// portée juridique doit rester atteignable à tout moment, avant comme
+  /// après connexion.
+  static const String privacyPath = '/politique-confidentialite';
+  static const String privacyName = 'privacy';
+
   static const String homePath = '/';
   static const String homeName = 'home';
 
