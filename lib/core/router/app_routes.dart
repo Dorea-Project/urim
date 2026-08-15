@@ -13,6 +13,28 @@ abstract final class AppRoutes {
   static const String onboardingPath = '/presentation';
   static const String onboardingName = 'onboarding';
 
+  static const String signInPath = '/connexion';
+  static const String signInName = 'signIn';
+
+  static const String otpPath = '/connexion/code';
+  static const String otpName = 'otp';
+
+  static const String secretCodeSetupPath = '/code-secret/creation';
+  static const String secretCodeSetupName = 'secretCodeSetup';
+
+  static const String secretCodePath = '/code-secret';
+  static const String secretCodeName = 'secretCode';
+
   static const String homePath = '/';
   static const String homeName = 'home';
+
+  /// Routes du parcours d'entrée : inaccessibles une fois l'accès ouvert.
+  static const Set<String> entryPaths = {
+    splashPath,
+    onboardingPath,
+    signInPath,
+    otpPath,
+    secretCodeSetupPath,
+    secretCodePath,
+  };
 }

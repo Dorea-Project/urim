@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,6 +7,7 @@ import 'package:urim/core/config/app_config.dart';
 import 'package:urim/core/config/app_config_provider.dart';
 import 'package:urim/core/storage/shared_preferences_provider.dart';
 import 'package:urim/data/datasources/onboarding_local_data_source.dart';
+import 'package:urim/presentation/auth/phone_page.dart';
 import 'package:urim/presentation/home/home_page.dart';
 import 'package:urim/presentation/onboarding/onboarding_content.dart';
 import 'package:urim/presentation/onboarding/onboarding_page.dart';
@@ -53,13 +54,16 @@ void main() {
     expect(find.byType(SplashPage), findsOneWidget);
   });
 
-  testWidgets('présentation déjà vue : on arrive directement sur l\'accueil',
+  testWidgets('présentation déjà vue : on arrive sur la connexion',
       (tester) async {
     await tester.pumpWidget(await buildApp(onboardingSeen: true));
     await tester.pumpAndSettle();
 
-    expect(find.byType(HomePage), findsOneWidget);
+    // L'accueil n'est plus atteignable sans session : la porte d'entrée
+    // renvoie sur le numéro de téléphone.
+    expect(find.byType(PhonePage), findsOneWidget);
     expect(find.byType(OnboardingPage), findsNothing);
+    expect(find.byType(HomePage), findsNothing);
   });
 
   testWidgets('« Passer » clôt la présentation et la retient', (tester) async {
@@ -69,7 +73,7 @@ void main() {
     await tester.tap(find.text(OnboardingContent.skip));
     await tester.pumpAndSettle();
 
-    expect(find.byType(HomePage), findsOneWidget);
+    expect(find.byType(PhonePage), findsOneWidget);
 
     final preferences = await SharedPreferences.getInstance();
     expect(
@@ -79,7 +83,7 @@ void main() {
     );
   });
 
-  testWidgets('le parcours complet mène à l\'accueil', (tester) async {
+  testWidgets('le parcours complet mène à la connexion', (tester) async {
     await tester.pumpWidget(await buildApp(onboardingSeen: false));
     await tester.pumpAndSettle();
 
@@ -90,6 +94,25 @@ void main() {
     await tester.tap(find.text(OnboardingContent.enter));
     await tester.pumpAndSettle();
 
-    expect(find.byType(HomePage), findsOneWidget);
+    expect(find.byType(PhonePage), findsOneWidget);
+  });
+
+  testWidgets('le bouton reste inactif tant que la politique n\'est pas '
+      'acceptée', (tester) async {
+    await tester.pumpWidget(await buildApp(onboardingSeen: true));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+      find.byType(TextFormField).last,
+      '0747769069',
+    );
+    await tester.pumpAndSettle();
+
+    final button = tester.widget<FilledButton>(find.byType(FilledButton));
+    expect(
+      button.onPressed,
+      isNull,
+      reason: 'le consentement conditionne l\'envoi du SMS',
+    );
   });
 }

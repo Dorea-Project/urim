@@ -3,6 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/core/config/app_config_provider.dart';
 import 'package:urim/core/router/app_routes.dart';
+import 'package:urim/presentation/auth/auth_gate.dart';
+import 'package:urim/presentation/auth/otp_page.dart';
+import 'package:urim/presentation/auth/phone_page.dart';
+import 'package:urim/presentation/auth/secret_code_page.dart';
 import 'package:urim/presentation/home/home_page.dart';
 import 'package:urim/presentation/onboarding/onboarding_page.dart';
 import 'package:urim/presentation/onboarding/onboarding_view_model.dart';
@@ -23,37 +27,57 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   final refreshSignal = ValueNotifier<int>(0);
   ref.onDispose(refreshSignal.dispose);
   ref.listen(onboardingCompletedProvider, (_, _) => refreshSignal.value++);
+  ref.listen(authGateProvider, (_, _) => refreshSignal.value++);
 
   return GoRouter(
     initialLocation: AppRoutes.splashPath,
     debugLogDiagnostics: config.enableVerboseLogging,
     refreshListenable: refreshSignal,
     redirect: (context, state) {
-      final status = ref.read(onboardingCompletedProvider);
       final location = state.matchedLocation;
 
-      return switch (status) {
-        // Lecture en cours : on tient l'écran de lancement.
-        AsyncLoading() =>
-          location == AppRoutes.splashPath ? null : AppRoutes.splashPath,
+      // --- 1. Présentation ---------------------------------------------------
 
-        // Jamais vue : présentation obligatoire.
-        AsyncData(:final bool value) when !value =>
-          location == AppRoutes.onboardingPath
-              ? null
-              : AppRoutes.onboardingPath,
+      final onboarding = ref.read(onboardingCompletedProvider);
+      if (onboarding.isLoading) {
+        return location == AppRoutes.splashPath ? null : AppRoutes.splashPath;
+      }
 
-        // Déjà vue : lancement et présentation ne sont plus atteignables.
-        AsyncData() => location == AppRoutes.splashPath ||
-                location == AppRoutes.onboardingPath
-            ? AppRoutes.homePath
-            : null,
-
-        // Lecture impossible : mieux vaut une présentation en trop qu'un
-        // démarrage bloqué.
-        AsyncError() => location == AppRoutes.onboardingPath
+      // Une lecture en échec vaut « jamais vue » : mieux vaut une présentation
+      // en trop qu'un démarrage bloqué.
+      if (!(onboarding.value ?? false)) {
+        return location == AppRoutes.onboardingPath
             ? null
-            : AppRoutes.onboardingPath,
+            : AppRoutes.onboardingPath;
+      }
+
+      // --- 2. Accès ----------------------------------------------------------
+
+      final gate = ref.read(authGateProvider);
+      if (gate.isLoading) {
+        return location == AppRoutes.splashPath ? null : AppRoutes.splashPath;
+      }
+
+      // En cas d'échec de lecture, on retombe sur la connexion : le pire
+      // scénario est de redemander un SMS, jamais d'ouvrir l'accès.
+      return switch (gate.value ?? AuthGate.signedOut) {
+        // Le parcours compte deux écrans : les deux restent atteignables.
+        AuthGate.signedOut =>
+          location == AppRoutes.signInPath || location == AppRoutes.otpPath
+              ? null
+              : AppRoutes.signInPath,
+
+        AuthGate.needsSecretCode => location == AppRoutes.secretCodeSetupPath
+            ? null
+            : AppRoutes.secretCodeSetupPath,
+
+        AuthGate.locked => location == AppRoutes.secretCodePath
+            ? null
+            : AppRoutes.secretCodePath,
+
+        // Accès ouvert : plus aucune route d'entrée n'est atteignable.
+        AuthGate.ready =>
+          AppRoutes.entryPaths.contains(location) ? AppRoutes.homePath : null,
       };
     },
     routes: [
@@ -66,6 +90,26 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.onboardingPath,
         name: AppRoutes.onboardingName,
         builder: (context, state) => const OnboardingPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.signInPath,
+        name: AppRoutes.signInName,
+        builder: (context, state) => const PhonePage(),
+      ),
+      GoRoute(
+        path: AppRoutes.otpPath,
+        name: AppRoutes.otpName,
+        builder: (context, state) => const OtpPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.secretCodeSetupPath,
+        name: AppRoutes.secretCodeSetupName,
+        builder: (context, state) => const SecretCodeSetupPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.secretCodePath,
+        name: AppRoutes.secretCodeName,
+        builder: (context, state) => const SecretCodeUnlockPage(),
       ),
       GoRoute(
         path: AppRoutes.homePath,
