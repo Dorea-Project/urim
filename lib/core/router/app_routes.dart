@@ -19,6 +19,11 @@ abstract final class AppRoutes {
   static const String otpPath = '/connexion/code';
   static const String otpName = 'otp';
 
+  /// Connexion d'un compte existant : le code secret d'abord, le SMS seulement
+  /// si le serveur ne reconnaît pas l'appareil.
+  static const String signInSecretCodePath = '/connexion/acces';
+  static const String signInSecretCodeName = 'signInSecretCode';
+
   static const String secretCodeSetupPath = '/code-secret/creation';
   static const String secretCodeSetupName = 'secretCodeSetup';
 
@@ -67,7 +72,20 @@ abstract final class AppRoutes {
     onboardingPath,
     signInPath,
     otpPath,
+    signInSecretCodePath,
     secretCodeSetupPath,
     secretCodePath,
+  };
+
+  /// Routes atteignables tant que personne n'est connecté.
+  ///
+  /// La création du code secret n'en fait pas partie : elle suppose une session
+  /// ouverte — sauf à l'inscription, où elle la termine, et où le numéro tenu
+  /// en mémoire suffit à distinguer les deux cas.
+  static const Set<String> signedOutPaths = {
+    signInPath,
+    otpPath,
+    signInSecretCodePath,
+    secretCodeSetupPath,
   };
 }

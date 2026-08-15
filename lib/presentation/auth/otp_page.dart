@@ -2,9 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:urim/core/config/mock_credentials.dart';
+import 'package:urim/core/router/app_routes.dart';
 import 'package:urim/domain/entities/auth/otp_challenge.dart';
 import 'package:urim/presentation/auth/auth_flow_view_model.dart';
 import 'package:urim/presentation/common/brand_mark.dart';
+import 'package:urim/presentation/common/demo_banner.dart';
 import 'package:urim/presentation/common/code_input.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
@@ -48,16 +52,33 @@ class _OtpPageState extends ConsumerState<OtpPage> {
   }
 
   void _refreshRemaining() {
-    final challenge = ref.read(authFlowViewModelProvider).challenge;
-    if (challenge == null) return;
+    final state = ref.read(authFlowViewModelProvider);
+    if (!state.hasPendingOtp) return;
 
-    final left = challenge.remaining(DateTime.now());
+    final left = state.remaining(DateTime.now());
     if (mounted && left != _remaining) setState(() => _remaining = left);
   }
 
+  /// Le code n'est pas vérifié ici.
+  ///
+  /// À l'inscription, le serveur veut le code SMS **et** le code secret dans le
+  /// même appel : le vérifier seul obligerait à le rejouer ensuite, et un code
+  /// à usage unique ne se rejoue pas. On le garde donc et l'on passe à la
+  /// serrure. Sur un appareil inconnu, en revanche, il n'y a rien à poser :
+  /// la vérification se fait ici.
   Future<void> _validate() async {
-    final verified =
-        await ref.read(authFlowViewModelProvider.notifier).verifyCode(_code);
+    final viewModel = ref.read(authFlowViewModelProvider.notifier);
+    viewModel.setOtp(_code);
+
+    // Inscription et code oublié posent une serrure : le code SMS les
+    // accompagne dans le même appel, une fois le code secret choisi.
+    final door = ref.read(authFlowViewModelProvider).door;
+    if (door != AuthDoor.signIn) {
+      if (mounted) context.goNamed(AppRoutes.secretCodeSetupName);
+      return;
+    }
+
+    final verified = await viewModel.verifyDevice();
 
     // Réussite : la redirection conduit à la suite, l'écran n'a rien à faire.
     if (!verified && mounted) {
@@ -99,7 +120,11 @@ class _OtpPageState extends ConsumerState<OtpPage> {
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              const SizedBox(height: AppSpacing.xl),
+              const SizedBox(height: AppSpacing.lg),
+              const DemoBanner(
+                text: 'Serveur simulé : le code est ${MockCredentials.otp}.',
+              ),
+              const SizedBox(height: AppSpacing.lg),
               CodeInput(
                 key: _inputKey,
                 length: OtpChallenge.defaultCodeLength,

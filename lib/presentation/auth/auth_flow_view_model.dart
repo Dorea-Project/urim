@@ -1,10 +1,17 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:urim/core/config/app_config_provider.dart';
+import 'package:urim/core/config/mock_credentials.dart';
 import 'package:urim/core/error/failure.dart';
+import 'package:urim/core/result/result.dart';
 import 'package:urim/core/time/clock_provider.dart';
+import 'package:urim/domain/entities/auth/auth_session.dart';
 import 'package:urim/data/repositories/auth_repository_impl.dart';
+import 'package:urim/data/repositories/secret_code_repository_impl.dart';
 import 'package:urim/domain/entities/auth/otp_challenge.dart';
 import 'package:urim/domain/entities/auth/phone_number.dart';
+import 'package:urim/domain/repositories/auth_repository.dart';
+import 'package:urim/domain/usecases/auth/define_secret_code.dart';
 import 'package:urim/domain/usecases/auth/request_otp.dart';
 import 'package:urim/domain/usecases/auth/verify_otp.dart';
 import 'package:urim/presentation/auth/auth_gate.dart';
@@ -13,32 +20,72 @@ final requestOtpProvider = Provider(
   (ref) => RequestOtp(ref.watch(authRepositoryProvider)),
 );
 
-final verifyOtpProvider = Provider(
-  (ref) => VerifyOtp(
-    ref.watch(authRepositoryProvider),
-    ref.watch(clockProvider).now,
-  ),
+final confirmRegistrationProvider = Provider(
+  (ref) => ConfirmRegistration(ref.watch(authRepositoryProvider)),
 );
 
-/// État partagé par les deux écrans de connexion.
+final verifyDeviceProvider = Provider(
+  (ref) => VerifyDevice(ref.watch(authRepositoryProvider)),
+);
+
+/// Par quelle porte l'utilisateur est entré.
 ///
-/// Un seul contrôleur plutôt qu'un par écran : l'écran du code a besoin du
-/// défi produit par l'écran du numéro, et le faire transiter par les
-/// paramètres de route exposerait un identifiant de session dans l'URL.
+/// Le serveur en expose deux — inscription et connexion — et refuse de dire si
+/// un numéro est connu : répondre ferait de la route un annuaire des inscrits.
+/// C'est donc l'utilisateur qui choisit, depuis la présentation.
+enum AuthDoor {
+  /// Créer un compte : SMS, puis code secret posé dans le même geste.
+  registration,
+
+  /// Se connecter : code secret d'abord, SMS seulement si l'appareil est
+  /// inconnu du serveur.
+  signIn,
+
+  /// Code secret oublié : SMS, puis nouveau code. Les autres appareils sont
+  /// révoqués — changer la serrure laisse rarement les anciennes clés en
+  /// circulation.
+  secretCodeReset,
+}
+
+/// État partagé par les écrans du parcours d'entrée.
+///
+/// Un seul contrôleur plutôt qu'un par écran : le code secret a besoin du
+/// numéro et du code SMS saisis deux écrans plus tôt, et les faire transiter
+/// par les paramètres de route exposerait le tout dans l'URL.
 final class AuthFlowState extends Equatable {
   const AuthFlowState({
+    this.door = AuthDoor.registration,
     this.dialCode = PhoneNumber.defaultDialCode,
     this.nationalNumber = '',
     this.privacyAccepted = false,
-    this.challenge,
+    this.otp = '',
+    this.secretCode = '',
+    this.otpRequestedAt,
     this.isSubmitting = false,
     this.failure,
   });
 
+  final AuthDoor door;
   final String dialCode;
   final String nationalNumber;
   final bool privacyAccepted;
-  final OtpChallenge? challenge;
+
+  /// Code SMS saisi, gardé le temps d'atteindre l'écran du code secret :
+  /// à l'inscription, le serveur veut les deux d'un seul appel.
+  final String otp;
+
+  /// Code secret saisi à la connexion, gardé **en mémoire seulement**.
+  ///
+  /// Il sert à poser la dérivation locale de déverrouillage une fois la session
+  /// ouverte, sans redemander à l'utilisateur ce qu'il vient de taper. Il
+  /// disparaît avec l'écran : rien ne l'écrit nulle part.
+  final String secretCode;
+
+  /// Moment de l'envoi, qui fait courir le compte à rebours. Le serveur ne
+  /// renvoie ni identifiant de défi ni échéance — il envoie un SMS, et c'est
+  /// tout.
+  final DateTime? otpRequestedAt;
+
   final bool isSubmitting;
   final Failure? failure;
 
@@ -47,10 +94,27 @@ final class AuthFlowState extends Equatable {
         nationalNumber: PhoneNumber.normalize(nationalNumber),
       );
 
+  bool get hasPendingOtp => otpRequestedAt != null;
+
+  /// Temps restant avant qu'il faille redemander un code.
+  Duration remaining(DateTime now) {
+    final requestedAt = otpRequestedAt;
+    if (requestedAt == null) return Duration.zero;
+
+    final left = OtpChallenge.defaultValidity - now.difference(requestedAt);
+
+    return left.isNegative ? Duration.zero : left;
+  }
+
   /// Le bouton reste actif tant que la saisie est plausible ; le refus précis
   /// vient du cas d'usage, qui sait dire *pourquoi*.
+  ///
+  /// Le consentement ne conditionne que l'inscription : celui qui se reconnecte
+  /// l'a donné le jour où il a créé son compte.
   bool get canSubmitPhone =>
-      !isSubmitting && privacyAccepted && phone.isValid;
+      !isSubmitting &&
+      phone.isValid &&
+      (door != AuthDoor.registration || privacyAccepted);
 
   String? get fieldError => switch (failure) {
         ValidationFailure(:final fieldErrors) when fieldErrors.isNotEmpty =>
@@ -59,29 +123,38 @@ final class AuthFlowState extends Equatable {
       };
 
   AuthFlowState copyWith({
+    AuthDoor? door,
     String? dialCode,
     String? nationalNumber,
     bool? privacyAccepted,
-    OtpChallenge? challenge,
+    String? otp,
+    String? secretCode,
+    DateTime? otpRequestedAt,
     bool? isSubmitting,
     Failure? failure,
     bool clearFailure = false,
   }) =>
       AuthFlowState(
+        door: door ?? this.door,
         dialCode: dialCode ?? this.dialCode,
         nationalNumber: nationalNumber ?? this.nationalNumber,
         privacyAccepted: privacyAccepted ?? this.privacyAccepted,
-        challenge: challenge ?? this.challenge,
+        otp: otp ?? this.otp,
+        secretCode: secretCode ?? this.secretCode,
+        otpRequestedAt: otpRequestedAt ?? this.otpRequestedAt,
         isSubmitting: isSubmitting ?? this.isSubmitting,
         failure: clearFailure ? null : (failure ?? this.failure),
       );
 
   @override
   List<Object?> get props => [
+        door,
         dialCode,
         nationalNumber,
         privacyAccepted,
-        challenge,
+        otp,
+        secretCode,
+        otpRequestedAt,
         isSubmitting,
         failure,
       ];
@@ -89,7 +162,22 @@ final class AuthFlowState extends Equatable {
 
 final class AuthFlowViewModel extends Notifier<AuthFlowState> {
   @override
-  AuthFlowState build() => const AuthFlowState();
+  AuthFlowState build() {
+    // Hors serveur, le numéro de démonstration est déjà là : sans passerelle
+    // SMS, taper un numéro au hasard n'apprend rien de plus. Le consentement,
+    // lui, reste à cocher — c'est un geste, pas un réglage.
+    if (ref.watch(appConfigProvider).usesMockCredentials) {
+      return const AuthFlowState(
+        dialCode: MockCredentials.dialCode,
+        nationalNumber: MockCredentials.nationalNumber,
+      );
+    }
+
+    return const AuthFlowState();
+  }
+
+  void setDoor(AuthDoor door) =>
+      state = state.copyWith(door: door, clearFailure: true);
 
   void setDialCode(String value) =>
       state = state.copyWith(dialCode: value, clearFailure: true);
@@ -100,7 +188,10 @@ final class AuthFlowViewModel extends Notifier<AuthFlowState> {
   void setPrivacyAccepted(bool value) =>
       state = state.copyWith(privacyAccepted: value, clearFailure: true);
 
-  /// Demande l'envoi du code. Vrai si un défi a été obtenu.
+  void setOtp(String value) =>
+      state = state.copyWith(otp: value, clearFailure: true);
+
+  /// Demande l'envoi du code. Vrai si le SMS est parti.
   Future<bool> requestCode() async {
     state = state.copyWith(isSubmitting: true, clearFailure: true);
 
@@ -112,8 +203,12 @@ final class AuthFlowViewModel extends Notifier<AuthFlowState> {
     );
 
     return result.fold(
-      onSuccess: (challenge) {
-        state = state.copyWith(challenge: challenge, isSubmitting: false);
+      onSuccess: (_) {
+        state = state.copyWith(
+          isSubmitting: false,
+          otp: '',
+          otpRequestedAt: ref.read(clockProvider).now(),
+        );
         return true;
       },
       onFailure: (failure) {
@@ -123,22 +218,97 @@ final class AuthFlowViewModel extends Notifier<AuthFlowState> {
     );
   }
 
-  /// Vérifie le code saisi. Vrai si la session est ouverte.
-  Future<bool> verifyCode(String code) async {
-    final challenge = state.challenge;
-    if (challenge == null) return false;
-
+  /// Termine l'inscription : code SMS + code secret, en un seul appel.
+  Future<bool> confirmRegistration(String secretCode) async {
     state = state.copyWith(isSubmitting: true, clearFailure: true);
 
-    final result = await ref.read(verifyOtpProvider)(
-      VerifyOtpParams(challenge: challenge, code: code),
+    final result = await ref.read(confirmRegistrationProvider)(
+      ConfirmRegistrationParams(
+        phone: state.phone,
+        otp: state.otp,
+        secretCode: secretCode,
+      ),
     );
+
+    return _settle(result);
+  }
+
+  /// Vérifie le code reçu sur un appareil inconnu du serveur.
+  Future<bool> verifyDevice() async {
+    state = state.copyWith(isSubmitting: true, clearFailure: true);
+
+    final result = await ref.read(verifyDeviceProvider)(
+      VerifyDeviceParams(phone: state.phone, otp: state.otp),
+    );
+
+    return _settle(result);
+  }
+
+  /// Connexion d'un compte existant.
+  ///
+  /// Rend l'issue du serveur : session ouverte, ou appareil inconnu — auquel
+  /// cas un SMS est déjà parti et l'écran du code prend la suite. `null`
+  /// signale un refus, dont le motif est dans `state.failure`.
+  Future<SignInResult?> signIn(String secretCode) async {
+    state = state.copyWith(
+      isSubmitting: true,
+      secretCode: secretCode,
+      clearFailure: true,
+    );
+
+    final result = await ref.read(authRepositoryProvider).signIn(
+          phone: state.phone,
+          secretCode: secretCode,
+        );
+
+    final outcome = result.valueOrNull;
+
+    if (outcome == null) {
+      state = state.copyWith(
+        isSubmitting: false,
+        failure: result.failureOrNull,
+      );
+      return null;
+    }
+
+    state = state.copyWith(
+      isSubmitting: false,
+      otpRequestedAt: outcome is DeviceVerificationNeeded
+          ? ref.read(clockProvider).now()
+          : null,
+      otp: '',
+    );
+
+    if (outcome is SessionOpened) {
+      await _adoptUnlockCode(secretCode);
+      _openGate();
+    }
+
+    return outcome;
+  }
+
+  /// Code secret oublié — demande le SMS.
+  ///
+  /// Réussit toujours, même sur un numéro inconnu : c'est la règle du serveur,
+  /// et l'écran ne doit pas la contredire en affichant « numéro introuvable ».
+  Future<bool> requestSecretCodeReset() async {
+    state = state.copyWith(
+      isSubmitting: true,
+      door: AuthDoor.secretCodeReset,
+      clearFailure: true,
+    );
+
+    final result = await ref
+        .read(authRepositoryProvider)
+        .requestSecretCodeReset(state.phone);
 
     return result.fold(
       onSuccess: (_) {
-        state = state.copyWith(isSubmitting: false);
-        // La redirection prend le relais : la session existe désormais.
-        ref.invalidate(authSessionProvider);
+        state = state.copyWith(
+          isSubmitting: false,
+          otp: '',
+          otpRequestedAt: ref.read(clockProvider).now(),
+        );
         return true;
       },
       onFailure: (failure) {
@@ -146,6 +316,52 @@ final class AuthFlowViewModel extends Notifier<AuthFlowState> {
         return false;
       },
     );
+  }
+
+  /// Code secret oublié — pose le nouveau code et ouvre la session.
+  Future<bool> confirmSecretCodeReset(String newSecretCode) async {
+    state = state.copyWith(isSubmitting: true, clearFailure: true);
+
+    final result = await ref.read(authRepositoryProvider).confirmSecretCodeReset(
+          phone: state.phone,
+          otp: state.otp,
+          newSecretCode: newSecretCode,
+        );
+
+    return _settle(result);
+  }
+
+  bool _settle(Result<AuthSession> result) => result.fold(
+        onSuccess: (_) {
+          state = state.copyWith(isSubmitting: false);
+          _openGate();
+          return true;
+        },
+        onFailure: (failure) {
+          state = state.copyWith(isSubmitting: false, failure: failure);
+          return false;
+        },
+      );
+
+  /// Pose la dérivation locale du code que l'utilisateur vient de taper.
+  ///
+  /// Le serveur vient de le valider : le redemander pour créer la serrure
+  /// locale serait le lui faire saisir deux fois de suite. L'échec est
+  /// volontairement ignoré — un code que la politique locale refuse (une suite,
+  /// une répétition) laisse simplement l'application demander un code de
+  /// déverrouillage à l'écran suivant.
+  Future<void> _adoptUnlockCode(String secretCode) async {
+    await DefineSecretCode(ref.read(secretCodeRepositoryProvider))(
+      DefineSecretCodeParams(code: secretCode, confirmation: secretCode),
+    );
+
+    ref.invalidate(hasSecretCodeProvider);
+  }
+
+  /// La redirection prend le relais : la session existe désormais.
+  void _openGate() {
+    ref.invalidate(authSessionProvider);
+    ref.read(sessionUnlockedProvider.notifier).unlock();
   }
 }
 

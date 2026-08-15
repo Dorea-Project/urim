@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:urim/presentation/auth/auth_flow_view_model.dart';
 import 'package:urim/presentation/onboarding/onboarding_content.dart';
 import 'package:urim/presentation/onboarding/onboarding_view_model.dart';
 import 'package:urim/presentation/onboarding/widgets/page_indicator.dart';
@@ -36,7 +37,13 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
         curve: _curve,
       );
 
-  Future<void> _finish() async {
+  /// Termine la présentation, en retenant par quelle porte on entre.
+  ///
+  /// Le serveur ne dira jamais si un numéro est connu — ce serait un annuaire
+  /// des inscrits. C'est donc ici, et seulement ici, que le choix se fait.
+  Future<void> _finish({AuthDoor door = AuthDoor.registration}) async {
+    ref.read(authFlowViewModelProvider.notifier).setDoor(door);
+
     final failure =
         await ref.read(onboardingViewModelProvider.notifier).complete();
 
@@ -113,11 +120,11 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                 ),
               ),
             ),
-            // « J'ai déjà un compte » mène au même écran que « Créer mon
-            // compte » : le parcours par SMS reconnaît un numéro connu, il n'a
-            // pas deux portes (Q13).
+            // Deux portes, deux parcours : créer un compte commence par un
+            // SMS, se connecter commence par le code secret (Q13).
             TextButton(
-              onPressed: isBusy ? null : _finish,
+              onPressed:
+                  isBusy ? null : () => _finish(door: AuthDoor.signIn),
               child: const Text(OnboardingContent.signIn),
             ),
             const SizedBox(height: AppSpacing.sm),

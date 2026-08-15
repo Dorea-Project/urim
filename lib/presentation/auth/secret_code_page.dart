@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:urim/core/config/mock_credentials.dart';
 import 'package:urim/core/error/failure.dart';
 import 'package:urim/domain/entities/auth/secret_code_policy.dart';
 import 'package:urim/presentation/auth/secret_code_view_model.dart';
 import 'package:urim/presentation/common/brand_mark.dart';
 import 'package:urim/presentation/common/code_input.dart';
+import 'package:urim/presentation/common/demo_banner.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
 
@@ -47,6 +49,8 @@ class _SecretCodeSetupPageState extends ConsumerState<SecretCodeSetupPage> {
       helper: isConfirming
           ? 'Saisissez-le une seconde fois'
           : '${SecretCodePolicy.length} chiffres, demandés à chaque ouverture',
+      demo: 'Pour l\'essai : ${MockCredentials.secretCode}. '
+          'Un code répété (0000) ou suivi (1234) est refusé.',
       failure: state.failure,
       isSubmitting: state.isSubmitting,
       inputKey: _inputKey,
@@ -88,6 +92,8 @@ class _SecretCodeUnlockPageState extends ConsumerState<SecretCodeUnlockPage> {
       title: 'Votre code secret',
       helper: _wrongCode ? 'Code incorrect' : 'Saisissez vos chiffres',
       helperIsError: _wrongCode,
+      demo: 'Celui que tu as choisi à la création — '
+          '${MockCredentials.secretCode} si tu as suivi la suggestion.',
       failure: status.error is Failure ? status.error as Failure : null,
       isSubmitting: status.isLoading,
       inputKey: _inputKey,
@@ -102,6 +108,7 @@ class _SecretCodeScaffold extends StatelessWidget {
   const _SecretCodeScaffold({
     required this.title,
     required this.helper,
+    required this.demo,
     required this.failure,
     required this.isSubmitting,
     required this.inputKey,
@@ -111,6 +118,10 @@ class _SecretCodeScaffold extends StatelessWidget {
 
   final String title;
   final String helper;
+
+  /// Ce que dit le bandeau de démonstration. Ignoré en production.
+  final String demo;
+
   final bool helperIsError;
   final Failure? failure;
   final bool isSubmitting;
@@ -145,7 +156,9 @@ class _SecretCodeScaffold extends StatelessWidget {
                           helperIsError ? scheme.error : colors.textSecondary,
                     ),
               ),
-              const SizedBox(height: AppSpacing.xl),
+              const SizedBox(height: AppSpacing.lg),
+              DemoBanner(text: demo),
+              const SizedBox(height: AppSpacing.lg),
               CodeInput(
                 key: inputKey,
                 length: SecretCodePolicy.length,

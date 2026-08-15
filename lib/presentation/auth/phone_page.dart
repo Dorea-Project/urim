@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:urim/core/router/app_routes.dart';
 import 'package:urim/presentation/auth/auth_flow_view_model.dart';
 import 'package:urim/presentation/common/brand_mark.dart';
+import 'package:urim/presentation/common/demo_banner.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
 
@@ -23,7 +24,14 @@ class PhonePage extends ConsumerWidget {
     final viewModel = ref.read(authFlowViewModelProvider.notifier);
     final scheme = Theme.of(context).colorScheme;
 
+    // Deux portes : créer un compte demande un SMS tout de suite ; se
+    // connecter demande d'abord le code secret, et n'enverra un SMS que si le
+    // serveur ne reconnaît pas l'appareil.
     Future<void> submit() async {
+      if (state.door == AuthDoor.signIn) {
+        return context.goNamed(AppRoutes.signInSecretCodeName);
+      }
+
       if (await viewModel.requestCode() && context.mounted) {
         context.goNamed(AppRoutes.otpName);
       }
@@ -40,7 +48,9 @@ class PhonePage extends ConsumerWidget {
               Center(child: BrandMonogram(color: scheme.primary, size: 96)),
               const SizedBox(height: AppSpacing.xxxl),
               Text(
-                'Votre numéro valide',
+                state.door == AuthDoor.signIn
+                    ? 'Ton numéro'
+                    : 'Ton numéro valide',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
@@ -63,6 +73,7 @@ class PhonePage extends ConsumerWidget {
                   const SizedBox(width: AppSpacing.md),
                   Expanded(
                     child: TextFormField(
+                      initialValue: state.nationalNumber,
                       keyboardType: TextInputType.phone,
                       autofocus: true,
                       onChanged: viewModel.setNationalNumber,
@@ -82,10 +93,19 @@ class PhonePage extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: AppSpacing.lg),
-              _PrivacyConsent(
-                accepted: state.privacyAccepted,
-                onChanged: viewModel.setPrivacyAccepted,
+              const DemoBanner(
+                text: 'Serveur simulé : aucun SMS ne part. Le numéro est '
+                    'prérempli, coche la politique et soumets.',
               ),
+              const SizedBox(height: AppSpacing.lg),
+              // Le consentement n'est demandé qu'à l'inscription : celui qui se
+              // reconnecte l'a déjà donné, et le lui redemander n'aurait aucune
+              // portée.
+              if (state.door == AuthDoor.registration)
+                _PrivacyConsent(
+                  accepted: state.privacyAccepted,
+                  onChanged: viewModel.setPrivacyAccepted,
+                ),
               const SizedBox(height: AppSpacing.xl),
               FilledButton(
                 onPressed: state.canSubmitPhone ? submit : null,

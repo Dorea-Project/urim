@@ -21,7 +21,11 @@ final class OtpChallenge extends Equatable {
   final DateTime expiresAt;
   final int codeLength;
 
-  static const int defaultCodeLength = 5;
+  /// Six chiffres : c'est ce que le serveur émet
+  /// (`app/contexts/auth/infrastructure/otp.py`). L'écran de saisie s'y règle
+  /// tout seul, mais un écart ferait échouer la vérification sans qu'aucun
+  /// message ne l'explique.
+  static const int defaultCodeLength = 6;
   static const Duration defaultValidity = Duration(minutes: 5);
 
   bool isExpired(DateTime now) => !now.isBefore(expiresAt);

@@ -4,6 +4,7 @@ import 'package:urim/core/error/failure.dart';
 import 'package:urim/data/repositories/secret_code_repository_impl.dart';
 import 'package:urim/domain/usecases/auth/define_secret_code.dart';
 import 'package:urim/domain/usecases/auth/verify_secret_code.dart';
+import 'package:urim/presentation/auth/auth_flow_view_model.dart';
 import 'package:urim/presentation/auth/auth_gate.dart';
 
 final defineSecretCodeProvider = Provider(
@@ -48,7 +49,19 @@ final class SecretCodeViewModel extends Notifier<SecretCodeState> {
   /// Retour à la première saisie, après une confirmation divergente.
   void restart() => state = const SecretCodeState();
 
-  /// Seconde saisie : c'est ici que le cas d'usage tranche.
+  /// Seconde saisie : c'est ici que tout se joue.
+  ///
+  /// Le code part **deux fois**, et ce n'est pas une redondance :
+  ///
+  /// - au serveur, où il devient l'identifiant du compte — c'est lui qui sera
+  ///   redemandé depuis un autre téléphone ;
+  /// - en local, sous forme dérivée, pour déverrouiller l'application sans
+  ///   réseau. Redemander au serveur à chaque ouverture rendrait Urim
+  ///   inutilisable dès que la connexion manque.
+  ///
+  /// L'ordre importe : la règle locale — quatre chiffres, ni suite ni
+  /// répétition, deux saisies identiques — filtre d'abord, pour ne pas
+  /// dépenser un appel sur un code que le serveur refuserait aussi.
   Future<bool> confirm(String confirmation) async {
     state = SecretCodeState(
       stage: state.stage,
@@ -56,29 +69,56 @@ final class SecretCodeViewModel extends Notifier<SecretCodeState> {
       isSubmitting: true,
     );
 
-    final result = await ref.read(defineSecretCodeProvider)(
+    final local = await ref.read(defineSecretCodeProvider)(
       DefineSecretCodeParams(
         code: state.firstEntry,
         confirmation: confirmation,
       ),
     );
 
-    return result.fold(
-      onSuccess: (_) {
-        // Définir son code vaut déverrouillage : on ne le redemande pas dans
-        // la foulée.
-        ref.read(sessionUnlockedProvider.notifier).unlock();
-        ref.invalidate(hasSecretCodeProvider);
-        state = const SecretCodeState();
-        return true;
-      },
-      onFailure: (failure) {
-        // Codes trop simples ou saisies divergentes : on repart de la
-        // première saisie, garder la précédente n'aurait pas de sens.
-        state = SecretCodeState(failure: failure);
-        return false;
-      },
-    );
+    final rejected = local.failureOrNull;
+    if (rejected != null) {
+      // Codes trop simples ou saisies divergentes : on repart de la première
+      // saisie, garder la précédente n'aurait pas de sens.
+      state = SecretCodeState(failure: rejected);
+      return false;
+    }
+
+    if (!await _settleWithServer()) {
+      state = SecretCodeState(
+        failure: ref.read(authFlowViewModelProvider).failure,
+      );
+      return false;
+    }
+
+    // Poser son code vaut déverrouillage : on ne le redemande pas dans la
+    // foulée.
+    ref.read(sessionUnlockedProvider.notifier).unlock();
+    ref.invalidate(hasSecretCodeProvider);
+    state = const SecretCodeState();
+
+    return true;
+  }
+
+  /// Ce que le serveur doit faire de ce code, selon la porte empruntée.
+  ///
+  /// Trois cas, et un seul n'appelle personne : quand la session est déjà
+  /// ouverte — connexion depuis un appareil qui n'avait pas encore de serrure
+  /// locale — le code ne sert qu'à déverrouiller, et le serveur a déjà le sien.
+  Future<bool> _settleWithServer() async {
+    final flow = ref.read(authFlowViewModelProvider.notifier);
+    final hasSession = ref.read(authSessionProvider).value != null;
+
+    if (hasSession) return true;
+
+    return switch (ref.read(authFlowViewModelProvider).door) {
+      AuthDoor.registration => flow.confirmRegistration(state.firstEntry),
+      AuthDoor.secretCodeReset =>
+        flow.confirmSecretCodeReset(state.firstEntry),
+      // Sans session et sans porte posée, il n'y a rien à confirmer : la
+      // serrure locale suffit, la redirection dira si l'accès s'ouvre.
+      AuthDoor.signIn => true,
+    };
   }
 }
 

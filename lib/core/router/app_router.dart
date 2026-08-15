@@ -7,6 +7,7 @@ import 'package:urim/presentation/auth/auth_gate.dart';
 import 'package:urim/presentation/auth/otp_page.dart';
 import 'package:urim/presentation/auth/phone_page.dart';
 import 'package:urim/presentation/auth/secret_code_page.dart';
+import 'package:urim/presentation/auth/sign_in_secret_code_page.dart';
 import 'package:urim/presentation/home/home_page.dart';
 import 'package:urim/presentation/legal/privacy_policy_page.dart';
 import 'package:urim/presentation/onboarding/onboarding_page.dart';
@@ -75,11 +76,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       // En cas d'échec de lecture, on retombe sur la connexion : le pire
       // scénario est de redemander un SMS, jamais d'ouvrir l'accès.
       return switch (gate.value ?? AuthGate.signedOut) {
-        // Le parcours compte deux écrans : les deux restent atteignables.
-        AuthGate.signedOut =>
-          location == AppRoutes.signInPath || location == AppRoutes.otpPath
-              ? null
-              : AppRoutes.signInPath,
+        // Deux portes, quatre écrans : numéro, code SMS, code secret de
+        // connexion, création du code secret. Tous restent atteignables tant
+        // que la session n'est pas ouverte.
+        AuthGate.signedOut => AppRoutes.signedOutPaths.contains(location)
+            ? null
+            : AppRoutes.signInPath,
 
         AuthGate.needsSecretCode => location == AppRoutes.secretCodeSetupPath
             ? null
@@ -114,6 +116,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.otpPath,
         name: AppRoutes.otpName,
         builder: (context, state) => const OtpPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.signInSecretCodePath,
+        name: AppRoutes.signInSecretCodeName,
+        builder: (context, state) => const SignInSecretCodePage(),
       ),
       GoRoute(
         path: AppRoutes.secretCodeSetupPath,
