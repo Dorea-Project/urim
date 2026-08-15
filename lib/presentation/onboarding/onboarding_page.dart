@@ -37,7 +37,8 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
       );
 
   Future<void> _finish() async {
-    final failure = await ref.read(onboardingViewModelProvider.notifier).complete();
+    final failure =
+        await ref.read(onboardingViewModelProvider.notifier).complete();
 
     // La redirection du routeur prend le relais dès que la présentation est
     // marquée comme vue ; l'écran n'a pas à naviguer lui-même.
@@ -55,7 +56,23 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
     return Scaffold(
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // « Passer » reste au même endroit sur les trois étapes : une
+            // sortie qu'on cherche du regard une seule fois.
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.only(right: AppSpacing.md),
+                child: TextButton(
+                  onPressed: isBusy ? null : _finish,
+                  style: TextButton.styleFrom(
+                    foregroundColor: context.colors.textSecondary,
+                  ),
+                  child: const Text(OnboardingContent.skip),
+                ),
+              ),
+            ),
             Expanded(
               child: PageView.builder(
                 controller: _controller,
@@ -65,97 +82,48 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                     _StepView(step: OnboardingContent.steps[index]),
               ),
             ),
-            PageIndicator(
-              count: OnboardingContent.steps.length,
-              currentIndex: _index,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.xl,
+                0,
+                AppSpacing.xl,
+                AppSpacing.lg,
+              ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: PageIndicator(
+                  count: OnboardingContent.steps.length,
+                  currentIndex: _index,
+                ),
+              ),
             ),
-            const SizedBox(height: AppSpacing.xl),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-              child: SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: isBusy
-                      ? null
-                      : () => _isLastStep ? _finish() : _goTo(_index + 1),
-                  child: Text(
-                    _isLastStep
-                        ? OnboardingContent.enter
-                        : OnboardingContent.next,
-                  ),
+              child: FilledButton(
+                style: FilledButton.styleFrom(
+                  minimumSize: const Size(0, 56),
+                ),
+                onPressed: isBusy
+                    ? null
+                    : () => _isLastStep ? _finish() : _goTo(_index + 1),
+                child: Text(
+                  _isLastStep
+                      ? OnboardingContent.enter
+                      : OnboardingContent.next,
                 ),
               ),
             ),
-            SizedBox(
-              height: 56,
-              child: Center(
-                child: _SecondaryAction(
-                  index: _index,
-                  isBusy: isBusy,
-                  onSkip: _finish,
-                  onPrevious: () => _goTo(_index - 1),
-                  onSignIn: _finish,
-                ),
-              ),
+            // « J'ai déjà un compte » mène au même écran que « Créer mon
+            // compte » : le parcours par SMS reconnaît un numéro connu, il n'a
+            // pas deux portes (Q13).
+            TextButton(
+              onPressed: isBusy ? null : _finish,
+              child: const Text(OnboardingContent.signIn),
             ),
             const SizedBox(height: AppSpacing.sm),
           ],
         ),
       ),
-    );
-  }
-}
-
-/// Action secondaire, différente à chaque étape : passer, revenir, se
-/// connecter.
-class _SecondaryAction extends StatelessWidget {
-  const _SecondaryAction({
-    required this.index,
-    required this.isBusy,
-    required this.onSkip,
-    required this.onPrevious,
-    required this.onSignIn,
-  });
-
-  final int index;
-  final bool isBusy;
-  final VoidCallback onSkip;
-  final VoidCallback onPrevious;
-  final VoidCallback onSignIn;
-
-  @override
-  Widget build(BuildContext context) {
-    if (index == 0) {
-      return TextButton(
-        onPressed: isBusy ? null : onSkip,
-        child: const Text(OnboardingContent.skip),
-      );
-    }
-
-    if (index < OnboardingContent.steps.length - 1) {
-      return TextButton(
-        onPressed: isBusy ? null : onPrevious,
-        child: const Text(OnboardingContent.previous),
-      );
-    }
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          OnboardingContent.alreadyRegistered,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: context.colors.textSecondary,
-              ),
-        ),
-        // Le module d'authentification n'existe pas encore : ce lien mène au
-        // meme endroit que le bouton principal. Il pointera vers /connexion
-        // des que ce module sera ouvert.
-        TextButton(
-          onPressed: isBusy ? null : onSignIn,
-          child: const Text(OnboardingContent.signIn),
-        ),
-      ],
     );
   }
 }
@@ -167,31 +135,60 @@ class _StepView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-      child: Column(
-        children: [
-          const Spacer(flex: 3),
-          StepIllustration(step: step),
-          const Spacer(flex: 4),
-          _MessageEntrance(
-            child: Text(
-              step.message,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: context.colors.textSecondary,
-                    height: 1.6,
+    final theme = Theme.of(context);
+
+    // Le motif cède la place au texte quand l'écran est court, et l'étape
+    // défile plutôt que de déborder : trois lignes de titre suffisent à faire
+    // sortir la mise en page d'un petit téléphone.
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final motif = (constraints.maxHeight * 0.34).clamp(120.0, 220.0);
+
+        return SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Le motif est reconstruit à chaque étape : c'est ce qui
+                // relance son animation quand la page change.
+                Align(child: StepIllustration(step: step, size: motif)),
+                const SizedBox(height: AppSpacing.xxxl),
+                _MessageEntrance(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        step.title,
+                        style: theme.textTheme.headlineMedium?.copyWith(
+                          height: 1.22,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
+                      Text(
+                        step.body,
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          color: context.colors.textSecondary,
+                          height: 1.6,
+                        ),
+                      ),
+                    ],
                   ),
+                ),
+                const SizedBox(height: AppSpacing.xl),
+              ],
             ),
           ),
-          const SizedBox(height: AppSpacing.xl),
-        ],
-      ),
+        );
+      },
     );
   }
 }
 
-/// Entrée du message : fondu et remontée, légèrement après le motif.
+/// Entrée du texte : fondu et remontée, légèrement après le motif.
 ///
 /// Le décalage n'est pas décoratif — il conduit le regard du dessin vers le
 /// texte, dans l'ordre où ils doivent être lus.
@@ -206,9 +203,7 @@ class _MessageEntrance extends StatelessWidget {
 
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: immediate ? 1 : 0, end: 1),
-      duration: immediate
-          ? Duration.zero
-          : const Duration(milliseconds: 520),
+      duration: immediate ? Duration.zero : const Duration(milliseconds: 620),
       curve: const Interval(0.35, 1, curve: Curves.easeOut),
       builder: (context, value, child) => Opacity(
         opacity: value,
