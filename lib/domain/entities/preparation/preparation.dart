@@ -22,6 +22,33 @@ enum PreparationOrigin {
       };
 }
 
+/// Où en est le travail, du point de vue de celui qui prêche.
+///
+/// Ce n'est pas un état d'avancement en pourcentage : c'est **à qui est la
+/// main**. L'accueil s'ordonne là-dessus — ce qui attend une réponse se voit
+/// en premier.
+enum PreparationState {
+  /// Urim a posé une question et attend : la main est à l'utilisateur.
+  handsBack('Rend la main'),
+
+  /// Urim a servi de la matière ; rien n'est bloqué.
+  served('Matière servie'),
+
+  /// Le message a été prêché, Urim a quelque chose à en dire.
+  feedbackReady('Retour disponible'),
+
+  /// Urim n'a pas pu travailler, et dit pourquoi.
+  refused('Refus motivé');
+
+  const PreparationState(this.label);
+
+  /// Étiquette de la pastille sur la carte d'accueil.
+  final String label;
+
+  /// Vrai quand la préparation attend une action de l'utilisateur.
+  bool get waitsForUser => this == PreparationState.handsBack;
+}
+
 /// Une préparation : le message ou l'enseignement en cours de travail.
 ///
 /// Racine de l'agrégat. Le fil de [blocks] est la préparation elle-même — il
@@ -34,9 +61,11 @@ final class Preparation extends Equatable {
     required this.origin,
     required this.createdAt,
     required this.updatedAt,
+    this.state = PreparationState.handsBack,
     this.summary = '',
     this.blocks = const [],
     this.recording,
+    this.serviceDate,
   });
 
   final String id;
@@ -54,10 +83,17 @@ final class Preparation extends Equatable {
   /// au tri : c'est la dernière activité qui compte, pas la création.
   final DateTime updatedAt;
 
+  /// À qui est la main.
+  final PreparationState state;
+
   final List<PreparationBlock> blocks;
 
   /// Présent uniquement pour [PreparationOrigin.transcribed].
   final Recording? recording;
+
+  /// Dimanche visé. Nul quand la préparation n'est pas datée : on prépare
+  /// aussi sans savoir quand on prêchera.
+  final DateTime? serviceDate;
 
   bool get hasRecording => recording != null;
 
@@ -78,8 +114,10 @@ final class Preparation extends Equatable {
     String? title,
     String? summary,
     DateTime? updatedAt,
+    PreparationState? state,
     List<PreparationBlock>? blocks,
     Recording? recording,
+    DateTime? serviceDate,
   }) =>
       Preparation(
         id: id,
@@ -88,13 +126,25 @@ final class Preparation extends Equatable {
         origin: origin,
         createdAt: createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
+        state: state ?? this.state,
         blocks: blocks ?? this.blocks,
         recording: recording ?? this.recording,
+        serviceDate: serviceDate ?? this.serviceDate,
       );
 
   @override
-  List<Object?> get props =>
-      [id, title, summary, origin, createdAt, updatedAt, blocks, recording];
+  List<Object?> get props => [
+        id,
+        title,
+        summary,
+        origin,
+        createdAt,
+        updatedAt,
+        state,
+        blocks,
+        recording,
+        serviceDate,
+      ];
 
   @override
   String toString() => 'Preparation($id, ${origin.name}, "$title")';
