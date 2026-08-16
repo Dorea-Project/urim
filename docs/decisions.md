@@ -96,10 +96,35 @@ reste sur `feat/core-architecture`, non fusionné.
 Soit il devient un module à part entière, soit on le supprime. Le laisser en
 suspens indéfiniment est la seule mauvaise réponse.
 
-### Q8 — Une seule langue, ou plusieurs ?
+### Q8 — Une seule langue, ou plusieurs ? — **socle posé, langue en attente**
 
-Rétrofiter la localisation sur trente écrans coûte cher. La décision doit
-tomber avant M2.
+Rétrofiter la localisation coûte cher, et la dette a été prise : au moment de
+poser la question, l'application comptait déjà **647 littéraux dans 74
+fichiers**. Le chiffre ment un peu — 166 sont du contenu scripté qui mourra avec
+le vrai moteur — mais l'interface elle-même pèse environ **300 chaînes**, dont
+80 sur les seuls écrans d'entrée.
+
+D'où le choix de séparer le socle de la langue. `flutter_localizations` et
+`gen-l10n` sont en place, les textes vivent dans `lib/l10n/app_fr.arb`, la
+présentation y est passée entièrement, et un test refuse toute nouvelle chaîne
+en dur dans les zones migrées — la liste s'allonge, elle ne recule pas.
+
+**Trois axes que « bilingue » confond**, et qui ne se décident pas ensemble :
+
+| Axe | Nature | État |
+|---|---|---|
+| Interface — libellés, erreurs | traduction | socle posé, une seule langue dedans |
+| Contenu — le texte biblique servi | droits et données | dépend de **Q1** |
+| Acheminement — WhatsApp, SMS, push | préférence par personne | le modèle existe déjà en `fr`, `en`, `en_GB`, `ar` |
+
+Une interface anglaise sur une Bible française est cohérente ; une Bible
+anglaise rouvre Q1 — la King James, elle, est dans le domaine public.
+
+Reste à trancher **laquelle**. À noter pour éviter un contresens coûteux : le
+dioula et le baoulé que promet la maquette de synthèse sont des langues **à voix
+haute**, pas des langues d'écran. Comme interface, l'effort est d'un autre
+ordre — orthographe non stabilisée, vocabulaire technique à inventer — et la
+plupart des locuteurs lisent le français.
 
 ### Q9 — Qu'est-ce qu'une église rattachée ?
 

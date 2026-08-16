@@ -1,0 +1,22 @@
+# Génération des traductions.
+#
+# Les textes vivent dans `lib/l10n/app_<langue>.arb` et nulle part ailleurs.
+# `flutter gen-l10n` en tire une classe `AppText`, régénérée à chaque build
+# grâce à `generate: true` dans le pubspec.
+#
+# Le fichier français fait référence : c'est lui qui définit les clés, les
+# variables et les pluriels. Une langue qui s'ajoute part de sa copie.
+
+arb-dir: lib/l10n
+template-arb-file: app_fr.arb
+output-localization-file: app_text.dart
+output-class: AppText
+output-dir: lib/l10n/generated
+
+# La sortie va dans l'arborescence (`output-dir`) plutôt que dans un paquet
+# synthétique : le code généré se lit, se relit en revue, et l'analyseur le voit
+# comme le reste.
+
+# Un libellé manquant doit casser à la compilation, pas rendre `null` à
+# l'écran.
+nullable-getter: false

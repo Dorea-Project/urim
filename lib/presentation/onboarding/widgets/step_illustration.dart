@@ -11,9 +11,13 @@ import 'package:urim/presentation/theme/app_colors.dart';
 /// une boucle attirerait l'œil en permanence alors que le texte est ce qu'il
 /// faut lire, et empêcherait tout test d'atteindre un état stable.
 class StepIllustration extends StatefulWidget {
-  const StepIllustration({super.key, required this.step, this.size = 220});
+  const StepIllustration({
+    super.key,
+    required this.illustration,
+    this.size = 220,
+  });
 
-  final OnboardingStep step;
+  final OnboardingIllustration illustration;
   final double size;
 
   @override
@@ -72,7 +76,7 @@ class _StepIllustrationState extends State<StepIllustration>
           builder: (context, child) => CustomPaint(
             size: Size.square(widget.size),
             painter: _IllustrationPainter(
-              illustration: widget.step.illustration,
+              illustration: widget.illustration,
               progress: _controller.value,
               palette: palette,
             ),

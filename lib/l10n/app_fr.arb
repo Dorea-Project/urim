@@ -1,0 +1,66 @@
+{
+  "@@locale": "fr",
+
+  "appTitle": "Urim",
+  "@appTitle": {
+    "description": "Nom de l'application, affiché par le système."
+  },
+
+  "onboardingSkip": "Passer",
+  "@onboardingSkip": {
+    "description": "Sortie de la présentation, en haut à droite."
+  },
+
+  "onboardingNext": "Continuer",
+  "@onboardingNext": {
+    "description": "Bouton principal des deux premières étapes."
+  },
+
+  "onboardingCreateAccount": "Créer mon compte",
+  "@onboardingCreateAccount": {
+    "description": "Bouton principal de la dernière étape : la porte de l'inscription."
+  },
+
+  "onboardingSignIn": "J'ai déjà un compte",
+  "@onboardingSignIn": {
+    "description": "La seconde porte : la connexion d'un compte existant."
+  },
+
+  "onboardingSaveFailed": "Impossible d'enregistrer ta progression. La présentation réapparaîtra au prochain lancement.",
+  "@onboardingSaveFailed": {
+    "description": "Échec de l'écriture locale. Dit la conséquence, pas la cause technique."
+  },
+
+  "onboardingStep": "Étape {position} sur {total}",
+  "@onboardingStep": {
+    "description": "Annonce vocale de la progression. Lu par les lecteurs d'écran, jamais affiché.",
+    "placeholders": {
+      "position": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+
+  "onboardingWeighingTitle": "Écris ta phrase.\nUrim cherche le texte dedans.",
+  "@onboardingWeighingTitle": {
+    "description": "Titre de la première étape. Le retour à la ligne porte le rythme de la phrase."
+  },
+
+  "onboardingWeighingBody": "Une référence, une citation approximative, ou juste une intention. Tu n'as aucun mode à choisir — la porte regarde si les mots se suivent comme dans l'Écriture.",
+
+  "onboardingHandbackTitle": "Il s'arrête\net te rend la main.",
+
+  "onboardingHandbackBody": "Chaque étage dit pourquoi il a fait ce qu'il a fait. Quand il ne peut pas trancher seul, il te pose la question au lieu de choisir à ta place.",
+
+  "onboardingResistanceTitle": "Il te montre les textes qui te résistent.",
+
+  "onboardingResistanceBody": "Ceux qui ne vont pas dans le sens de ta lecture. C'est le seul moyen de ne pas faire dire au texte ce qu'on avait décidé d'y trouver.",
+
+  "back": "Retour",
+  "@back": {
+    "description": "Infobulle du bouton de retour, partout."
+  },
+
+  "retry": "Réessayer",
+
+  "cancel": "Annuler"
+}

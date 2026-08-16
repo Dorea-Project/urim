@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/auth/auth_flow_view_model.dart';
 import 'package:urim/presentation/onboarding/onboarding_content.dart';
 import 'package:urim/presentation/onboarding/onboarding_view_model.dart';
@@ -51,7 +52,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
     // marquée comme vue ; l'écran n'a pas à naviguer lui-même.
     if (failure != null && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text(OnboardingContent.saveFailed)),
+        SnackBar(content: Text(AppText.of(context).onboardingSaveFailed)),
       );
     }
   }
@@ -59,6 +60,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     final isBusy = ref.watch(onboardingViewModelProvider).isLoading;
+    final text = AppText.of(context);
 
     return Scaffold(
       body: SafeArea(
@@ -76,7 +78,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                   style: TextButton.styleFrom(
                     foregroundColor: context.colors.textSecondary,
                   ),
-                  child: const Text(OnboardingContent.skip),
+                  child: Text(text.onboardingSkip),
                 ),
               ),
             ),
@@ -115,8 +117,8 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                     : () => _isLastStep ? _finish() : _goTo(_index + 1),
                 child: Text(
                   _isLastStep
-                      ? OnboardingContent.enter
-                      : OnboardingContent.next,
+                      ? text.onboardingCreateAccount
+                      : text.onboardingNext,
                 ),
               ),
             ),
@@ -125,7 +127,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
             TextButton(
               onPressed:
                   isBusy ? null : () => _finish(door: AuthDoor.signIn),
-              child: const Text(OnboardingContent.signIn),
+              child: Text(text.onboardingSignIn),
             ),
             const SizedBox(height: AppSpacing.sm),
           ],
@@ -138,11 +140,12 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
 class _StepView extends StatelessWidget {
   const _StepView({required this.step});
 
-  final OnboardingStep step;
+  final OnboardingIllustration step;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final text = AppText.of(context);
 
     // Le motif cède la place au texte quand l'écran est court, et l'étape
     // défile plutôt que de déborder : trois lignes de titre suffisent à faire
@@ -161,14 +164,14 @@ class _StepView extends StatelessWidget {
               children: [
                 // Le motif est reconstruit à chaque étape : c'est ce qui
                 // relance son animation quand la page change.
-                Align(child: StepIllustration(step: step, size: motif)),
+                Align(child: StepIllustration(illustration: step, size: motif)),
                 const SizedBox(height: AppSpacing.xxxl),
                 _MessageEntrance(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        step.title,
+                        step.title(text),
                         style: theme.textTheme.headlineMedium?.copyWith(
                           height: 1.22,
                           fontWeight: FontWeight.w700,
@@ -176,7 +179,7 @@ class _StepView extends StatelessWidget {
                       ),
                       const SizedBox(height: AppSpacing.lg),
                       Text(
-                        step.body,
+                        step.body(text),
                         style: theme.textTheme.bodyLarge?.copyWith(
                           color: context.colors.textSecondary,
                           height: 1.6,

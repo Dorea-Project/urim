@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
 
@@ -23,7 +24,7 @@ class PageIndicator extends StatelessWidget {
     final colors = context.colors;
 
     return Semantics(
-      label: 'Étape ${currentIndex + 1} sur $count',
+      label: AppText.of(context).onboardingStep(currentIndex + 1, count),
       excludeSemantics: true,
       child: Row(
         mainAxisSize: MainAxisSize.min,

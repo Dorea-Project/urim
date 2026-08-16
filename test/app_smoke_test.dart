@@ -9,11 +9,15 @@ import 'package:urim/core/storage/shared_preferences_provider.dart';
 import 'package:urim/data/datasources/onboarding_local_data_source.dart';
 import 'package:urim/presentation/auth/phone_page.dart';
 import 'package:urim/presentation/home/home_page.dart';
-import 'package:urim/presentation/onboarding/onboarding_content.dart';
+import 'package:urim/l10n/generated/app_text_fr.dart';
 import 'package:urim/presentation/onboarding/onboarding_page.dart';
 import 'package:urim/presentation/splash/splash_page.dart';
 
 /// Parcours de démarrage : lancement, présentation, accès à l'application.
+/// Les libelles viennent des memes fichiers que l'ecran : le test verifie le
+/// sens, jamais une chaine recopiee.
+final texte = AppTextFr();
+
 void main() {
   const testConfig = AppConfig(
     flavor: Flavor.dev,
@@ -70,7 +74,7 @@ void main() {
     await tester.pumpWidget(await buildApp(onboardingSeen: false));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text(OnboardingContent.skip));
+    await tester.tap(find.text(texte.onboardingSkip));
     await tester.pumpAndSettle();
 
     expect(find.byType(PhonePage), findsOneWidget);
@@ -87,11 +91,11 @@ void main() {
     await tester.pumpWidget(await buildApp(onboardingSeen: false));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text(OnboardingContent.next));
+    await tester.tap(find.text(texte.onboardingNext));
     await tester.pumpAndSettle();
-    await tester.tap(find.text(OnboardingContent.next));
+    await tester.tap(find.text(texte.onboardingNext));
     await tester.pumpAndSettle();
-    await tester.tap(find.text(OnboardingContent.enter));
+    await tester.tap(find.text(texte.onboardingCreateAccount));
     await tester.pumpAndSettle();
 
     expect(find.byType(PhonePage), findsOneWidget);
