@@ -5,6 +5,7 @@ import 'package:urim/core/error/failure.dart';
 import 'package:urim/core/router/app_routes.dart';
 import 'package:urim/domain/entities/account/known_device.dart';
 import 'package:urim/domain/entities/account/user_profile.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/common/french_dates.dart';
 import 'package:urim/presentation/common/section_card.dart';
 import 'package:urim/presentation/profile/profile_view_model.dart';
@@ -24,11 +25,11 @@ class ProfilePage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profil'),
+        title: Text(AppText.of(context).profileTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 20),
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
-          tooltip: 'Retour',
+          tooltip: AppText.of(context).back,
         ),
       ),
       body: SafeArea(
@@ -61,7 +62,7 @@ class _ProfileList extends ConsumerWidget {
     if (failure == null || !context.mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(_messageFor(failure))),
+      SnackBar(content: Text(_messageFor(AppText.of(context), failure))),
     );
   }
 
@@ -70,21 +71,21 @@ class _ProfileList extends ConsumerWidget {
     WidgetRef ref,
     KnownDevice device,
   ) async {
+    final text = AppText.of(context);
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: Text('Retirer ${device.label} ?'),
-        content: const Text(
-          'Cet appareil devra se reconnecter par SMS pour ouvrir Urim.',
-        ),
+        title: Text(text.profileDeviceRemoveTitle(device.label)),
+        content: Text(text.profileDeviceRemoveBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: const Text('Annuler'),
+            child: Text(text.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: const Text('Retirer'),
+            child: Text(text.profileDeviceRemove),
           ),
         ],
       ),
@@ -99,13 +100,14 @@ class _ProfileList extends ConsumerWidget {
     if (failure == null || !context.mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(_messageFor(failure))),
+      SnackBar(content: Text(_messageFor(text, failure))),
     );
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = state.profile;
+    final text = AppText.of(context);
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(
@@ -119,38 +121,38 @@ class _ProfileList extends ConsumerWidget {
         const SizedBox(height: AppSpacing.xl),
 
         // --- Compte ----------------------------------------------------------
-        const SectionLabel('Compte'),
+        SectionLabel(text.profileSectionAccount),
         SectionCard(
           children: [
             SettingNavRow(
-              title: 'Nom affiché',
-              value: profile.hasDisplayName ? profile.displayName : 'À définir',
+              title: text.profileDisplayName,
+              value: profile.hasDisplayName
+                  ? profile.displayName
+                  : text.profileDisplayNameEmpty,
               onTap: () => _rename(context, ref),
             ),
             SettingNavRow(
-              title: 'Numéro de téléphone',
+              title: text.profilePhone,
               value: formatPhone(profile),
-              subtitle: 'Changer de numéro suppose un nouveau code par SMS.',
+              subtitle: text.profilePhonePending,
             ),
-            const SettingNavRow(
-              title: 'Code à 4 chiffres',
-              value: 'Modifier',
-              subtitle: 'Le changement passera par l\'écran de création, '
-                  'encore réservé au premier accès.',
+            SettingNavRow(
+              title: text.profileSecretCode,
+              value: text.profileSecretCodeAction,
+              subtitle: text.profileSecretCodePending,
             ),
           ],
         ),
         const SizedBox(height: AppSpacing.xl),
 
         // --- Églises ---------------------------------------------------------
-        const SectionLabel('Églises'),
+        SectionLabel(text.profileSectionChurches),
         if (state.churches.isEmpty)
-          const SectionCard(
+          SectionCard(
             children: [
               SettingRow(
-                title: 'Aucune église rattachée',
-                subtitle: 'Le rattachement viendra de l\'annuaire de la '
-                    'plateforme, pas d\'Urim.',
+                title: text.profileNoChurch,
+                subtitle: text.profileNoChurchHint,
                 muted: true,
               ),
             ],
@@ -161,35 +163,32 @@ class _ProfileList extends ConsumerWidget {
               for (final church in state.churches)
                 SettingNavRow(
                   title: church.label,
-                  subtitle: 'Ton numéro y est reconnu. Tes préparations n\'y '
-                      'sont pas visibles.',
+                  subtitle: text.profileChurchRecognised,
                 ),
             ],
           ),
-        const SectionNote(
-          'Une seule identité, plusieurs églises possibles. Ce que tu écris '
-          'dans Urim ne traverse jamais vers elles.',
-        ),
+        SectionNote(text.profileChurchesNote),
         const SizedBox(height: AppSpacing.xl),
 
         // --- Appareils -------------------------------------------------------
-        const SectionLabel('Appareils'),
+        SectionLabel(text.profileSectionDevices),
         SectionCard(
           children: [
             for (final device in state.devices)
               SettingRow(
                 title: device.label,
                 subtitle: device.isCurrent
-                    ? 'Cet appareil · actif maintenant'
-                    : 'Dernière activité le '
-                        '${frenchDayMonth(device.lastActiveAt)}',
+                    ? text.profileDeviceCurrent
+                    : text.profileDeviceLastSeen(
+                        frenchDayMonth(device.lastActiveAt),
+                      ),
                 trailing: device.canBeForgotten
                     ? TextButton(
                         onPressed: () => _forget(context, ref, device),
                         style: TextButton.styleFrom(
                           foregroundColor: Theme.of(context).colorScheme.error,
                         ),
-                        child: const Text('Retirer'),
+                        child: Text(text.profileDeviceRemove),
                       )
                     : null,
               ),
@@ -200,11 +199,11 @@ class _ProfileList extends ConsumerWidget {
         SectionCard(
           children: [
             SettingNavRow(
-              title: 'Réglages',
+              title: text.settingsTitle,
               onTap: () => context.pushNamed(AppRoutes.settingsName),
             ),
             SettingNavRow(
-              title: 'Tes données',
+              title: text.privacyTitle,
               onTap: () => context.pushNamed(AppRoutes.privacyName),
             ),
           ],
@@ -233,7 +232,9 @@ class _Identity extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                profile.hasDisplayName ? profile.displayName : 'Sans nom',
+                profile.hasDisplayName
+                    ? profile.displayName
+                    : AppText.of(context).profileNoName,
                 style: theme.textTheme.headlineSmall,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -270,7 +271,7 @@ class _ProfileError extends ConsumerWidget {
             Icon(Icons.error_outline, color: scheme.error),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'Le profil n\'a pas pu être lu.',
+              AppText.of(context).profileReadFailed,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.titleMedium,
             ),
@@ -287,7 +288,7 @@ class _ProfileError extends ConsumerWidget {
             const SizedBox(height: AppSpacing.xl),
             OutlinedButton(
               onPressed: () => ref.invalidate(profileViewModelProvider),
-              child: const Text('Réessayer'),
+              child: Text(AppText.of(context).retry),
             ),
           ],
         ),
@@ -308,9 +309,11 @@ String formatPhone(UserProfile profile) {
   return '${profile.phone.dialCode} ${groups.join(' ')}'.trimRight();
 }
 
-String _messageFor(Failure failure) => switch (failure) {
+String _messageFor(AppText text, Failure failure) => switch (failure) {
+      // Le motif par champ vient du serveur ou du cas d'usage : il est déjà
+      // rédigé pour être lu, et il en dit plus que la règle générale.
       ValidationFailure(:final fieldErrors) when fieldErrors.isNotEmpty =>
         fieldErrors.values.first,
-      ValidationFailure() => 'Cette modification a été refusée.',
-      _ => 'Cette modification n\'a pas pu être enregistrée.',
+      ValidationFailure() => text.profileChangeRefused,
+      _ => text.profileChangeFailed,
     };

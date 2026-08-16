@@ -9,7 +9,6 @@ import 'package:urim/domain/entities/settings/app_settings.dart';
 import 'package:urim/presentation/settings/settings_page.dart';
 import 'package:urim/presentation/settings/settings_view_model.dart';
 import 'package:urim/l10n/generated/app_text_fr.dart';
-import 'package:urim/presentation/theme/app_theme.dart';
 
 import '../support/pump_app.dart';
 

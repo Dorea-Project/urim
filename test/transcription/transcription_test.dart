@@ -14,7 +14,8 @@ import 'package:urim/data/repositories/in_memory_transcription_repository.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/domain/entities/transcription/synthesis_draft.dart';
 import 'package:urim/presentation/home/home_page.dart';
-import 'package:urim/presentation/theme/app_theme.dart';
+
+import '../support/pump_app.dart';
 import 'package:urim/presentation/transcription/synthesis_page.dart';
 import 'package:urim/presentation/transcription/transcription_page.dart';
 
@@ -178,10 +179,7 @@ void main() {
             idGeneratorProvider.overrideWithValue(_SequentialIds()),
             sharedPreferencesProvider.overrideWithValue(preferences),
           ],
-          child: MaterialApp.router(
-            theme: AppTheme.light,
-            routerConfig: router,
-          ),
+          child: wrapRouter(router),
         ),
       );
       await tester.pumpAndSettle();

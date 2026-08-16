@@ -13,7 +13,8 @@ import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/presentation/home/home_page.dart';
 import 'package:urim/presentation/preparation/new_preparation_page.dart';
 import 'package:urim/presentation/preparation/preparation_page.dart';
-import 'package:urim/presentation/theme/app_theme.dart';
+
+import '../support/pump_app.dart';
 
 /// Le parcours des maquettes, d'un bout à l'autre : l'accueil, la feuille des
 /// tâches, le formulaire, puis le fil.
@@ -75,10 +76,7 @@ void main() {
           idGeneratorProvider.overrideWithValue(_SequentialIds()),
           sharedPreferencesProvider.overrideWithValue(preferences),
         ],
-        child: MaterialApp.router(
-          theme: AppTheme.light,
-          routerConfig: router,
-        ),
+        child: wrapRouter(router),
       ),
     );
     await tester.pumpAndSettle();

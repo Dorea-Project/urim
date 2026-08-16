@@ -352,4 +352,103 @@ class AppTextFr extends AppText {
   @override
   String get translationLicenceNotice =>
       'Les autres traductions demandent une licence : Urim ne les proposera qu\'une fois les droits obtenus.';
+
+  @override
+  String get profileTitle => 'Profil';
+
+  @override
+  String get profileNoName => 'Sans nom';
+
+  @override
+  String get profileSectionAccount => 'Compte';
+
+  @override
+  String get profileSectionChurches => 'Églises';
+
+  @override
+  String get profileSectionDevices => 'Appareils';
+
+  @override
+  String get profileDisplayName => 'Nom affiché';
+
+  @override
+  String get profileDisplayNameEmpty => 'À définir';
+
+  @override
+  String get profileDisplayNameHint => 'Kouadio Aristide';
+
+  @override
+  String get profileDisplayNameExplanation =>
+      'Ce nom ne sort pas de l\'application : il sert à te reconnaître sur cet écran, et à former ton monogramme.';
+
+  @override
+  String get profileNoNameAvatar => 'Aucun nom défini';
+
+  @override
+  String get profilePhone => 'Numéro de téléphone';
+
+  @override
+  String get profilePhonePending =>
+      'Changer de numéro suppose un nouveau code par SMS.';
+
+  @override
+  String get profileSecretCode => 'Code à 4 chiffres';
+
+  @override
+  String get profileSecretCodeAction => 'Modifier';
+
+  @override
+  String get profileSecretCodePending =>
+      'Le changement passera par l\'écran de création, encore réservé au premier accès.';
+
+  @override
+  String get profileNoChurch => 'Aucune église rattachée';
+
+  @override
+  String get profileNoChurchHint =>
+      'Le rattachement viendra de l\'annuaire de la plateforme, pas d\'Urim.';
+
+  @override
+  String get profileChurchRecognised =>
+      'Ton numéro y est reconnu. Tes préparations n\'y sont pas visibles.';
+
+  @override
+  String get profileChurchesNote =>
+      'Une seule identité, plusieurs églises possibles. Ce que tu écris dans Urim ne traverse jamais vers elles.';
+
+  @override
+  String get profileDeviceCurrent => 'Cet appareil · actif maintenant';
+
+  @override
+  String profileDeviceLastSeen(String date) {
+    return 'Dernière activité le $date';
+  }
+
+  @override
+  String get profileDeviceRemove => 'Retirer';
+
+  @override
+  String profileDeviceRemoveTitle(String device) {
+    return 'Retirer $device ?';
+  }
+
+  @override
+  String get profileDeviceRemoveBody =>
+      'Cet appareil devra se reconnecter par SMS pour ouvrir Urim.';
+
+  @override
+  String get profileReadFailed => 'Le profil n\'a pas pu être lu.';
+
+  @override
+  String get profileChangeRefused => 'Cette modification a été refusée.';
+
+  @override
+  String get profileChangeFailed =>
+      'Cette modification n\'a pas pu être enregistrée.';
+
+  @override
+  String get profileNoSession => 'Aucune session ouverte.';
+
+  @override
+  String get save => 'Enregistrer';
 }

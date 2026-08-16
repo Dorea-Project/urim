@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
 
@@ -44,8 +45,10 @@ class _DisplayNameDialogState extends State<_DisplayNameDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final text = AppText.of(context);
+
     return AlertDialog(
-      title: const Text('Nom affiché'),
+      title: Text(text.profileDisplayName),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,13 +59,12 @@ class _DisplayNameDialogState extends State<_DisplayNameDialog> {
             textCapitalization: TextCapitalization.words,
             textInputAction: TextInputAction.done,
             maxLength: 60,
-            decoration: const InputDecoration(hintText: 'Kouadio Aristide'),
+            decoration: InputDecoration(hintText: text.profileDisplayNameHint),
             onSubmitted: (_) => _submit(),
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Ce nom ne sort pas de l\'application : il sert à te reconnaître '
-            'sur cet écran, et à former ton monogramme.',
+            text.profileDisplayNameExplanation,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: context.colors.textSecondary,
                   height: 1.4,
@@ -73,11 +75,11 @@ class _DisplayNameDialogState extends State<_DisplayNameDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Annuler'),
+          child: Text(text.cancel),
         ),
         TextButton(
           onPressed: _submit,
-          child: const Text('Enregistrer'),
+          child: Text(text.save),
         ),
       ],
     );

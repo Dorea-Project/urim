@@ -686,6 +686,180 @@ abstract class AppText {
   /// In fr, this message translates to:
   /// **'Les autres traductions demandent une licence : Urim ne les proposera qu\'une fois les droits obtenus.'**
   String get translationLicenceNotice;
+
+  /// No description provided for @profileTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Profil'**
+  String get profileTitle;
+
+  /// En-tête, quand aucun nom n'a été donné. On le dit plutôt que d'en inventer un à partir du numéro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans nom'**
+  String get profileNoName;
+
+  /// No description provided for @profileSectionAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte'**
+  String get profileSectionAccount;
+
+  /// No description provided for @profileSectionChurches.
+  ///
+  /// In fr, this message translates to:
+  /// **'Églises'**
+  String get profileSectionChurches;
+
+  /// No description provided for @profileSectionDevices.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appareils'**
+  String get profileSectionDevices;
+
+  /// No description provided for @profileDisplayName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom affiché'**
+  String get profileDisplayName;
+
+  /// No description provided for @profileDisplayNameEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'À définir'**
+  String get profileDisplayNameEmpty;
+
+  /// Exemple de saisie dans la boîte de dialogue. Un nom ivoirien courant.
+  ///
+  /// In fr, this message translates to:
+  /// **'Kouadio Aristide'**
+  String get profileDisplayNameHint;
+
+  /// No description provided for @profileDisplayNameExplanation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce nom ne sort pas de l\'application : il sert à te reconnaître sur cet écran, et à former ton monogramme.'**
+  String get profileDisplayNameExplanation;
+
+  /// Annonce vocale de la silhouette qui remplace les initiales. Jamais affichée.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun nom défini'**
+  String get profileNoNameAvatar;
+
+  /// No description provided for @profilePhone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Numéro de téléphone'**
+  String get profilePhone;
+
+  /// No description provided for @profilePhonePending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer de numéro suppose un nouveau code par SMS.'**
+  String get profilePhonePending;
+
+  /// No description provided for @profileSecretCode.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code à 4 chiffres'**
+  String get profileSecretCode;
+
+  /// No description provided for @profileSecretCodeAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier'**
+  String get profileSecretCodeAction;
+
+  /// No description provided for @profileSecretCodePending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le changement passera par l\'écran de création, encore réservé au premier accès.'**
+  String get profileSecretCodePending;
+
+  /// No description provided for @profileNoChurch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune église rattachée'**
+  String get profileNoChurch;
+
+  /// No description provided for @profileNoChurchHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le rattachement viendra de l\'annuaire de la plateforme, pas d\'Urim.'**
+  String get profileNoChurchHint;
+
+  /// No description provided for @profileChurchRecognised.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton numéro y est reconnu. Tes préparations n\'y sont pas visibles.'**
+  String get profileChurchRecognised;
+
+  /// Promesse d'étanchéité, pas une préférence d'affichage : le code doit la garantir.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une seule identité, plusieurs églises possibles. Ce que tu écris dans Urim ne traverse jamais vers elles.'**
+  String get profileChurchesNote;
+
+  /// No description provided for @profileDeviceCurrent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet appareil · actif maintenant'**
+  String get profileDeviceCurrent;
+
+  /// No description provided for @profileDeviceLastSeen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière activité le {date}'**
+  String profileDeviceLastSeen(String date);
+
+  /// No description provided for @profileDeviceRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer'**
+  String get profileDeviceRemove;
+
+  /// No description provided for @profileDeviceRemoveTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer {device} ?'**
+  String profileDeviceRemoveTitle(String device);
+
+  /// No description provided for @profileDeviceRemoveBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet appareil devra se reconnecter par SMS pour ouvrir Urim.'**
+  String get profileDeviceRemoveBody;
+
+  /// No description provided for @profileReadFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le profil n\'a pas pu être lu.'**
+  String get profileReadFailed;
+
+  /// No description provided for @profileChangeRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette modification a été refusée.'**
+  String get profileChangeRefused;
+
+  /// No description provided for @profileChangeFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette modification n\'a pas pu être enregistrée.'**
+  String get profileChangeFailed;
+
+  /// Anomalie, pas un état vide : l'écran n'est atteignable qu'une fois l'accès ouvert.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune session ouverte.'**
+  String get profileNoSession;
+
+  /// No description provided for @save.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get save;
 }
 
 class _AppTextDelegate extends LocalizationsDelegate<AppText> {

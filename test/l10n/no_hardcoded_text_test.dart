@@ -13,6 +13,7 @@ const List<String> zonesTenues = [
   'lib/presentation/auth',
   'lib/presentation/legal',
   'lib/presentation/settings',
+  'lib/presentation/profile',
 ];
 
 /// Ce qui n'est pas du texte d'interface, même entre guillemets.
@@ -49,7 +50,12 @@ void main() {
       for (final fichier in dossier
           .listSync(recursive: true)
           .whereType<File>()
-          .where((f) => f.path.endsWith('.dart'))) {
+          .where((f) => f.path.endsWith('.dart'))
+          // Un ViewModel ne dessine rien. Les messages qu'il porte sont
+          // techniques, destinés aux journaux : l'architecture veut que le
+          // texte affichable soit produit par l'écran, et c'est l'écran qui
+          // est gardé ici.
+          .where((f) => !f.path.endsWith('_view_model.dart'))) {
         final lignes = fichier.readAsLinesSync();
 
         for (var i = 0; i < lignes.length; i++) {
@@ -66,8 +72,12 @@ void main() {
             final texte = trouve.group(1)!;
             if (technique.hasMatch(texte)) continue;
             if (expressionReguliere.hasMatch(texte)) continue;
-            // Un texte qui ne porte aucune lettre ne se lit pas.
-            if (!RegExp('[A-Za-zÀ-ÿ]').hasMatch(texte)) continue;
+
+            // Ce qui reste une fois les interpolations retirées : un gabarit
+            // comme « \${dialCode} \${groups} » n'est pas une phrase, c'est
+            // une mise en forme. Rien à traduire tant qu'aucun mot n'y figure.
+            final horsVariables = texte.replaceAll(RegExp(r'\$\{[^}]*\}?'), '');
+            if (!RegExp('[A-Za-zÀ-ÿ]').hasMatch(horsVariables)) continue;
 
             coupables.add('${fichier.path}:${i + 1}  « $texte »');
           }

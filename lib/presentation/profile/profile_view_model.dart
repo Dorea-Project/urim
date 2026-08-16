@@ -47,6 +47,7 @@ final class ProfileViewModel extends AsyncNotifier<ProfileState> {
     // L'écran n'est atteignable qu'une fois l'accès ouvert : sans session, ce
     // n'est pas un état vide, c'est une anomalie.
     if (session == null) {
+      // Message technique, destiné aux journaux : l'écran produit le sien.
       throw const AuthFailure(
         message: 'Aucune session ouverte.',
         code: 'no_session',

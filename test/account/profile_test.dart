@@ -14,7 +14,9 @@ import 'package:urim/domain/entities/account/user_profile.dart';
 import 'package:urim/presentation/auth/auth_gate.dart';
 import 'package:urim/presentation/profile/profile_page.dart';
 import 'package:urim/presentation/profile/profile_view_model.dart';
-import 'package:urim/presentation/theme/app_theme.dart';
+import 'package:urim/l10n/generated/app_text_fr.dart';
+
+import '../support/pump_app.dart';
 
 /// Horloge figée : « Dernière activité le 28 juillet » doit être vérifiable.
 final class _FixedClock implements Clock {
@@ -24,6 +26,9 @@ final class _FixedClock implements Clock {
   @override
   DateTime now() => _now;
 }
+
+/// Les libelles viennent de la meme source que l'ecran.
+final texte = AppTextFr();
 
 void main() {
   final fixedNow = DateTime(2026, 8, 15, 10);
@@ -173,10 +178,7 @@ void main() {
             clockProvider.overrideWithValue(_FixedClock(fixedNow)),
             authSessionProvider.overrideWith((ref) async => session),
           ],
-          child: MaterialApp(
-            theme: AppTheme.light,
-            home: const ProfilePage(),
-          ),
+          child: wrapScreen(const ProfilePage()),
         ),
       );
       await tester.pumpAndSettle();
@@ -186,8 +188,8 @@ void main() {
         (tester) async {
       await pumpProfile(tester);
 
-      expect(find.text('Sans nom'), findsOneWidget);
-      expect(find.text('À définir'), findsOneWidget);
+      expect(find.text(texte.profileNoName), findsOneWidget);
+      expect(find.text(texte.profileDisplayNameEmpty), findsOneWidget);
       expect(find.byIcon(Icons.person_outline), findsOneWidget);
     });
 
@@ -201,11 +203,11 @@ void main() {
       await pumpProfile(tester);
 
       expect(find.text('Tecno Spark 8C'), findsOneWidget);
-      expect(find.text('Cet appareil · actif maintenant'), findsOneWidget);
+      expect(find.text(texte.profileDeviceCurrent), findsOneWidget);
       expect(find.text('itel A60'), findsOneWidget);
-      expect(find.text('Dernière activité le 28 juillet'), findsOneWidget);
+      expect(find.text(texte.profileDeviceLastSeen('28 juillet')), findsOneWidget);
       expect(
-        find.text('Retirer'),
+        find.text(texte.profileDeviceRemove),
         findsOneWidget,
         reason: 'l\'appareil courant n\'a pas de bouton de retrait',
       );
@@ -214,19 +216,19 @@ void main() {
     testWidgets('retirer un appareil demande confirmation', (tester) async {
       await pumpProfile(tester);
 
-      await tester.tap(find.text('Retirer'));
+      await tester.tap(find.text(texte.profileDeviceRemove));
       await tester.pumpAndSettle();
 
-      expect(find.text('Retirer itel A60 ?'), findsOneWidget);
+      expect(find.text(texte.profileDeviceRemoveTitle('itel A60')), findsOneWidget);
 
-      await tester.tap(find.text('Annuler'));
+      await tester.tap(find.text(texte.cancel));
       await tester.pumpAndSettle();
 
       expect(find.text('itel A60'), findsOneWidget);
 
-      await tester.tap(find.text('Retirer'));
+      await tester.tap(find.text(texte.profileDeviceRemove));
       await tester.pumpAndSettle();
-      await tester.tap(find.widgetWithText(TextButton, 'Retirer').last);
+      await tester.tap(find.widgetWithText(TextButton, texte.profileDeviceRemove).last);
       await tester.pumpAndSettle();
 
       expect(find.text('itel A60'), findsNothing);
@@ -236,11 +238,11 @@ void main() {
         (tester) async {
       await pumpProfile(tester);
 
-      await tester.tap(find.text('Nom affiché'));
+      await tester.tap(find.text(texte.profileDisplayName));
       await tester.pumpAndSettle();
 
       await tester.enterText(find.byType(TextField), 'Kouadio Aristide');
-      await tester.tap(find.text('Enregistrer'));
+      await tester.tap(find.text(texte.save));
       await tester.pumpAndSettle();
 
       expect(find.text('Kouadio Aristide'), findsWidgets);
@@ -259,7 +261,7 @@ void main() {
         (tester) async {
       await pumpProfile(tester);
 
-      expect(find.text('Aucune église rattachée'), findsOneWidget);
+      expect(find.text(texte.profileNoChurch), findsOneWidget);
       expect(
         find.textContaining('ne traverse jamais vers elles'),
         findsOneWidget,

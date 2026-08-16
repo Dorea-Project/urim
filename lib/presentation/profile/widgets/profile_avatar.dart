@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
 
 /// Pastille d'identité : les initiales, ou une silhouette faute de nom.
@@ -29,7 +30,7 @@ class ProfileAvatar extends StatelessWidget {
               Icons.person_outline,
               size: size / 2,
               color: scheme.onPrimary,
-              semanticLabel: 'Aucun nom défini',
+              semanticLabel: AppText.of(context).profileNoNameAvatar,
             )
           : Text(
               initials,
@@ -63,7 +64,7 @@ class ProfileAvatarButton extends StatelessWidget {
       padding: const EdgeInsets.only(right: AppSpacing.sm),
       child: IconButton(
         onPressed: onPressed,
-        tooltip: 'Profil',
+        tooltip: AppText.of(context).profileTitle,
         icon: ProfileAvatar(initials: initials, size: 32),
       ),
     );

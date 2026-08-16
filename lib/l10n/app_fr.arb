@@ -238,5 +238,63 @@
   "settingsSaveFailed": "Ce réglage n'a pas pu être enregistré.",
   "settingsReadFailed": "Les réglages n'ont pas pu être lus.",
   "translationPublicDomain": "Domaine public",
-  "translationLicenceNotice": "Les autres traductions demandent une licence : Urim ne les proposera qu'une fois les droits obtenus."
+  "translationLicenceNotice": "Les autres traductions demandent une licence : Urim ne les proposera qu'une fois les droits obtenus.",
+  "profileTitle": "Profil",
+  "profileNoName": "Sans nom",
+  "@profileNoName": {
+    "description": "En-tête, quand aucun nom n'a été donné. On le dit plutôt que d'en inventer un à partir du numéro."
+  },
+  "profileSectionAccount": "Compte",
+  "profileSectionChurches": "Églises",
+  "profileSectionDevices": "Appareils",
+  "profileDisplayName": "Nom affiché",
+  "profileDisplayNameEmpty": "À définir",
+  "profileDisplayNameHint": "Kouadio Aristide",
+  "@profileDisplayNameHint": {
+    "description": "Exemple de saisie dans la boîte de dialogue. Un nom ivoirien courant."
+  },
+  "profileDisplayNameExplanation": "Ce nom ne sort pas de l'application : il sert à te reconnaître sur cet écran, et à former ton monogramme.",
+  "profileNoNameAvatar": "Aucun nom défini",
+  "@profileNoNameAvatar": {
+    "description": "Annonce vocale de la silhouette qui remplace les initiales. Jamais affichée."
+  },
+  "profilePhone": "Numéro de téléphone",
+  "profilePhonePending": "Changer de numéro suppose un nouveau code par SMS.",
+  "profileSecretCode": "Code à 4 chiffres",
+  "profileSecretCodeAction": "Modifier",
+  "profileSecretCodePending": "Le changement passera par l'écran de création, encore réservé au premier accès.",
+  "profileNoChurch": "Aucune église rattachée",
+  "profileNoChurchHint": "Le rattachement viendra de l'annuaire de la plateforme, pas d'Urim.",
+  "profileChurchRecognised": "Ton numéro y est reconnu. Tes préparations n'y sont pas visibles.",
+  "profileChurchesNote": "Une seule identité, plusieurs églises possibles. Ce que tu écris dans Urim ne traverse jamais vers elles.",
+  "@profileChurchesNote": {
+    "description": "Promesse d'étanchéité, pas une préférence d'affichage : le code doit la garantir."
+  },
+  "profileDeviceCurrent": "Cet appareil · actif maintenant",
+  "profileDeviceLastSeen": "Dernière activité le {date}",
+  "@profileDeviceLastSeen": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "profileDeviceRemove": "Retirer",
+  "profileDeviceRemoveTitle": "Retirer {device} ?",
+  "@profileDeviceRemoveTitle": {
+    "placeholders": {
+      "device": {
+        "type": "String"
+      }
+    }
+  },
+  "profileDeviceRemoveBody": "Cet appareil devra se reconnecter par SMS pour ouvrir Urim.",
+  "profileReadFailed": "Le profil n'a pas pu être lu.",
+  "profileChangeRefused": "Cette modification a été refusée.",
+  "profileChangeFailed": "Cette modification n'a pas pu être enregistrée.",
+  "profileNoSession": "Aucune session ouverte.",
+  "@profileNoSession": {
+    "description": "Anomalie, pas un état vide : l'écran n'est atteignable qu'une fois l'accès ouvert."
+  },
+  "save": "Enregistrer"
 }
