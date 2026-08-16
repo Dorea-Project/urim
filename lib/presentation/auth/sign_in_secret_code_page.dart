@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/core/config/mock_credentials.dart';
+import 'package:urim/core/error/auth_error_codes.dart';
+import 'package:urim/core/error/failure.dart';
 import 'package:urim/core/router/app_routes.dart';
 import 'package:urim/domain/entities/auth/secret_code_policy.dart';
 import 'package:urim/domain/repositories/auth_repository.dart';
@@ -109,7 +111,7 @@ class _SignInSecretCodePageState extends ConsumerState<SignInSecretCodePage> {
                 onCompleted: state.isSubmitting ? (_) {} : _submit,
               ),
               const SizedBox(height: AppSpacing.lg),
-              if (state.failure != null)
+              if (state.failure case final Failure failure)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -117,7 +119,23 @@ class _SignInSecretCodePageState extends ConsumerState<SignInSecretCodePage> {
                     const SizedBox(width: AppSpacing.xs),
                     Flexible(
                       child: Text(
-                        'Code secret incorrect.',
+                        // Un compte verrouillé après cinq essais n'est pas un
+                        // code faux : le dire « incorrect » ferait s'acharner
+                        // quelqu'un qui doit seulement attendre.
+                        switch (failure.code) {
+                          AuthErrorCodes.tooManyAttempts =>
+                            'Trop d\'essais. Attends quelques minutes avant de '
+                                'réessayer.',
+                          AuthErrorCodes.accountInactive =>
+                            'Ce compte est désactivé.',
+                          AuthErrorCodes.invalidCredentials =>
+                            'Code secret incorrect.',
+                          _ => switch (failure) {
+                              NetworkFailure() => 'Pas de connexion.',
+                              _ => 'Connexion impossible pour l\'instant.',
+                            },
+                        },
+                        textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: scheme.error,
                             ),

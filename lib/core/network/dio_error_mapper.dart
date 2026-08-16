@@ -49,7 +49,10 @@ AppException _mapBadResponse(DioException error) {
   final code = api?.code ?? 'http_$statusCode';
   final message = api?.message ?? 'Le serveur a répondu avec le statut $statusCode.';
 
-  if (statusCode == 401 || statusCode == 403) {
+  // 410 : le code SMS a expiré. Techniquement « Gone », métier « recommence ».
+  // Sans cette ligne il tombait dans les erreurs serveur, et l'écran annonçait
+  // une panne à quelqu'un qui n'avait qu'à redemander un code.
+  if (statusCode == 401 || statusCode == 403 || statusCode == 410) {
     return UnauthorizedException(message, code: code, cause: error);
   }
 

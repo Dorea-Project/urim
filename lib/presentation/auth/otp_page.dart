@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/core/config/mock_credentials.dart';
+import 'package:urim/core/error/auth_error_codes.dart';
+import 'package:urim/core/error/failure.dart';
 import 'package:urim/core/router/app_routes.dart';
 import 'package:urim/domain/entities/auth/otp_challenge.dart';
 import 'package:urim/presentation/auth/auth_flow_view_model.dart';
@@ -164,27 +166,52 @@ class _OtpPageState extends ConsumerState<OtpPage> {
   }
 }
 
+/// Ce que dit un refus du serveur, en français d'utilisateur.
+///
+/// Traduit le **code** et non le message : celui du serveur est technique et
+/// change au fil des relectures, le code est stable.
+String _messageFor(Failure failure) => switch (failure.code) {
+      AuthErrorCodes.otpExpired ||
+      AuthErrorCodes.otpNotFound =>
+        'Ce code a expiré. Demandes-en un nouveau.',
+      AuthErrorCodes.otpInvalid => 'Code incorrect.',
+      AuthErrorCodes.otpTooManyAttempts =>
+        'Trop d\'essais sur ce code. Demandes-en un nouveau.',
+      AuthErrorCodes.otpTooManyRequests =>
+        'Trop de codes demandés. Patiente quelques minutes.',
+      AuthErrorCodes.phoneAlreadyRegistered =>
+        'Ce numéro a déjà un compte. Connecte-toi.',
+      _ => switch (failure) {
+          NetworkFailure() => 'Pas de connexion.',
+          ValidationFailure() => 'Code incorrect.',
+          _ => 'Vérification impossible pour l\'instant.',
+        },
+    };
+
 /// Temps restant, ou message d'échec s'il y en a un.
 class _Countdown extends StatelessWidget {
   const _Countdown({required this.remaining, required this.failure});
 
   final Duration remaining;
-  final Object? failure;
+  final Failure? failure;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final style = Theme.of(context).textTheme.bodySmall;
 
-    if (failure != null) {
+    if (failure case final Failure failure) {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(Icons.error_outline, size: 16, color: scheme.error),
           const SizedBox(width: AppSpacing.xs),
-          Text(
-            'Code incorrect',
-            style: style?.copyWith(color: scheme.error),
+          Flexible(
+            child: Text(
+              _messageFor(failure),
+              textAlign: TextAlign.right,
+              style: style?.copyWith(color: scheme.error),
+            ),
           ),
         ],
       );
