@@ -5,6 +5,7 @@ import 'package:urim/core/config/mock_credentials.dart';
 import 'package:urim/core/error/auth_error_codes.dart';
 import 'package:urim/core/error/failure.dart';
 import 'package:urim/core/router/app_routes.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/domain/entities/auth/secret_code_policy.dart';
 import 'package:urim/domain/repositories/auth_repository.dart';
 import 'package:urim/presentation/auth/auth_flow_view_model.dart';
@@ -64,6 +65,7 @@ class _SignInSecretCodePageState extends ConsumerState<SignInSecretCodePage> {
     final state = ref.watch(authFlowViewModelProvider);
     final scheme = Theme.of(context).colorScheme;
     final colors = context.colors;
+    final text = AppText.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -72,7 +74,7 @@ class _SignInSecretCodePageState extends ConsumerState<SignInSecretCodePage> {
           onPressed: () => context.canPop()
               ? context.pop()
               : context.goNamed(AppRoutes.signInName),
-          tooltip: 'Retour',
+          tooltip: AppText.of(context).back,
         ),
       ),
       body: SafeArea(
@@ -84,7 +86,7 @@ class _SignInSecretCodePageState extends ConsumerState<SignInSecretCodePage> {
               BrandMonogram(color: scheme.primary, size: 96),
               const SizedBox(height: AppSpacing.xxxl),
               Text(
-                'Ton code secret',
+                text.secretCodeUnlockTitle,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
@@ -97,11 +99,7 @@ class _SignInSecretCodePageState extends ConsumerState<SignInSecretCodePage> {
                     ),
               ),
               const SizedBox(height: AppSpacing.lg),
-              const DemoBanner(
-                text: 'Serveur simulé : le code est celui que tu as posé à '
-                    'l\'inscription — ${MockCredentials.secretCode} si tu as '
-                    'suivi la suggestion.',
-              ),
+              DemoBanner(text: text.demoSignIn(MockCredentials.secretCode)),
               const SizedBox(height: AppSpacing.lg),
               CodeInput(
                 key: _inputKey,
@@ -124,15 +122,14 @@ class _SignInSecretCodePageState extends ConsumerState<SignInSecretCodePage> {
                         // quelqu'un qui doit seulement attendre.
                         switch (failure.code) {
                           AuthErrorCodes.tooManyAttempts =>
-                            'Trop d\'essais. Attends quelques minutes avant de '
-                                'réessayer.',
+                            text.errorTooManyAttempts,
                           AuthErrorCodes.accountInactive =>
-                            'Ce compte est désactivé.',
+                            text.errorAccountInactive,
                           AuthErrorCodes.invalidCredentials =>
-                            'Code secret incorrect.',
+                            text.errorSecretCodeIncorrect,
                           _ => switch (failure) {
-                              NetworkFailure() => 'Pas de connexion.',
-                              _ => 'Connexion impossible pour l\'instant.',
+                              NetworkFailure() => text.errorNoConnection,
+                              _ => text.errorSignInUnavailable,
                             },
                         },
                         textAlign: TextAlign.center,
@@ -154,7 +151,7 @@ class _SignInSecretCodePageState extends ConsumerState<SignInSecretCodePage> {
               const SizedBox(height: AppSpacing.xl),
               TextButton(
                 onPressed: state.isSubmitting ? null : _forgotten,
-                child: const Text('Code oublié ?'),
+                child: Text(text.signInForgotten),
               ),
             ],
           ),

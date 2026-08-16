@@ -63,4 +63,137 @@ class AppTextFr extends AppText {
 
   @override
   String get cancel => 'Annuler';
+
+  @override
+  String get authPhoneTitleSignIn => 'Ton numéro';
+
+  @override
+  String get authPhoneTitleRegistration => 'Ton numéro valide';
+
+  @override
+  String get authPhoneHint => '07 47 76 9069';
+
+  @override
+  String get authPhoneSubmit => 'Soumettre';
+
+  @override
+  String get authPrivacyConsent => 'J\'ai lu et j\'accepte la ';
+
+  @override
+  String get authPrivacyLink => 'politique de confidentialité';
+
+  @override
+  String authOtpTitle(int count) {
+    return 'Utiliser code SMS de $count chiffres';
+  }
+
+  @override
+  String get authOtpValidate => 'Validation';
+
+  @override
+  String get authOtpResend => 'Renvoyer le code';
+
+  @override
+  String get authOtpRequestNew => 'Demander un nouveau code';
+
+  @override
+  String get authOtpExpiredShort => 'Code expiré';
+
+  @override
+  String authOtpRemainingMinutes(int minutes, String seconds) {
+    return 'il reste $minutes min $seconds';
+  }
+
+  @override
+  String authOtpRemainingSeconds(int seconds) {
+    return 'il reste $seconds s';
+  }
+
+  @override
+  String get secretCodeChooseTitle => 'Choisis un code secret';
+
+  @override
+  String get secretCodeConfirmTitle => 'Confirme ton code secret';
+
+  @override
+  String secretCodeChooseHelper(int count) {
+    return '$count chiffres, demandés à chaque ouverture';
+  }
+
+  @override
+  String get secretCodeConfirmHelper => 'Saisis-le une seconde fois';
+
+  @override
+  String get secretCodeUnlockTitle => 'Ton code secret';
+
+  @override
+  String get secretCodeUnlockHelper => 'Saisis tes chiffres';
+
+  @override
+  String get secretCodeWrong => 'Code incorrect';
+
+  @override
+  String get signInForgotten => 'Code oublié ?';
+
+  @override
+  String get errorOtpExpired => 'Ce code a expiré. Demandes-en un nouveau.';
+
+  @override
+  String get errorOtpInvalid => 'Code incorrect.';
+
+  @override
+  String get errorOtpTooManyAttempts =>
+      'Trop d\'essais sur ce code. Demandes-en un nouveau.';
+
+  @override
+  String get errorOtpTooManyRequests =>
+      'Trop de codes demandés. Patiente quelques minutes.';
+
+  @override
+  String get errorPhoneAlreadyRegistered =>
+      'Ce numéro a déjà un compte. Connecte-toi.';
+
+  @override
+  String get errorSecretCodeIncorrect => 'Code secret incorrect.';
+
+  @override
+  String get errorTooManyAttempts =>
+      'Trop d\'essais. Attends quelques minutes avant de réessayer.';
+
+  @override
+  String get errorAccountInactive => 'Ce compte est désactivé.';
+
+  @override
+  String get errorNoConnection => 'Pas de connexion.';
+
+  @override
+  String get errorVerificationUnavailable =>
+      'Vérification impossible pour l\'instant.';
+
+  @override
+  String get errorSignInUnavailable => 'Connexion impossible pour l\'instant.';
+
+  @override
+  String get demoPhone =>
+      'Serveur simulé : aucun SMS ne part. Le numéro est prérempli, coche la politique et soumets.';
+
+  @override
+  String demoOtp(String code) {
+    return 'Serveur simulé : le code est $code.';
+  }
+
+  @override
+  String demoSecretCodeSetup(String code) {
+    return 'Pour l\'essai : $code. Un code répété (0000) ou suivi (1234) est refusé.';
+  }
+
+  @override
+  String demoSecretCodeUnlock(String code) {
+    return 'Celui que tu as choisi à la création — $code si tu as suivi la suggestion.';
+  }
+
+  @override
+  String demoSignIn(String code) {
+    return 'Serveur simulé : le code est celui que tu as posé à l\'inscription — $code si tu as suivi la suggestion.';
+  }
 }

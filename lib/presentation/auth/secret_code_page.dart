@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:urim/core/config/mock_credentials.dart';
 import 'package:urim/core/error/failure.dart';
 import 'package:urim/domain/entities/auth/secret_code_policy.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/auth/secret_code_view_model.dart';
 import 'package:urim/presentation/common/brand_mark.dart';
 import 'package:urim/presentation/common/code_input.dart';
@@ -41,16 +42,16 @@ class _SecretCodeSetupPageState extends ConsumerState<SecretCodeSetupPage> {
   Widget build(BuildContext context) {
     final state = ref.watch(secretCodeViewModelProvider);
     final isConfirming = state.stage == SecretCodeStage.confirm;
+    final text = AppText.of(context);
 
     return _SecretCodeScaffold(
       title: isConfirming
-          ? 'Confirmez votre code secret'
-          : 'Choisissez un code secret',
+          ? text.secretCodeConfirmTitle
+          : text.secretCodeChooseTitle,
       helper: isConfirming
-          ? 'Saisissez-le une seconde fois'
-          : '${SecretCodePolicy.length} chiffres, demandés à chaque ouverture',
-      demo: 'Pour l\'essai : ${MockCredentials.secretCode}. '
-          'Un code répété (0000) ou suivi (1234) est refusé.',
+          ? text.secretCodeConfirmHelper
+          : text.secretCodeChooseHelper(SecretCodePolicy.length),
+      demo: text.demoSecretCodeSetup(MockCredentials.secretCode),
       failure: state.failure,
       isSubmitting: state.isSubmitting,
       inputKey: _inputKey,
@@ -87,13 +88,15 @@ class _SecretCodeUnlockPageState extends ConsumerState<SecretCodeUnlockPage> {
   @override
   Widget build(BuildContext context) {
     final status = ref.watch(secretCodeUnlockViewModelProvider);
+    final text = AppText.of(context);
 
     return _SecretCodeScaffold(
-      title: 'Votre code secret',
-      helper: _wrongCode ? 'Code incorrect' : 'Saisissez vos chiffres',
+      title: text.secretCodeUnlockTitle,
+      helper: _wrongCode
+          ? text.secretCodeWrong
+          : text.secretCodeUnlockHelper,
       helperIsError: _wrongCode,
-      demo: 'Celui que tu as choisi à la création — '
-          '${MockCredentials.secretCode} si tu as suivi la suggestion.',
+      demo: text.demoSecretCodeUnlock(MockCredentials.secretCode),
       failure: status.error is Failure ? status.error as Failure : null,
       isSubmitting: status.isLoading,
       inputKey: _inputKey,

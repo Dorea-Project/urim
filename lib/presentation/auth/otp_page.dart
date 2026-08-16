@@ -8,6 +8,7 @@ import 'package:urim/core/error/auth_error_codes.dart';
 import 'package:urim/core/error/failure.dart';
 import 'package:urim/core/router/app_routes.dart';
 import 'package:urim/domain/entities/auth/otp_challenge.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/auth/auth_flow_view_model.dart';
 import 'package:urim/presentation/common/brand_mark.dart';
 import 'package:urim/presentation/common/demo_banner.dart';
@@ -103,6 +104,7 @@ class _OtpPageState extends ConsumerState<OtpPage> {
   Widget build(BuildContext context) {
     final state = ref.watch(authFlowViewModelProvider);
     final scheme = Theme.of(context).colorScheme;
+    final text = AppText.of(context);
     final expired = _remaining == Duration.zero;
     final complete = _code.length == OtpChallenge.defaultCodeLength;
 
@@ -117,15 +119,12 @@ class _OtpPageState extends ConsumerState<OtpPage> {
               Center(child: BrandMonogram(color: scheme.primary, size: 96)),
               const SizedBox(height: AppSpacing.xxxl),
               Text(
-                'Utiliser code SMS de '
-                '${OtpChallenge.defaultCodeLength} chiffres',
+                text.authOtpTitle(OtpChallenge.defaultCodeLength),
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: AppSpacing.lg),
-              const DemoBanner(
-                text: 'Serveur simulé : le code est ${MockCredentials.otp}.',
-              ),
+              DemoBanner(text: text.demoOtp(MockCredentials.otp)),
               const SizedBox(height: AppSpacing.lg),
               CodeInput(
                 key: _inputKey,
@@ -149,13 +148,13 @@ class _OtpPageState extends ConsumerState<OtpPage> {
                         dimension: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Validation'),
+                    : Text(text.authOtpValidate),
               ),
               const SizedBox(height: AppSpacing.sm),
               TextButton(
                 onPressed: state.isSubmitting ? null : _resend,
                 child: Text(
-                  expired ? 'Demander un nouveau code' : 'Renvoyer le code',
+                  expired ? text.authOtpRequestNew : text.authOtpResend,
                 ),
               ),
             ],
@@ -170,21 +169,20 @@ class _OtpPageState extends ConsumerState<OtpPage> {
 ///
 /// Traduit le **code** et non le message : celui du serveur est technique et
 /// change au fil des relectures, le code est stable.
-String _messageFor(Failure failure) => switch (failure.code) {
+String _messageFor(AppText text, Failure failure) =>
+    switch (failure.code) {
       AuthErrorCodes.otpExpired ||
       AuthErrorCodes.otpNotFound =>
-        'Ce code a expiré. Demandes-en un nouveau.',
-      AuthErrorCodes.otpInvalid => 'Code incorrect.',
-      AuthErrorCodes.otpTooManyAttempts =>
-        'Trop d\'essais sur ce code. Demandes-en un nouveau.',
-      AuthErrorCodes.otpTooManyRequests =>
-        'Trop de codes demandés. Patiente quelques minutes.',
+        text.errorOtpExpired,
+      AuthErrorCodes.otpInvalid => text.errorOtpInvalid,
+      AuthErrorCodes.otpTooManyAttempts => text.errorOtpTooManyAttempts,
+      AuthErrorCodes.otpTooManyRequests => text.errorOtpTooManyRequests,
       AuthErrorCodes.phoneAlreadyRegistered =>
-        'Ce numéro a déjà un compte. Connecte-toi.',
+        text.errorPhoneAlreadyRegistered,
       _ => switch (failure) {
-          NetworkFailure() => 'Pas de connexion.',
-          ValidationFailure() => 'Code incorrect.',
-          _ => 'Vérification impossible pour l\'instant.',
+          NetworkFailure() => text.errorNoConnection,
+          ValidationFailure() => text.errorOtpInvalid,
+          _ => text.errorVerificationUnavailable,
         },
     };
 
@@ -199,6 +197,7 @@ class _Countdown extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final style = Theme.of(context).textTheme.bodySmall;
+    final text = AppText.of(context);
 
     if (failure case final Failure failure) {
       return Row(
@@ -208,7 +207,7 @@ class _Countdown extends StatelessWidget {
           const SizedBox(width: AppSpacing.xs),
           Flexible(
             child: Text(
-              _messageFor(failure),
+              _messageFor(text, failure),
               textAlign: TextAlign.right,
               style: style?.copyWith(color: scheme.error),
             ),
@@ -219,7 +218,7 @@ class _Countdown extends StatelessWidget {
 
     if (remaining == Duration.zero) {
       return Text(
-        'Code expiré',
+        text.authOtpExpiredShort,
         style: style?.copyWith(color: scheme.error),
       );
     }
@@ -229,8 +228,11 @@ class _Countdown extends StatelessWidget {
 
     return Text(
       minutes > 0
-          ? 'il reste $minutes min ${seconds.toString().padLeft(2, '0')}'
-          : 'il reste $seconds s',
+          ? text.authOtpRemainingMinutes(
+              minutes,
+              seconds.toString().padLeft(2, '0'),
+            )
+          : text.authOtpRemainingSeconds(seconds),
       style: style?.copyWith(color: context.colors.textSecondary),
     );
   }

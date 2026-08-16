@@ -1,66 +1,178 @@
 {
   "@@locale": "fr",
-
   "appTitle": "Urim",
   "@appTitle": {
     "description": "Nom de l'application, affiché par le système."
   },
-
   "onboardingSkip": "Passer",
   "@onboardingSkip": {
     "description": "Sortie de la présentation, en haut à droite."
   },
-
   "onboardingNext": "Continuer",
   "@onboardingNext": {
     "description": "Bouton principal des deux premières étapes."
   },
-
   "onboardingCreateAccount": "Créer mon compte",
   "@onboardingCreateAccount": {
     "description": "Bouton principal de la dernière étape : la porte de l'inscription."
   },
-
   "onboardingSignIn": "J'ai déjà un compte",
   "@onboardingSignIn": {
     "description": "La seconde porte : la connexion d'un compte existant."
   },
-
   "onboardingSaveFailed": "Impossible d'enregistrer ta progression. La présentation réapparaîtra au prochain lancement.",
   "@onboardingSaveFailed": {
     "description": "Échec de l'écriture locale. Dit la conséquence, pas la cause technique."
   },
-
   "onboardingStep": "Étape {position} sur {total}",
   "@onboardingStep": {
     "description": "Annonce vocale de la progression. Lu par les lecteurs d'écran, jamais affiché.",
     "placeholders": {
-      "position": { "type": "int" },
-      "total": { "type": "int" }
+      "position": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
-
   "onboardingWeighingTitle": "Écris ta phrase.\nUrim cherche le texte dedans.",
   "@onboardingWeighingTitle": {
     "description": "Titre de la première étape. Le retour à la ligne porte le rythme de la phrase."
   },
-
   "onboardingWeighingBody": "Une référence, une citation approximative, ou juste une intention. Tu n'as aucun mode à choisir — la porte regarde si les mots se suivent comme dans l'Écriture.",
-
   "onboardingHandbackTitle": "Il s'arrête\net te rend la main.",
-
   "onboardingHandbackBody": "Chaque étage dit pourquoi il a fait ce qu'il a fait. Quand il ne peut pas trancher seul, il te pose la question au lieu de choisir à ta place.",
-
   "onboardingResistanceTitle": "Il te montre les textes qui te résistent.",
-
   "onboardingResistanceBody": "Ceux qui ne vont pas dans le sens de ta lecture. C'est le seul moyen de ne pas faire dire au texte ce qu'on avait décidé d'y trouver.",
-
   "back": "Retour",
   "@back": {
     "description": "Infobulle du bouton de retour, partout."
   },
-
   "retry": "Réessayer",
-
-  "cancel": "Annuler"
+  "cancel": "Annuler",
+  "authPhoneTitleSignIn": "Ton numéro",
+  "@authPhoneTitleSignIn": {
+    "description": "Titre de l'écran du numéro, porte « connexion »."
+  },
+  "authPhoneTitleRegistration": "Ton numéro valide",
+  "@authPhoneTitleRegistration": {
+    "description": "Titre du même écran, porte « inscription » : le numéro doit être joignable, un SMS y part."
+  },
+  "authPhoneHint": "07 47 76 9069",
+  "@authPhoneHint": {
+    "description": "Exemple de saisie, format ivoirien."
+  },
+  "authPhoneSubmit": "Soumettre",
+  "authPrivacyConsent": "J'ai lu et j'accepte la ",
+  "@authPrivacyConsent": {
+    "description": "Début de la phrase de consentement. Se termine par le lien ci-dessous — les deux se lisent d'un trait."
+  },
+  "authPrivacyLink": "politique de confidentialité",
+  "authOtpTitle": "Utiliser code SMS de {count} chiffres",
+  "@authOtpTitle": {
+    "description": "Titre de l'écran du code. La longueur vient du serveur, jamais d'une constante d'écran.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "authOtpValidate": "Validation",
+  "authOtpResend": "Renvoyer le code",
+  "authOtpRequestNew": "Demander un nouveau code",
+  "@authOtpRequestNew": {
+    "description": "Remplace « renvoyer » une fois le délai écoulé : ce n'est plus le même geste."
+  },
+  "authOtpExpiredShort": "Code expiré",
+  "authOtpRemainingMinutes": "il reste {minutes} min {seconds}",
+  "@authOtpRemainingMinutes": {
+    "description": "Compte à rebours, au-dessus d'une minute.",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "authOtpRemainingSeconds": "il reste {seconds} s",
+  "@authOtpRemainingSeconds": {
+    "description": "Compte à rebours, dernière minute.",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "secretCodeChooseTitle": "Choisis un code secret",
+  "secretCodeConfirmTitle": "Confirme ton code secret",
+  "secretCodeChooseHelper": "{count} chiffres, demandés à chaque ouverture",
+  "@secretCodeChooseHelper": {
+    "description": "Dit ce que le code engage : il reviendra à chaque fois.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "secretCodeConfirmHelper": "Saisis-le une seconde fois",
+  "secretCodeUnlockTitle": "Ton code secret",
+  "secretCodeUnlockHelper": "Saisis tes chiffres",
+  "secretCodeWrong": "Code incorrect",
+  "signInForgotten": "Code oublié ?",
+  "errorOtpExpired": "Ce code a expiré. Demandes-en un nouveau.",
+  "@errorOtpExpired": {
+    "description": "Traduit AUTH_OTP_EXPIRED. Dit la sortie, pas seulement le problème."
+  },
+  "errorOtpInvalid": "Code incorrect.",
+  "errorOtpTooManyAttempts": "Trop d'essais sur ce code. Demandes-en un nouveau.",
+  "errorOtpTooManyRequests": "Trop de codes demandés. Patiente quelques minutes.",
+  "errorPhoneAlreadyRegistered": "Ce numéro a déjà un compte. Connecte-toi.",
+  "errorSecretCodeIncorrect": "Code secret incorrect.",
+  "errorTooManyAttempts": "Trop d'essais. Attends quelques minutes avant de réessayer.",
+  "@errorTooManyAttempts": {
+    "description": "Compte verrouillé. Distinct d'un code faux : le dire « incorrect » ferait s'acharner quelqu'un qui doit seulement attendre."
+  },
+  "errorAccountInactive": "Ce compte est désactivé.",
+  "errorNoConnection": "Pas de connexion.",
+  "errorVerificationUnavailable": "Vérification impossible pour l'instant.",
+  "errorSignInUnavailable": "Connexion impossible pour l'instant.",
+  "demoPhone": "Serveur simulé : aucun SMS ne part. Le numéro est prérempli, coche la politique et soumets.",
+  "@demoPhone": {
+    "description": "N'apparaît qu'en dehors de la production."
+  },
+  "demoOtp": "Serveur simulé : le code est {code}.",
+  "@demoOtp": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "demoSecretCodeSetup": "Pour l'essai : {code}. Un code répété (0000) ou suivi (1234) est refusé.",
+  "@demoSecretCodeSetup": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "demoSecretCodeUnlock": "Celui que tu as choisi à la création — {code} si tu as suivi la suggestion.",
+  "@demoSecretCodeUnlock": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "demoSignIn": "Serveur simulé : le code est celui que tu as posé à l'inscription — {code} si tu as suivi la suggestion.",
+  "@demoSignIn": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  }
 }

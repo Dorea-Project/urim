@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/core/router/app_routes.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/auth/auth_flow_view_model.dart';
 import 'package:urim/presentation/common/brand_mark.dart';
 import 'package:urim/presentation/common/demo_banner.dart';
@@ -23,6 +24,7 @@ class PhonePage extends ConsumerWidget {
     final state = ref.watch(authFlowViewModelProvider);
     final viewModel = ref.read(authFlowViewModelProvider.notifier);
     final scheme = Theme.of(context).colorScheme;
+    final text = AppText.of(context);
 
     // Deux portes : créer un compte demande un SMS tout de suite ; se
     // connecter demande d'abord le code secret, et n'enverra un SMS que si le
@@ -49,8 +51,8 @@ class PhonePage extends ConsumerWidget {
               const SizedBox(height: AppSpacing.xxxl),
               Text(
                 state.door == AuthDoor.signIn
-                    ? 'Ton numéro'
-                    : 'Ton numéro valide',
+                    ? text.authPhoneTitleSignIn
+                    : text.authPhoneTitleRegistration,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
@@ -82,7 +84,7 @@ class PhonePage extends ConsumerWidget {
                         LengthLimitingTextInputFormatter(14),
                       ],
                       decoration: InputDecoration(
-                        hintText: '07 47 76 9069',
+                        hintText: text.authPhoneHint,
                         errorText: state.fieldError,
                       ),
                       onFieldSubmitted: (_) {
@@ -93,10 +95,7 @@ class PhonePage extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: AppSpacing.lg),
-              const DemoBanner(
-                text: 'Serveur simulé : aucun SMS ne part. Le numéro est '
-                    'prérempli, coche la politique et soumets.',
-              ),
+              DemoBanner(text: text.demoPhone),
               const SizedBox(height: AppSpacing.lg),
               // Le consentement n'est demandé qu'à l'inscription : celui qui se
               // reconnecte l'a déjà donné, et le lui redemander n'aurait aucune
@@ -114,7 +113,7 @@ class PhonePage extends ConsumerWidget {
                         dimension: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Soumettre'),
+                    : Text(text.authPhoneSubmit),
               ),
               const SizedBox(height: AppSpacing.lg),
             ],
@@ -153,6 +152,7 @@ class _PrivacyConsentState extends State<_PrivacyConsent> {
     final textStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
           color: context.colors.textSecondary,
         );
+    final labels = AppText.of(context);
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -170,11 +170,11 @@ class _PrivacyConsentState extends State<_PrivacyConsent> {
             onTap: () => widget.onChanged(!widget.accepted),
             child: Text.rich(
               TextSpan(
-                text: 'J\'ai lu et j\'accepte la ',
+                text: labels.authPrivacyConsent,
                 style: textStyle,
                 children: [
                   TextSpan(
-                    text: 'politique de confidentialité',
+                    text: labels.authPrivacyLink,
                     style: textStyle?.copyWith(
                       color: scheme.primary,
                       fontWeight: FontWeight.w600,

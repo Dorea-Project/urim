@@ -10,6 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// s'allonge à mesure. Un écran qui y entre n'en ressort pas.
 const List<String> zonesTenues = [
   'lib/presentation/onboarding',
+  'lib/presentation/auth',
 ];
 
 /// Ce qui n'est pas du texte d'interface, même entre guillemets.
@@ -25,6 +26,12 @@ final RegExp technique = RegExp(
   r'\W+' // ponctuation seule, séparateurs
   r')$',
 );
+
+/// Une expression régulière n'est pas une phrase.
+///
+/// `[\+0-9]` filtre une saisie ; le traduire n'aurait aucun sens, et
+/// l'exclure à la main aurait ouvert une porte pour tout le reste.
+final RegExp expressionReguliere = RegExp(r'^[\[(]|\\[dwsSWD+*?]');
 
 /// Un littéral simple, hors commentaires.
 final RegExp litteral = RegExp("'([^']{2,})'");
@@ -56,6 +63,9 @@ void main() {
           for (final trouve in litteral.allMatches(ligne)) {
             final texte = trouve.group(1)!;
             if (technique.hasMatch(texte)) continue;
+            if (expressionReguliere.hasMatch(texte)) continue;
+            // Un texte qui ne porte aucune lettre ne se lit pas.
+            if (!RegExp('[A-Za-zÀ-ÿ]').hasMatch(texte)) continue;
 
             coupables.add('${fichier.path}:${i + 1}  « $texte »');
           }
