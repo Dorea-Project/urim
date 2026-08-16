@@ -137,6 +137,11 @@ final class InMemoryTranscriptionRepository {
             note: 'Traduction à relire par un locuteur avant diffusion',
           ),
           ReadAloudVoice(
+            language: 'Bété',
+            kind: ReadAloudKind.translated,
+            note: 'Traduction à relire par un locuteur avant diffusion',
+          ),
+          ReadAloudVoice(
             language: 'Ta propre voix',
             kind: ReadAloudKind.ownVoice,
             note: 'Enregistre-toi lisant la synthèse — rien à traduire, rien '

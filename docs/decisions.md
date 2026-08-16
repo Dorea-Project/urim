@@ -221,14 +221,32 @@ que devient la transcription quand l'audio disparaît ?
 
 ### Q17 — La lecture à voix haute : quelles langues, par quel moyen ?
 
-La synthèse propose quatre lectures : une voix de synthèse française, deux
-traductions — dioula, baoulé — « à relire par un locuteur avant diffusion », et
-la voix de celui qui a prêché.
+**Cadre posé.** Le dioula, le baoulé, le bété et les suivantes ne sont **pas des
+langues d'interface**. Aucun écran ne sera traduit dans ces langues : elles ne
+concernent que la **voix** — la synthèse validée, lue à ceux de l'assemblée qui
+écouteront plutôt que de lire. C'est une modalité de sortie, pas une locale.
 
-Trois briques distinctes, dont deux entièrement nouvelles : la synthèse vocale
-et la traduction vers des langues très peu dotées. La quatrième — s'enregistrer
-soi-même — ne demande rien d'autre que la capture audio, et pourrait sortir la
-première.
+La distinction n'est pas théorique : traduire trente écrans en bété n'a aucun
+sens — l'orthographe n'est pas stabilisée, le vocabulaire d'interface est à
+inventer, et les locuteurs lisent le français. Lire à voix haute dans leur
+langue, en revanche, touche exactement ceux que l'écrit laisse dehors.
+
+La liste reste ouverte, et elle appartient à l'assemblée : une église
+n'aura pas les mêmes langues qu'une autre.
+
+Trois briques distinctes se cachent derrière :
+
+| Lecture | Ce qu'elle demande |
+|---|---|
+| Français, voix de synthèse | une synthèse vocale française — la brique la mieux dotée |
+| Dioula, baoulé, bété… | une **traduction** puis une **voix**, dans des langues très peu dotées, avec relecture humaine annoncée sur la maquette |
+| Sa propre voix | **rien** — ni traduction, ni modèle : seulement la capture audio |
+
+La troisième est la seule qui fonctionne aujourd'hui, et c'est aussi la plus
+juste : c'est la voix du pasteur que l'assemblée reconnaît. Elle devrait sortir
+la première, et les deux autres attendre d'être bonnes plutôt que d'être
+livrées médiocres — une traduction approximative d'un texte biblique n'est pas
+un défaut d'ergonomie, c'est une faute.
 
 ### Q18 — Une fois validée, qui voit la synthèse ?
 

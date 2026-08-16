@@ -12,6 +12,7 @@ import 'package:urim/core/time/clock_provider.dart';
 import 'package:urim/data/repositories/in_memory_preparation_repository.dart';
 import 'package:urim/data/repositories/in_memory_transcription_repository.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
+import 'package:urim/domain/entities/transcription/synthesis_draft.dart';
 import 'package:urim/presentation/home/home_page.dart';
 import 'package:urim/presentation/theme/app_theme.dart';
 import 'package:urim/presentation/transcription/synthesis_page.dart';
@@ -96,7 +97,18 @@ void main() {
 
       expect(draft.isValidated, isFalse);
       expect(draft.canBeReadAloud, isFalse);
-      expect(draft.voices, hasLength(4));
+      expect(draft.voices, hasLength(5));
+
+      // Ces langues sont des voix, jamais des ecrans : la seule qui ne demande
+      // aucun modele est celle du predicateur lui-meme.
+      expect(
+        draft.voices.where((v) => v.kind == ReadAloudKind.translated).length,
+        3,
+      );
+      expect(
+        draft.voices.where((v) => v.kind == ReadAloudKind.ownVoice).length,
+        1,
+      );
     });
 
     test('valider ouvre la lecture, et ne se fait qu\'une fois', () async {

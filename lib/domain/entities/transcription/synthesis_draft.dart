@@ -16,15 +16,27 @@ final class SynthesisCapsule extends Equatable {
   List<Object?> get props => [text, saidAt];
 }
 
-/// Langue de lecture à voix haute.
+/// Comment la synthèse est portée à la voix.
+///
+/// Ces langues ne sont **pas** des langues d'interface : aucun écran ne sera
+/// traduit en dioula, en baoulé ou en bété. Elles ne concernent que la lecture
+/// à voix haute — ceux de l'assemblée que l'écrit laisse dehors. C'est une
+/// modalité de sortie, jamais une locale.
 enum ReadAloudKind {
   /// Voix de synthèse dans la langue de la prédication.
   synthetic,
 
   /// Traduction, à relire par un locuteur avant diffusion.
+  ///
+  /// Deux briques derrière, dans des langues très peu dotées : traduire, puis
+  /// dire. Une traduction approximative d'un texte biblique n'est pas un défaut
+  /// d'ergonomie — c'est une faute. Elles attendront d'être bonnes.
   translated,
 
   /// La voix de celui qui a prêché : rien à traduire, rien à générer.
+  ///
+  /// La seule qui ne demande aucun modèle, et la plus juste — c'est la voix que
+  /// l'assemblée reconnaît.
   ownVoice,
 }
 
