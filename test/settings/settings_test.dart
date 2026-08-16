@@ -8,8 +8,10 @@ import 'package:urim/domain/entities/bible/bible_translation.dart';
 import 'package:urim/domain/entities/settings/app_settings.dart';
 import 'package:urim/presentation/settings/settings_page.dart';
 import 'package:urim/presentation/settings/settings_view_model.dart';
-import 'package:urim/presentation/settings/widgets/reading_size_selector.dart';
+import 'package:urim/l10n/generated/app_text_fr.dart';
 import 'package:urim/presentation/theme/app_theme.dart';
+
+import '../support/pump_app.dart';
 
 /// Réglages : ce qui est conservé, et ce qui est montré sans être promis.
 void main() {
@@ -117,10 +119,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [sharedPreferencesProvider.overrideWithValue(preferences)],
-          child: MaterialApp(
-            theme: AppTheme.light,
-            home: const SettingsPage(),
-          ),
+          child: wrapScreen(const SettingsPage()),
         ),
       );
       await tester.pumpAndSettle();
@@ -184,7 +183,7 @@ void main() {
 
       double sampleFontSize() => tester
           .widget<Text>(
-            find.text(ReadingSizeSelector.sample),
+            find.text(AppTextFr().settingsReadingSample),
           )
           .style!
           .fontSize!;

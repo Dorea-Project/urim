@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:urim/core/error/failure.dart';
 import 'package:urim/domain/entities/bible/bible_translation.dart';
 import 'package:urim/domain/entities/settings/app_settings.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/common/section_card.dart';
 import 'package:urim/presentation/settings/settings_view_model.dart';
 import 'package:urim/presentation/settings/widgets/reading_size_selector.dart';
@@ -23,14 +24,15 @@ class SettingsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsViewModelProvider);
+    final text = AppText.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Réglages'),
+        title: Text(text.settingsTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 20),
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
-          tooltip: 'Retour',
+          tooltip: text.back,
         ),
       ),
       body: SafeArea(
@@ -57,13 +59,14 @@ class _SettingsList extends ConsumerWidget {
     if (failure == null || !context.mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Ce réglage n\'a pas pu être enregistré.')),
+      SnackBar(content: Text(AppText.of(context).settingsSaveFailed)),
     );
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.read(settingsViewModelProvider.notifier);
+    final text = AppText.of(context);
     final translation =
         BibleTranslation.byId(settings.defaultTranslationId);
 
@@ -76,7 +79,7 @@ class _SettingsList extends ConsumerWidget {
       ),
       children: [
         // --- Lecture ---------------------------------------------------------
-        const SectionLabel('Lecture'),
+        SectionLabel(text.settingsSectionReading),
         SectionCard(
           children: [
             Padding(
@@ -94,11 +97,11 @@ class _SettingsList extends ConsumerWidget {
         const SizedBox(height: AppSpacing.xl),
 
         // --- Écriture --------------------------------------------------------
-        const SectionLabel('Écriture'),
+        SectionLabel(text.settingsSectionScripture),
         SectionCard(
           children: [
             SettingNavRow(
-              title: 'Version par défaut',
+              title: text.settingsDefaultVersion,
               value: translation.name,
               onTap: () => showTranslationSheet(
                 context: context,
@@ -110,9 +113,8 @@ class _SettingsList extends ConsumerWidget {
               ),
             ),
             SettingSwitchRow(
-              title: 'Toujours afficher la référence',
-              subtitle: 'Livre, chapitre, verset et version sous chaque '
-                  'citation.',
+              title: text.settingsAlwaysShowReference,
+              subtitle: text.settingsAlwaysShowReferenceHint,
               value: settings.alwaysShowReference,
               onChanged: (value) => _apply(
                 context,
@@ -127,25 +129,22 @@ class _SettingsList extends ConsumerWidget {
         //
         // Les trois attendent une décision : la source du texte biblique (Q1),
         // le moteur de transcription (Q2), et ce qu'on synchronise (Q10).
-        const SectionLabel('Hors connexion'),
-        const SectionCard(
+        SectionLabel(text.settingsSectionOffline),
+        SectionCard(
           children: [
             SettingSwitchRow(
-              title: 'Texte biblique téléchargé',
-              subtitle: 'Disponible quand la source du texte biblique aura été '
-                  'choisie.',
+              title: text.settingsBibleDownloaded,
+              subtitle: text.settingsBibleDownloadedPending,
               value: false,
             ),
             SettingSwitchRow(
-              title: 'Transcrire sur l\'appareil',
-              subtitle: 'L\'audio ne quittera jamais le téléphone. Le moteur '
-                  'de transcription reste à retenir.',
+              title: text.settingsTranscribeOnDevice,
+              subtitle: text.settingsTranscribeOnDevicePending,
               value: false,
             ),
             SettingSwitchRow(
-              title: 'Synchroniser en Wi-Fi seulement',
-              subtitle: 'Rien n\'est encore synchronisé : tes préparations ne '
-                  'quittent pas cet appareil.',
+              title: text.settingsWifiOnly,
+              subtitle: text.settingsWifiOnlyPending,
               value: false,
             ),
           ],
@@ -153,14 +152,12 @@ class _SettingsList extends ConsumerWidget {
         const SizedBox(height: AppSpacing.xl),
 
         // --- Rappels ---------------------------------------------------------
-        const SectionLabel('Rappels'),
-        const SectionCard(
+        SectionLabel(text.settingsSectionReminders),
+        SectionCard(
           children: [
             SettingSwitchRow(
-              title: 'Préparation en cours',
-              subtitle: 'Un rappel le samedi si un message n\'est pas '
-                  'terminé — dès qu\'une préparation saura dire qu\'elle ne '
-                  'l\'est pas.',
+              title: text.settingsReminderInProgress,
+              subtitle: text.settingsReminderInProgressPending,
               value: false,
             ),
           ],
@@ -168,17 +165,16 @@ class _SettingsList extends ConsumerWidget {
         const SizedBox(height: AppSpacing.xl),
 
         // --- Contenu ---------------------------------------------------------
-        const SectionLabel('Contenu'),
-        const SectionCard(
+        SectionLabel(text.settingsSectionContent),
+        SectionCard(
           children: [
             SettingNavRow(
-              title: 'Exporter mes préparations',
-              subtitle: 'Texte ou PDF — l\'export arrive avec la synthèse.',
+              title: text.settingsExport,
+              subtitle: text.settingsExportPending,
             ),
             SettingRow(
-              title: 'Espace utilisé',
-              subtitle: 'Mesurable une fois le stockage des préparations '
-                  'choisi.',
+              title: text.settingsStorageUsed,
+              subtitle: text.settingsStorageUsedPending,
               muted: true,
             ),
           ],
@@ -199,7 +195,7 @@ class _TrainingNotice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      'Urim n\'utilise jamais tes préparations pour entraîner un modèle.',
+      AppText.of(context).settingsTrainingNotice,
       textAlign: TextAlign.center,
       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: context.colors.textSecondary,
@@ -231,7 +227,7 @@ class _SettingsError extends ConsumerWidget {
             Icon(Icons.error_outline, color: scheme.error),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'Les réglages n\'ont pas pu être lus.',
+              AppText.of(context).settingsReadFailed,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.titleMedium,
             ),
@@ -248,7 +244,7 @@ class _SettingsError extends ConsumerWidget {
             const SizedBox(height: AppSpacing.xl),
             OutlinedButton(
               onPressed: () => ref.invalidate(settingsViewModelProvider),
-              child: const Text('Réessayer'),
+              child: Text(AppText.of(context).retry),
             ),
           ],
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:urim/domain/entities/settings/app_settings.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/common/ruled_content.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
@@ -20,19 +21,26 @@ class ReadingSizeSelector extends StatelessWidget {
   final ReadingTextSize selected;
   final ValueChanged<ReadingTextSize> onSelected;
 
-  /// Le verset de la maquette. Court, connu, et de la traduction que l'on sait
-  /// afficher sans licence.
-  static const String sample =
-      'Ils persévéraient dans l\'enseignement des apôtres…';
+  /// Nomme une taille.
+  ///
+  /// L'échelle vient du domaine, le mot vient de l'écran : « Grand » est un
+  /// texte affichable, et le domaine n'en produit pas.
+  static String labelOf(AppText text, ReadingTextSize size) => switch (size) {
+        ReadingTextSize.small => text.settingsTextSizeSmall,
+        ReadingTextSize.normal => text.settingsTextSizeNormal,
+        ReadingTextSize.large => text.settingsTextSizeLarge,
+        ReadingTextSize.extraLarge => text.settingsTextSizeExtraLarge,
+      };
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final text = AppText.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Taille du texte', style: theme.textTheme.titleMedium),
+        Text(text.settingsTextSize, style: theme.textTheme.titleMedium),
         const SizedBox(height: AppSpacing.md),
         SizedBox(
           width: double.infinity,
@@ -43,7 +51,7 @@ class ReadingSizeSelector extends StatelessWidget {
                 for (final size in ReadingTextSize.values)
                   ButtonSegment<ReadingTextSize>(
                     value: size,
-                    label: Text(size.label),
+                    label: Text(labelOf(text, size)),
                   ),
               ],
               selected: {selected},
@@ -70,7 +78,7 @@ class ReadingSamplePreview extends StatelessWidget {
     return RuledContent(
       color: Theme.of(context).colorScheme.primary,
       child: Text(
-        ReadingSizeSelector.sample,
+        AppText.of(context).settingsReadingSample,
         style: AppTypography.reading.copyWith(
           fontSize: AppTypography.reading.fontSize! * size.scale,
           color: context.colors.textPrimary,

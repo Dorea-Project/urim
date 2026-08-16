@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/presentation/auth/auth_flow_view_model.dart';
 import 'package:urim/presentation/common/ruled_content.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/legal/privacy_content.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
@@ -21,15 +22,16 @@ class PrivacyPolicyPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colors = context.colors;
+    final text = AppText.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(PrivacyContent.title),
+        title: Text(text.privacyTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 20),
           onPressed: () =>
               context.canPop() ? context.pop() : context.go('/connexion'),
-          tooltip: 'Retour',
+          tooltip: text.back,
         ),
       ),
       body: SafeArea(
@@ -45,16 +47,17 @@ class PrivacyPolicyPage extends ConsumerWidget {
                 ),
                 children: [
                   Text(
-                    PrivacyContent.intro,
+                    text.privacyIntro,
                     style: theme.textTheme.bodyLarge?.copyWith(height: 1.5),
                   ),
                   const SizedBox(height: AppSpacing.xl),
-                  for (final commitment in PrivacyContent.commitments) ...[
+                  for (final commitment
+                      in PrivacyContent.commitments(text)) ...[
                     _Commitment(commitment: commitment),
                     const SizedBox(height: AppSpacing.xl),
                   ],
                   Text(
-                    PrivacyContent.retainedLabel,
+                    text.privacyRetainedLabel,
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: colors.textSecondary,
                       letterSpacing: 1.2,
@@ -64,7 +67,7 @@ class PrivacyPolicyPage extends ConsumerWidget {
                   const _RetainedCard(),
                   const SizedBox(height: AppSpacing.xl),
                   Text(
-                    PrivacyContent.legalNotice,
+                    text.privacyLegalNotice,
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: colors.textSecondary,
                       height: 1.5,
@@ -141,7 +144,7 @@ class _RetainedCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for (final item in PrivacyContent.retained)
+          for (final item in PrivacyContent.retained(AppText.of(context)))
             Padding(
               padding: const EdgeInsets.only(bottom: AppSpacing.sm),
               child: Row(
@@ -202,7 +205,7 @@ class _AcceptBar extends StatelessWidget {
         // autant de teintes d'action que d'écrans.
         style: FilledButton.styleFrom(minimumSize: const Size(0, 56)),
         onPressed: onAccept,
-        child: const Text(PrivacyContent.accept),
+        child: Text(AppText.of(context).privacyAccept),
       ),
     );
   }

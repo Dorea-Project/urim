@@ -196,4 +196,160 @@ class AppTextFr extends AppText {
   String demoSignIn(String code) {
     return 'Serveur simulé : le code est celui que tu as posé à l\'inscription — $code si tu as suivi la suggestion.';
   }
+
+  @override
+  String get privacyTitle => 'Tes données';
+
+  @override
+  String get privacyIntro =>
+      'Trois choses qu\'Urim ne fera jamais. Elles sont tenues par le code, pas par une promesse.';
+
+  @override
+  String get privacyNoProfilingTitle => 'Aucune analyse de personne';
+
+  @override
+  String get privacyNoProfilingBody =>
+      'Urim traite des textes. Il ne produit aucun jugement, score ou profil sur un membre, un fidèle ou un collaborateur.';
+
+  @override
+  String get privacyOwnershipTitle => 'Tes préparations restent à toi';
+
+  @override
+  String get privacyOwnershipBody =>
+      'Elles ne sont lues par personne d\'autre — ni par ton église, ni par Dorea, ni par un responsable.';
+
+  @override
+  String get privacyNoResaleTitle => 'Rien n\'est revendu';
+
+  @override
+  String get privacyNoResaleBody =>
+      'Aucun partage à un tiers, aucune publicité, aucun entraînement de modèle sur ton contenu.';
+
+  @override
+  String get privacyRetainedLabel => 'CE QUI EST CONSERVÉ';
+
+  @override
+  String get privacyRetainedPhone =>
+      'Ton numéro de téléphone, pour te reconnaître.';
+
+  @override
+  String get privacyRetainedWork =>
+      'Tes préparations et enregistrements, jusqu\'à ce que tu les supprimes.';
+
+  @override
+  String get privacyRetainedDevices =>
+      'Les appareils sur lesquels tu t\'es connecté.';
+
+  @override
+  String get privacyLegalNotice =>
+      'Traitement soumis à la loi ivoirienne n° 2013-450 relative à la protection des données à caractère personnel. Tu peux supprimer ton compte et tout son contenu à tout moment.';
+
+  @override
+  String get privacyAccept => 'J\'ai lu et j\'accepte';
+
+  @override
+  String get settingsTitle => 'Réglages';
+
+  @override
+  String get settingsSectionReading => 'Lecture';
+
+  @override
+  String get settingsSectionScripture => 'Écriture';
+
+  @override
+  String get settingsSectionOffline => 'Hors connexion';
+
+  @override
+  String get settingsSectionReminders => 'Rappels';
+
+  @override
+  String get settingsSectionContent => 'Contenu';
+
+  @override
+  String get settingsTextSize => 'Taille du texte';
+
+  @override
+  String get settingsTextSizeSmall => 'Petit';
+
+  @override
+  String get settingsTextSizeNormal => 'Normal';
+
+  @override
+  String get settingsTextSizeLarge => 'Grand';
+
+  @override
+  String get settingsTextSizeExtraLarge => 'Très grand';
+
+  @override
+  String get settingsReadingSample =>
+      'Ils persévéraient dans l\'enseignement des apôtres…';
+
+  @override
+  String get settingsDefaultVersion => 'Version par défaut';
+
+  @override
+  String get settingsAlwaysShowReference => 'Toujours afficher la référence';
+
+  @override
+  String get settingsAlwaysShowReferenceHint =>
+      'Livre, chapitre, verset et version sous chaque citation.';
+
+  @override
+  String get settingsBibleDownloaded => 'Texte biblique téléchargé';
+
+  @override
+  String get settingsBibleDownloadedPending =>
+      'Disponible quand la source du texte biblique aura été choisie.';
+
+  @override
+  String get settingsTranscribeOnDevice => 'Transcrire sur l\'appareil';
+
+  @override
+  String get settingsTranscribeOnDevicePending =>
+      'L\'audio ne quittera jamais le téléphone. Le moteur de transcription reste à retenir.';
+
+  @override
+  String get settingsWifiOnly => 'Synchroniser en Wi-Fi seulement';
+
+  @override
+  String get settingsWifiOnlyPending =>
+      'Rien n\'est encore synchronisé : tes préparations ne quittent pas cet appareil.';
+
+  @override
+  String get settingsReminderInProgress => 'Préparation en cours';
+
+  @override
+  String get settingsReminderInProgressPending =>
+      'Un rappel le samedi si un message n\'est pas terminé — dès qu\'une préparation saura dire qu\'elle ne l\'est pas.';
+
+  @override
+  String get settingsExport => 'Exporter mes préparations';
+
+  @override
+  String get settingsExportPending =>
+      'Texte ou PDF — l\'export arrive avec la synthèse.';
+
+  @override
+  String get settingsStorageUsed => 'Espace utilisé';
+
+  @override
+  String get settingsStorageUsedPending =>
+      'Mesurable une fois le stockage des préparations choisi.';
+
+  @override
+  String get settingsTrainingNotice =>
+      'Urim n\'utilise jamais tes préparations pour entraîner un modèle.';
+
+  @override
+  String get settingsSaveFailed => 'Ce réglage n\'a pas pu être enregistré.';
+
+  @override
+  String get settingsReadFailed => 'Les réglages n\'ont pas pu être lus.';
+
+  @override
+  String get translationPublicDomain => 'Domaine public';
+
+  @override
+  String get translationLicenceNotice =>
+      'Les autres traductions demandent une licence : Urim ne les proposera qu\'une fois les droits obtenus.';
 }

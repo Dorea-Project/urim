@@ -11,6 +11,8 @@ import 'package:flutter_test/flutter_test.dart';
 const List<String> zonesTenues = [
   'lib/presentation/onboarding',
   'lib/presentation/auth',
+  'lib/presentation/legal',
+  'lib/presentation/settings',
 ];
 
 /// Ce qui n'est pas du texte d'interface, même entre guillemets.

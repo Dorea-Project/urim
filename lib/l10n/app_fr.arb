@@ -174,5 +174,69 @@
         "type": "String"
       }
     }
-  }
+  },
+  "privacyTitle": "Tes données",
+  "@privacyTitle": {
+    "description": "Titre de l'écran, et son nom dans le profil."
+  },
+  "privacyIntro": "Trois choses qu'Urim ne fera jamais. Elles sont tenues par le code, pas par une promesse.",
+  "@privacyIntro": {
+    "description": "Texte à portée juridique : toute modification engage. À relire avec le même soin qu'un contrat."
+  },
+  "privacyNoProfilingTitle": "Aucune analyse de personne",
+  "privacyNoProfilingBody": "Urim traite des textes. Il ne produit aucun jugement, score ou profil sur un membre, un fidèle ou un collaborateur.",
+  "privacyOwnershipTitle": "Tes préparations restent à toi",
+  "privacyOwnershipBody": "Elles ne sont lues par personne d'autre — ni par ton église, ni par Dorea, ni par un responsable.",
+  "privacyNoResaleTitle": "Rien n'est revendu",
+  "privacyNoResaleBody": "Aucun partage à un tiers, aucune publicité, aucun entraînement de modèle sur ton contenu.",
+  "privacyRetainedLabel": "CE QUI EST CONSERVÉ",
+  "privacyRetainedPhone": "Ton numéro de téléphone, pour te reconnaître.",
+  "privacyRetainedWork": "Tes préparations et enregistrements, jusqu'à ce que tu les supprimes.",
+  "privacyRetainedDevices": "Les appareils sur lesquels tu t'es connecté.",
+  "privacyLegalNotice": "Traitement soumis à la loi ivoirienne n° 2013-450 relative à la protection des données à caractère personnel. Tu peux supprimer ton compte et tout son contenu à tout moment.",
+  "@privacyLegalNotice": {
+    "description": "Mention légale. Le numéro de loi ne se traduit pas — il se remplace par la référence locale."
+  },
+  "privacyAccept": "J'ai lu et j'accepte",
+  "settingsTitle": "Réglages",
+  "settingsSectionReading": "Lecture",
+  "settingsSectionScripture": "Écriture",
+  "settingsSectionOffline": "Hors connexion",
+  "settingsSectionReminders": "Rappels",
+  "settingsSectionContent": "Contenu",
+  "settingsTextSize": "Taille du texte",
+  "settingsTextSizeSmall": "Petit",
+  "settingsTextSizeNormal": "Normal",
+  "settingsTextSizeLarge": "Grand",
+  "settingsTextSizeExtraLarge": "Très grand",
+  "@settingsTextSizeExtraLarge": {
+    "description": "Les quatre tailles de lecture. Elles quittent le domaine : une échelle est une donnée, son nom est un texte."
+  },
+  "settingsReadingSample": "Ils persévéraient dans l'enseignement des apôtres…",
+  "@settingsReadingSample": {
+    "description": "Aperçu de la taille choisie. Un verset connu, en Louis Segond — la seule traduction affichable sans licence."
+  },
+  "settingsDefaultVersion": "Version par défaut",
+  "settingsAlwaysShowReference": "Toujours afficher la référence",
+  "settingsAlwaysShowReferenceHint": "Livre, chapitre, verset et version sous chaque citation.",
+  "settingsBibleDownloaded": "Texte biblique téléchargé",
+  "settingsBibleDownloadedPending": "Disponible quand la source du texte biblique aura été choisie.",
+  "settingsTranscribeOnDevice": "Transcrire sur l'appareil",
+  "settingsTranscribeOnDevicePending": "L'audio ne quittera jamais le téléphone. Le moteur de transcription reste à retenir.",
+  "settingsWifiOnly": "Synchroniser en Wi-Fi seulement",
+  "settingsWifiOnlyPending": "Rien n'est encore synchronisé : tes préparations ne quittent pas cet appareil.",
+  "settingsReminderInProgress": "Préparation en cours",
+  "settingsReminderInProgressPending": "Un rappel le samedi si un message n'est pas terminé — dès qu'une préparation saura dire qu'elle ne l'est pas.",
+  "settingsExport": "Exporter mes préparations",
+  "settingsExportPending": "Texte ou PDF — l'export arrive avec la synthèse.",
+  "settingsStorageUsed": "Espace utilisé",
+  "settingsStorageUsedPending": "Mesurable une fois le stockage des préparations choisi.",
+  "settingsTrainingNotice": "Urim n'utilise jamais tes préparations pour entraîner un modèle.",
+  "@settingsTrainingNotice": {
+    "description": "Rappel de la politique, posé là où l'on s'interroge sur ce qui sort de l'appareil."
+  },
+  "settingsSaveFailed": "Ce réglage n'a pas pu être enregistré.",
+  "settingsReadFailed": "Les réglages n'ont pas pu être lus.",
+  "translationPublicDomain": "Domaine public",
+  "translationLicenceNotice": "Les autres traductions demandent une licence : Urim ne les proposera qu'une fois les droits obtenus."
 }

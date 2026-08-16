@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:urim/domain/entities/bible/bible_translation.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
 
@@ -18,6 +19,7 @@ Future<void> showTranslationSheet({
     showDragHandle: true,
     builder: (sheetContext) {
       final theme = Theme.of(sheetContext);
+      final text = AppText.of(sheetContext);
 
       return SafeArea(
         child: Padding(
@@ -31,7 +33,10 @@ Future<void> showTranslationSheet({
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Version par défaut', style: theme.textTheme.titleLarge),
+              Text(
+                text.settingsDefaultVersion,
+                style: theme.textTheme.titleLarge,
+              ),
               const SizedBox(height: AppSpacing.md),
               for (final translation in BibleTranslation.available)
                 ListTile(
@@ -39,7 +44,7 @@ Future<void> showTranslationSheet({
                   title: Text(translation.name),
                   subtitle: Text(
                     translation.isPublicDomain
-                        ? 'Domaine public'
+                        ? text.translationPublicDomain
                         : translation.copyright ?? '',
                   ),
                   trailing: translation.id == selectedId
@@ -52,8 +57,7 @@ Future<void> showTranslationSheet({
                 ),
               const SizedBox(height: AppSpacing.md),
               Text(
-                'Les autres traductions demandent une licence : Urim ne les '
-                'proposera qu\'une fois les droits obtenus.',
+                text.translationLicenceNotice,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: sheetContext.colors.textSecondary,
                   height: 1.45,

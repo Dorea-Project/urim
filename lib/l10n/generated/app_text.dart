@@ -410,6 +410,282 @@ abstract class AppText {
   /// In fr, this message translates to:
   /// **'Serveur simulé : le code est celui que tu as posé à l\'inscription — {code} si tu as suivi la suggestion.'**
   String demoSignIn(String code);
+
+  /// Titre de l'écran, et son nom dans le profil.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes données'**
+  String get privacyTitle;
+
+  /// Texte à portée juridique : toute modification engage. À relire avec le même soin qu'un contrat.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trois choses qu\'Urim ne fera jamais. Elles sont tenues par le code, pas par une promesse.'**
+  String get privacyIntro;
+
+  /// No description provided for @privacyNoProfilingTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune analyse de personne'**
+  String get privacyNoProfilingTitle;
+
+  /// No description provided for @privacyNoProfilingBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Urim traite des textes. Il ne produit aucun jugement, score ou profil sur un membre, un fidèle ou un collaborateur.'**
+  String get privacyNoProfilingBody;
+
+  /// No description provided for @privacyOwnershipTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes préparations restent à toi'**
+  String get privacyOwnershipTitle;
+
+  /// No description provided for @privacyOwnershipBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Elles ne sont lues par personne d\'autre — ni par ton église, ni par Dorea, ni par un responsable.'**
+  String get privacyOwnershipBody;
+
+  /// No description provided for @privacyNoResaleTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien n\'est revendu'**
+  String get privacyNoResaleTitle;
+
+  /// No description provided for @privacyNoResaleBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun partage à un tiers, aucune publicité, aucun entraînement de modèle sur ton contenu.'**
+  String get privacyNoResaleBody;
+
+  /// No description provided for @privacyRetainedLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'CE QUI EST CONSERVÉ'**
+  String get privacyRetainedLabel;
+
+  /// No description provided for @privacyRetainedPhone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton numéro de téléphone, pour te reconnaître.'**
+  String get privacyRetainedPhone;
+
+  /// No description provided for @privacyRetainedWork.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes préparations et enregistrements, jusqu\'à ce que tu les supprimes.'**
+  String get privacyRetainedWork;
+
+  /// No description provided for @privacyRetainedDevices.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les appareils sur lesquels tu t\'es connecté.'**
+  String get privacyRetainedDevices;
+
+  /// Mention légale. Le numéro de loi ne se traduit pas — il se remplace par la référence locale.
+  ///
+  /// In fr, this message translates to:
+  /// **'Traitement soumis à la loi ivoirienne n° 2013-450 relative à la protection des données à caractère personnel. Tu peux supprimer ton compte et tout son contenu à tout moment.'**
+  String get privacyLegalNotice;
+
+  /// No description provided for @privacyAccept.
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'ai lu et j\'accepte'**
+  String get privacyAccept;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglages'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsSectionReading.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecture'**
+  String get settingsSectionReading;
+
+  /// No description provided for @settingsSectionScripture.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écriture'**
+  String get settingsSectionScripture;
+
+  /// No description provided for @settingsSectionOffline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hors connexion'**
+  String get settingsSectionOffline;
+
+  /// No description provided for @settingsSectionReminders.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappels'**
+  String get settingsSectionReminders;
+
+  /// No description provided for @settingsSectionContent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contenu'**
+  String get settingsSectionContent;
+
+  /// No description provided for @settingsTextSize.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taille du texte'**
+  String get settingsTextSize;
+
+  /// No description provided for @settingsTextSizeSmall.
+  ///
+  /// In fr, this message translates to:
+  /// **'Petit'**
+  String get settingsTextSizeSmall;
+
+  /// No description provided for @settingsTextSizeNormal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Normal'**
+  String get settingsTextSizeNormal;
+
+  /// No description provided for @settingsTextSizeLarge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Grand'**
+  String get settingsTextSizeLarge;
+
+  /// Les quatre tailles de lecture. Elles quittent le domaine : une échelle est une donnée, son nom est un texte.
+  ///
+  /// In fr, this message translates to:
+  /// **'Très grand'**
+  String get settingsTextSizeExtraLarge;
+
+  /// Aperçu de la taille choisie. Un verset connu, en Louis Segond — la seule traduction affichable sans licence.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ils persévéraient dans l\'enseignement des apôtres…'**
+  String get settingsReadingSample;
+
+  /// No description provided for @settingsDefaultVersion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Version par défaut'**
+  String get settingsDefaultVersion;
+
+  /// No description provided for @settingsAlwaysShowReference.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toujours afficher la référence'**
+  String get settingsAlwaysShowReference;
+
+  /// No description provided for @settingsAlwaysShowReferenceHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Livre, chapitre, verset et version sous chaque citation.'**
+  String get settingsAlwaysShowReferenceHint;
+
+  /// No description provided for @settingsBibleDownloaded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Texte biblique téléchargé'**
+  String get settingsBibleDownloaded;
+
+  /// No description provided for @settingsBibleDownloadedPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Disponible quand la source du texte biblique aura été choisie.'**
+  String get settingsBibleDownloadedPending;
+
+  /// No description provided for @settingsTranscribeOnDevice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Transcrire sur l\'appareil'**
+  String get settingsTranscribeOnDevice;
+
+  /// No description provided for @settingsTranscribeOnDevicePending.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'audio ne quittera jamais le téléphone. Le moteur de transcription reste à retenir.'**
+  String get settingsTranscribeOnDevicePending;
+
+  /// No description provided for @settingsWifiOnly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synchroniser en Wi-Fi seulement'**
+  String get settingsWifiOnly;
+
+  /// No description provided for @settingsWifiOnlyPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien n\'est encore synchronisé : tes préparations ne quittent pas cet appareil.'**
+  String get settingsWifiOnlyPending;
+
+  /// No description provided for @settingsReminderInProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'Préparation en cours'**
+  String get settingsReminderInProgress;
+
+  /// No description provided for @settingsReminderInProgressPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un rappel le samedi si un message n\'est pas terminé — dès qu\'une préparation saura dire qu\'elle ne l\'est pas.'**
+  String get settingsReminderInProgressPending;
+
+  /// No description provided for @settingsExport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exporter mes préparations'**
+  String get settingsExport;
+
+  /// No description provided for @settingsExportPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Texte ou PDF — l\'export arrive avec la synthèse.'**
+  String get settingsExportPending;
+
+  /// No description provided for @settingsStorageUsed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Espace utilisé'**
+  String get settingsStorageUsed;
+
+  /// No description provided for @settingsStorageUsedPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mesurable une fois le stockage des préparations choisi.'**
+  String get settingsStorageUsedPending;
+
+  /// Rappel de la politique, posé là où l'on s'interroge sur ce qui sort de l'appareil.
+  ///
+  /// In fr, this message translates to:
+  /// **'Urim n\'utilise jamais tes préparations pour entraîner un modèle.'**
+  String get settingsTrainingNotice;
+
+  /// No description provided for @settingsSaveFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce réglage n\'a pas pu être enregistré.'**
+  String get settingsSaveFailed;
+
+  /// No description provided for @settingsReadFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les réglages n\'ont pas pu être lus.'**
+  String get settingsReadFailed;
+
+  /// No description provided for @translationPublicDomain.
+  ///
+  /// In fr, this message translates to:
+  /// **'Domaine public'**
+  String get translationPublicDomain;
+
+  /// No description provided for @translationLicenceNotice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les autres traductions demandent une licence : Urim ne les proposera qu\'une fois les droits obtenus.'**
+  String get translationLicenceNotice;
 }
 
 class _AppTextDelegate extends LocalizationsDelegate<AppText> {

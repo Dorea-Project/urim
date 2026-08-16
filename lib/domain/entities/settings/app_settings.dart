@@ -9,17 +9,18 @@ import 'package:urim/domain/entities/bible/bible_translation.dart';
 /// un utilisateur qui a déjà grossi tout son téléphone n'a pas à recommencer
 /// ici.
 enum ReadingTextSize {
-  small('Petit', 0.875),
-  normal('Normal', 1),
-  large('Grand', 1.15),
-  extraLarge('Très grand', 1.35);
+  small(0.875),
+  normal(1),
+  large(1.15),
+  extraLarge(1.35);
 
-  const ReadingTextSize(this.label, this.scale);
-
-  /// Libellé du sélecteur.
-  final String label;
+  const ReadingTextSize(this.scale);
 
   /// Facteur appliqué à la taille du texte de lecture.
+  ///
+  /// Le **nom** de la taille a quitté ce fichier : « Grand » est un texte
+  /// affichable, et le domaine n'en produit pas — c'est l'interface qui nomme,
+  /// comme le veut l'architecture. L'échelle, elle, est bien une donnée.
   final double scale;
 
   /// Retombe sur [normal] pour une valeur inconnue : une préférence illisible
