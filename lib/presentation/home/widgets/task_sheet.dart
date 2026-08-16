@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/core/router/app_routes.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
 
@@ -27,12 +28,12 @@ Future<void> showTaskSheet(BuildContext context) {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Quelle tâche ?',
+              AppText.of(sheetContext).taskSheetTitle,
               style: Theme.of(sheetContext).textTheme.headlineSmall,
             ),
             const SizedBox(height: AppSpacing.xs),
             Text(
-              'Deux travaux différents, pas deux façons d\'écrire.',
+              AppText.of(sheetContext).taskSheetSubtitle,
               style: Theme.of(sheetContext).textTheme.bodyMedium?.copyWith(
                     color: sheetContext.colors.textSecondary,
                   ),
@@ -40,28 +41,25 @@ Future<void> showTaskSheet(BuildContext context) {
             const SizedBox(height: AppSpacing.lg),
             _TaskOption(
               icon: Icons.edit_outlined,
-              title: 'Préparer un message',
-              body: 'Urim t\'accompagne question par question — l\'axe, le '
-                  'texte, les bornes — jusqu\'à ton squelette.',
+              title: AppText.of(sheetContext).taskWriteTitle,
+              body: AppText.of(sheetContext).taskWriteBody,
               onTap: () {
                 Navigator.of(sheetContext).pop();
                 context.pushNamed(AppRoutes.newPreparationName);
               },
             ),
             const SizedBox(height: AppSpacing.md),
-            const _TaskOption(
+            _TaskOption(
               icon: Icons.mic_none,
-              title: 'Transcrire une prédication',
-              body: 'Mise en texte, puis une synthèse que tu valides avant '
-                  'qu\'elle ne soit lue à voix haute.',
-              pending: 'Le moteur de transcription n\'est pas encore retenu. '
-                  'Un exemple transcrit est visible depuis l\'accueil.',
+              title: AppText.of(sheetContext).taskTranscribeTitle,
+              body: AppText.of(sheetContext).taskTranscribeBody,
+              pending: AppText.of(sheetContext).taskTranscribePending,
             ),
             const SizedBox(height: AppSpacing.lg),
             Center(
               child: TextButton(
                 onPressed: () => Navigator.of(sheetContext).pop(),
-                child: const Text('Annuler'),
+                child: Text(AppText.of(sheetContext).cancel),
               ),
             ),
           ],

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:urim/domain/entities/preparation/preparation_block.dart';
+import 'package:urim/l10n/generated/app_text.dart';
+import 'package:urim/presentation/common/domain_labels.dart';
 import 'package:urim/presentation/common/french_dates.dart';
 import 'package:urim/presentation/common/ruled_content.dart';
 import 'package:urim/presentation/settings/settings_view_model.dart';
@@ -98,7 +100,7 @@ class _UrimSaidState extends State<_UrimSaid> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'URIM',
+            AppText.of(context).blockUrim,
             style: theme.textTheme.labelSmall?.copyWith(
               color: colors.textSecondary,
               letterSpacing: 1.2,
@@ -180,7 +182,7 @@ class _UrimSaidState extends State<_UrimSaid> {
                     ),
                     const SizedBox(width: AppSpacing.xs),
                     Text(
-                      'Comment j\'en suis arrivé là',
+                      AppText.of(context).blockTrace,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: colors.textSecondary,
                       ),
@@ -245,7 +247,7 @@ class _WeighedTextCard extends StatelessWidget {
               ],
               Flexible(
                 child: Text(
-                  text.stance.label,
+                  textStanceLabel(AppText.of(context), text.stance),
                   style: theme.textTheme.labelLarge?.copyWith(
                     color: stanceColor,
                     fontSize: 13,
@@ -370,9 +372,7 @@ class _MoreLink extends StatelessWidget {
               Text(label, style: Theme.of(sheetContext).textTheme.titleLarge),
               const SizedBox(height: AppSpacing.md),
               Text(
-                'La liste des loci n\'est pas encore écrite. Les trois axes '
-                'proposés viennent de ta phrase ; les sept autres attendent '
-                'que le moteur existe.',
+                AppText.of(sheetContext).lociUnavailable,
                 style: Theme.of(sheetContext).textTheme.bodyMedium?.copyWith(
                       color: sheetContext.colors.textSecondary,
                       height: 1.5,
@@ -382,7 +382,7 @@ class _MoreLink extends StatelessWidget {
           ),
         ),
       ),
-      child: Text('$label →'),
+      child: Text(AppText.of(context).blockMoreLink(label)),
     );
   }
 }
@@ -454,9 +454,11 @@ class _ScriptureQuote extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final label = switch (block.provenance) {
-      ScriptureProvenance.cited => 'ÉCRITURE',
-      ScriptureProvenance.recognizedInRecording =>
-        'RECONNU DANS LA CITATION · ${formatAnchor(block.anchor)}',
+      ScriptureProvenance.cited => AppText.of(context).blockScripture,
+      ScriptureProvenance.recognizedInRecording => AppText.of(context)
+          .blockRecognisedInQuote(
+          formatAnchor(AppText.of(context), block.anchor),
+        ),
     };
 
     return Padding(
@@ -496,7 +498,7 @@ class _SynthesisView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'SYNTHÈSE D\'URIM',
+            AppText.of(context).blockSynthesis,
             style: theme.textTheme.labelSmall?.copyWith(
               color: colors.textSecondary,
               letterSpacing: 1.2,
@@ -591,8 +593,10 @@ class _SynthesisPointView extends StatelessWidget {
                 ),
                 if (point.isAnchoredInMedia)
                   TextSpan(
-                    text: '  — ${formatDuration(point.from!)}'
-                        ' à ${formatDuration(point.to!)}',
+                    text: AppText.of(context).synthesisPointRange(
+                      formatDuration(point.from!),
+                      formatDuration(point.to!),
+                    ),
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: colors.textMuted,
                     ),
@@ -618,12 +622,18 @@ String formatDuration(Duration duration) {
 }
 
 /// Étiquette temporelle d'un bloc, selon son repère.
-String formatAnchor(BlockAnchor anchor, {DateTime? now}) => switch (anchor) {
+///
+/// Prend les textes en paramètre plutôt que le contexte : la fonction est
+/// appelée depuis des tests qui n'ont pas d'arbre de widgets, et lui faire
+/// chercher un `BuildContext` la rendrait inutilisable là où elle est le plus
+/// simple à vérifier.
+String formatAnchor(AppText text, BlockAnchor anchor, {DateTime? now}) =>
+    switch (anchor) {
       MediaAnchor(:final offset) => formatDuration(offset),
-      ClockAnchor(:final at) => _formatClock(at, now ?? DateTime.now()),
+      ClockAnchor(:final at) => _formatClock(text, at, now ?? DateTime.now()),
     };
 
-String _formatClock(DateTime at, DateTime now) {
+String _formatClock(AppText text, DateTime at, DateTime now) {
   final time = '${at.hour.toString().padLeft(2, '0')}:'
       '${at.minute.toString().padLeft(2, '0')}';
 
@@ -632,8 +642,8 @@ String _formatClock(DateTime at, DateTime now) {
   final difference = today.difference(day).inDays;
 
   return switch (difference) {
-    0 => 'AUJOURD\'HUI $time',
-    1 => 'HIER $time',
-    _ => '${frenchDayMonth(at).toUpperCase()} $time',
+    0 => text.blockToday(time),
+    1 => text.blockYesterday(time),
+    _ => text.blockOnDate(frenchDayMonth(at).toUpperCase(), time),
   };
 }

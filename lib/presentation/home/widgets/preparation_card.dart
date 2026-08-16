@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/core/router/app_routes.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
+import 'package:urim/presentation/common/domain_labels.dart';
 import 'package:urim/presentation/common/french_dates.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/common/ruled_content.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
@@ -18,6 +20,7 @@ class PreparationCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colors = context.colors;
+    final text = AppText.of(context);
 
     final card = Container(
       width: double.infinity,
@@ -49,7 +52,7 @@ class PreparationCard extends ConsumerWidget {
               const SizedBox(width: AppSpacing.sm),
               Flexible(
                 child: Text(
-                  _meta(preparation),
+                  _meta(text, preparation),
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: colors.textSecondary,
@@ -105,7 +108,7 @@ class _StateChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.md),
       ),
       child: Text(
-        state.label,
+        preparationStateLabel(AppText.of(context), state),
         style: theme.textTheme.bodyMedium?.copyWith(
           fontWeight: state.waitsForUser ? FontWeight.w600 : FontWeight.w400,
         ),
@@ -115,14 +118,18 @@ class _StateChip extends StatelessWidget {
 }
 
 /// « Hier, 21:14 », « Jeudi · dimanche 17 août ».
-String _meta(Preparation preparation, {DateTime? now}) {
-  final activity = _activityLabel(preparation.updatedAt, now ?? DateTime.now());
+String _meta(AppText text, Preparation preparation, {DateTime? now}) {
+  final activity = _activityLabel(
+    text,
+    preparation.updatedAt,
+    now ?? DateTime.now(),
+  );
 
   if (preparation.serviceDate case final DateTime service) {
-    return '· $activity · dimanche ${frenchDayMonth(service)}';
+    return text.homeCardMetaWithService(activity, frenchDayMonth(service));
   }
 
-  return '· $activity';
+  return text.homeCardMeta(activity);
 }
 
 const List<String> _weekdays = [
@@ -135,7 +142,7 @@ const List<String> _weekdays = [
   'Dimanche',
 ];
 
-String _activityLabel(DateTime at, DateTime now) {
+String _activityLabel(AppText text, DateTime at, DateTime now) {
   final today = DateTime(now.year, now.month, now.day);
   final day = DateTime(at.year, at.month, at.day);
   final difference = today.difference(day).inDays;
@@ -144,8 +151,8 @@ String _activityLabel(DateTime at, DateTime now) {
       '${at.minute.toString().padLeft(2, '0')}';
 
   return switch (difference) {
-    0 => 'Aujourd\'hui, $time',
-    1 => 'Hier, $time',
+    0 => text.homeActivityToday(time),
+    1 => text.homeActivityYesterday(time),
     // Au-delà d'une semaine, le jour de la semaine ne situe plus rien.
     < 7 => _weekdays[at.weekday - 1],
     _ => frenchDayMonth(at),

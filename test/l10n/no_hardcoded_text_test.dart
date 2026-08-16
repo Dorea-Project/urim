@@ -14,6 +14,9 @@ const List<String> zonesTenues = [
   'lib/presentation/legal',
   'lib/presentation/settings',
   'lib/presentation/profile',
+  'lib/presentation/home',
+  'lib/presentation/preparation',
+  'lib/presentation/transcription',
 ];
 
 /// Ce qui n'est pas du texte d'interface, même entre guillemets.
@@ -76,7 +79,9 @@ void main() {
             // Ce qui reste une fois les interpolations retirées : un gabarit
             // comme « \${dialCode} \${groups} » n'est pas une phrase, c'est
             // une mise en forme. Rien à traduire tant qu'aucun mot n'y figure.
-            final horsVariables = texte.replaceAll(RegExp(r'\$\{[^}]*\}?'), '');
+            final horsVariables = texte
+                .replaceAll(RegExp(r'\$\{[^}]*\}?'), '')
+                .replaceAll(RegExp(r'\$[a-zA-Z_][a-zA-Z0-9_]*'), '');
             if (!RegExp('[A-Za-zÀ-ÿ]').hasMatch(horsVariables)) continue;
 
             coupables.add('${fichier.path}:${i + 1}  « $texte »');

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/core/router/app_routes.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/home/home_view_model.dart';
 import 'package:urim/presentation/home/widgets/preparation_card.dart';
 import 'package:urim/presentation/home/widgets/task_sheet.dart';
@@ -58,7 +59,7 @@ class HomePage extends ConsumerWidget {
                   ),
                   onPressed: () => showTaskSheet(context),
                   icon: const Icon(Icons.add),
-                  label: const Text('Ouvrir une tâche'),
+                  label: Text(AppText.of(context).homeOpenTask),
                 ),
               ),
             ),
@@ -78,6 +79,7 @@ class _Feed extends StatelessWidget {
   Widget build(BuildContext context) {
     if (preparations.isEmpty) return const _FeedEmpty();
 
+    final text = AppText.of(context);
     final groups = groupByRecency(preparations, now: DateTime.now());
 
     return ListView(
@@ -95,7 +97,10 @@ class _Feed extends StatelessWidget {
               bottom: AppSpacing.md,
             ),
             child: Text(
-              group.label,
+              switch (group.recency) {
+                Recency.thisWeek => text.homeGroupThisWeek,
+                Recency.earlier => text.homeGroupEarlier,
+              },
               style: Theme.of(context).textTheme.labelSmall?.copyWith(
                     color: context.colors.textSecondary,
                     letterSpacing: 1.2,
@@ -125,13 +130,12 @@ class _FeedEmpty extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Rien en cours.',
+              AppText.of(context).homeEmptyTitle,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Ouvre une tâche : écris ce que tu veux dire, ou verse un '
-              'enregistrement.',
+              AppText.of(context).homeEmptyBody,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: context.colors.textSecondary,
@@ -162,13 +166,13 @@ class _FeedError extends ConsumerWidget {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'La liste n\'a pas pu être lue.',
+              AppText.of(context).homeReadFailed,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: AppSpacing.xl),
             OutlinedButton(
               onPressed: () => ref.invalidate(preparationListProvider),
-              child: const Text('Réessayer'),
+              child: Text(AppText.of(context).retry),
             ),
           ],
         ),

@@ -5,6 +5,8 @@ import 'package:urim/core/router/app_routes.dart';
 import 'package:urim/domain/entities/preparation/recording.dart';
 import 'package:urim/domain/entities/transcription/transcription_review.dart';
 import 'package:urim/presentation/common/french_dates.dart';
+import 'package:urim/l10n/generated/app_text.dart';
+import 'package:urim/presentation/common/domain_labels.dart';
 import 'package:urim/presentation/common/ruled_content.dart';
 import 'package:urim/presentation/preparation/widgets/block_views.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
@@ -28,19 +30,21 @@ class TranscriptionPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(review.value?.title ?? 'Transcription'),
+        title: Text(
+          review.value?.title ?? AppText.of(context).transcriptionFallbackTitle,
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 20),
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
-          tooltip: 'Retour',
+          tooltip: AppText.of(context).back,
         ),
-        actions: const [
+        actions: [
           IconButton(
-            icon: Icon(Icons.more_vert),
+            icon: const Icon(Icons.more_vert),
             // Renommer, exporter, supprimer l'enregistrement : rien de tout
             // cela n'existe encore.
             onPressed: null,
-            tooltip: 'Options',
+            tooltip: AppText.of(context).options,
           ),
         ],
       ),
@@ -66,6 +70,7 @@ class _ReviewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = context.colors;
+    final text = AppText.of(context);
     final recording = review.recording;
 
     return ListView(
@@ -80,14 +85,14 @@ class _ReviewBody extends StatelessWidget {
         const SizedBox(height: AppSpacing.xl),
 
         // --- Fragments -------------------------------------------------------
-        _SectionLabel('Fragments'),
+        _SectionLabel(text.transcriptionSectionFragments),
         FragmentStrip(
           total: recording.fragmentCount,
           acknowledged: recording.fragmentsAcknowledged,
         ),
         const SizedBox(height: AppSpacing.md),
         Text(
-          _pendingSentence(recording.fragmentsPending),
+          _pendingSentence(text, recording.fragmentsPending),
           style: theme.textTheme.bodyMedium?.copyWith(
             color: colors.textSecondary,
             height: 1.45,
@@ -96,7 +101,7 @@ class _ReviewBody extends StatelessWidget {
         const SizedBox(height: AppSpacing.xl),
 
         // --- Textes convoqués ------------------------------------------------
-        _SectionLabel('Ce que tu as convoqué'),
+        _SectionLabel(text.transcriptionSectionConvoked),
         for (final scripture in review.convoked) ...[
           _ConvokedView(scripture: scripture),
           const SizedBox(height: AppSpacing.lg),
@@ -129,12 +134,15 @@ class _RecordingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = context.colors;
+    final text = AppText.of(context);
 
     final meta = [
-      'Enregistré',
-      '${recording.fragmentsAcknowledged} fragments acquittés',
+      text.transcriptionRecorded,
+      text.transcriptionFragmentsAcknowledged(
+        recording.fragmentsAcknowledged,
+      ),
       if (recording.audioDeletedOn case final DateTime deleted)
-        'audio supprimé le ${frenchDayMonth(deleted)}',
+        text.transcriptionAudioDeletedOn(frenchDayMonth(deleted)),
     ].join(' · ');
 
     return Container(
@@ -168,14 +176,13 @@ class _RecordingCard extends StatelessWidget {
               // Reprendre suppose la capture audio, qui attend le moteur (Q2).
               onPressed: null,
               style: OutlinedButton.styleFrom(minimumSize: const Size(0, 52)),
-              child: const Text('Reprendre l\'enregistrement'),
+              child: Text(text.transcriptionResume),
             ),
           ),
           if (!recording.hasAudio) ...[
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'L\'audio a été effacé : la reprise repartira d\'une nouvelle '
-              'capture.',
+              text.transcriptionAudioDeleted,
               textAlign: TextAlign.center,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: colors.textSecondary,
@@ -199,6 +206,7 @@ class _ConvokedView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = context.colors;
+    final text = AppText.of(context);
 
     return RuledContent(
       color: colors.success,
@@ -207,7 +215,7 @@ class _ConvokedView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${scripture.kind.label.toUpperCase()}'
+            '${convocationKindLabel(text, scripture.kind)}'
             ' · ${formatDuration(scripture.at)}',
             style: theme.textTheme.labelSmall?.copyWith(
               color: colors.success,
@@ -218,8 +226,9 @@ class _ConvokedView extends StatelessWidget {
           PassageView(passage: scripture.passage, rule: false),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            '${scripture.passage.referenceLabel} — '
-            '${scripture.wasPlanned ? 'prévu dans ta préparation' : 'non prévu'}',
+            scripture.wasPlanned
+                ? text.transcriptionPlanned(scripture.passage.referenceLabel)
+                : text.transcriptionUnplanned(scripture.passage.referenceLabel),
             style: theme.textTheme.bodySmall?.copyWith(
               color: colors.success,
               fontWeight: FontWeight.w600,
@@ -271,9 +280,8 @@ class _SpeakerNotice extends StatelessWidget {
   const _SpeakerNotice();
 
   @override
-  Widget build(BuildContext context) => const NoticeBox(
-        text: 'Aucune séparation de locuteurs. Les voix éloignées du micro '
-            'sont écartées avant écriture, jamais enregistrées puis filtrées.',
+  Widget build(BuildContext context) => NoticeBox(
+        text: AppText.of(context).transcriptionSpeakerNotice,
       );
 }
 
@@ -330,7 +338,7 @@ class _ReviewActions extends StatelessWidget {
           // transcription (Q2).
           onPressed: null,
           style: OutlinedButton.styleFrom(shape: const StadiumBorder()),
-          child: const Text('Corriger la transcription'),
+          child: Text(AppText.of(context).transcriptionFixText),
         ),
         OutlinedButton(
           onPressed: () => context.pushNamed(
@@ -338,7 +346,7 @@ class _ReviewActions extends StatelessWidget {
             pathParameters: {'id': preparationId},
           ),
           style: OutlinedButton.styleFrom(shape: const StadiumBorder()),
-          child: const Text('Voir la synthèse'),
+          child: Text(AppText.of(context).transcriptionSeeSynthesis),
         ),
         OutlinedButton(
           onPressed: () => context.pushNamed(
@@ -346,7 +354,7 @@ class _ReviewActions extends StatelessWidget {
             pathParameters: {'id': preparationId},
           ),
           style: OutlinedButton.styleFrom(shape: const StadiumBorder()),
-          child: const Text('Ouvrir la préparation'),
+          child: Text(AppText.of(context).transcriptionOpenPreparation),
         ),
       ],
     );
@@ -382,7 +390,7 @@ class _ReviewError extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.xxl),
         child: Text(
-          'Cette préparation n\'a pas d\'enregistrement transcrit.',
+          AppText.of(context).transcriptionNotFound,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: context.colors.textSecondary,
@@ -393,17 +401,10 @@ class _ReviewError extends StatelessWidget {
   }
 }
 
-const List<String> _numbers = ['Aucun', 'Un', 'Deux', 'Trois'];
-
-/// « Deux fragments attendent le réseau » — les petits nombres en toutes
-/// lettres, comme sur la maquette, et l'accord qui va avec.
-String _pendingSentence(int pending) {
-  if (pending == 0) return 'Tous les fragments sont acquittés.';
-
-  final count = pending < _numbers.length ? _numbers[pending] : '$pending';
-
-  return pending == 1
-      ? '$count fragment attend le réseau. Il partira seul, dans l\'ordre.'
-      : '$count fragments attendent le réseau. Ils partiront seuls, dans '
-          'l\'ordre.';
-}
+/// « Deux fragments attendent le réseau », et l'accord qui va avec.
+///
+/// L'accord est porté par le format ARB, plus par une fonction écrite à la
+/// main : une langue qui compte autrement n'aura pas à réécrire de code.
+String _pendingSentence(AppText text, int pending) => pending == 0
+    ? text.transcriptionAllAcknowledged
+    : text.transcriptionFragmentsPending(pending);

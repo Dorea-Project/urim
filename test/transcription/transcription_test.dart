@@ -13,6 +13,7 @@ import 'package:urim/data/repositories/in_memory_preparation_repository.dart';
 import 'package:urim/data/repositories/in_memory_transcription_repository.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/domain/entities/transcription/synthesis_draft.dart';
+import 'package:urim/l10n/generated/app_text_fr.dart';
 import 'package:urim/presentation/home/home_page.dart';
 
 import '../support/pump_app.dart';
@@ -33,6 +34,9 @@ final class _SequentialIds implements IdGenerator {
   @override
   String newId() => 'id-${_next++}';
 }
+
+/// Les libelles viennent de la meme source que l'ecran.
+final texte = AppTextFr();
 
 void main() {
   final fixedNow = DateTime(2026, 8, 15, 10);
@@ -197,14 +201,14 @@ void main() {
       expect(find.text('Hébreux 13 — 9 août'), findsOneWidget);
       expect(find.text('41:07'), findsOneWidget);
       expect(
-        find.textContaining('55 fragments acquittés'),
+        find.textContaining(texte.transcriptionFragmentsAcknowledged(55)),
         findsOneWidget,
       );
       expect(
-        find.textContaining('Deux fragments attendent le réseau'),
+        find.textContaining(texte.transcriptionFragmentsPending(2)),
         findsOneWidget,
       );
-      expect(find.textContaining('audio supprimé le 16 août'), findsOneWidget);
+      expect(find.textContaining(texte.transcriptionAudioDeletedOn('16 août')), findsOneWidget);
       expect(find.text('CONSTAT'), findsOneWidget);
       expect(find.text('ALIGNEMENT AU SQUELETTE'), findsOneWidget);
       expect(
@@ -221,10 +225,10 @@ void main() {
       await pumpTranscription(tester);
 
       expect(
-        find.text('Hébreux 13:1 — prévu dans ta préparation'),
+        find.text(texte.transcriptionPlanned('Hébreux 13:1')),
         findsOneWidget,
       );
-      expect(find.text('Hébreux 13:3 — non prévu'), findsOneWidget);
+      expect(find.text(texte.transcriptionUnplanned('Hébreux 13:3')), findsOneWidget);
     });
 
     testWidgets('la reprise d\'enregistrement est visible mais fermée',
@@ -232,7 +236,7 @@ void main() {
       await pumpTranscription(tester);
 
       final button = tester.widget<OutlinedButton>(
-        find.widgetWithText(OutlinedButton, 'Reprendre l\'enregistrement'),
+        find.widgetWithText(OutlinedButton, texte.transcriptionResume),
       );
 
       expect(button.onPressed, isNull);
@@ -241,19 +245,19 @@ void main() {
     testWidgets('la synthèse annonce que rien n\'est parti', (tester) async {
       await pumpTranscription(tester);
 
-      await tester.tap(find.text('Voir la synthèse'));
+      await tester.tap(find.text(texte.transcriptionSeeSynthesis));
       await tester.pumpAndSettle();
 
-      expect(find.text('Synthèse — à valider'), findsOneWidget);
-      expect(find.text('Rien n\'est encore parti.'), findsOneWidget);
+      expect(find.text(texte.synthesisTitleDraft), findsOneWidget);
+      expect(find.text(texte.synthesisSealTitleDraft), findsOneWidget);
       expect(
         find.textContaining('Aucun membre ne la voit'),
         findsOneWidget,
       );
-      expect(find.text('Disponible une fois la synthèse validée.'),
+      expect(find.text(texte.synthesisReadAloudLocked),
           findsOneWidget);
       expect(find.textContaining('CAPSULE 1'), findsOneWidget);
-      expect(find.text('LE VERSET, NON RÉÉCRIT'), findsOneWidget);
+      expect(find.text(texte.synthesisSectionVerse.toUpperCase()), findsOneWidget);
       expect(find.text('Dioula'), findsOneWidget);
       expect(find.text('Ta propre voix'), findsOneWidget);
     });
@@ -261,17 +265,17 @@ void main() {
     testWidgets('valider change ce que l\'écran promet', (tester) async {
       await pumpTranscription(tester);
 
-      await tester.tap(find.text('Voir la synthèse'));
+      await tester.tap(find.text(texte.transcriptionSeeSynthesis));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Valider cette synthèse'));
+      await tester.tap(find.text(texte.synthesisValidate));
       await tester.pumpAndSettle();
 
-      expect(find.text('Synthèse — validée'), findsOneWidget);
-      expect(find.text('Validée par toi.'), findsOneWidget);
-      expect(find.text('Rien n\'est encore parti.'), findsNothing);
+      expect(find.text(texte.synthesisTitleValidated), findsOneWidget);
+      expect(find.text(texte.synthesisSealTitleValidated), findsOneWidget);
+      expect(find.text(texte.synthesisSealTitleDraft), findsNothing);
       expect(
-        find.text('Disponible une fois la synthèse validée.'),
+        find.text(texte.synthesisReadAloudLocked),
         findsNothing,
       );
 
@@ -283,7 +287,7 @@ void main() {
           matching: find.byType(Tooltip),
         ),
       );
-      expect(play.message, 'Lecture à venir');
+      expect(play.message, texte.synthesisVoiceComing);
     });
   });
 }

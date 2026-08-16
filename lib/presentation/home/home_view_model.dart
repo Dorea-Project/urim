@@ -48,11 +48,19 @@ final preparationOpenerProvider =
   PreparationOpener.new,
 );
 
-/// Un groupe de l'accueil : « CETTE SEMAINE », « PLUS TÔT ».
-final class PreparationGroup {
-  const PreparationGroup({required this.label, required this.preparations});
+/// Depuis quand un travail n'a pas bougé.
+///
+/// Une nature, pas un libellé : c'est l'écran qui nomme « CETTE SEMAINE ».
+enum Recency { thisWeek, earlier }
 
-  final String label;
+/// Un groupe de l'accueil.
+final class PreparationGroup {
+  const PreparationGroup({
+    required this.recency,
+    required this.preparations,
+  });
+
+  final Recency recency;
   final List<Preparation> preparations;
 }
 
@@ -76,8 +84,8 @@ List<PreparationGroup> groupByRecency(
 
   return [
     if (thisWeek.isNotEmpty)
-      PreparationGroup(label: 'CETTE SEMAINE', preparations: thisWeek),
+      PreparationGroup(recency: Recency.thisWeek, preparations: thisWeek),
     if (earlier.isNotEmpty)
-      PreparationGroup(label: 'PLUS TÔT', preparations: earlier),
+      PreparationGroup(recency: Recency.earlier, preparations: earlier),
   ];
 }

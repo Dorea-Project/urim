@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/core/router/app_routes.dart';
 import 'package:urim/presentation/common/french_dates.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/common/section_card.dart';
 import 'package:urim/presentation/home/home_view_model.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
@@ -38,7 +39,7 @@ class _NewPreparationPageState extends ConsumerState<NewPreparationPage> {
       initialDate: _serviceDate ?? _nextSunday(now),
       firstDate: DateTime(now.year, now.month, now.day),
       lastDate: now.add(const Duration(days: 365)),
-      helpText: 'Date du culte',
+      helpText: AppText.of(context).newPreparationServiceDate,
       // Le dimanche est le cas courant, pas une contrainte : on prêche aussi
       // en semaine.
       selectableDayPredicate: null,
@@ -59,7 +60,8 @@ class _NewPreparationPageState extends ConsumerState<NewPreparationPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            failure?.message ?? 'Cette préparation n\'a pas pu être ouverte.',
+            failure?.message ??
+                AppText.of(context).newPreparationFailed,
           ),
         ),
       );
@@ -79,14 +81,15 @@ class _NewPreparationPageState extends ConsumerState<NewPreparationPage> {
     final theme = Theme.of(context);
     final colors = context.colors;
     final isBusy = ref.watch(preparationOpenerProvider).isLoading;
+    final text = AppText.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nouvelle préparation'),
+        title: Text(text.newPreparationTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 20),
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
-          tooltip: 'Retour',
+          tooltip: text.back,
         ),
       ),
       body: SafeArea(
@@ -102,8 +105,7 @@ class _NewPreparationPageState extends ConsumerState<NewPreparationPage> {
                 ),
                 children: [
                   Text(
-                    'Une référence, une phrase que tu as en tête, ou ce que tu '
-                    'veux dire. Écris comme ça vient.',
+                    text.newPreparationIntro,
                     style: theme.textTheme.bodyLarge?.copyWith(
                       color: colors.textSecondary,
                       height: 1.5,
@@ -119,38 +121,35 @@ class _NewPreparationPageState extends ConsumerState<NewPreparationPage> {
                     textCapitalization: TextCapitalization.sentences,
                     onChanged: (value) =>
                         setState(() => _hasText = value.trim().isNotEmpty),
-                    decoration: const InputDecoration(
-                      hintText: 'Romains 8:15 — ou : que l\'amour fraternel '
-                          'continue — ou : je veux parler de la persévérance à '
-                          'des étudiants qui décrochent',
+                    decoration: InputDecoration(
+                      hintText: text.newPreparationHint,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   const _DictationRow(),
                   const SizedBox(height: AppSpacing.xl),
-                  const SectionLabel('Pour quel dimanche'),
+                  SectionLabel(text.newPreparationServiceSection),
                   SectionCard(
                     children: [
                       SettingNavRow(
-                        title: 'Date du culte',
+                        title: text.newPreparationServiceDate,
                         value: _serviceDate == null
-                            ? 'À définir'
-                            : 'dim. ${frenchDayMonth(_serviceDate!)}',
+                            ? text.newPreparationServiceDateEmpty
+                            : text.newPreparationServiceDateValue(
+                                frenchDayMonth(_serviceDate!),
+                              ),
                         onTap: _pickServiceDate,
                       ),
-                      const SettingNavRow(
-                        title: 'Espace',
-                        value: 'Personnel',
-                        subtitle: 'Le partage avec une église attend que le '
-                            'rattachement existe.',
+                      SettingNavRow(
+                        title: text.newPreparationSpace,
+                        value: text.newPreparationSpacePersonal,
+                        subtitle: text.newPreparationSpacePending,
                       ),
                     ],
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   Text(
-                    'Aucun mode à choisir. Le moteur regarde si les mots que '
-                    'tu écris se suivent comme dans l\'Écriture — c\'est '
-                    'l\'ordre des mots qui décide, jamais le vocabulaire.',
+                    text.newPreparationNoModeNotice,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: colors.textSecondary,
                       height: 1.5,
@@ -173,7 +172,7 @@ class _NewPreparationPageState extends ConsumerState<NewPreparationPage> {
                     minimumSize: const Size(0, 56),
                   ),
                   onPressed: _hasText && !isBusy ? _open : null,
-                  child: const Text('Ouvrir la préparation'),
+                  child: Text(text.newPreparationOpen),
                 ),
               ),
             ),
@@ -207,8 +206,7 @@ class _DictationRow extends StatelessWidget {
         const SizedBox(width: AppSpacing.md),
         Expanded(
           child: Text(
-            'Ou dicte — Urim te fera confirmer avant d\'aller plus loin. '
-            'La dictée attend le moteur de reconnaissance.',
+            AppText.of(context).newPreparationDictate,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: colors.textSecondary,
                   height: 1.45,

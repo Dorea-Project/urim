@@ -29,21 +29,16 @@ enum PreparationOrigin {
 /// en premier.
 enum PreparationState {
   /// Urim a posé une question et attend : la main est à l'utilisateur.
-  handsBack('Rend la main'),
+  handsBack,
 
   /// Urim a servi de la matière ; rien n'est bloqué.
-  served('Matière servie'),
+  served,
 
   /// Le message a été prêché, Urim a quelque chose à en dire.
-  feedbackReady('Retour disponible'),
+  feedbackReady,
 
   /// Urim n'a pas pu travailler, et dit pourquoi.
-  refused('Refus motivé');
-
-  const PreparationState(this.label);
-
-  /// Étiquette de la pastille sur la carte d'accueil.
-  final String label;
+  refused;
 
   /// Vrai quand la préparation attend une action de l'utilisateur.
   bool get waitsForUser => this == PreparationState.handsBack;

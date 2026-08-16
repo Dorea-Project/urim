@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/domain/entities/transcription/synthesis_draft.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/common/ruled_content.dart';
 import 'package:urim/presentation/preparation/widgets/block_views.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
@@ -27,23 +28,23 @@ class SynthesisPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(
           synthesis.value?.isValidated ?? false
-              ? 'Synthèse — validée'
-              : 'Synthèse — à valider',
+              ? AppText.of(context).synthesisTitleValidated
+              : AppText.of(context).synthesisTitleDraft,
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 20),
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
-          tooltip: 'Retour',
+          tooltip: AppText.of(context).back,
         ),
       ),
       body: SafeArea(
         child: switch (synthesis) {
           AsyncData(:final value) =>
             _SynthesisBody(synthesis: value, preparationId: preparationId),
-          AsyncError() => const Center(
+          AsyncError() => Center(
               child: Padding(
-                padding: EdgeInsets.all(AppSpacing.xxl),
-                child: Text('Cette prédication n\'a pas de synthèse.'),
+                padding: const EdgeInsets.all(AppSpacing.xxl),
+                child: Text(AppText.of(context).synthesisNotFound),
               ),
             ),
           _ => const Center(child: CircularProgressIndicator()),
@@ -70,7 +71,7 @@ class _SynthesisBody extends ConsumerWidget {
       SnackBar(
         content: Text(
           failure == null
-              ? 'Synthèse validée. Elle peut maintenant être lue.'
+              ? AppText.of(context).synthesisValidatedToast
               : failure.message,
         ),
       ),
@@ -81,6 +82,7 @@ class _SynthesisBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colors = context.colors;
+    final text = AppText.of(context);
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(
@@ -93,22 +95,18 @@ class _SynthesisBody extends ConsumerWidget {
         _SealBanner(isValidated: synthesis.isValidated),
         const SizedBox(height: AppSpacing.xl),
 
-        _Label('Ce qu\'Urim a retenu'),
+        _Label(text.synthesisSectionCapsules),
         for (var i = 0; i < synthesis.capsules.length; i++) ...[
           _CapsuleView(index: i + 1, capsule: synthesis.capsules[i]),
           const SizedBox(height: AppSpacing.lg),
         ],
 
         const SizedBox(height: AppSpacing.sm),
-        _Label('Le verset, non réécrit'),
+        _Label(text.synthesisSectionVerse),
         PassageView(passage: synthesis.verse),
         const SizedBox(height: AppSpacing.xl),
 
-        const NoticeBox(
-          text: 'Les capsules sont écrites par un modèle à partir de ta '
-              'transcription. Les versets, eux, viennent de la Bible — jamais '
-              'du modèle. Relis avant de valider.',
-        ),
+        NoticeBox(text: text.synthesisModelNotice),
         const SizedBox(height: AppSpacing.xl),
 
         SizedBox(
@@ -120,16 +118,16 @@ class _SynthesisBody extends ConsumerWidget {
                 : () => _validate(context, ref),
             child: Text(
               synthesis.isValidated
-                  ? 'Synthèse validée'
-                  : 'Valider cette synthèse',
+                  ? text.synthesisValidated
+                  : text.synthesisValidate,
             ),
           ),
         ),
         const SizedBox(height: AppSpacing.xl),
 
-        _Label('Lire à voix haute'),
+        _Label(text.synthesisSectionReadAloud),
         Text(
-          'Pour ceux de l\'assemblée qui écouteront plutôt que de lire.',
+          text.synthesisReadAloudIntro,
           style: theme.textTheme.bodyLarge?.copyWith(
             color: colors.textSecondary,
             height: 1.5,
@@ -140,8 +138,8 @@ class _SynthesisBody extends ConsumerWidget {
         const SizedBox(height: AppSpacing.md),
         Text(
           synthesis.canBeReadAloud
-              ? 'La lecture reprend la synthèse telle que tu l\'as validée.'
-              : 'Disponible une fois la synthèse validée.',
+              ? text.synthesisReadAloudOpen
+              : text.synthesisReadAloudLocked,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: colors.textSecondary,
           ),
@@ -161,6 +159,7 @@ class _SealBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = context.colors;
+    final text = AppText.of(context);
 
     return RuledContent(
       color: isValidated ? colors.success : theme.colorScheme.primary,
@@ -177,17 +176,16 @@ class _SealBanner extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              isValidated ? 'Validée par toi.' : 'Rien n\'est encore parti.',
+              isValidated
+                  ? text.synthesisSealTitleValidated
+                  : text.synthesisSealTitleDraft,
               style: theme.textTheme.titleLarge,
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
               isValidated
-                  ? 'Elle peut être lue à voix haute. Tu restes le seul à '
-                      'pouvoir la modifier.'
-                  : 'Tant que tu n\'as pas validé, cette synthèse n\'existe '
-                      'que pour toi. Aucun membre ne la voit, aucune voix ne '
-                      'la lit.',
+                  ? text.synthesisSealBodyValidated
+                  : text.synthesisSealBodyDraft,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: colors.textSecondary,
                 height: 1.5,
@@ -211,6 +209,7 @@ class _CapsuleView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = context.colors;
+    final text = AppText.of(context);
 
     return DottedRuledContent(
       color: colors.textSecondary,
@@ -219,7 +218,7 @@ class _CapsuleView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'CAPSULE $index · DIT À ${formatDuration(capsule.saidAt)}',
+            text.synthesisCapsuleLabel(index, formatDuration(capsule.saidAt)),
             style: theme.textTheme.labelSmall?.copyWith(
               color: colors.textSecondary,
               letterSpacing: 1.2,
@@ -240,7 +239,7 @@ class _CapsuleView extends StatelessWidget {
             // Retourner au moment exact suppose l'audio, effacé après
             // transcription, et un lecteur qui n'existe pas encore.
             onPressed: null,
-            child: const Text('Voir où c\'est dit dans ta prédication'),
+            child: Text(text.synthesisCapsuleSource),
           ),
         ],
       ),
@@ -294,11 +293,12 @@ class _VoiceRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = context.colors;
+    final text = AppText.of(context);
 
     final note = [
       voice.note,
       if (voice.duration case final Duration duration)
-        formatSpokenDuration(duration),
+        formatSpokenDuration(text, duration),
     ].join(' · ');
 
     final isOwnVoice = voice.kind == ReadAloudKind.ownVoice;
@@ -335,8 +335,8 @@ class _VoiceRow extends StatelessWidget {
             // vocale ni les traductions n'existent encore (Q3).
             enabled: false,
             tooltip: enabled
-                ? 'Lecture à venir'
-                : 'Disponible une fois la synthèse validée',
+                ? text.synthesisVoiceComing
+                : text.synthesisVoiceLocked,
           ),
         ],
       ),
@@ -398,9 +398,11 @@ class _Label extends StatelessWidget {
 }
 
 /// « 2 min 40 » — une durée de lecture ne se lit pas comme un chronomètre.
-String formatSpokenDuration(Duration duration) {
+String formatSpokenDuration(AppText text, Duration duration) {
   final minutes = duration.inMinutes;
   final seconds = duration.inSeconds % 60;
 
-  return seconds == 0 ? '$minutes min' : '$minutes min $seconds';
+  return seconds == 0
+      ? text.synthesisSpokenMinutes(minutes)
+      : text.synthesisSpokenMinutesSeconds(minutes, seconds);
 }

@@ -296,5 +296,280 @@
   "@profileNoSession": {
     "description": "Anomalie, pas un état vide : l'écran n'est atteignable qu'une fois l'accès ouvert."
   },
-  "save": "Enregistrer"
+  "save": "Enregistrer",
+  "homeOpenTask": "Ouvrir une tâche",
+  "homeEmptyTitle": "Rien en cours.",
+  "homeEmptyBody": "Ouvre une tâche : écris ce que tu veux dire, ou verse un enregistrement.",
+  "homeReadFailed": "La liste n'a pas pu être lue.",
+  "homeGroupThisWeek": "CETTE SEMAINE",
+  "homeGroupEarlier": "PLUS TÔT",
+  "@homeGroupEarlier": {
+    "description": "Deux groupes seulement : ce qui est dans la semaine, et le reste. Un découpage plus fin n'apprendrait rien."
+  },
+  "homeActivityToday": "Aujourd'hui, {time}",
+  "@homeActivityToday": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "homeActivityYesterday": "Hier, {time}",
+  "@homeActivityYesterday": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "homeCardMeta": "· {activity}",
+  "@homeCardMeta": {
+    "placeholders": {
+      "activity": {
+        "type": "String"
+      }
+    }
+  },
+  "homeCardMetaWithService": "· {activity} · dimanche {service}",
+  "@homeCardMetaWithService": {
+    "description": "Dernière activité, puis le dimanche visé.",
+    "placeholders": {
+      "activity": {
+        "type": "String"
+      },
+      "service": {
+        "type": "String"
+      }
+    }
+  },
+  "stateHandsBack": "Rend la main",
+  "@stateHandsBack": {
+    "description": "Urim a posé une question et attend. C'est ce qui met la préparation en tête de l'accueil."
+  },
+  "stateServed": "Matière servie",
+  "stateFeedbackReady": "Retour disponible",
+  "stateRefused": "Refus motivé",
+  "taskSheetTitle": "Quelle tâche ?",
+  "taskSheetSubtitle": "Deux travaux différents, pas deux façons d'écrire.",
+  "taskWriteTitle": "Préparer un message",
+  "taskWriteBody": "Urim t'accompagne question par question — l'axe, le texte, les bornes — jusqu'à ton squelette.",
+  "taskTranscribeTitle": "Transcrire une prédication",
+  "taskTranscribeBody": "Mise en texte, puis une synthèse que tu valides avant qu'elle ne soit lue à voix haute.",
+  "taskTranscribePending": "Le moteur de transcription n'est pas encore retenu. Un exemple transcrit est visible depuis l'accueil.",
+  "newPreparationTitle": "Nouvelle préparation",
+  "newPreparationIntro": "Une référence, une phrase que tu as en tête, ou ce que tu veux dire. Écris comme ça vient.",
+  "newPreparationHint": "Romains 8:15 — ou : que l'amour fraternel continue — ou : je veux parler de la persévérance à des étudiants qui décrochent",
+  "@newPreparationHint": {
+    "description": "Trois entrées possibles dans le même champ : une référence, une citation, une intention. C'est l'exemple qui le dit, pas un mode à cocher."
+  },
+  "newPreparationDictate": "Ou dicte — Urim te fera confirmer avant d'aller plus loin. La dictée attend le moteur de reconnaissance.",
+  "newPreparationServiceSection": "Pour quel dimanche",
+  "newPreparationServiceDate": "Date du culte",
+  "newPreparationServiceDateEmpty": "À définir",
+  "newPreparationServiceDateValue": "dim. {date}",
+  "@newPreparationServiceDateValue": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "newPreparationSpace": "Espace",
+  "newPreparationSpacePersonal": "Personnel",
+  "newPreparationSpacePending": "Le partage avec une église attend que le rattachement existe.",
+  "newPreparationNoModeNotice": "Aucun mode à choisir. Le moteur regarde si les mots que tu écris se suivent comme dans l'Écriture — c'est l'ordre des mots qui décide, jamais le vocabulaire.",
+  "newPreparationOpen": "Ouvrir la préparation",
+  "newPreparationFailed": "Cette préparation n'a pas pu être ouverte.",
+  "preparationEmpty": "Pose ta première idée en bas de l'écran.",
+  "preparationLoadFailed": "Chargement impossible.",
+  "preparationComposerHint": "Écris ta réponse, ou choisis…",
+  "preparationDictationSoon": "Dictée — bientôt disponible",
+  "preparationSend": "Ajouter au fil",
+  "blockUrim": "URIM",
+  "@blockUrim": {
+    "description": "Qui parle. Au-dessus de chaque tour d'Urim."
+  },
+  "blockTrace": "Comment j'en suis arrivé là",
+  "@blockTrace": {
+    "description": "Replié par défaut. C'est ce qui distingue une proposition d'un oracle."
+  },
+  "blockScripture": "ÉCRITURE",
+  "blockRecognisedInQuote": "RECONNU DANS LA CITATION · {at}",
+  "@blockRecognisedInQuote": {
+    "placeholders": {
+      "at": {
+        "type": "String"
+      }
+    }
+  },
+  "blockSynthesis": "SYNTHÈSE D'URIM",
+  "blockMoreLink": "{label} →",
+  "@blockMoreLink": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "lociUnavailable": "La liste des loci n'est pas encore écrite. Les trois axes proposés viennent de ta phrase ; les sept autres attendent que le moteur existe.",
+  "stanceSubject": "Ce texte en fait son sujet",
+  "stanceSupports": "Ce texte le soutient",
+  "stanceComplicates": "Ce texte le complique",
+  "@stanceComplicates": {
+    "description": "Ce qui résiste à la lecture. Affiché au même rang que ce qui la porte — un moteur qui ne servirait que l'appui fabriquerait la preuve."
+  },
+  "transcriptionFallbackTitle": "Transcription",
+  "transcriptionOptions": "Options",
+  "transcriptionResume": "Reprendre l'enregistrement",
+  "transcriptionAudioDeleted": "L'audio a été effacé : la reprise repartira d'une nouvelle capture.",
+  "transcriptionRecorded": "Enregistré",
+  "transcriptionFragmentsAcknowledged": "{count} fragments acquittés",
+  "@transcriptionFragmentsAcknowledged": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "transcriptionAudioDeletedOn": "audio supprimé le {date}",
+  "@transcriptionAudioDeletedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "transcriptionSectionFragments": "Fragments",
+  "transcriptionSectionConvoked": "Ce que tu as convoqué",
+  "transcriptionAllAcknowledged": "Tous les fragments sont acquittés.",
+  "transcriptionFragmentsPending": "{count, plural, =1{Un fragment attend le réseau. Il partira seul, dans l'ordre.} other{{count} fragments attendent le réseau. Ils partiront seuls, dans l'ordre.}}",
+  "@transcriptionFragmentsPending": {
+    "description": "Le pluriel est porté par le format, plus par une fonction écrite à la main.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "transcriptionConvokedAnnounced": "ANNONCÉ À VOIX HAUTE",
+  "transcriptionConvokedRecognised": "RECONNU DANS LA CITATION",
+  "transcriptionPlanned": "{reference} — prévu dans ta préparation",
+  "@transcriptionPlanned": {
+    "placeholders": {
+      "reference": {
+        "type": "String"
+      }
+    }
+  },
+  "transcriptionUnplanned": "{reference} — non prévu",
+  "@transcriptionUnplanned": {
+    "placeholders": {
+      "reference": {
+        "type": "String"
+      }
+    }
+  },
+  "transcriptionSpeakerNotice": "Aucune séparation de locuteurs. Les voix éloignées du micro sont écartées avant écriture, jamais enregistrées puis filtrées.",
+  "transcriptionFixText": "Corriger la transcription",
+  "transcriptionSeeSynthesis": "Voir la synthèse",
+  "transcriptionOpenPreparation": "Ouvrir la préparation",
+  "transcriptionNotFound": "Cette préparation n'a pas d'enregistrement transcrit.",
+  "synthesisTitleDraft": "Synthèse — à valider",
+  "synthesisTitleValidated": "Synthèse — validée",
+  "synthesisNotFound": "Cette prédication n'a pas de synthèse.",
+  "synthesisSealTitleDraft": "Rien n'est encore parti.",
+  "synthesisSealBodyDraft": "Tant que tu n'as pas validé, cette synthèse n'existe que pour toi. Aucun membre ne la voit, aucune voix ne la lit.",
+  "@synthesisSealBodyDraft": {
+    "description": "Promesse tenue par le code : la lecture reste fermée tant que le drapeau est faux."
+  },
+  "synthesisSealTitleValidated": "Validée par toi.",
+  "synthesisSealBodyValidated": "Elle peut être lue à voix haute. Tu restes le seul à pouvoir la modifier.",
+  "synthesisSectionCapsules": "Ce qu'Urim a retenu",
+  "synthesisCapsuleLabel": "CAPSULE {index} · DIT À {at}",
+  "@synthesisCapsuleLabel": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "at": {
+        "type": "String"
+      }
+    }
+  },
+  "synthesisCapsuleSource": "Voir où c'est dit dans ta prédication",
+  "synthesisSectionVerse": "Le verset, non réécrit",
+  "synthesisModelNotice": "Les capsules sont écrites par un modèle à partir de ta transcription. Les versets, eux, viennent de la Bible — jamais du modèle. Relis avant de valider.",
+  "synthesisValidate": "Valider cette synthèse",
+  "synthesisValidated": "Synthèse validée",
+  "synthesisValidatedToast": "Synthèse validée. Elle peut maintenant être lue.",
+  "synthesisSectionReadAloud": "Lire à voix haute",
+  "synthesisReadAloudIntro": "Pour ceux de l'assemblée qui écouteront plutôt que de lire.",
+  "synthesisReadAloudLocked": "Disponible une fois la synthèse validée.",
+  "synthesisReadAloudOpen": "La lecture reprend la synthèse telle que tu l'as validée.",
+  "synthesisVoiceComing": "Lecture à venir",
+  "synthesisVoiceLocked": "Disponible une fois la synthèse validée",
+  "synthesisSpokenMinutes": "{minutes} min",
+  "@synthesisSpokenMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "synthesisSpokenMinutesSeconds": "{minutes} min {seconds}",
+  "@synthesisSpokenMinutesSeconds": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "options": "Options",
+  "@options": {
+    "description": "Infobulle du menu contextuel, partout."
+  },
+  "blockToday": "AUJOURD'HUI {time}",
+  "@blockToday": {
+    "description": "Repère d'un bloc écrit aujourd'hui.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "blockYesterday": "HIER {time}",
+  "@blockYesterday": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "blockOnDate": "{date} {time}",
+  "@blockOnDate": {
+    "description": "Au-delà d'hier, la date remplace le mot.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "synthesisPointRange": "  — {from} à {to}",
+  "@synthesisPointRange": {
+    "description": "Segment de l'enregistrement dont un point est tiré.",
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -10,11 +10,16 @@ import 'package:urim/core/storage/shared_preferences_provider.dart';
 import 'package:urim/core/time/clock.dart';
 import 'package:urim/core/time/clock_provider.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
+import 'package:urim/l10n/generated/app_text_fr.dart';
+import 'package:urim/presentation/common/domain_labels.dart';
 import 'package:urim/presentation/home/home_page.dart';
 import 'package:urim/presentation/preparation/new_preparation_page.dart';
 import 'package:urim/presentation/preparation/preparation_page.dart';
 
 import '../support/pump_app.dart';
+
+/// Les libelles viennent de la meme source que l'ecran.
+final texte = AppTextFr();
 
 /// Le parcours des maquettes, d'un bout à l'autre : l'accueil, la feuille des
 /// tâches, le formulaire, puis le fil.
@@ -86,8 +91,8 @@ void main() {
     testWidgets('les travaux sont groupés par récence', (tester) async {
       await pumpParcours(tester);
 
-      expect(find.text('CETTE SEMAINE'), findsOneWidget);
-      expect(find.text('PLUS TÔT'), findsOneWidget);
+      expect(find.text(texte.homeGroupThisWeek), findsOneWidget);
+      expect(find.text(texte.homeGroupEarlier), findsOneWidget);
       expect(find.text('Amour fraternel'), findsOneWidget);
       expect(find.text('Actes 2:42-47'), findsOneWidget);
     });
@@ -96,10 +101,12 @@ void main() {
       await pumpParcours(tester);
 
       for (final state in PreparationState.values) {
+        final libelle = preparationStateLabel(texte, state);
+
         expect(
-          find.text(state.label),
+          find.text(libelle),
           findsOneWidget,
-          reason: 'l\'état « ${state.label} » doit se lire sur la liste',
+          reason: 'l\'état « $libelle » doit se lire sur la liste',
         );
       }
     });
@@ -119,12 +126,12 @@ void main() {
     testWidgets('deux travaux, dont un encore fermé', (tester) async {
       await pumpParcours(tester);
 
-      await tester.tap(find.text('Ouvrir une tâche'));
+      await tester.tap(find.text(texte.homeOpenTask));
       await tester.pumpAndSettle();
 
-      expect(find.text('Quelle tâche ?'), findsOneWidget);
-      expect(find.text('Préparer un message'), findsOneWidget);
-      expect(find.text('Transcrire une prédication'), findsOneWidget);
+      expect(find.text(texte.taskSheetTitle), findsOneWidget);
+      expect(find.text(texte.taskWriteTitle), findsOneWidget);
+      expect(find.text(texte.taskTranscribeTitle), findsOneWidget);
       expect(
         find.textContaining('moteur de transcription n\'est pas encore'),
         findsOneWidget,
@@ -134,22 +141,22 @@ void main() {
     testWidgets('« Préparer un message » ouvre le formulaire', (tester) async {
       await pumpParcours(tester);
 
-      await tester.tap(find.text('Ouvrir une tâche'));
+      await tester.tap(find.text(texte.homeOpenTask));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Préparer un message'));
+      await tester.tap(find.text(texte.taskWriteTitle));
       await tester.pumpAndSettle();
 
       expect(find.byType(NewPreparationPage), findsOneWidget);
-      expect(find.text('Pour quel dimanche'.toUpperCase()), findsOneWidget);
+      expect(find.text(texte.newPreparationServiceSection.toUpperCase()), findsOneWidget);
     });
   });
 
   group('formulaire', () {
     Future<void> openForm(WidgetTester tester) async {
       await pumpParcours(tester);
-      await tester.tap(find.text('Ouvrir une tâche'));
+      await tester.tap(find.text(texte.homeOpenTask));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Préparer un message'));
+      await tester.tap(find.text(texte.taskWriteTitle));
       await tester.pumpAndSettle();
     }
 
@@ -157,7 +164,7 @@ void main() {
       await openForm(tester);
 
       final button = tester.widget<FilledButton>(
-        find.widgetWithText(FilledButton, 'Ouvrir la préparation'),
+        find.widgetWithText(FilledButton, texte.newPreparationOpen),
       );
 
       expect(button.onPressed, isNull);
@@ -173,7 +180,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Ouvrir la préparation'));
+      await tester.tap(find.text(texte.newPreparationOpen));
       await tester.pumpAndSettle();
 
       expect(find.byType(PreparationPage), findsOneWidget);
@@ -190,11 +197,11 @@ void main() {
 
       await tester.enterText(find.byType(TextField), 'Romains 8:15');
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Ouvrir la préparation'));
+      await tester.tap(find.text(texte.newPreparationOpen));
       await tester.pumpAndSettle();
 
       // Retour à l'accueil : le formulaire a été remplacé, donc un seul retour.
-      await tester.tap(find.byTooltip('Retour'));
+      await tester.tap(find.byTooltip(texte.back));
       await tester.pumpAndSettle();
 
       expect(find.byType(HomePage), findsOneWidget);

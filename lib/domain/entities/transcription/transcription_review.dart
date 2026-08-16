@@ -5,14 +5,10 @@ import 'package:urim/domain/entities/preparation/recording.dart';
 /// Comment un texte est apparu dans la prédication.
 enum ConvocationKind {
   /// La référence a été annoncée : « ouvrons Hébreux 13 ».
-  announced('Annoncé à voix haute'),
+  announced,
 
   /// Le texte a été cité sans être annoncé — reconnu à l'ordre des mots.
-  recognizedInQuote('Reconnu dans la citation');
-
-  const ConvocationKind(this.label);
-
-  final String label;
+  recognizedInQuote,
 }
 
 /// Un texte convoqué pendant la prédication.

@@ -451,4 +451,366 @@ class AppTextFr extends AppText {
 
   @override
   String get save => 'Enregistrer';
+
+  @override
+  String get homeOpenTask => 'Ouvrir une tâche';
+
+  @override
+  String get homeEmptyTitle => 'Rien en cours.';
+
+  @override
+  String get homeEmptyBody =>
+      'Ouvre une tâche : écris ce que tu veux dire, ou verse un enregistrement.';
+
+  @override
+  String get homeReadFailed => 'La liste n\'a pas pu être lue.';
+
+  @override
+  String get homeGroupThisWeek => 'CETTE SEMAINE';
+
+  @override
+  String get homeGroupEarlier => 'PLUS TÔT';
+
+  @override
+  String homeActivityToday(String time) {
+    return 'Aujourd\'hui, $time';
+  }
+
+  @override
+  String homeActivityYesterday(String time) {
+    return 'Hier, $time';
+  }
+
+  @override
+  String homeCardMeta(String activity) {
+    return '· $activity';
+  }
+
+  @override
+  String homeCardMetaWithService(String activity, String service) {
+    return '· $activity · dimanche $service';
+  }
+
+  @override
+  String get stateHandsBack => 'Rend la main';
+
+  @override
+  String get stateServed => 'Matière servie';
+
+  @override
+  String get stateFeedbackReady => 'Retour disponible';
+
+  @override
+  String get stateRefused => 'Refus motivé';
+
+  @override
+  String get taskSheetTitle => 'Quelle tâche ?';
+
+  @override
+  String get taskSheetSubtitle =>
+      'Deux travaux différents, pas deux façons d\'écrire.';
+
+  @override
+  String get taskWriteTitle => 'Préparer un message';
+
+  @override
+  String get taskWriteBody =>
+      'Urim t\'accompagne question par question — l\'axe, le texte, les bornes — jusqu\'à ton squelette.';
+
+  @override
+  String get taskTranscribeTitle => 'Transcrire une prédication';
+
+  @override
+  String get taskTranscribeBody =>
+      'Mise en texte, puis une synthèse que tu valides avant qu\'elle ne soit lue à voix haute.';
+
+  @override
+  String get taskTranscribePending =>
+      'Le moteur de transcription n\'est pas encore retenu. Un exemple transcrit est visible depuis l\'accueil.';
+
+  @override
+  String get newPreparationTitle => 'Nouvelle préparation';
+
+  @override
+  String get newPreparationIntro =>
+      'Une référence, une phrase que tu as en tête, ou ce que tu veux dire. Écris comme ça vient.';
+
+  @override
+  String get newPreparationHint =>
+      'Romains 8:15 — ou : que l\'amour fraternel continue — ou : je veux parler de la persévérance à des étudiants qui décrochent';
+
+  @override
+  String get newPreparationDictate =>
+      'Ou dicte — Urim te fera confirmer avant d\'aller plus loin. La dictée attend le moteur de reconnaissance.';
+
+  @override
+  String get newPreparationServiceSection => 'Pour quel dimanche';
+
+  @override
+  String get newPreparationServiceDate => 'Date du culte';
+
+  @override
+  String get newPreparationServiceDateEmpty => 'À définir';
+
+  @override
+  String newPreparationServiceDateValue(String date) {
+    return 'dim. $date';
+  }
+
+  @override
+  String get newPreparationSpace => 'Espace';
+
+  @override
+  String get newPreparationSpacePersonal => 'Personnel';
+
+  @override
+  String get newPreparationSpacePending =>
+      'Le partage avec une église attend que le rattachement existe.';
+
+  @override
+  String get newPreparationNoModeNotice =>
+      'Aucun mode à choisir. Le moteur regarde si les mots que tu écris se suivent comme dans l\'Écriture — c\'est l\'ordre des mots qui décide, jamais le vocabulaire.';
+
+  @override
+  String get newPreparationOpen => 'Ouvrir la préparation';
+
+  @override
+  String get newPreparationFailed =>
+      'Cette préparation n\'a pas pu être ouverte.';
+
+  @override
+  String get preparationEmpty => 'Pose ta première idée en bas de l\'écran.';
+
+  @override
+  String get preparationLoadFailed => 'Chargement impossible.';
+
+  @override
+  String get preparationComposerHint => 'Écris ta réponse, ou choisis…';
+
+  @override
+  String get preparationDictationSoon => 'Dictée — bientôt disponible';
+
+  @override
+  String get preparationSend => 'Ajouter au fil';
+
+  @override
+  String get blockUrim => 'URIM';
+
+  @override
+  String get blockTrace => 'Comment j\'en suis arrivé là';
+
+  @override
+  String get blockScripture => 'ÉCRITURE';
+
+  @override
+  String blockRecognisedInQuote(String at) {
+    return 'RECONNU DANS LA CITATION · $at';
+  }
+
+  @override
+  String get blockSynthesis => 'SYNTHÈSE D\'URIM';
+
+  @override
+  String blockMoreLink(String label) {
+    return '$label →';
+  }
+
+  @override
+  String get lociUnavailable =>
+      'La liste des loci n\'est pas encore écrite. Les trois axes proposés viennent de ta phrase ; les sept autres attendent que le moteur existe.';
+
+  @override
+  String get stanceSubject => 'Ce texte en fait son sujet';
+
+  @override
+  String get stanceSupports => 'Ce texte le soutient';
+
+  @override
+  String get stanceComplicates => 'Ce texte le complique';
+
+  @override
+  String get transcriptionFallbackTitle => 'Transcription';
+
+  @override
+  String get transcriptionOptions => 'Options';
+
+  @override
+  String get transcriptionResume => 'Reprendre l\'enregistrement';
+
+  @override
+  String get transcriptionAudioDeleted =>
+      'L\'audio a été effacé : la reprise repartira d\'une nouvelle capture.';
+
+  @override
+  String get transcriptionRecorded => 'Enregistré';
+
+  @override
+  String transcriptionFragmentsAcknowledged(int count) {
+    return '$count fragments acquittés';
+  }
+
+  @override
+  String transcriptionAudioDeletedOn(String date) {
+    return 'audio supprimé le $date';
+  }
+
+  @override
+  String get transcriptionSectionFragments => 'Fragments';
+
+  @override
+  String get transcriptionSectionConvoked => 'Ce que tu as convoqué';
+
+  @override
+  String get transcriptionAllAcknowledged =>
+      'Tous les fragments sont acquittés.';
+
+  @override
+  String transcriptionFragmentsPending(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count fragments attendent le réseau. Ils partiront seuls, dans l\'ordre.',
+      one: 'Un fragment attend le réseau. Il partira seul, dans l\'ordre.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get transcriptionConvokedAnnounced => 'ANNONCÉ À VOIX HAUTE';
+
+  @override
+  String get transcriptionConvokedRecognised => 'RECONNU DANS LA CITATION';
+
+  @override
+  String transcriptionPlanned(String reference) {
+    return '$reference — prévu dans ta préparation';
+  }
+
+  @override
+  String transcriptionUnplanned(String reference) {
+    return '$reference — non prévu';
+  }
+
+  @override
+  String get transcriptionSpeakerNotice =>
+      'Aucune séparation de locuteurs. Les voix éloignées du micro sont écartées avant écriture, jamais enregistrées puis filtrées.';
+
+  @override
+  String get transcriptionFixText => 'Corriger la transcription';
+
+  @override
+  String get transcriptionSeeSynthesis => 'Voir la synthèse';
+
+  @override
+  String get transcriptionOpenPreparation => 'Ouvrir la préparation';
+
+  @override
+  String get transcriptionNotFound =>
+      'Cette préparation n\'a pas d\'enregistrement transcrit.';
+
+  @override
+  String get synthesisTitleDraft => 'Synthèse — à valider';
+
+  @override
+  String get synthesisTitleValidated => 'Synthèse — validée';
+
+  @override
+  String get synthesisNotFound => 'Cette prédication n\'a pas de synthèse.';
+
+  @override
+  String get synthesisSealTitleDraft => 'Rien n\'est encore parti.';
+
+  @override
+  String get synthesisSealBodyDraft =>
+      'Tant que tu n\'as pas validé, cette synthèse n\'existe que pour toi. Aucun membre ne la voit, aucune voix ne la lit.';
+
+  @override
+  String get synthesisSealTitleValidated => 'Validée par toi.';
+
+  @override
+  String get synthesisSealBodyValidated =>
+      'Elle peut être lue à voix haute. Tu restes le seul à pouvoir la modifier.';
+
+  @override
+  String get synthesisSectionCapsules => 'Ce qu\'Urim a retenu';
+
+  @override
+  String synthesisCapsuleLabel(int index, String at) {
+    return 'CAPSULE $index · DIT À $at';
+  }
+
+  @override
+  String get synthesisCapsuleSource => 'Voir où c\'est dit dans ta prédication';
+
+  @override
+  String get synthesisSectionVerse => 'Le verset, non réécrit';
+
+  @override
+  String get synthesisModelNotice =>
+      'Les capsules sont écrites par un modèle à partir de ta transcription. Les versets, eux, viennent de la Bible — jamais du modèle. Relis avant de valider.';
+
+  @override
+  String get synthesisValidate => 'Valider cette synthèse';
+
+  @override
+  String get synthesisValidated => 'Synthèse validée';
+
+  @override
+  String get synthesisValidatedToast =>
+      'Synthèse validée. Elle peut maintenant être lue.';
+
+  @override
+  String get synthesisSectionReadAloud => 'Lire à voix haute';
+
+  @override
+  String get synthesisReadAloudIntro =>
+      'Pour ceux de l\'assemblée qui écouteront plutôt que de lire.';
+
+  @override
+  String get synthesisReadAloudLocked =>
+      'Disponible une fois la synthèse validée.';
+
+  @override
+  String get synthesisReadAloudOpen =>
+      'La lecture reprend la synthèse telle que tu l\'as validée.';
+
+  @override
+  String get synthesisVoiceComing => 'Lecture à venir';
+
+  @override
+  String get synthesisVoiceLocked => 'Disponible une fois la synthèse validée';
+
+  @override
+  String synthesisSpokenMinutes(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String synthesisSpokenMinutesSeconds(int minutes, int seconds) {
+    return '$minutes min $seconds';
+  }
+
+  @override
+  String get options => 'Options';
+
+  @override
+  String blockToday(String time) {
+    return 'AUJOURD\'HUI $time';
+  }
+
+  @override
+  String blockYesterday(String time) {
+    return 'HIER $time';
+  }
+
+  @override
+  String blockOnDate(String date, String time) {
+    return '$date $time';
+  }
+
+  @override
+  String synthesisPointRange(String from, String to) {
+    return '  — $from à $to';
+  }
 }

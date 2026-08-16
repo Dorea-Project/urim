@@ -5,6 +5,7 @@ import 'package:urim/core/error/failure.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/presentation/preparation/preparation_view_model.dart';
 import 'package:urim/presentation/preparation/widgets/block_views.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
 
@@ -23,7 +24,7 @@ class PreparationPage extends ConsumerWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 20),
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
-          tooltip: 'Retour',
+          tooltip: AppText.of(context).back,
         ),
         title: Text(
           preparation.value?.title ?? '',
@@ -35,7 +36,7 @@ class PreparationPage extends ConsumerWidget {
             // Renommer, exporter, supprimer : rien de tout cela n'existe
             // encore.
             onPressed: null,
-            tooltip: 'Options',
+            tooltip: AppText.of(context).options,
           ),
         ],
       ),
@@ -76,7 +77,7 @@ class _Thread extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.xxl),
           child: Text(
-            'Pose ta première idée en bas de l\'écran.',
+            AppText.of(context).preparationEmpty,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: context.colors.textSecondary,
@@ -110,7 +111,11 @@ class _ThreadError extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final message =
-        error is Failure ? (error as Failure).message : 'Chargement impossible.';
+        // Le message d'une Failure est déjà rédigé par le cas d'usage ; le
+        // repli, lui, est un texte d'écran.
+        error is Failure
+            ? (error as Failure).message
+            : AppText.of(context).preparationLoadFailed;
 
     return Center(
       child: Padding(
@@ -193,8 +198,8 @@ class _ComposerState extends ConsumerState<_Composer> {
               keyboardType: TextInputType.multiline,
               onChanged: (value) =>
                   setState(() => _hasText = value.trim().isNotEmpty),
-              decoration: const InputDecoration(
-                hintText: 'Écris ta réponse, ou choisis…',
+              decoration: InputDecoration(
+                hintText: AppText.of(context).preparationComposerHint,
               ),
             ),
           ),
@@ -205,7 +210,7 @@ class _ComposerState extends ConsumerState<_Composer> {
             // Q2, non tranchée. Le bouton reste visible pour ne pas laisser
             // croire que la saisie vocale a été oubliée.
             onPressed: null,
-            tooltip: 'Dictée — bientôt disponible',
+            tooltip: AppText.of(context).preparationDictationSoon,
           ),
           const SizedBox(width: AppSpacing.xs),
           IconButton.filled(
@@ -219,7 +224,7 @@ class _ComposerState extends ConsumerState<_Composer> {
                     ),
                   )
                 : const Icon(Icons.arrow_upward),
-            tooltip: 'Ajouter au fil',
+            tooltip: AppText.of(context).preparationSend,
           ),
         ],
       ),

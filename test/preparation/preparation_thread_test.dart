@@ -10,10 +10,12 @@ import 'package:urim/core/time/clock_provider.dart';
 import 'package:urim/data/repositories/in_memory_preparation_repository.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/domain/entities/preparation/preparation_block.dart';
+import 'package:urim/l10n/generated/app_text_fr.dart';
+import 'package:urim/presentation/common/domain_labels.dart';
 import 'package:urim/presentation/home/home_view_model.dart';
 import 'package:urim/presentation/preparation/preparation_page.dart';
 import 'package:urim/presentation/preparation/widgets/block_views.dart';
-import 'package:urim/presentation/theme/app_theme.dart';
+import '../support/pump_app.dart';
 
 /// Horloge figée : les étiquettes « HIER 20:58 » doivent être vérifiables.
 final class _FixedClock implements Clock {
@@ -31,6 +33,9 @@ final class _SequentialIds implements IdGenerator {
   @override
   String newId() => 'id-${_next++}';
 }
+
+/// Les libelles viennent de la meme source que l'ecran.
+final texte = AppTextFr();
 
 void main() {
   final fixedNow = DateTime(2026, 8, 15, 10);
@@ -180,7 +185,10 @@ void main() {
         now: fixedNow,
       );
 
-      expect(groups.map((group) => group.label), ['CETTE SEMAINE', 'PLUS TÔT']);
+      expect(
+        groups.map((group) => group.recency),
+        [Recency.thisWeek, Recency.earlier],
+      );
       expect(groups.first.preparations, hasLength(2));
       expect(groups.last.preparations, hasLength(1));
     });
@@ -189,17 +197,16 @@ void main() {
       final groups = groupByRecency([at(fixedNow)], now: fixedNow);
 
       expect(groups, hasLength(1));
-      expect(groups.single.label, 'CETTE SEMAINE');
+      expect(groups.single.recency, Recency.thisWeek);
     });
   });
 
   group('étiquettes temporelles', () {
     test('un repère média s\'affiche en minutes et secondes', () {
-      expect(formatAnchor(const MediaAnchor(Duration(minutes: 3, seconds: 10))),
+      expect(formatAnchor(texte, const MediaAnchor(Duration(minutes: 3, seconds: 10))),
           '03:10');
       expect(
-        formatAnchor(
-            const MediaAnchor(Duration(hours: 1, minutes: 4, seconds: 22))),
+        formatAnchor(texte, const MediaAnchor(Duration(hours: 1, minutes: 4, seconds: 22))),
         '1:04:22',
       );
     });
@@ -209,10 +216,10 @@ void main() {
       final yesterday = DateTime(2026, 8, 14, 20, 58);
       final older = DateTime(2026, 8, 4, 9, 5);
 
-      expect(formatAnchor(ClockAnchor(today), now: fixedNow),
+      expect(formatAnchor(texte, ClockAnchor(today), now: fixedNow),
           'AUJOURD\'HUI 14:02');
-      expect(formatAnchor(ClockAnchor(yesterday), now: fixedNow), 'HIER 20:58');
-      expect(formatAnchor(ClockAnchor(older), now: fixedNow), '4 AOÛT 09:05');
+      expect(formatAnchor(texte, ClockAnchor(yesterday), now: fixedNow), texte.blockYesterday('20:58'));
+      expect(formatAnchor(texte, ClockAnchor(older), now: fixedNow), texte.blockOnDate('4 AOÛT', '09:05'));
     });
   });
 
@@ -238,9 +245,8 @@ void main() {
           child: Consumer(
             builder: (context, ref, _) {
               preparationId = ref.watch(preparationRepositoryProvider).seededId!;
-              return MaterialApp(
-                theme: AppTheme.light,
-                home: PreparationPage(preparationId: preparationId),
+              return wrapScreen(
+                PreparationPage(preparationId: preparationId),
               );
             },
           ),
@@ -267,9 +273,9 @@ void main() {
         (tester) async {
       await pumpThread(tester);
 
-      expect(find.text(TextStance.subject.label), findsOneWidget);
-      expect(find.text(TextStance.supports.label), findsOneWidget);
-      expect(find.text(TextStance.complicates.label), findsNWidgets(2));
+      expect(find.text(textStanceLabel(texte, TextStance.subject)), findsOneWidget);
+      expect(find.text(textStanceLabel(texte, TextStance.supports)), findsOneWidget);
+      expect(find.text(textStanceLabel(texte, TextStance.complicates)), findsNWidgets(2));
       expect(find.text('1 Corinthiens 11:17-22'), findsOneWidget);
     });
 

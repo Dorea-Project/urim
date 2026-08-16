@@ -124,17 +124,13 @@ final class ScriptureBlock extends PreparationBlock {
 /// décidé de trouver.
 enum TextStance {
   /// Le texte traite le sujet lui-même.
-  subject('Ce texte en fait son sujet'),
+  subject,
 
   /// Il va dans le sens de la lecture.
-  supports('Ce texte le soutient'),
+  supports,
 
   /// Il lui résiste.
-  complicates('Ce texte le complique');
-
-  const TextStance(this.label);
-
-  final String label;
+  complicates;
 
   /// Vrai pour ce qui contrarie la lecture — signalé, jamais masqué.
   bool get resists => this == TextStance.complicates;

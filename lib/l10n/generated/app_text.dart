@@ -860,6 +860,594 @@ abstract class AppText {
   /// In fr, this message translates to:
   /// **'Enregistrer'**
   String get save;
+
+  /// No description provided for @homeOpenTask.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir une tâche'**
+  String get homeOpenTask;
+
+  /// No description provided for @homeEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien en cours.'**
+  String get homeEmptyTitle;
+
+  /// No description provided for @homeEmptyBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvre une tâche : écris ce que tu veux dire, ou verse un enregistrement.'**
+  String get homeEmptyBody;
+
+  /// No description provided for @homeReadFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'La liste n\'a pas pu être lue.'**
+  String get homeReadFailed;
+
+  /// No description provided for @homeGroupThisWeek.
+  ///
+  /// In fr, this message translates to:
+  /// **'CETTE SEMAINE'**
+  String get homeGroupThisWeek;
+
+  /// Deux groupes seulement : ce qui est dans la semaine, et le reste. Un découpage plus fin n'apprendrait rien.
+  ///
+  /// In fr, this message translates to:
+  /// **'PLUS TÔT'**
+  String get homeGroupEarlier;
+
+  /// No description provided for @homeActivityToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aujourd\'hui, {time}'**
+  String homeActivityToday(String time);
+
+  /// No description provided for @homeActivityYesterday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hier, {time}'**
+  String homeActivityYesterday(String time);
+
+  /// No description provided for @homeCardMeta.
+  ///
+  /// In fr, this message translates to:
+  /// **'· {activity}'**
+  String homeCardMeta(String activity);
+
+  /// Dernière activité, puis le dimanche visé.
+  ///
+  /// In fr, this message translates to:
+  /// **'· {activity} · dimanche {service}'**
+  String homeCardMetaWithService(String activity, String service);
+
+  /// Urim a posé une question et attend. C'est ce qui met la préparation en tête de l'accueil.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rend la main'**
+  String get stateHandsBack;
+
+  /// No description provided for @stateServed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Matière servie'**
+  String get stateServed;
+
+  /// No description provided for @stateFeedbackReady.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retour disponible'**
+  String get stateFeedbackReady;
+
+  /// No description provided for @stateRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Refus motivé'**
+  String get stateRefused;
+
+  /// No description provided for @taskSheetTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quelle tâche ?'**
+  String get taskSheetTitle;
+
+  /// No description provided for @taskSheetSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Deux travaux différents, pas deux façons d\'écrire.'**
+  String get taskSheetSubtitle;
+
+  /// No description provided for @taskWriteTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Préparer un message'**
+  String get taskWriteTitle;
+
+  /// No description provided for @taskWriteBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Urim t\'accompagne question par question — l\'axe, le texte, les bornes — jusqu\'à ton squelette.'**
+  String get taskWriteBody;
+
+  /// No description provided for @taskTranscribeTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Transcrire une prédication'**
+  String get taskTranscribeTitle;
+
+  /// No description provided for @taskTranscribeBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mise en texte, puis une synthèse que tu valides avant qu\'elle ne soit lue à voix haute.'**
+  String get taskTranscribeBody;
+
+  /// No description provided for @taskTranscribePending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le moteur de transcription n\'est pas encore retenu. Un exemple transcrit est visible depuis l\'accueil.'**
+  String get taskTranscribePending;
+
+  /// No description provided for @newPreparationTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle préparation'**
+  String get newPreparationTitle;
+
+  /// No description provided for @newPreparationIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une référence, une phrase que tu as en tête, ou ce que tu veux dire. Écris comme ça vient.'**
+  String get newPreparationIntro;
+
+  /// Trois entrées possibles dans le même champ : une référence, une citation, une intention. C'est l'exemple qui le dit, pas un mode à cocher.
+  ///
+  /// In fr, this message translates to:
+  /// **'Romains 8:15 — ou : que l\'amour fraternel continue — ou : je veux parler de la persévérance à des étudiants qui décrochent'**
+  String get newPreparationHint;
+
+  /// No description provided for @newPreparationDictate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ou dicte — Urim te fera confirmer avant d\'aller plus loin. La dictée attend le moteur de reconnaissance.'**
+  String get newPreparationDictate;
+
+  /// No description provided for @newPreparationServiceSection.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour quel dimanche'**
+  String get newPreparationServiceSection;
+
+  /// No description provided for @newPreparationServiceDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date du culte'**
+  String get newPreparationServiceDate;
+
+  /// No description provided for @newPreparationServiceDateEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'À définir'**
+  String get newPreparationServiceDateEmpty;
+
+  /// No description provided for @newPreparationServiceDateValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'dim. {date}'**
+  String newPreparationServiceDateValue(String date);
+
+  /// No description provided for @newPreparationSpace.
+  ///
+  /// In fr, this message translates to:
+  /// **'Espace'**
+  String get newPreparationSpace;
+
+  /// No description provided for @newPreparationSpacePersonal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Personnel'**
+  String get newPreparationSpacePersonal;
+
+  /// No description provided for @newPreparationSpacePending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le partage avec une église attend que le rattachement existe.'**
+  String get newPreparationSpacePending;
+
+  /// No description provided for @newPreparationNoModeNotice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun mode à choisir. Le moteur regarde si les mots que tu écris se suivent comme dans l\'Écriture — c\'est l\'ordre des mots qui décide, jamais le vocabulaire.'**
+  String get newPreparationNoModeNotice;
+
+  /// No description provided for @newPreparationOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir la préparation'**
+  String get newPreparationOpen;
+
+  /// No description provided for @newPreparationFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette préparation n\'a pas pu être ouverte.'**
+  String get newPreparationFailed;
+
+  /// No description provided for @preparationEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pose ta première idée en bas de l\'écran.'**
+  String get preparationEmpty;
+
+  /// No description provided for @preparationLoadFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chargement impossible.'**
+  String get preparationLoadFailed;
+
+  /// No description provided for @preparationComposerHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écris ta réponse, ou choisis…'**
+  String get preparationComposerHint;
+
+  /// No description provided for @preparationDictationSoon.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dictée — bientôt disponible'**
+  String get preparationDictationSoon;
+
+  /// No description provided for @preparationSend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter au fil'**
+  String get preparationSend;
+
+  /// Qui parle. Au-dessus de chaque tour d'Urim.
+  ///
+  /// In fr, this message translates to:
+  /// **'URIM'**
+  String get blockUrim;
+
+  /// Replié par défaut. C'est ce qui distingue une proposition d'un oracle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comment j\'en suis arrivé là'**
+  String get blockTrace;
+
+  /// No description provided for @blockScripture.
+  ///
+  /// In fr, this message translates to:
+  /// **'ÉCRITURE'**
+  String get blockScripture;
+
+  /// No description provided for @blockRecognisedInQuote.
+  ///
+  /// In fr, this message translates to:
+  /// **'RECONNU DANS LA CITATION · {at}'**
+  String blockRecognisedInQuote(String at);
+
+  /// No description provided for @blockSynthesis.
+  ///
+  /// In fr, this message translates to:
+  /// **'SYNTHÈSE D\'URIM'**
+  String get blockSynthesis;
+
+  /// No description provided for @blockMoreLink.
+  ///
+  /// In fr, this message translates to:
+  /// **'{label} →'**
+  String blockMoreLink(String label);
+
+  /// No description provided for @lociUnavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'La liste des loci n\'est pas encore écrite. Les trois axes proposés viennent de ta phrase ; les sept autres attendent que le moteur existe.'**
+  String get lociUnavailable;
+
+  /// No description provided for @stanceSubject.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce texte en fait son sujet'**
+  String get stanceSubject;
+
+  /// No description provided for @stanceSupports.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce texte le soutient'**
+  String get stanceSupports;
+
+  /// Ce qui résiste à la lecture. Affiché au même rang que ce qui la porte — un moteur qui ne servirait que l'appui fabriquerait la preuve.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce texte le complique'**
+  String get stanceComplicates;
+
+  /// No description provided for @transcriptionFallbackTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Transcription'**
+  String get transcriptionFallbackTitle;
+
+  /// No description provided for @transcriptionOptions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Options'**
+  String get transcriptionOptions;
+
+  /// No description provided for @transcriptionResume.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reprendre l\'enregistrement'**
+  String get transcriptionResume;
+
+  /// No description provided for @transcriptionAudioDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'audio a été effacé : la reprise repartira d\'une nouvelle capture.'**
+  String get transcriptionAudioDeleted;
+
+  /// No description provided for @transcriptionRecorded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistré'**
+  String get transcriptionRecorded;
+
+  /// No description provided for @transcriptionFragmentsAcknowledged.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} fragments acquittés'**
+  String transcriptionFragmentsAcknowledged(int count);
+
+  /// No description provided for @transcriptionAudioDeletedOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'audio supprimé le {date}'**
+  String transcriptionAudioDeletedOn(String date);
+
+  /// No description provided for @transcriptionSectionFragments.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fragments'**
+  String get transcriptionSectionFragments;
+
+  /// No description provided for @transcriptionSectionConvoked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que tu as convoqué'**
+  String get transcriptionSectionConvoked;
+
+  /// No description provided for @transcriptionAllAcknowledged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les fragments sont acquittés.'**
+  String get transcriptionAllAcknowledged;
+
+  /// Le pluriel est porté par le format, plus par une fonction écrite à la main.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Un fragment attend le réseau. Il partira seul, dans l\'ordre.} other{{count} fragments attendent le réseau. Ils partiront seuls, dans l\'ordre.}}'**
+  String transcriptionFragmentsPending(int count);
+
+  /// No description provided for @transcriptionConvokedAnnounced.
+  ///
+  /// In fr, this message translates to:
+  /// **'ANNONCÉ À VOIX HAUTE'**
+  String get transcriptionConvokedAnnounced;
+
+  /// No description provided for @transcriptionConvokedRecognised.
+  ///
+  /// In fr, this message translates to:
+  /// **'RECONNU DANS LA CITATION'**
+  String get transcriptionConvokedRecognised;
+
+  /// No description provided for @transcriptionPlanned.
+  ///
+  /// In fr, this message translates to:
+  /// **'{reference} — prévu dans ta préparation'**
+  String transcriptionPlanned(String reference);
+
+  /// No description provided for @transcriptionUnplanned.
+  ///
+  /// In fr, this message translates to:
+  /// **'{reference} — non prévu'**
+  String transcriptionUnplanned(String reference);
+
+  /// No description provided for @transcriptionSpeakerNotice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune séparation de locuteurs. Les voix éloignées du micro sont écartées avant écriture, jamais enregistrées puis filtrées.'**
+  String get transcriptionSpeakerNotice;
+
+  /// No description provided for @transcriptionFixText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Corriger la transcription'**
+  String get transcriptionFixText;
+
+  /// No description provided for @transcriptionSeeSynthesis.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir la synthèse'**
+  String get transcriptionSeeSynthesis;
+
+  /// No description provided for @transcriptionOpenPreparation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir la préparation'**
+  String get transcriptionOpenPreparation;
+
+  /// No description provided for @transcriptionNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette préparation n\'a pas d\'enregistrement transcrit.'**
+  String get transcriptionNotFound;
+
+  /// No description provided for @synthesisTitleDraft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synthèse — à valider'**
+  String get synthesisTitleDraft;
+
+  /// No description provided for @synthesisTitleValidated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synthèse — validée'**
+  String get synthesisTitleValidated;
+
+  /// No description provided for @synthesisNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette prédication n\'a pas de synthèse.'**
+  String get synthesisNotFound;
+
+  /// No description provided for @synthesisSealTitleDraft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien n\'est encore parti.'**
+  String get synthesisSealTitleDraft;
+
+  /// Promesse tenue par le code : la lecture reste fermée tant que le drapeau est faux.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tant que tu n\'as pas validé, cette synthèse n\'existe que pour toi. Aucun membre ne la voit, aucune voix ne la lit.'**
+  String get synthesisSealBodyDraft;
+
+  /// No description provided for @synthesisSealTitleValidated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Validée par toi.'**
+  String get synthesisSealTitleValidated;
+
+  /// No description provided for @synthesisSealBodyValidated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Elle peut être lue à voix haute. Tu restes le seul à pouvoir la modifier.'**
+  String get synthesisSealBodyValidated;
+
+  /// No description provided for @synthesisSectionCapsules.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce qu\'Urim a retenu'**
+  String get synthesisSectionCapsules;
+
+  /// No description provided for @synthesisCapsuleLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'CAPSULE {index} · DIT À {at}'**
+  String synthesisCapsuleLabel(int index, String at);
+
+  /// No description provided for @synthesisCapsuleSource.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir où c\'est dit dans ta prédication'**
+  String get synthesisCapsuleSource;
+
+  /// No description provided for @synthesisSectionVerse.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le verset, non réécrit'**
+  String get synthesisSectionVerse;
+
+  /// No description provided for @synthesisModelNotice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les capsules sont écrites par un modèle à partir de ta transcription. Les versets, eux, viennent de la Bible — jamais du modèle. Relis avant de valider.'**
+  String get synthesisModelNotice;
+
+  /// No description provided for @synthesisValidate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valider cette synthèse'**
+  String get synthesisValidate;
+
+  /// No description provided for @synthesisValidated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synthèse validée'**
+  String get synthesisValidated;
+
+  /// No description provided for @synthesisValidatedToast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synthèse validée. Elle peut maintenant être lue.'**
+  String get synthesisValidatedToast;
+
+  /// No description provided for @synthesisSectionReadAloud.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire à voix haute'**
+  String get synthesisSectionReadAloud;
+
+  /// No description provided for @synthesisReadAloudIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour ceux de l\'assemblée qui écouteront plutôt que de lire.'**
+  String get synthesisReadAloudIntro;
+
+  /// No description provided for @synthesisReadAloudLocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Disponible une fois la synthèse validée.'**
+  String get synthesisReadAloudLocked;
+
+  /// No description provided for @synthesisReadAloudOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'La lecture reprend la synthèse telle que tu l\'as validée.'**
+  String get synthesisReadAloudOpen;
+
+  /// No description provided for @synthesisVoiceComing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecture à venir'**
+  String get synthesisVoiceComing;
+
+  /// No description provided for @synthesisVoiceLocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Disponible une fois la synthèse validée'**
+  String get synthesisVoiceLocked;
+
+  /// No description provided for @synthesisSpokenMinutes.
+  ///
+  /// In fr, this message translates to:
+  /// **'{minutes} min'**
+  String synthesisSpokenMinutes(int minutes);
+
+  /// No description provided for @synthesisSpokenMinutesSeconds.
+  ///
+  /// In fr, this message translates to:
+  /// **'{minutes} min {seconds}'**
+  String synthesisSpokenMinutesSeconds(int minutes, int seconds);
+
+  /// Infobulle du menu contextuel, partout.
+  ///
+  /// In fr, this message translates to:
+  /// **'Options'**
+  String get options;
+
+  /// Repère d'un bloc écrit aujourd'hui.
+  ///
+  /// In fr, this message translates to:
+  /// **'AUJOURD\'HUI {time}'**
+  String blockToday(String time);
+
+  /// No description provided for @blockYesterday.
+  ///
+  /// In fr, this message translates to:
+  /// **'HIER {time}'**
+  String blockYesterday(String time);
+
+  /// Au-delà d'hier, la date remplace le mot.
+  ///
+  /// In fr, this message translates to:
+  /// **'{date} {time}'**
+  String blockOnDate(String date, String time);
+
+  /// Segment de l'enregistrement dont un point est tiré.
+  ///
+  /// In fr, this message translates to:
+  /// **'  — {from} à {to}'**
+  String synthesisPointRange(String from, String to);
 }
 
 class _AppTextDelegate extends LocalizationsDelegate<AppText> {
