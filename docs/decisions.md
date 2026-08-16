@@ -255,6 +255,35 @@ On sort alors d'Urim vers l'assemblée — donc vers **Q9**, et vers une promess
 inverse de celle du profil : les préparations ne traversent jamais, mais la
 synthèse validée, si.
 
+### Q19 — Où vivent les documents produits ? — **écartée pour l'instant**
+
+À la fin d'une conversation, le pasteur — ou Urim — propose de générer le moment
+en `.docx`, `.pptx`, plus tard un ebook ou de l'audio. La question suit d'elle
+même : où tout cela se range-t-il ?
+
+**Ce n'est pas le cœur du produit**, et ça attend. Ce qui est consigné ici l'est
+pour ne pas être redécouvert, et pour éviter deux erreurs faciles.
+
+**La bibliothèque est une vue, pas un contexte.** Les fichiers appartiennent
+déjà à `deliverable`, les faits de prédication à `archive`. Un troisième magasin
+donnerait deux propriétaires au même fichier. Ce qui manque n'est pas un
+stockage : c'est **l'endroit où les deux portes se rejoignent** — aujourd'hui la
+préparation produit des documents, la transcription produit de l'audio, et rien
+ne dit à un pasteur « voici ce que tu as, tout confondu ».
+
+**Deux objets seraient réellement nouveaux :**
+
+- **l'ebook** — une *compilation*, plusieurs préparations réunies. Une opération
+  sur un ensemble, pas un format de plus à côté du `.docx` ;
+- **l'audio de la synthèse** — aujourd'hui un bouton fermé sur un écran ; en
+  faire un artefact lui donnerait une existence, et poserait la question de sa
+  durée de conservation, comme pour l'audio du culte (**Q16**).
+
+⚠️ **Une bibliothèque est à un geste de la distribution.** Tant qu'elle est *ce
+que j'ai*, elle est simple. Le jour où l'un de ces objets se partage, il sort du
+pasteur et entre dans l'assemblée — et rouvre **Q18** : qui voit quoi, par quel
+canal, avec quel consentement.
+
 ## Décisions prises
 
 | # | Décision | Pourquoi |
@@ -281,6 +310,8 @@ synthèse validée, si.
 | D20 | Le code secret est une donnée **serveur**, posée en même temps que le code SMS | Le serveur n'ouvre pas de compte sans serrure : `verify-registration` prend les deux. Le code reste aussi dérivé localement, pour déverrouiller sans réseau — deux usages, une seule saisie. |
 | D21 | Jetons et identifiant d'appareil au coffre matériel ; tout le reste aux préférences | Keystore / Keychain pour ce qui ouvre des portes, préférences pour ce qui n'a pas de valeur volée. La dette « la clé du code secret vit dans les préférences » se referme ici. |
 | D22 | L'identifiant d'appareil est tiré au hasard, jamais lu dans le matériel | IMEI et Android ID sont des données personnelles, pistables d'une application à l'autre. Urim n'a besoin que de savoir « c'est le même appareil qu'hier ». |
+| D24 | Générer un document n'est pas un export : c'est une **soumission au contrôle** | Le serveur juge ce qui sortira **avant qu'un fichier existe**, et ne rend les octets que pour ce qui porte « conforme ». L'écran ne montre donc pas « Exporter ▾ » mais ce qui sortira, ce qui a été contrôlé, et ce qui bloque encore. |
+| D25 | Le `.pptx` et le `.docx` ne sont pas deux exports du même contenu | Le deck est ce que l'assemblée voit ; la note porte ce qui **ne monte pas** à l'écran — mots d'origine, mises en garde, textes qui résistent. Les fusionner ferait perdre la moitié du travail du moteur, ou la projetterait. |
 | D23 | Un seul rafraîchissement à la fois, un seul rejeu par requête | Trois écrans qui échouent ensemble ne doivent pas déclencher trois rotations : la deuxième invaliderait le jeton de la première. Et une requête qui échoue deux fois signe une session morte, pas une boucle à retenter. |
 
 ## Dettes assumées

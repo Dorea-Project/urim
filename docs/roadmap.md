@@ -140,8 +140,10 @@ demande aucun modèle — s'enregistrer soi-même — pourrait sortir la premiè
 ## Chantiers transverses
 
 - **Hors ligne** — la capture et l'écriture doivent fonctionner sans réseau.
-- **Export** — « Exporter en texte » sous une synthèse, « Texte ou PDF » pour
-  l'ensemble des préparations depuis les réglages. Le PDF est une brique de
-  plus : mise en page, polices embarquées, partage système.
+- **Livrable** — le serveur sait déjà écrire les deux documents : le `.pptx`
+  que l'assemblée voit, le `.docx` qui porte ce qui ne monte pas à l'écran.
+  C'est la **dernière case vide** de la ligne d'arrivée v1 côté serveur, et
+  aucun écran mobile ne la sert. Voir **D24** : ce n'est pas un export, c'est
+  une soumission au contrôle.
 - **Recherche** — sur les titres, les résumés et le contenu des blocs.
 - **Intégration continue** — analyse et tests à chaque poussée.
