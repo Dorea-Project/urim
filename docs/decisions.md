@@ -129,35 +129,97 @@ Drift (SQLite) pour la file et les tours gardés, `path_provider` pour l'audio.
 Les préférences système ne conviennent pas : une file grandit, et un tour réel
 pèse jusqu'à 27 ko de JSON.
 
-### Q5 — « tu » ou « vous » ?
+### Q5 — « tu » ou « vous » ? — **tranchée, et autrement que prévu**
 
-Les maquettes mélangent les deux : « **Votre** numéro valide » à la connexion,
-« **Tes** données » ensuite. À trancher avant que les écrans ne se multiplient.
+Ma recommandation était éditoriale : choisir « tu » et corriger l'écran d'entrée.
+La réponse est meilleure, et elle change la nature de la question.
 
-Le profil et les réglages tutoient sans exception — « Ton numéro y est
-reconnu », « Économise tes données mobiles », « Urim n'utilise jamais tes
-préparations ». Le vouvoiement ne subsiste qu'à la connexion.
+> *« Je m'appelle Urim, votre compagnon, je suis là pour vous assister — si ça
+> ne vous gêne pas, on se tutoie ? »*
 
-Recommandation : **« tu »**, et corriger cet écran-là plutôt que les autres.
+**Ce n'est pas un choix de rédaction, c'est une permission demandée.** Urim
+vouvoie d'abord, parce qu'on ne tutoie pas quelqu'un qu'on rencontre ; il
+demande, et il obéit. La forme d'adresse devient donc une **donnée du compte**,
+pas une constante de la copie — et le tutoiement est *accordé*, jamais présumé.
 
-### Q6 — D'où vient le nom de l'utilisateur ?
+C'est aussi ce qui empêche Urim d'être mécanique. Un outil qui tutoie d'office
+est familier sans être proche ; celui qui demande d'abord est poli, et la
+politesse est ce qui fait entendre quelqu'un plutôt que quelque chose.
 
-L'accueil affiche un avatar « KA ». L'inscription ne collecte qu'un numéro de
-téléphone. Il manque une étape, ou une saisie différée au premier usage.
+#### Ce que ça coûte, mesuré et non estimé
 
-Le profil répond à la moitié : « Nom affiché » s'y modifie, et le monogramme en
-est dérivé. Reste le moment de la première saisie — pendant l'inscription, ou
-au premier usage. En attendant, le profil accepte un nom vide et affiche le
-numéro à sa place.
+Tout ce qu'Urim dit est écrit en « vous », et **en dur** : 25 occurrences dans
+les tables du tour, 18 dans les répondeurs, 32 dans les motifs des étages
+(`weigh_conviction` 10, `resolve_passage` 11, `route_entry` 6…). Rien n'est dans
+un catalogue, et le français ne se transforme pas mécaniquement — « prêchez-vous »
+ne devient pas « prêches-tu » par une règle, et « votre » demande le genre et le
+nombre pour devenir « ton », « ta », « tes ».
 
-### Q7 — Le discernement pastoral a-t-il sa place ?
+#### La règle qui interdit le raccourci
 
-Un domaine complet a été écrit sur une lecture erronée du produit : consigner
-une question, les passages qui l'éclairent, la décision qui en découle. Il
-reste sur `feat/core-architecture`, non fusionné.
+**On ne pose pas la question avant de pouvoir honorer la réponse.** C'est D13
+appliqué à une phrase au lieu d'un interrupteur : demander « on se tutoie ? »
+puis continuer à vouvoyer serait exactement le mensonge que D13 refuse — et
+tutoyer l'interface tout en vouvoyant Urim se lirait comme une faute, pas comme
+une nuance.
 
-Soit il devient un module à part entière, soit on le supprime. Le laisser en
-suspens indéfiniment est la seule mauvaise réponse.
+D'où l'ordre : le **catalogue** d'abord — sortir les phrases d'Urim du code, ce
+que le chantier bilingue a déjà fait pour les notifications (`app/_shared/messages.py`)
+et qui servira deux fois —, la question ensuite. Le salut et le nom, eux, peuvent
+partir avant : ils vivent dans la copie du produit.
+
+### Q5bis — qui a le droit d'écrire une phrase, et laquelle — **tranchée**
+
+Posée en écrivant le salut, parce que D29 dit que le client n'écrit jamais une
+phrase de sa propre autorité, et qu'il fallait savoir si « Je m'appelle Urim »
+en est une.
+
+Trois registres, et la frontière est nette :
+
+| Registre | Qui l'écrit | Exemples |
+|---|---|---|
+| **Ce qu'Urim dit d'une préparation** | le serveur, toujours | `say`, `why`, `ask`, les intitulés de groupe, les motifs de blocage |
+| **La voix du produit** — il se présente, il explique ce qu'il est | la copie de l'application | la présentation animée, le salut, « si ça ne vous gêne pas, on se tutoie ? » |
+| **L'état de l'application** | l'application, seule à le savoir | « Gardé sur cet appareil », « un geste attend le réseau » (D40) |
+
+Ce qui reste interdit est intact : une phrase sur un texte, un motif, une pesée.
+
+### Q6 — D'où vient le nom de l'utilisateur ? — **tranchée**
+
+**De l'inscription.** Le nom est demandé pendant l'entrée, pas différé au
+premier usage — et c'est le même écran que le salut de Q5 : Urim se présente,
+demande à qui il parle, puis demande s'il peut tutoyer. Un formulaire aurait posé
+trois champs ; une rencontre pose trois phrases.
+
+Ce que ça demande, et qui n'existe pas encore : `POST /auth/verify-registration`
+ne prend aujourd'hui que le téléphone, l'OTP, le code secret et l'appareil. Les
+colonnes `accounts.first_name` / `last_name`, elles, existent depuis le M0.
+
+Le profil garde son champ « Nom affiché » — on change de nom, on ne se
+réinscrit pas.
+
+### Q7 — Le discernement pastoral a-t-il sa place ? — **à supprimer**
+
+Un domaine complet écrit sur une lecture erronée du produit : consigner une
+question pastorale, les passages qui l'éclairent, la décision qui en découle.
+783 lignes sur six fichiers, dans `feat/core-architecture` — sources de données,
+modèles, dépôt, trois modèles de vue.
+
+**Il n'a plus sa place, et on sait maintenant pourquoi.** Urim ne consigne pas
+des décisions pastorales : il conduit un tour, et ce qu'une préparation garde,
+ce sont les décisions du pasteur sur un texte (D28). La question de départ n'est
+pas « quel est mon problème » mais « qu'est-ce que je veux prêcher ». Ce sont
+deux produits.
+
+Ce qui le rend nuisible plutôt que neutre : 783 lignes câblables invitent
+quelqu'un à les câbler. Une branche qui dort a l'air d'un travail en attente,
+pas d'une erreur reconnue.
+
+**Décision : supprimer la branche**, en gardant sa trace ici —
+`bc8d8467e525443b32d7abf1caf4d095151895cd`. Le code reste atteignable par ce
+SHA tant qu'il n'est pas ramassé ; ce document est ce qui
+permettra de le retrouver si le besoin réapparaît — et de se souvenir qu'il
+avait été écarté une fois, avec cette raison.
 
 ### Q8 — Une seule langue, ou plusieurs ? — **socle posé, langue en attente**
 
@@ -204,19 +266,30 @@ qui reconnaît un numéro, et une frontière que le code doit garantir.
 Restent ouverts : d'où vient la liste, qui rattache qui, et ce que
 l'utilisateur peut en faire (quitter une église ? refuser un rattachement ?).
 
-### Q10 — Que synchronise-t-on, et vers où ?
+### Q10 — Que synchronise-t-on, et vers où ? — **tranchée**
 
-**Bloque** les trois réglages hors connexion.
+Ce n'est pas une sauvegarde, et le mot « synchroniser » était le problème.
 
-« Synchroniser en Wi-Fi seulement » suppose une synchronisation, donc une copie
-hors de l'appareil. « Espace utilisé — 318 Mo » et la liste des appareils vont
-dans le même sens.
+**Ce qui sort de l'appareil est la synthèse validée, et elle sort vers Dorea** —
+l'application de l'assemblée — où elle devient un encart : le texte, l'audio, ce
+que les fidèles peuvent relire de la prédication. Le geste n'est disponible que
+lorsque l'église est sur Dorea, puisqu'il n'y a personne à qui publier autrement.
 
-La politique de confidentialité promet que les préparations ne sont **lues** par
-personne d'autre ; elle ne dit pas qu'elles ne quittent pas l'appareil. L'écart
-est peut-être tenable — un dépôt chiffré côté serveur reste illisible — mais il
-doit être tranché et écrit avant que le mot « synchroniser » n'apparaisse en
-production.
+Trois conséquences, et la première referme une inquiétude :
+
+- **Les préparations ne partent pas.** Ce qui part est ce que le pasteur a
+  validé pour son assemblée. L'écart que je craignais entre la politique de
+  confidentialité — « personne d'autre ne les lit » — et un dépôt distant
+  n'existe pas : il n'y a pas de dépôt distant des préparations.
+- **D17 devient concret.** « Rien ne sort avant validation » n'était qu'une
+  règle d'écran ; c'est maintenant la porte d'une publication réelle.
+- **Le réglage change de nom.** « Synchroniser en Wi-Fi seulement » devient
+  « publier sur Dorea » — l'audio d'une prédication pèse des dizaines de Mo, et
+  le choix du Wi-Fi garde son sens, mais il porte sur un envoi voulu, pas sur un
+  va-et-vient continu.
+
+Ce qui reste de **Q18** — qui voit la synthèse — trouve ici sa moitié :
+l'assemblée, sur Dorea, une fois la validation donnée.
 
 ### Q11 — Que fait « Retirer » sur un appareil ?
 
@@ -287,13 +360,32 @@ c'est la relecture qui cesse de s'appliquer.
 Les bornes viennent de la curation — 4 561 unités couvrent les 66 livres et
 portent toutes leurs pesées.
 
-### Q16 — Que promet-on sur l'audio ?
+### Q16 — Que promet-on sur l'audio ? — **méthode proposée**
 
-La relecture affiche « audio supprimé le 16 août » : une durée de conservation
-est donc annoncée, sans qu'aucune règle ne l'ait fixée. Combien de jours, et
-que devient la transcription quand l'audio disparaît ?
+La maquette affiche « audio supprimé le 16 août » : une date au **passé**, pour
+un effacement que personne n'a décidé. C'est ça qu'il faut corriger d'abord —
+pas la durée, le temps du verbe.
 
-À écrire dans la politique de confidentialité avant d'être affiché.
+L'audio est **local** (Q2) : la question n'est donc pas qui le voit, mais quand
+il libère la place. Un message de trente-huit minutes pèse des dizaines de Mo,
+et un téléphone se remplit.
+
+#### La méthode
+
+1. **Jamais avant la validation de la synthèse.** L'audio est la seule pièce qui
+   permette de vérifier la transcription ; l'effacer avant rendrait invérifiable
+   ce que le pasteur s'apprête à approuver.
+2. **Annoncé au futur, jamais constaté au passé.** L'écran dit « conservé
+   jusqu'au 16 septembre », et non « supprimé le 16 août ». Une suppression qu'on
+   apprend après coup est une perte ; annoncée, c'est un ménage.
+3. **Trente jours après la validation**, par défaut. Assez pour se réécouter,
+   assez court pour ne pas remplir l'appareil.
+4. **Deux gestes, toujours offerts** : « Garder » repousse, « Supprimer
+   maintenant » libère. La voix d'un homme qui prêche ne s'efface pas sans qu'il
+   ait eu la main dessus.
+
+À écrire dans la politique de confidentialité avec ces mots-là — elle promet
+aujourd'hui que rien ne part, elle ne dit rien de ce qui reste.
 
 ### Q17 — La lecture à voix haute : quelles langues, par quel moyen ?
 
