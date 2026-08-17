@@ -38,7 +38,7 @@ Les arbitrages et les questions en attente vivent dans
 | Socle sécurité : jetons au coffre, rotation, identifiant d'appareil | Fait |
 | Politique de confidentialité | Fait |
 | Domaine des préparations | Fait |
-| Persistance des préparations | Sur le **serveur**. Ce que l'appareil garde reste **ouvert — Q4** |
+| Persistance des préparations | Sur le **serveur** ; l'appareil garde ce qu'il faut pour continuer hors réseau — **Q4 tranchée** |
 | Profil et réglages | Fait — églises et appareils **simulés** |
 | Accueil | Branché sur le **vrai fil** du serveur (`GET /urim/studies`) |
 | Création, fil guidé | Bâtis sur le **contrat du serveur** (`TurnView`) — le moteur, lui, reste dû |
@@ -83,9 +83,11 @@ appel de modèle et peut-être une autre phrase que celle déjà lue (D38). Et q
 le corpus a été relu depuis l'ouverture, l'écran le dit : le tour n'est pas
 faux, il n'est plus mot pour mot celui qu'on avait sous les yeux.
 
-**Q4 est close sauf son étape 5** : ouvrir une préparation *nouvelle* sans
-réseau, ce qui n'est plus du stockage mais un moteur embarqué. Elle attend un
-arbitrage.
+**Q4 est close.** Sa dernière question est tranchée : on n'ouvre pas hors
+réseau, parce qu'ouvrir n'est pas enregistrer une phrase mais **la faire lire**,
+et le corpus n'est pas sur l'appareil (D41). La frontière tient en une ligne :
+*on continue sans réseau, on n'ouvre pas* — et le refus dit sa raison plutôt que
+de laisser croire à une phrase perdue.
 
 Restent dus : la recherche. Une carte transcrite ne porte plus de pastille : le
 moteur ne connaît que les préparations écrites.
@@ -194,10 +196,9 @@ demande aucun modèle — s'enregistrer soi-même — pourrait sortir la premiè
 
 ## Chantiers transverses
 
-- **Hors ligne** — tenu pour l'écriture et la lecture : les mots ne se perdent
-  plus, le dernier tour se relit, et décider, écarter, parler attendent le
-  réseau (**Q4**, étapes 1 à 4). Ce qui reste hors d'atteinte est l'**ouverture**
-  d'une préparation, qui demande le moteur — étape 5.
+- **Hors ligne** — **tranché** (D41) : *on continue sans réseau, on n'ouvre
+  pas*. Les mots ne se perdent plus, le dernier tour se relit, décider, écarter
+  et parler attendent le réseau. Ouvrir refuse, en disant pourquoi.
 - **Livrable** — le serveur sait déjà écrire les deux documents : le `.pptx`
   que l'assemblée voit, le `.docx` qui porte ce qui ne monte pas à l'écran.
   C'est la **dernière case vide** de la ligne d'arrivée v1 côté serveur, et

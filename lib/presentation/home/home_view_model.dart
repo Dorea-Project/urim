@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:urim/core/error/failure.dart';
 import 'package:urim/core/result/cached.dart';
-import 'package:urim/data/repositories/in_memory_preparation_repository.dart';
 import 'package:urim/data/repositories/study_repository_impl.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
 
@@ -55,24 +54,33 @@ final class PreparationOpener extends Notifier<AsyncValue<void>> {
   AsyncValue<void> build() => const AsyncData(null);
 
   /// Renvoie l'identifiant de la préparation ouverte, ou la `Failure`.
+  ///
+  /// ⚠️ **Passe par le dépôt du moteur, et c'était un défaut de ne pas le
+  /// faire.** Ce formulaire créait une préparation dans le magasin en mémoire :
+  /// l'ouverture n'atteignait donc jamais le serveur, même avec un build qui le
+  /// vise. Le fil d'accueil, lui, lisait le serveur — les deux se
+  /// contredisaient sans que rien n'échoue.
+  ///
+  /// C'est aussi le seul geste qui ne peut pas attendre le réseau : lire une
+  /// phrase demande le corpus, et il n'est pas sur l'appareil (Q4, étape 5).
   Future<(String?, Failure?)> open({
     required String text,
     DateTime? serviceDate,
   }) async {
     state = const AsyncLoading();
 
-    final result = await ref.read(preparationRepositoryProvider).open(
-          text: text,
+    final result = await ref.read(studyRepositoryProvider).open(
+          rawInput: text,
           serviceDate: serviceDate,
         );
 
     return result.fold(
-      onSuccess: (preparation) {
+      onSuccess: (study) {
         state = const AsyncData(null);
         // Le fil est une lecture, pas un abonnement : c'est ici qu'on lui dit
         // qu'il a vieilli.
         ref.invalidate(studyFeedProvider);
-        return (preparation.id, null);
+        return (study.id, null);
       },
       onFailure: (failure) {
         state = AsyncError(failure, StackTrace.current);

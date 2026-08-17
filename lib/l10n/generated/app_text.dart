@@ -1143,6 +1143,12 @@ abstract class AppText {
   /// **'Cette préparation n\'a pas pu être ouverte.'**
   String get newPreparationFailed;
 
+  /// La reponse a l'etape 5 de Q4. Ouvrir est le seul geste qui ne peut pas attendre le reseau : lire une phrase demande le corpus, et il n'est pas sur l'appareil. Dit la raison, et que le brouillon garde la phrase (D32) — sans quoi le pasteur croirait avoir perdu ce qu'il venait d'ecrire.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir demande le réseau : Urim consulte les textes pour lire ta phrase. Elle est gardée — tu la retrouveras ici.'**
+  String get newPreparationNeedsNetwork;
+
   /// No description provided for @preparationEmpty.
   ///
   /// In fr, this message translates to:

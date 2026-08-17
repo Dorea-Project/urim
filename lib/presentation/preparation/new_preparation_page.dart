@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:urim/core/error/failure.dart';
 import 'package:urim/core/router/app_routes.dart';
 import 'package:urim/data/datasources/draft_local_data_source.dart';
 import 'package:urim/presentation/common/draft_keeper.dart';
@@ -83,14 +84,20 @@ class _NewPreparationPageState extends ConsumerState<NewPreparationPage> {
     if (!mounted) return;
 
     if (id == null) {
-      // L'ouverture a echoue : le brouillon reste, et c'est tout l'interet.
+      // ⚠️ **Ouvrir est le seul geste qui ne peut pas attendre le réseau.**
+      // Décider, écarter, parler se mettent en file (Q4, étapes 3a et 3b) parce
+      // que le serveur sait les rejouer. Lire une phrase, non : ça demande le
+      // corpus, et il n'est pas sur l'appareil. On le dit avec sa raison, et on
+      // rappelle que la phrase est gardée — sinon le pasteur croit l'avoir
+      // perdue au moment où il vient de l'écrire.
+      final message = switch (failure) {
+        NetworkFailure() => AppText.of(context).newPreparationNeedsNetwork,
+        final Failure autre => autre.message,
+        null => AppText.of(context).newPreparationFailed,
+      };
+
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            failure?.message ??
-                AppText.of(context).newPreparationFailed,
-          ),
-        ),
+        SnackBar(content: Text(message)),
       );
       return;
     }

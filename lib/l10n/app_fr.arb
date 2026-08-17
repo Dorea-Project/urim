@@ -452,6 +452,10 @@
   "newPreparationNoModeNotice": "Aucun mode à choisir. Le moteur regarde si les mots que tu écris se suivent comme dans l'Écriture — c'est l'ordre des mots qui décide, jamais le vocabulaire.",
   "newPreparationOpen": "Ouvrir la préparation",
   "newPreparationFailed": "Cette préparation n'a pas pu être ouverte.",
+  "newPreparationNeedsNetwork": "Ouvrir demande le réseau : Urim consulte les textes pour lire ta phrase. Elle est gardée — tu la retrouveras ici.",
+  "@newPreparationNeedsNetwork": {
+    "description": "La reponse a l'etape 5 de Q4. Ouvrir est le seul geste qui ne peut pas attendre le reseau : lire une phrase demande le corpus, et il n'est pas sur l'appareil. Dit la raison, et que le brouillon garde la phrase (D32) — sans quoi le pasteur croirait avoir perdu ce qu'il venait d'ecrire."
+  },
   "preparationEmpty": "Pose ta première idée en bas de l'écran.",
   "preparationLoadFailed": "Chargement impossible.",
   "preparationComposerHint": "Écris ta réponse, ou choisis…",

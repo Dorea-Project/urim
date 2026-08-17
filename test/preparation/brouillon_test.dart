@@ -10,9 +10,12 @@ import 'package:urim/core/time/clock.dart';
 import 'package:urim/core/time/clock_provider.dart';
 import 'package:urim/data/datasources/draft_local_data_source.dart';
 import 'package:urim/data/repositories/study_repository_impl.dart';
+import 'package:urim/l10n/generated/app_text_fr.dart';
 import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
 import 'package:urim/domain/repositories/study_repository.dart';
 import 'package:urim/presentation/common/draft_keeper.dart';
+import 'package:urim/domain/entities/preparation/study.dart';
+import 'package:urim/presentation/preparation/new_preparation_page.dart';
 import 'package:urim/presentation/preparation/preparation_page.dart';
 import '../support/fake_documents.dart';
 import '../support/pump_app.dart';
@@ -38,6 +41,15 @@ base class _DepotQuiRefuse extends DepotFige {
   _DepotQuiRefuse(super.etude);
 
   @override
+  Future<Result<Study>> open({
+    required String rawInput,
+    DateTime? serviceDate,
+  }) async =>
+      const Result.failed(
+        NetworkFailure(message: 'Pas de reseau.', code: 'offline'),
+      );
+
+  @override
   Future<Result<GestureOutcome>> say({
     required String studyId,
     required String rawInput,
@@ -48,6 +60,8 @@ base class _DepotQuiRefuse extends DepotFige {
     );
   }
 }
+
+final texte = AppTextFr();
 
 void main() {
   final maintenant = DateTime(2026, 8, 17, 21, 14);
@@ -152,6 +166,57 @@ void main() {
 
       expect(documents.contenu, isEmpty,
           reason: 'un brouillon accuse ne doit pas se reecrire apres coup');
+    });
+  });
+
+  group('ouvrir demande le reseau', () {
+    testWidgets('le refus dit pourquoi, et que la phrase est gardee',
+        (tester) async {
+      // La reponse a l'etape 5 de Q4 : ouvrir est le seul geste qui ne peut pas
+      // attendre le reseau — lire une phrase demande le corpus, et il n'est pas
+      // sur l'appareil. Un « Pas de connexion » sec laisserait croire au
+      // pasteur qu'il vient de perdre ce qu'il a ecrit.
+      SharedPreferences.setMockInitialValues(<String, Object>{});
+      final preferences = await SharedPreferences.getInstance();
+      final documents = FakeDocuments();
+      tester.view.physicalSize = const Size(390, 1400);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(preferences),
+            demoConfigOverride,
+            clockProvider.overrideWithValue(_FixedClock(maintenant)),
+            localDocumentsProvider.overrideWithValue(documents),
+            studyRepositoryProvider.overrideWithValue(
+              _DepotQuiRefuse(ToursReels.etude(ToursReels.ouverture)),
+            ),
+          ],
+          child: wrapScreen(const NewPreparationPage()),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.byType(TextField),
+        'l\'amour fraternel n\'existe plus dans l\'eglise',
+      );
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.tap(find.text(texte.newPreparationOpen));
+      await tester.pumpAndSettle();
+
+      expect(find.text(texte.newPreparationNeedsNetwork), findsOneWidget);
+      // Et la phrase est encore la, sur l'appareil comme dans le champ.
+      expect(
+        documents.contenu[DraftLocalDataSource.ouvertureKey],
+        contains('amour fraternel'),
+      );
+      expect(
+        find.text('l\'amour fraternel n\'existe plus dans l\'eglise'),
+        findsOneWidget,
+      );
     });
   });
 

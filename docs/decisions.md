@@ -54,7 +54,7 @@ modèle distant reste possible si le fournisseur s'y engage contractuellement,
 mais cela doit être dit à l'utilisateur — la politique actuelle laisse
 entendre que rien ne sort de l'appareil.
 
-### Q4 — Que garde l'appareil ? — **la question centrale de M1 et M2**
+### Q4 — Que garde l'appareil ? — **tranchée**
 
 J'ai écrit un jour qu'elle était « sans objet » parce que les préparations
 vivent sur le serveur. C'était faux, et de la mauvaise façon : la question n'a
@@ -106,13 +106,22 @@ personne ne l'écoutait. L'écran le dit maintenant une fois, sobrement, et
 n'empêche rien : le tour n'est pas faux, il n'est plus **mot pour mot** celui
 que le pasteur avait sous les yeux.
 
-#### Ce qui reste : l'étape 5
+#### L'étape 5 — **on n'ouvre pas hors réseau**, et c'est tranché
 
-Ouvrir une préparation **nouvelle** sans réseau. Ce n'est plus du stockage : il
-faudrait que le moteur tourne ailleurs que sur le serveur — le corpus, les
-4 561 unités relues, les 442 889 jetons. C'est un chantier à part, et la
-question attend un arbitrage : est-ce que le pasteur doit pouvoir *ouvrir* hors
-réseau, ou seulement continuer ce qu'il a déjà ouvert ?
+> *« On ne peut pas soumettre une préparation hors réseau, car l'interaction
+> fait appel à des informations externes. »*
+
+C'est la réponse, et elle referme la question au lieu de la reporter. Ouvrir
+n'est pas enregistrer une phrase : c'est **la faire lire**. L'étage 0 regarde si
+les mots se suivent comme dans l'Écriture, l'étage 1 aligne des versets, la
+pesée interroge 4 561 unités relues et 442 889 jetons. Rien de tout cela n'est
+sur l'appareil, et l'y mettre serait un autre produit.
+
+La frontière du hors connexion est donc nette, et elle se dit en une phrase :
+**on continue sans réseau, on n'ouvre pas.** Continuer est tenu — les mots ne se
+perdent plus, le dernier tour se relit, décider, écarter et parler attendent.
+Ouvrir refuse, en disant *pourquoi* et en gardant la phrase : sans la raison, le
+pasteur croirait avoir perdu ce qu'il vient d'écrire.
 
 #### Ce qui reste vrai de l'ancienne réponse
 
@@ -394,6 +403,7 @@ canal, avec quel consentement.
 | D38 | Une parole porte une **clé d'idempotence**, tirée à la mise en file et non à l'envoi | Étape 3b de Q4, des deux côtés. Décider et écarter posent un état : les renvoyer donne le même résultat. Une parole, non — le serveur y répond, et la renvoyer coûterait un second passage du répondeur, donc un appel de modèle en plus et peut-être **une autre phrase que celle que le pasteur a déjà lue**. La clé est tirée au moment où le geste entre en file : la tirer à l'envoi la rendrait différente à chaque tentative, c'est-à-dire inutile. Côté serveur, `urim_preparation.last_turn_key` — une colonne et non une table, parce que le client vide sa file **dans l'ordre** et **s'arrête au premier échec** : la seule parole qu'il puisse renvoyer est donc la dernière. Ce que ça ne protège pas : deux appareils agissant en même temps, dont la conséquence est un appel de modèle en trop et non un état faux. |
 | D39 | La clé se pose **après** le geste, jamais avant | La réclamer d'abord serait plus simple et perdrait la parole : un geste qui échoue laisserait sa clé brûlée, le renvoi serait ignoré, et la phrase du pasteur disparaîtrait sans que personne ne le sache. Seule une parole réellement traitée ferme la porte derrière elle. |
 | D40 | L'application peut décrire **son propre état** ; seul Urim décrit l'Écriture et son raisonnement | Où passe exactement la frontière de D29, posée en écrivant les mentions de provenance. « Gardé sur cet appareil », « le corpus a été relu depuis l'ouverture » : personne d'autre ne peut les dire, puisque le serveur ne sait pas ce que l'appareil détient. Ce qui reste interdit est intact : une phrase sur un texte, un motif, une pesée. |
+| D41 | **On continue sans réseau, on n'ouvre pas** | La réponse à l'étape 5 de Q4, et la frontière du hors connexion. Ouvrir n'est pas enregistrer une phrase, c'est la faire **lire** : l'étage 0 regarde si les mots se suivent comme dans l'Écriture, la pesée interroge 4 561 unités relues et 442 889 jetons. Ces informations sont externes par nature ; les embarquer serait un autre produit. Le refus dit donc sa raison et rappelle que la phrase est gardée — un « Pas de connexion » sec ferait croire au pasteur qu'il vient de perdre ce qu'il a écrit. |
 | D23 | Un seul rafraîchissement à la fois, un seul rejeu par requête | Trois écrans qui échouent ensemble ne doivent pas déclencher trois rotations : la deuxième invaliderait le jeton de la première. Et une requête qui échoue deux fois signe une session morte, pas une boucle à retenter. |
 
 ## Dettes assumées

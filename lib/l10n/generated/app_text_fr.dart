@@ -630,6 +630,10 @@ class AppTextFr extends AppText {
       'Cette préparation n\'a pas pu être ouverte.';
 
   @override
+  String get newPreparationNeedsNetwork =>
+      'Ouvrir demande le réseau : Urim consulte les textes pour lire ta phrase. Elle est gardée — tu la retrouveras ici.';
+
+  @override
   String get preparationEmpty => 'Pose ta première idée en bas de l\'écran.';
 
   @override

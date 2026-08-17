@@ -112,6 +112,32 @@ void main() {
     expect(ligne.serviceDate, DateTime(2026, 8, 23));
   }, timeout: const Timeout(Duration(minutes: 5)));
 
+  test('une parole rejouee avec la meme cle ne rejoue rien', () async {
+    // Etape 3b de Q4, eprouvee contre le vrai serveur : c'est le seul endroit
+    // ou l'on voit que la cle est reellement honoree.
+    final urim = source();
+
+    final ouverte = await urim.open(rawInput: '1 Jean 4:7-21');
+    const cle = 'urim-banc-live-idempotence';
+
+    final premiere = await urim.say(
+      studyId: ouverte.id,
+      rawInput: 'quel plan je peux tenir sur ce texte ?',
+      idempotencyKey: cle,
+    );
+
+    // Le meme envoi, la meme cle : le serveur rend l'etat sans repasser par
+    // son repondeur — donc sans un second appel de modele.
+    final seconde = await urim.say(
+      studyId: ouverte.id,
+      rawInput: 'quel plan je peux tenir sur ce texte ?',
+      idempotencyKey: cle,
+    );
+
+    expect(seconde.turn, isNotNull);
+    expect(seconde.turn!.stageCode, premiere.turn!.stageCode);
+  }, timeout: const Timeout(Duration(minutes: 5)));
+
   test('un axe pese se decide sur son propre etage', () async {
     final urim = source();
 
