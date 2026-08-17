@@ -492,6 +492,21 @@ class AppTextFr extends AppText {
   }
 
   @override
+  String gesturePending(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count gestes attendent le réseau',
+      one: 'Un geste attend le réseau',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get gesturePendingBody =>
+      'Le moteur répondra dès que la connexion reviendra. Rien n\'est perdu.';
+
+  @override
   String servedFromDevice(String when) {
     return 'Gardé sur cet appareil · $when';
   }

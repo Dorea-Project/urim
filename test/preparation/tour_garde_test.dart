@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:urim/core/result/cached.dart';
 import 'package:urim/core/time/clock.dart';
+import 'package:urim/data/datasources/pending_gestures_local_data_source.dart';
 import 'package:urim/data/datasources/turn_cache_local_data_source.dart';
 import 'package:urim/data/repositories/study_repository_impl.dart';
 import 'package:urim/data/datasources/urim_remote_data_source.dart';
@@ -119,7 +120,14 @@ void main() {
       ..httpClientAdapter = reseau;
 
     return (
-      depot: RemoteStudyRepository(UrimRemoteDataSource(dio, cache: cache), cache),
+      depot: RemoteStudyRepository(
+        UrimRemoteDataSource(dio, cache: cache),
+        cache,
+        PendingGesturesLocalDataSource(
+          documents: documents,
+          clock: _FixedClock(horloge ?? recu),
+        ),
+      ),
       documents: documents,
       reseau: reseau,
     );

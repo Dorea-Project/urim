@@ -72,9 +72,14 @@ le fil s'ouvrent sur ce qu'ils savent déjà, en disant d'où ça vient, puis se
 rafraîchissent (D34) — huit secondes de blanc deviennent zéro, et un accueil
 vide devient le travail en cours.
 
-Restent dus : la recherche, et les étapes 3 à 5 de **Q4** — répondre sans
-réseau demande une file de gestes. Une carte transcrite ne porte plus de
-pastille : le moteur ne connaît que les préparations écrites.
+**Étape 3a : décider et écarter sans réseau.** Le geste est noté et rejoué
+dans l'ordre au retour de la connexion — la cascade du serveur fait le reste,
+sans un mot de code de fusion. Ce qu'il ne fait pas, et ne fera pas : montrer
+le tour suivant. Seul le moteur le sait (D36).
+
+Restent dus : la recherche, et les étapes 3b à 5 de **Q4** — parler sans
+réseau demande une clé d'idempotence, des deux côtés. Une carte transcrite ne
+porte plus de pastille : le moteur ne connaît que les préparations écrites.
 
 ### M2 — Préparation écrite
 

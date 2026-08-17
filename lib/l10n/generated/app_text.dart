@@ -921,6 +921,18 @@ abstract class AppText {
   /// **'· {activity} · dimanche {service}'**
   String homeCardMetaWithService(String activity, String service);
 
+  /// Un geste noté sur l'appareil, pas encore parti. Le tour suivant est ce que le pipeline aurait répondu : on ne peut pas le fabriquer ici sans inventer une phrase d'Urim (D29). L'écran dit donc où en est l'envoi, et rien de plus.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Un geste attend le réseau} other{{count} gestes attendent le réseau}}'**
+  String gesturePending(int count);
+
+  /// Ce qui rassure sans mentir : le geste est garde, mais le tour n'existe pas encore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le moteur répondra dès que la connexion reviendra. Rien n\'est perdu.'**
+  String get gesturePendingBody;
+
   /// Ce qui est affiché vient du magasin local, pas du serveur. Le moteur rejoue à chaque lecture : ce qui a été gardé hier soir est ce qu'il disait hier soir, et le faire passer pour une réponse d'aujourd'hui serait un mensonge découvert au pire moment.
   ///
   /// In fr, this message translates to:

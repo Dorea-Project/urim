@@ -342,6 +342,19 @@
       }
     }
   },
+  "gesturePending": "{count, plural, =1{Un geste attend le réseau} other{{count} gestes attendent le réseau}}",
+  "@gesturePending": {
+    "description": "Un geste noté sur l'appareil, pas encore parti. Le tour suivant est ce que le pipeline aurait répondu : on ne peut pas le fabriquer ici sans inventer une phrase d'Urim (D29). L'écran dit donc où en est l'envoi, et rien de plus.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gesturePendingBody": "Le moteur répondra dès que la connexion reviendra. Rien n'est perdu.",
+  "@gesturePendingBody": {
+    "description": "Ce qui rassure sans mentir : le geste est garde, mais le tour n'existe pas encore."
+  },
   "servedFromDevice": "Gardé sur cet appareil · {when}",
   "@servedFromDevice": {
     "description": "Ce qui est affiché vient du magasin local, pas du serveur. Le moteur rejoue à chaque lecture : ce qui a été gardé hier soir est ce qu'il disait hier soir, et le faire passer pour une réponse d'aujourd'hui serait un mensonge découvert au pire moment.",

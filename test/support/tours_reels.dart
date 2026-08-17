@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:urim/core/result/cached.dart';
 import 'package:urim/core/result/result.dart';
 import 'package:urim/data/datasources/urim_remote_data_source.dart';
+import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
+import 'package:urim/domain/entities/preparation/pending_gesture.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/domain/repositories/study_repository.dart';
@@ -91,24 +93,32 @@ base class DepotFige implements StudyRepository {
   Future<Result<Study>> getById(String studyId) async => Result.success(etude);
 
   @override
-  Future<Result<Study>> decide({
+  Future<Result<GestureOutcome>> decide({
     required String studyId,
     required String stageCode,
     required String optionCode,
+    String label = '',
   }) async {
     decisions.add((stageCode, optionCode));
-    return Result.success(etude);
+    return Result.success(Served(etude));
   }
 
   @override
-  Future<Result<Study>> dismiss({
+  Future<Result<GestureOutcome>> dismiss({
     required String studyId,
     required String stageCode,
     required String optionCode,
   }) async {
     rejets.add((stageCode, optionCode));
-    return Result.success(etude);
+    return Result.success(Served(etude));
   }
+
+  /// La doublure repond toujours : rien n'attend jamais.
+  @override
+  Future<List<PendingGesture>> pending(String studyId) async => const [];
+
+  @override
+  Future<Result<Study>?> flush(String studyId) async => null;
 
   @override
   Future<Result<Study>> say({

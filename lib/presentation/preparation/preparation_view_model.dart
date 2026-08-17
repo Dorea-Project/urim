@@ -3,6 +3,8 @@ import 'package:urim/core/error/failure.dart';
 import 'package:urim/core/result/cached.dart';
 import 'package:urim/core/result/result.dart';
 import 'package:urim/data/repositories/study_repository_impl.dart';
+import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
+import 'package:urim/domain/entities/preparation/pending_gesture.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/domain/entities/preparation/turn.dart';
 import 'package:urim/domain/repositories/study_repository.dart';
@@ -49,10 +51,19 @@ final class ThreadState {
     required this.study,
     this.entries = const [],
     this.receivedAt,
+    this.pending = const [],
   });
 
   final Study study;
   final List<ThreadEntry> entries;
+
+  /// Les gestes notés qui n'ont pas encore pu partir.
+  ///
+  /// **Aucun tour ne les accompagne**, et c'est le point dur de l'étape : le
+  /// tour suivant est ce que le pipeline aurait répondu, et le fabriquer ici
+  /// serait inventer une phrase d'Urim (D29). L'écran dit donc « noté », garde
+  /// le tour précédent sous les yeux, et attend.
+  final List<PendingGesture> pending;
 
   /// L'heure à laquelle ce tour a été reçu, **quand il vient du magasin
   /// local**. Nul veut dire frais.
@@ -64,6 +75,8 @@ final class ThreadState {
   final DateTime? receivedAt;
 
   bool get isStale => receivedAt != null;
+
+  bool get isWaitingToSend => pending.isNotEmpty;
 
   Turn? get turn => study.turn;
 }
@@ -84,11 +97,22 @@ final class PreparationThread extends AsyncNotifier<ThreadState> {
   Future<ThreadState> build() async {
     final repository = ref.watch(studyRepositoryProvider);
 
+    // Ce qui attendait d'être envoyé part avant toute lecture : sinon on
+    // afficherait un tour antérieur aux gestes que le pasteur a déjà faits.
+    if (await repository.flush(studyId) case Success(:final value)) {
+      return _depuis(value);
+    }
+
     if (await repository.cachedById(studyId) case final Cached<Study> garde) {
       // Le rafraîchissement part sans qu'on l'attende : l'écran est déjà
       // utilisable, et un échec de réseau ne doit pas l'effacer.
       Future.microtask(_rafraichir);
-      return _depuis(garde.value, receivedAt: garde.receivedAt);
+      return ThreadState(
+        study: garde.value,
+        receivedAt: garde.receivedAt,
+        pending: await repository.pending(studyId),
+        entries: _entrees(garde.value),
+      );
     }
 
     final result = await repository.getById(studyId);
@@ -102,21 +126,33 @@ final class PreparationThread extends AsyncNotifier<ThreadState> {
   ThreadState _depuis(Study study, {DateTime? receivedAt}) => ThreadState(
         study: study,
         receivedAt: receivedAt,
-        entries: [
-          // Ce que le pasteur a écrit en ouvrant — la seule chose qu'il ait
-          // dite que le serveur garde vraiment. Tout le reste de ce qu'il dit
-          // vit dans ses décisions, pas dans des phrases.
-          if (study.rawInput.isNotEmpty) SpokenByPastor(study.rawInput),
-          if (study.turn case final Turn turn) ServedTurn(turn, live: true),
-        ],
+        entries: _entrees(study),
       );
+
+  List<ThreadEntry> _entrees(Study study) => [
+        // Ce que le pasteur a écrit en ouvrant — la seule chose qu'il ait dite
+        // que le serveur garde vraiment. Tout le reste de ce qu'il dit vit
+        // dans ses décisions, pas dans des phrases.
+        if (study.rawInput.isNotEmpty) SpokenByPastor(study.rawInput),
+        if (study.turn case final Turn turn) ServedTurn(turn, live: true),
+      ];
 
   /// Relit au serveur et remplace le tour gardé — **sans jamais effacer**.
   ///
   /// Un échec laisse l'écran tel quel : le pasteur garde ce qu'il avait sous
   /// les yeux. Bascule en erreur ferait payer la panne de réseau deux fois.
   Future<void> _rafraichir() async {
-    final result = await ref.read(studyRepositoryProvider).getById(studyId);
+    final repository = ref.read(studyRepositoryProvider);
+
+    // Le réseau est peut-être revenu : ce qui attendait part maintenant, et
+    // c'est plus juste qu'une simple relecture.
+    if (await repository.flush(studyId) case Success(:final value)) {
+      state = AsyncData(_depuis(value));
+      ref.invalidate(studyFeedProvider);
+      return;
+    }
+
+    final result = await repository.getById(studyId);
 
     result.fold(
       onSuccess: (study) {
@@ -148,6 +184,7 @@ final class PreparationThread extends AsyncNotifier<ThreadState> {
           studyId: studyId,
           stageCode: stageCode,
           optionCode: optionCode,
+          label: label,
         ),
       );
 
@@ -166,14 +203,26 @@ final class PreparationThread extends AsyncNotifier<ThreadState> {
       );
 
   /// Parler. Une phrase libre, à n'importe quel moment.
+  ///
+  /// ⚠️ **Parler ne se met pas en file, et c'est délibéré.** Décider et écarter
+  /// posent un état : les rejouer donne le même résultat. Une phrase, non — le
+  /// serveur y répond, et la renvoyer deux fois coûterait deux passages du
+  /// répondeur, donc deux appels de modèle. Il faut une clé d'idempotence, et
+  /// c'est l'étape 3b de Q4, des deux côtés.
+  ///
+  /// En attendant, sans réseau la phrase échoue — mais elle n'est pas perdue :
+  /// le brouillon la garde (D32), et elle est encore dans le champ.
   Future<Failure?> say(String text) {
     final dit = text.trim();
     if (dit.isEmpty) return Future.value();
 
     return _geste(
       said: dit,
-      action: (repository, studyId) =>
-          repository.say(studyId: studyId, rawInput: dit),
+      action: (repository, studyId) async =>
+          (await repository.say(studyId: studyId, rawInput: dit)).fold(
+        onSuccess: (study) => Result.success(Served(study)),
+        onFailure: (failure) => Result.failed(failure),
+      ),
     );
   }
 
@@ -185,7 +234,7 @@ final class PreparationThread extends AsyncNotifier<ThreadState> {
   /// ferait perdre le fil de la conversation, au sens propre.
   Future<Failure?> _geste({
     String? said,
-    required Future<Result<Study>> Function(
+    required Future<Result<GestureOutcome>> Function(
       StudyRepository repository,
       String studyId,
     ) action,
@@ -207,24 +256,35 @@ final class PreparationThread extends AsyncNotifier<ThreadState> {
 
     final result = await action(ref.read(studyRepositoryProvider), studyId);
 
-    return result.fold(
-      onSuccess: (study) {
-        state = AsyncData(ThreadState(
-          study: study,
-          entries: [
-            ...entries,
-            if (study.turn case final Turn turn) ServedTurn(turn, live: true),
-          ],
-        ));
-        // Le fil d'accueil vient de vieillir : l'étage a changé.
-        ref.invalidate(studyFeedProvider);
+    return await result.fold(
+      onSuccess: (issue) async {
+        switch (issue) {
+          case Served(:final study):
+            state = AsyncData(ThreadState(
+              study: study,
+              entries: [
+                ...entries,
+                if (study.turn case final Turn turn)
+                  ServedTurn(turn, live: true),
+              ],
+            ));
+            // Le fil d'accueil vient de vieillir : l'étage a changé.
+            ref.invalidate(studyFeedProvider);
+
+          case Queued():
+            // Pas de tour à montrer, et il ne faut surtout pas en inventer un.
+            // Ce que le pasteur a touché reste à l'écran, marqué comme non
+            // parti : c'est tout ce qu'on peut dire honnêtement.
+            state = AsyncData(ThreadState(
+              study: courant.study,
+              entries: entries,
+              receivedAt: courant.receivedAt,
+              pending: await ref.read(studyRepositoryProvider).pending(studyId),
+            ));
+        }
         return null;
       },
-      onFailure: (failure) {
-        // L'échec ne fait pas basculer l'écran : le fil reste lisible, et
-        // l'appelant affiche le motif.
-        return failure;
-      },
+      onFailure: (failure) async => failure,
     );
   }
 }

@@ -6,22 +6,26 @@ import 'package:urim/core/error/failure.dart';
 import 'package:urim/core/network/dio_client.dart';
 import 'package:urim/core/result/cached.dart';
 import 'package:urim/core/result/result.dart';
+import 'package:urim/data/datasources/pending_gestures_local_data_source.dart';
 import 'package:urim/data/datasources/turn_cache_local_data_source.dart';
 import 'package:urim/data/datasources/urim_remote_data_source.dart';
 import 'package:urim/data/repositories/demo_urim_engine.dart';
 import 'package:urim/data/repositories/in_memory_preparation_repository.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/domain/entities/preparation/preparation_block.dart';
+import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
+import 'package:urim/domain/entities/preparation/pending_gesture.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/domain/repositories/study_repository.dart';
 
 /// Le moteur tel que le serveur le tient.
 final class RemoteStudyRepository implements StudyRepository {
-  const RemoteStudyRepository(this._source, this._cache);
+  const RemoteStudyRepository(this._source, this._cache, this._file);
 
   final UrimRemoteDataSource _source;
   final TurnCacheLocalDataSource _cache;
+  final PendingGesturesLocalDataSource _file;
 
   @override
   Future<Cached<Study>?> cachedById(String studyId) async {
@@ -68,28 +72,117 @@ final class RemoteStudyRepository implements StudyRepository {
       _guard(() => _source.getStudy(studyId));
 
   @override
-  Future<Result<Study>> decide({
+  Future<Result<GestureOutcome>> decide({
     required String studyId,
     required String stageCode,
     required String optionCode,
+    String label = '',
   }) =>
-      _guard(() => _source.decide(
-            studyId: studyId,
-            stageCode: stageCode,
-            optionCode: optionCode,
-          ));
+      _geste(
+        studyId,
+        PendingGesture(
+          kind: PendingGestureKind.decide,
+          stageCode: stageCode,
+          optionCode: optionCode,
+          label: label,
+        ),
+      );
 
   @override
-  Future<Result<Study>> dismiss({
+  Future<Result<GestureOutcome>> dismiss({
     required String studyId,
     required String stageCode,
     required String optionCode,
   }) =>
-      _guard(() => _source.dismiss(
+      _geste(
+        studyId,
+        PendingGesture(
+          kind: PendingGestureKind.dismiss,
+          stageCode: stageCode,
+          optionCode: optionCode,
+        ),
+      );
+
+  @override
+  Future<List<PendingGesture>> pending(String studyId) => _file.read(studyId);
+
+  /// Envoie, ou note.
+  ///
+  /// ⚠️ **Seul un manque de reseau est mis en file.** Un refus du serveur — un
+  /// etage qui n'attend plus, une option inconnue — est un jugement, pas un
+  /// contretemps : le renvoyer plus tard ne le rendrait pas acceptable, et
+  /// l'accumuler ferait une file qui ne se videra jamais.
+  Future<Result<GestureOutcome>> _geste(
+    String studyId,
+    PendingGesture geste,
+  ) async {
+    // Ce qui attendait part d'abord : l'ordre d'emission est ce qui rend le
+    // rejeu equivalent a une seance en ligne.
+    if (await flush(studyId) case Failed(:final failure)) {
+      if (failure is NetworkFailure) {
+        await _file.append(studyId, geste);
+        return const Result.success(Queued());
+      }
+      return Result.failed(failure);
+    }
+
+    final envoi = await _guard(() => _envoyer(studyId, geste));
+
+    return envoi.fold(
+      onSuccess: (study) => Result.success(Served(study)),
+      onFailure: (failure) async {
+        if (failure is! NetworkFailure) return Result.failed(failure);
+        await _file.append(studyId, geste);
+        return const Result.success(Queued());
+      },
+    );
+  }
+
+  Future<Study> _envoyer(String studyId, PendingGesture geste) =>
+      switch (geste.kind) {
+        PendingGestureKind.decide => _source.decide(
             studyId: studyId,
-            stageCode: stageCode,
-            optionCode: optionCode,
-          ));
+            stageCode: geste.stageCode,
+            optionCode: geste.optionCode,
+          ),
+        PendingGestureKind.dismiss => _source.dismiss(
+            studyId: studyId,
+            stageCode: geste.stageCode,
+            optionCode: geste.optionCode,
+          ),
+      };
+
+  @override
+  Future<Result<Study>?> flush(String studyId) async {
+    final file = await _file.read(studyId);
+    if (file.isEmpty) return null;
+
+    Study? dernier;
+    final reste = [...file];
+
+    for (final geste in file) {
+      final envoi = await _guard(() => _envoyer(studyId, geste));
+
+      if (envoi case Failed(:final failure)) {
+        // Ce qui est parti ne doit pas repartir ; ce qui reste attend.
+        await _remplacer(studyId, reste);
+        return Result.failed(failure);
+      }
+
+      dernier = envoi.valueOrNull;
+      reste.removeAt(0);
+    }
+
+    await _file.clear(studyId);
+    return dernier == null ? null : Result.success(dernier);
+  }
+
+  Future<void> _remplacer(String studyId, List<PendingGesture> reste) async {
+    await _file.clear(studyId);
+    for (final geste in reste) {
+      await _file.append(studyId, geste);
+    }
+  }
 
   @override
   Future<Result<Study>> say({
@@ -155,20 +248,36 @@ final class MockStudyRepository implements StudyRepository {
       _avec(studyId, (titre) => _engine.read(studyId, titre));
 
   @override
-  Future<Result<Study>> decide({
+  Future<Result<GestureOutcome>> decide({
     required String studyId,
     required String stageCode,
     required String optionCode,
-  }) =>
-      _avec(studyId, (titre) => _engine.decide(studyId, titre, optionCode));
+    String label = '',
+  }) async =>
+      (await _avec(studyId, (titre) => _engine.decide(studyId, titre, optionCode)))
+          .fold(
+        onSuccess: (study) => Result.success(Served(study)),
+        onFailure: (failure) => Result.failed(failure),
+      );
 
   @override
-  Future<Result<Study>> dismiss({
+  Future<Result<GestureOutcome>> dismiss({
     required String studyId,
     required String stageCode,
     required String optionCode,
-  }) =>
-      _avec(studyId, (titre) => _engine.dismiss(studyId, titre, optionCode));
+  }) async =>
+      (await _avec(studyId, (titre) => _engine.dismiss(studyId, titre, optionCode)))
+          .fold(
+        onSuccess: (study) => Result.success(Served(study)),
+        onFailure: (failure) => Result.failed(failure),
+      );
+
+  /// Le mannequin repond toujours : il n'y a jamais rien en attente.
+  @override
+  Future<List<PendingGesture>> pending(String studyId) async => const [];
+
+  @override
+  Future<Result<Study>?> flush(String studyId) async => null;
 
   @override
   Future<Result<Study>> say({
@@ -259,5 +368,6 @@ final studyRepositoryProvider = Provider<StudyRepository>((ref) {
   return RemoteStudyRepository(
     UrimRemoteDataSource(ref.watch(dioProvider), cache: cache),
     cache,
+    ref.watch(pendingGesturesProvider),
   );
 });

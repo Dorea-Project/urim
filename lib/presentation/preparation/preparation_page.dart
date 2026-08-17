@@ -6,6 +6,7 @@ import 'package:urim/data/datasources/draft_local_data_source.dart';
 import 'package:urim/presentation/common/draft_keeper.dart';
 import 'package:urim/presentation/common/stale_banner.dart';
 import 'package:urim/presentation/preparation/preparation_view_model.dart';
+import 'package:urim/presentation/preparation/widgets/pending_banner.dart';
 import 'package:urim/presentation/preparation/widgets/turn_views.dart';
 import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
@@ -120,8 +121,12 @@ class _Thread extends ConsumerWidget {
         AppSpacing.lg,
         AppSpacing.sm,
       ),
-      itemCount: state.entries.length,
-      itemBuilder: (context, index) => switch (state.entries[index]) {
+      // Le bandeau d'attente vient en dernier, sous le geste qui attend :
+      // c'est la ou le pasteur regarde apres avoir touche.
+      itemCount: state.entries.length + (state.isWaitingToSend ? 1 : 0),
+      itemBuilder: (context, index) => index == state.entries.length
+          ? PendingBanner(pending: state.pending)
+          : switch (state.entries[index]) {
         SpokenByPastor(:final text) => _PastorSaid(text: text),
         ServedTurn(:final turn, :final live) => TurnView(
             turn: turn,
@@ -142,7 +147,7 @@ class _Thread extends ConsumerWidget {
               optionCode: optionCode,
             )),
           ),
-      },
+        },
     );
   }
 }

@@ -1,5 +1,7 @@
 import 'package:urim/core/result/cached.dart';
 import 'package:urim/core/result/result.dart';
+import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
+import 'package:urim/domain/entities/preparation/pending_gesture.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
 
@@ -49,10 +51,15 @@ abstract interface class StudyRepository {
   ///
   /// [stageCode] n'est pas toujours celui du tour : les pesées portent le leur
   /// (`decideStage`). Le poster au mauvais étage vaut un refus du serveur.
-  Future<Result<Study>> decide({
+  ///
+  /// Trois issues, et la troisième est nouvelle : sans réseau, le geste est
+  /// **noté** ([Queued]) au lieu d'être perdu. Un refus du serveur, lui, reste
+  /// un échec — le renvoyer plus tard ne le rendrait pas acceptable.
+  Future<Result<GestureOutcome>> decide({
     required String studyId,
     required String stageCode,
     required String optionCode,
+    String label = '',
   });
 
   /// Écarter une option. Elle reste dans la liste, marquée et reléguée.
@@ -60,7 +67,7 @@ abstract interface class StudyRepository {
   /// Écarter n'est pas décider : aucun étage n'avance. Cela apprend seulement
   /// au tour suivant de ne pas reproposer ce qu'on vient de repousser — sans
   /// quoi un moteur qui rejoue n'a aucun moyen de s'en souvenir.
-  Future<Result<Study>> dismiss({
+  Future<Result<GestureOutcome>> dismiss({
     required String studyId,
     required String stageCode,
     required String optionCode,
@@ -75,4 +82,18 @@ abstract interface class StudyRepository {
     required String studyId,
     required String rawInput,
   });
+
+  /// Les gestes en attente d'envoi pour cette préparation, dans l'ordre.
+  ///
+  /// L'écran s'en sert pour dire ce qui n'est pas encore parti. Tous portent sur
+  /// le **même tour** — on ne peut pas agir sur un tour qu'on n'a pas reçu.
+  Future<List<PendingGesture>> pending(String studyId);
+
+  /// Renvoie ce qui attend, dans l'ordre d'émission.
+  ///
+  /// Rend la préparation à jour si quelque chose est parti, nul s'il n'y avait
+  /// rien à envoyer, et une `Failure` si le réseau manque encore. S'arrête au
+  /// premier refus : rejouer la suite d'une décision refusée poserait des
+  /// gestes sur un état qui n'est pas celui qu'on croyait.
+  Future<Result<Study>?> flush(String studyId);
 }
