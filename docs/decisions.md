@@ -595,6 +595,86 @@ traduit : *« fils de Timée »*). L'inventaire dit ce qu'on sait servir ; il ne
 promet pas que chaque demande y trouve sa case. C'est précisément pourquoi le
 répondeur doit rester le fond du canal.
 
+### Q22 — Le mur est mesuré, le vide ne l'est pas — **recommandation**
+
+> *« Il doit accélérer son travail. Il n'a pas le temps — c'est pour ça qu'il a
+> besoin d'un compagnon. »*
+
+C'est la phrase qui remet tout le reste dans l'ordre, et elle transforme une
+liste de défauts en un seul.
+
+#### Une propriété mesurée, une autre qui manque
+
+`scripts/urim_banc_arbre.py` marche l'arbre conversationnel et pose une seule
+question à chaque tour :
+
+> **Après ce tour, le pasteur a-t-il quelque chose à faire ?**
+
+Il est à **zéro mur** sur les chemins réels, confessionnels et absurdes. C'est
+une vraie garantie, et elle tient.
+
+Mais elle garantit qu'il n'est pas **coincé**. Elle ne dit rien de ce qu'il a
+**gagné**. Ce sont deux échecs différents, et le second est celui qui coûte du
+temps :
+
+| | La question | Mesuré ? |
+|---|---|---|
+| **Le mur** | après ce tour, rien à faire | oui, à 0 |
+| **Le vide** | après ce tour, rien de plus qu'avant | **non** |
+
+Un mur se voit et se contourne. Un vide ne se voit pas : le pasteur a lu onze
+écrans, il a répondu, et il a reçu les onze mêmes écrans.
+
+#### La séance a produit un tour vide qui passe le banc
+
+Sur Marc 10:46-52, à la phrase *« je veux faire ressortir que Jésus peut tout
+guérir »* : douze plans à toucher — donc **pas un mur** —, les mêmes dix pesées,
+les mêmes dix-huit couples, et un `say` qui explique ce qu'est un thème. Zéro
+matière nouvelle. Le banc l'aurait laissé passer.
+
+#### Tout ce que la séance a trouvé est le même défaut
+
+Chacun de ces points est une facture en temps, payée par quelqu'un qui n'en a
+pas :
+
+| Ce qui s'est passé | Ce que ça coûte |
+|---|---|
+| huit secondes par tour, à chaque ouverture d'écran | l'attente |
+| onze écrans de défilement, dont neuf de décor déjà lu | la traversée |
+| « je veux prêcher sur Marc 10:46-52 » → référence perdue | tout retaper |
+| sa correction explicite ignorée | rouvrir une préparation |
+| sa phrase la plus substantielle → un répondeur | rien |
+| sa question sur le contexte → aucun chemin | alors que la réponse était **déjà dans sa préparation** |
+| son document refusé | alors que quatorze sections sur quinze étaient prêtes |
+
+Le plus dur à admettre est l'avant-dernier : le contexte littéraire de Marc 10
+avait été calculé **à l'ouverture**, écrit dans la trace à l'étage
+`load_context`, et stocké. Il a attendu, il a demandé, on ne lui a rien dit.
+
+#### La recommandation
+
+**1. Le décor ambiant se sert une fois, pas à chaque tour.** Neuf des onze
+écrans sont des pesées et des couples déjà lus. Un tour ne devrait porter que ce
+qui a **changé** ; le reste se renvoie, replié. C'est de la mise en page, aucun
+étage à toucher — et c'est le plus gros gain de la liste.
+
+**2. Ce qui est déjà calculé s'offre, au lieu d'attendre la question.** Le
+contexte, les variantes de version, les mots de l'original : tout est là au
+moment où l'unité est bornée. Le tour devrait le **nommer** — pas le déplier,
+juste dire qu'il l'a. Q21 route la question du pasteur ; celle-ci lui épargne de
+la poser.
+
+**3. Le banc gagne un second chiffre.** Un tour est **vide** quand ce qu'il sert
+est inclus dans ce que le tour précédent servait — mêmes blocs, mêmes items,
+aucun fait nouveau. Une phrase seule ne compte pas comme un gain. Ce chiffre
+doit être **0 sur les chemins réels**, au même titre que les murs.
+
+#### Ce que ça dit du reste
+
+Q20 s'en trouve encore déplacée. Un modèle qui reformule mieux « Voici ce que je
+peux vous proposer ici » ne fait rien gagner à un homme pressé. Un moteur qui
+sert son contexte sans qu'il ait à le demander, si.
+
 ### Q19 — Où vivent les documents produits ? — **écartée pour l'instant**
 
 À la fin d'une conversation, le pasteur — ou Urim — propose de générer le moment
