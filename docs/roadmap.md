@@ -38,7 +38,7 @@ Les arbitrages et les questions en attente vivent dans
 | Socle sécurité : jetons au coffre, rotation, identifiant d'appareil | Fait |
 | Politique de confidentialité | Fait |
 | Domaine des préparations | Fait |
-| Persistance des préparations | **Bloqué par Q4** |
+| Persistance des préparations | Sur le **serveur** — Q4 est sans objet |
 | Profil et réglages | Fait — églises et appareils **simulés** |
 | Accueil | Branché sur le **vrai fil** du serveur (`GET /urim/studies`) |
 | Création, fil guidé | Bâtis sur le **contrat du serveur** (`TurnView`) — le moteur, lui, reste dû |
@@ -65,9 +65,9 @@ la préparation.
 Un build de démonstration garde son fil : le magasin en mémoire est projeté sur
 le même contrat, sur la même bascule que le parcours d'entrée simulé.
 
-Restent dus : la recherche, et la persistance côté appareil — **Q4**. Une carte
-transcrite ne porte plus de pastille : le serveur ne connaît que les
-préparations écrites.
+Restent dus : la recherche, et le hors connexion — ce qui restait de **Q4**
+une fois les préparations passées au serveur. Une carte transcrite ne porte
+plus de pastille : le moteur ne connaît que les préparations écrites.
 
 ### M2 — Préparation écrite
 
@@ -86,9 +86,21 @@ il n'y a qu'un tour, et ce qui est au-dessus est le compte rendu de la séance.
 Ce qui a été gagné : la barre ne se ferme jamais, et écrire « L'Église » vaut
 la toucher — le serveur résout d'abord ce qui désigne l'écran.
 
-Le moteur lui-même reste dû : les axes (**Q14**), les textes pesés (**Q1**),
-les bornes (**Q15**). Un build de démonstration le fait jouer par un mannequin
-qui imite la forme du contrat, pas le raisonnement.
+**Éprouvé contre le vrai moteur.** Les tests d'écran sont nourris par les
+réponses exactes du serveur, capturées contre le corpus réel (D31), et un test
+tagué `live` traverse la couche de données jusqu'au serveur qui tourne.
+
+Ce que cette confrontation a appris, et qu'aucune donnée écrite à la main
+n'aurait dit : le tour d'ouverture sert **seize** pastilles mêlant les dix loci
+et des passages, un motif peut faire **1 423 caractères**, et dix pesées plus
+dix-huit couples plan × matière reviennent à **chaque** tour comme décor
+ambiant. Rien ne déborde — mais un tour fait jusqu'à **onze écrans**. C'est la
+prochaine décision d'écran.
+
+Le moteur, lui, n'est plus le trou qu'on croyait : **Q14 et Q15 sont
+répondues**, et 4 561 unités relues couvrent les 66 livres. Un build de
+démonstration garde un mannequin qui imite la forme du contrat, pas le
+raisonnement.
 
 ### M3 — Enregistrement et transcription
 
@@ -135,7 +147,8 @@ Restent dus :
 - les églises et les appareils réels — **Q9** et **Q11** ;
 - les trois réglages hors connexion — **Q1**, **Q2**, **Q10** ;
 - le rappel du samedi — **Q12** ;
-- l'espace utilisé, qui ne se calcule qu'une fois le stockage tranché — **Q4**.
+- l'espace utilisé, qui ne veut plus dire grand-chose depuis que les
+  préparations vivent sur le serveur : reste l'audio des transcriptions — **Q2**.
 
 ## Les trois briques lourdes
 

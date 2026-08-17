@@ -20,13 +20,8 @@ final class UrimRemoteDataSource {
   /// Ce que la réponse ne contient pas : aucune phrase d'Urim. Le serveur s'y
   /// refuse pour ne pas rejouer son pipeline vingt fois, et l'application n'a
   /// donc rien à en attendre.
-  Future<List<StudySummary>> listStudies() async {
-    final rows = await _get<List<dynamic>>('/urim/studies') ?? const [];
-
-    return [
-      for (final row in rows) _summaryFromJson(row as Map<String, dynamic>),
-    ];
-  }
+  Future<List<StudySummary>> listStudies() async =>
+      feedFromWire(await _get<List<dynamic>>('/urim/studies') ?? const []);
 
   /// `POST /urim/studies` — une préparation **personnelle**, sans église.
   ///
@@ -99,8 +94,22 @@ Study _study(Map<String, dynamic>? json) {
   if (json == null) {
     throw const FormatException('Le serveur n\'a rendu aucune préparation.');
   }
-  return _studyFromJson(json);
+  return studyFromWire(json);
 }
+
+/// L'analyse d'une préparation, séparée du transport.
+///
+/// Publique pour une raison précise : les tests d'écran sont nourris par des
+/// **charges réelles capturées** contre le moteur, et un test de widget
+/// contrôle le temps — y attendre une requête, même simulée, ne se termine
+/// jamais. Les faire passer par une autre porte que celle-ci reviendrait à
+/// éprouver un décodage qui n'est pas celui de production.
+Study studyFromWire(Map<String, dynamic> json) => _studyFromJson(json);
+
+/// Le fil, même raison.
+List<StudySummary> feedFromWire(List<dynamic> rows) => [
+      for (final row in rows) _summaryFromJson(row as Map<String, dynamic>),
+    ];
 
 // ---------------------------------------------------------------------------
 // Le fil

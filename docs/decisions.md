@@ -54,17 +54,20 @@ modèle distant reste possible si le fournisseur s'y engage contractuellement,
 mais cela doit être dit à l'utilisateur — la politique actuelle laisse
 entendre que rien ne sort de l'appareil.
 
-### Q4 — Comment stocker les préparations ?
+### Q4 — Comment stocker les préparations ? — **sans objet**
 
-**Bloque** M1.
+Elle supposait que l'application était propriétaire des préparations. Elle ne
+l'est pas : **les préparations vivent sur le serveur**, et il n'y a rien à
+stocker localement — pas même le fil, puisqu'il n'existe pas (D28). Ce que le
+serveur garde, ce sont les décisions ; les phrases se refabriquent au rejeu.
 
-Les préférences système ne conviennent pas ici : une préparation contient un
-fil de blocs qui grandit, et une transcription s'adosse à un fichier audio de
-plusieurs dizaines de mégaoctets.
+Ce qui reste de la question est une **autre** question, plus étroite : le hors
+connexion. Écrire sans réseau suppose de retenir un geste et de le rejouer plus
+tard, pas de recopier une base. Et l'audio d'une transcription, lui, restera
+bien un fichier local — mais il dépend de **Q2**, pas d'ici.
 
-Recommandation : **Drift** (SQLite) pour les préparations et les blocs,
-`path_provider` pour les fichiers audio. La recherche plein texte devient
-possible, et la mémoire ne porte plus tout le corpus.
+Ce que la question disait de Drift reste vrai le jour où le hors connexion se
+fera ; ce n'est simplement plus ce qui bloque M1.
 
 ### Q5 — « tu » ou « vous » ?
 
@@ -192,24 +195,37 @@ Les deux parcours sont écrits. Trois conséquences d'écran :
 - « Code oublié ? » aboutit toujours, même sur un numéro inconnu, et l'écran ne
   dit jamais le contraire.
 
-### Q14 — D'où viennent les dix loci ?
+### Q14 — D'où viennent les dix loci ? — **répondue par le serveur**
 
-Le fil guidé propose trois axes — l'Église, l'homme, le péché — extraits d'un
-ensemble de dix, annoncé par « Voir les dix loci ». Cette liste n'existe nulle
-part : ni sa composition, ni ce qui rattache une phrase à l'un plutôt qu'à un
-autre.
+Elles existent, et depuis longtemps. Le moteur les sert avec leurs libellés —
+théologie propre, christologie, pneumatologie, anthropologie, hamartiologie,
+sotériologie, ecclésiologie, angélologie, démonologie, eschatologie — et pour
+chaque phrase du pasteur il signale **celles que sa formulation touche**, avec
+un motif écrit pour elle : « L'Église sans amour », « Pourquoi l'amour entre
+croyants semble aujourd'hui impossible ». Les autres restent ouvertes, avec la
+mention « c'est vous qui savez ce que vous prêchez ».
 
-C'est la pièce centrale du moteur, pas un détail d'écran.
+Ce qui rattache une phrase à un locus est le rapprochement doctrinal du corpus
+curé, et le tour porte sa signature (`ia-mistral` ou le nom d'un relecteur)
+quand le libellé n'a pas été écrit par le corpus.
 
-### Q15 — Qui borne la péricope ?
+La question était posée depuis le mobile, avant qu'on ait regardé le moteur.
 
-Urim propose d'étendre « Actes 2:42 » à « 42-47 », et prévient que s'en tenir
-au verset seul rend les pesées inapplicables : « Tu forces les bornes ».
+### Q15 — Qui borne la péricope ? — **répondue par le serveur**
 
-Reste à décider ce que cela signifie concrètement — les textes qui résistent
-disparaissent-ils, ou sont-ils simplement marqués comme non recalculés ? — et
-d'où viennent les bornes littéraires, qui ne sont pas dans le texte biblique
-lui-même.
+L'étage `bound_pericope` le fait, et il ne propose pas une extension : il
+propose les **unités littéraires relues** que la demande recoupe. « 1 Jean
+4:7-21 » en couvre trois — l'amour comme preuve de la connaissance de Dieu, la
+présence de l'Esprit et la confession, l'amour parfait et la confiance — et le
+pasteur choisit.
+
+La conséquence de garder ses bornes est servie avec le choix, pas après : tout
+ce qui est curé devient illisible pour les étages avals, `bounds_overridden`
+devient vrai, et l'alerte sur le proof-texting se tait. Rien ne « disparaît » :
+c'est la relecture qui cesse de s'appliquer.
+
+Les bornes viennent de la curation — 4 561 unités couvrent les 66 livres et
+portent toutes leurs pesées.
 
 ### Q16 — Que promet-on sur l'audio ?
 
@@ -317,6 +333,7 @@ canal, avec quel consentement.
 | D28 | **Il n'y a pas d'historique de conversation.** Le fil montre un tour, et le compte rendu de la séance en cours | Le moteur rejoue son pipeline à chaque lecture : ce qu'une préparation garde, ce sont les **décisions** du pasteur, pas les phrases. Un journal côté serveur figerait des phrases qu'un moteur amélioré ne dirait plus, et les deux se contrediraient. Conséquence assumée : rouvrir une préparation demain rend ce que le moteur en dit demain. La seule chose que le pasteur ait dite et qui persiste est sa phrase d'ouverture — c'est elle qui ouvre le fil. |
 | D29 | Le client n'écrit **jamais** une phrase de sa propre autorité | `say`, `why`, `ask`, les intitulés de groupe, les motifs de blocage : tout vient du serveur, tel quel. L'application fournit la mise en forme. Une phrase fabriquée côté Flutter échapperait à la relecture, aux tests, et à la règle du filet doré. Le corollaire est que le `why` **n'est pas repliable** : le rendre facultatif à l'affichage reviendrait à le rendre facultatif tout court. |
 | D30 | Un `kind` de bloc inconnu est **tu**, pas une erreur | Le moteur gagne des étages ; une application installée ne les gagne pas en même temps. Faire tomber l'écran sur un bloc que cette version ne connaît pas punirait le pasteur d'une amélioration du serveur. Même règle que `last_outcome` sur le fil. |
+| D31 | Les tests d'écran sont nourris par des **charges réelles capturées**, pas par des données écrites à la main | Ce que j'invente ressemble à mes maquettes : trois pastilles, un motif de deux lignes. Le corpus sert seize pastilles, un motif de 1 423 caractères, dix pesées et dix-huit couples qui reviennent à chaque tour. Les fixtures de `test/fixtures/urim/` sont les réponses exactes du moteur, capturées contre le corpus réel — elles se régénèrent, elles ne se rédigent pas. Corollaire technique : l'analyse doit être appelable **hors transport** (`studyFromWire`), un test de widget contrôlant le temps ne pouvant pas attendre une requête. |
 | D23 | Un seul rafraîchissement à la fois, un seul rejeu par requête | Trois écrans qui échouent ensemble ne doivent pas déclencher trois rotations : la deuxième invaliderait le jeton de la première. Et une requête qui échoue deux fois signe une session morte, pas une boucle à retenter. |
 
 ## Dettes assumées
@@ -333,6 +350,8 @@ canal, avec quel consentement.
 | Le fil guidé, la relecture et les capsules sont **scriptés** : aucun moteur ne les produit | Q1, Q2, Q3, Q14 |
 | Les préparations vivent en mémoire — fermer l'application les perd | Q4 |
 | Le fil guidé parle le contrat du serveur, mais un build de démonstration le fait **jouer par un mannequin** (`DemoUrimEngine`) : quatre étages scriptés, aucune Écriture consultée. Il imite la forme du contrat, pas le raisonnement | Quand l'application vise le serveur par défaut |
+| **Un tour réel coûte jusqu'à onze écrans de défilement** sur un téléphone. Rien ne déborde ; c'est la longueur qui casse l'usage — dix pesées et dix-huit couples plan × matière, republiés à chaque tour comme décor ambiant, séparent le pasteur de son geste | La prochaine décision d'écran |
+| Le thème servi par le moteur est un gabarit de **codes bruts** — « theologie_propre, en textuel doctrinal ». Affiché tel quel sous « THÈME » | Côté serveur, aller chercher le libellé de l'axe |
 | Le compte rendu de séance est perdu en quittant l'écran. C'est cohérent avec D28, mais ce qui a été touché il y a cinq minutes disparaît en revenant de l'accueil | À évaluer à l'usage — un cache de session suffirait |
 | Une prédication transcrite n'a **pas d'issue moteur** : sa pastille « Retour disponible » a disparu du fil. Le serveur ne connaît que les préparations écrites — sa capture est verrouillée à l'étape 1 | Q2, avec la capture réelle |
 | La base de développement partagée est estampillée par une **branche parallèle** (bilingue) : la migration du fil ne peut pas y être appliquée depuis `main`. Le DDL est éprouvé sur la vraie base dans une transaction annulée, pas encore posé | À la fusion des deux branches — une révision de fusion Alembic sera nécessaire |

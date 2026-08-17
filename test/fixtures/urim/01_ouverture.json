@@ -1,0 +1,328 @@
+{
+  "id": "00000000-0000-4000-8000-000000000001",
+  "status": "ouverte",
+  "entry_mode": "conviction",
+  "raw_input": "l'amour fraternel n'existe plus dans l'eglise",
+  "outcome": "await_decision",
+  "rationale": "Une intention peut porter plusieurs doctrines, et c'est souvent le cas. Laquelle prêchez-vous ? Les axes que votre formulation touche sont signalés — les autres restent ouverts. Des passages qui traitent ce sujet sont proposés plus bas ; y aller directement vous fait sauter la pesée doctrinale de l'axe. Formulation à forte charge : davantage de textes qui résistent sont affichés, et le risque de proof-texting sera relevé sur la mise en forme.",
+  "trace": [
+    {
+      "stage_code": "route_entry",
+      "rationale": "Lu comme une intention. Ni référence ni citation, mais une phrase lisible."
+    },
+    {
+      "stage_code": "weigh_conviction",
+      "rationale": "Une intention peut porter plusieurs doctrines, et c'est souvent le cas. Laquelle prêchez-vous ? Les axes que votre formulation touche sont signalés — les autres restent ouverts. Des passages qui traitent ce sujet sont proposés plus bas ; y aller directement vous fait sauter la pesée doctrinale de l'axe. Formulation à forte charge : davantage de textes qui résistent sont affichés, et le risque de proof-texting sera relevé sur la mise en forme."
+    }
+  ],
+  "options": [
+    {
+      "code": "axe:theologie_propre",
+      "label": "Théologie propre — Dieu",
+      "rationale": "Disponible — c'est vous qui savez ce que vous prêchez.",
+      "origin": "locus",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    },
+    {
+      "code": "axe:christologie",
+      "label": "Christologie — Jésus-Christ",
+      "rationale": "Disponible — c'est vous qui savez ce que vous prêchez.",
+      "origin": "locus",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    },
+    {
+      "code": "axe:pneumatologie",
+      "label": "Pneumatologie — le Saint-Esprit",
+      "rationale": "Disponible — c'est vous qui savez ce que vous prêchez.",
+      "origin": "locus",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    },
+    {
+      "code": "axe:anthropologie",
+      "label": "L'homme sans charité",
+      "rationale": "Pourquoi l'amour entre frères est-il le signe de la vraie vie chrétienne.",
+      "origin": "locus",
+      "dismissed": false,
+      "strength": null,
+      "signature": "ia-mistral"
+    },
+    {
+      "code": "axe:hamartiologie",
+      "label": "Hamartiologie — le péché",
+      "rationale": "Disponible — c'est vous qui savez ce que vous prêchez.",
+      "origin": "locus",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    },
+    {
+      "code": "axe:soteriologie",
+      "label": "Sotériologie — le salut",
+      "rationale": "Disponible — c'est vous qui savez ce que vous prêchez.",
+      "origin": "locus",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    },
+    {
+      "code": "axe:ecclesiologie",
+      "label": "L'Église sans amour",
+      "rationale": "Ce que devient la communauté quand l'amour fraternel disparaît.",
+      "origin": "locus",
+      "dismissed": false,
+      "strength": null,
+      "signature": "ia-mistral"
+    },
+    {
+      "code": "axe:angelologie",
+      "label": "Angélologie — les anges",
+      "rationale": "Disponible — c'est vous qui savez ce que vous prêchez.",
+      "origin": "locus",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    },
+    {
+      "code": "axe:demonologie",
+      "label": "Démonologie — Satan et les démons",
+      "rationale": "Disponible — c'est vous qui savez ce que vous prêchez.",
+      "origin": "locus",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    },
+    {
+      "code": "axe:eschatologie",
+      "label": "Eschatologie — les derniers temps",
+      "rationale": "Disponible — c'est vous qui savez ce que vous prêchez.",
+      "origin": "locus",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    },
+    {
+      "code": "1 Jean 4:7-21",
+      "label": "1 Jean 4:7-21",
+      "rationale": "L'apôtre Jean souligne que l'amour fraternel est une marque essentielle de la vie chrétienne, né de l'amour de Dieu, et que son absence révèle un manque de connaissance de Dieu.",
+      "origin": "sens",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    },
+    {
+      "code": "1 Corinthiens 13:1-13",
+      "label": "1 Corinthiens 13:1-13",
+      "rationale": "Ce chapitre célèbre l'amour comme la plus grande vertu, montrant que sans amour, même les dons spirituels ou les actions les plus nobles sont vains.",
+      "origin": "sens",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    },
+    {
+      "code": "Galates 5:13-26",
+      "label": "Galates 5:13-26",
+      "rationale": "Paul exhorte les Galates à servir les uns les autres par amour, et présente l'amour comme le fruit de l'Esprit, opposé aux œuvres de la chair.",
+      "origin": "sens",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    },
+    {
+      "code": "Matthieu 24:10-12",
+      "label": "Matthieu 24:10-12",
+      "rationale": "Jésus avertit que dans les derniers temps, à cause de l'augmentation de la méchanceté, l'amour de beaucoup se refroidira, illustrant une réalité possible dans l'Église.",
+      "origin": "sens",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    },
+    {
+      "code": "2 Timothée 3:1-5",
+      "label": "2 Timothée 3:1-5",
+      "rationale": "Paul décrit les temps difficiles des derniers jours, où les gens auront une apparence de piété mais renieront la puissance de celle-ci, incluant un manque d'amour fraternel.",
+      "origin": "sens",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    },
+    {
+      "code": "Jean 13:34-35",
+      "label": "Jean 13:34-35",
+      "rationale": "Jésus donne un commandement nouveau : s'aimer les uns les autres comme il les a aimés, et déclare que c'est par cet amour que tous reconnaîtront ses disciples.",
+      "origin": "sens",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    }
+  ],
+  "resolved": null,
+  "pericope_id": null,
+  "bounds_overridden": false,
+  "version_id": null,
+  "axis_code": null,
+  "plan_source": null,
+  "subject_matter": null,
+  "theme": null,
+  "elements": [],
+  "verses": [],
+  "variants": [],
+  "bearings": [],
+  "caveats": [],
+  "context": [],
+  "couples": [],
+  "supports": [],
+  "pericope_label": null,
+  "resisting_elsewhere": [],
+  "curation_reviewed_by": null,
+  "corpus_snapshot": "0631af9c9994f76b",
+  "corpus_drifted": false,
+  "turn": {
+    "say": "Votre phrase touche plusieurs endroits de la doctrine.",
+    "why": "Une intention peut porter plusieurs doctrines, et c'est souvent le cas. Laquelle prêchez-vous ? Les axes que votre formulation touche sont signalés — les autres restent ouverts. Des passages qui traitent ce sujet sont proposés plus bas ; y aller directement vous fait sauter la pesée doctrinale de l'axe. Formulation à forte charge : davantage de textes qui résistent sont affichés, et le risque de proof-texting sera relevé sur la mise en forme.",
+    "ask": "Sur lequel prêchez-vous ?",
+    "expects": "choice",
+    "stage_code": "weigh_conviction",
+    "signature": null,
+    "blocks": [
+      {
+        "kind": "chips",
+        "items": [
+          {
+            "code": "axe:theologie_propre",
+            "label": "Théologie propre — Dieu",
+            "hint": "Disponible — c'est vous qui savez ce que vous prêchez.",
+            "origin": "locus",
+            "selected": false,
+            "signature": null
+          },
+          {
+            "code": "axe:christologie",
+            "label": "Christologie — Jésus-Christ",
+            "hint": "Disponible — c'est vous qui savez ce que vous prêchez.",
+            "origin": "locus",
+            "selected": false,
+            "signature": null
+          },
+          {
+            "code": "axe:pneumatologie",
+            "label": "Pneumatologie — le Saint-Esprit",
+            "hint": "Disponible — c'est vous qui savez ce que vous prêchez.",
+            "origin": "locus",
+            "selected": false,
+            "signature": null
+          },
+          {
+            "code": "axe:anthropologie",
+            "label": "L'homme sans charité",
+            "hint": "Pourquoi l'amour entre frères est-il le signe de la vraie vie chrétienne.",
+            "origin": "locus",
+            "selected": false,
+            "signature": "ia-mistral"
+          },
+          {
+            "code": "axe:hamartiologie",
+            "label": "Hamartiologie — le péché",
+            "hint": "Disponible — c'est vous qui savez ce que vous prêchez.",
+            "origin": "locus",
+            "selected": false,
+            "signature": null
+          },
+          {
+            "code": "axe:soteriologie",
+            "label": "Sotériologie — le salut",
+            "hint": "Disponible — c'est vous qui savez ce que vous prêchez.",
+            "origin": "locus",
+            "selected": false,
+            "signature": null
+          },
+          {
+            "code": "axe:ecclesiologie",
+            "label": "L'Église sans amour",
+            "hint": "Ce que devient la communauté quand l'amour fraternel disparaît.",
+            "origin": "locus",
+            "selected": false,
+            "signature": "ia-mistral"
+          },
+          {
+            "code": "axe:angelologie",
+            "label": "Angélologie — les anges",
+            "hint": "Disponible — c'est vous qui savez ce que vous prêchez.",
+            "origin": "locus",
+            "selected": false,
+            "signature": null
+          },
+          {
+            "code": "axe:demonologie",
+            "label": "Démonologie — Satan et les démons",
+            "hint": "Disponible — c'est vous qui savez ce que vous prêchez.",
+            "origin": "locus",
+            "selected": false,
+            "signature": null
+          },
+          {
+            "code": "axe:eschatologie",
+            "label": "Eschatologie — les derniers temps",
+            "hint": "Disponible — c'est vous qui savez ce que vous prêchez.",
+            "origin": "locus",
+            "selected": false,
+            "signature": null
+          },
+          {
+            "code": "1 Jean 4:7-21",
+            "label": "1 Jean 4:7-21",
+            "hint": "L'apôtre Jean souligne que l'amour fraternel est une marque essentielle de la vi",
+            "origin": "sens",
+            "selected": false,
+            "signature": null
+          },
+          {
+            "code": "1 Corinthiens 13:1-13",
+            "label": "1 Corinthiens 13:1-13",
+            "hint": "Ce chapitre célèbre l'amour comme la plus grande vertu, montrant que sans amour,",
+            "origin": "sens",
+            "selected": false,
+            "signature": null
+          },
+          {
+            "code": "Galates 5:13-26",
+            "label": "Galates 5:13-26",
+            "hint": "Paul exhorte les Galates à servir les uns les autres par amour, et présente l'am",
+            "origin": "sens",
+            "selected": false,
+            "signature": null
+          },
+          {
+            "code": "Matthieu 24:10-12",
+            "label": "Matthieu 24:10-12",
+            "hint": "Jésus avertit que dans les derniers temps, à cause de l'augmentation de la mécha",
+            "origin": "sens",
+            "selected": false,
+            "signature": null
+          },
+          {
+            "code": "2 Timothée 3:1-5",
+            "label": "2 Timothée 3:1-5",
+            "hint": "Paul décrit les temps difficiles des derniers jours, où les gens auront une appa",
+            "origin": "sens",
+            "selected": false,
+            "signature": null
+          },
+          {
+            "code": "Jean 13:34-35",
+            "label": "Jean 13:34-35",
+            "hint": "Jésus donne un commandement nouveau : s'aimer les uns les autres comme il les a ",
+            "origin": "sens",
+            "selected": false,
+            "signature": null
+          }
+        ]
+      }
+    ]
+  }
+}

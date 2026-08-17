@@ -1,0 +1,524 @@
+{
+  "id": "00000000-0000-4000-8000-000000000001",
+  "status": "ouverte",
+  "entry_mode": "conviction",
+  "raw_input": "l'amour fraternel n'existe plus dans l'eglise",
+  "outcome": "continue",
+  "rationale": "Thème proposé à partir de l'axe retenu : theologie_propre.",
+  "trace": [
+    {
+      "stage_code": "route_entry",
+      "rationale": "Lu comme une intention. Ni référence ni citation, mais une phrase lisible."
+    },
+    {
+      "stage_code": "load_context",
+      "rationale": "Aucun contexte relu sur cette unité."
+    },
+    {
+      "stage_code": "propose_theme",
+      "rationale": "Thème proposé à partir de l'axe retenu : theologie_propre."
+    }
+  ],
+  "options": [],
+  "resolved": "1 Jean 4:7-12",
+  "pericope_id": "877c01e1-279c-538f-b6b4-2018b99dcb62",
+  "bounds_overridden": false,
+  "version_id": "a3a06fb7-a7b2-54bb-a165-0627c1746887",
+  "axis_code": "theologie_propre",
+  "plan_source": "textuel",
+  "subject_matter": "doctrinal",
+  "theme": "theologie_propre, en textuel doctrinal",
+  "elements": [],
+  "verses": [
+    {
+      "reference": "1 Jean 4:7",
+      "text": "Bien-aimés, aimons nous les uns les autres ; car l’amour est de Dieu, et quiconque aime est né de Dieu et connaît Dieu.",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:8",
+      "text": "Celui qui n’aime pas n’a pas connu Dieu, car Dieu est amour.",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:9",
+      "text": "L’amour de Dieu a été manifesté envers nous en ce que Dieu a envoyé son Fils  unique dans le monde, afin que nous vivions par lui.",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:10",
+      "text": "Et  cet amour consiste, non point en ce que nous avons aimé Dieu, mais en ce qu’il nous a aimés et a envoyé son Fils comme victime expiatoire pour nos péchés.",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:11",
+      "text": "Bien-aimés, si Dieu nous a ainsi aimés, nous devons aussi nous aimer les uns les autres.",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:12",
+      "text": "Personne n’a jamais vu Dieu ; si nous nous aimons les uns les autres, Dieu demeure en nous, et son amour est parfait en nous.",
+      "elsewhere": []
+    }
+  ],
+  "variants": [],
+  "bearings": [
+    {
+      "axis_code": "theologie_propre",
+      "label": "Théologie propre (Dieu)",
+      "strength": "porte",
+      "rationale": "Le passage développe une définition de Dieu comme amour (v. 8) et enracine cette nature divine dans l'envoi du Fils pour l'expiation (v. 9-10), ce qui dépasse une simple mention de Dieu pour en faire un sujet structurant."
+    },
+    {
+      "axis_code": "christologie",
+      "label": "Christologie",
+      "strength": "porte",
+      "rationale": "La christologie est centrale ici : l'envoi du Fils unique (v. 9) et sa fonction de victime expiatoire (v. 10) sont présentés comme la manifestation concrète de l'amour de Dieu, sans être développés théologiquement mais en étant indispensables au propos."
+    },
+    {
+      "axis_code": "pneumatologie",
+      "label": "Pneumatologie",
+      "strength": "absent",
+      "rationale": "Aucune mention de l'Esprit, ni de son rôle dans la connaissance de Dieu ou dans l'amour fraternel. Le passage se concentre sur l'amour comme fruit de la régénération (v. 7) sans l'attribuer à une action pneumatologique."
+    },
+    {
+      "axis_code": "anthropologie",
+      "label": "Anthropologie",
+      "strength": "porte",
+      "rationale": "L'anthropologie est abordée via la régénération ('né de Dieu', v. 7) et la capacité à aimer, présentée comme une preuve de la connaissance de Dieu. L'amour est un marqueur ontologique de la nouvelle naissance."
+    },
+    {
+      "axis_code": "hamartiologie",
+      "label": "Hamartiologie",
+      "strength": "porte",
+      "rationale": "Le péché est mentionné indirectement à travers la notion de victime expiatoire (v. 10), mais le passage ne développe pas une doctrine du péché : il l'évoque comme ce contre quoi l'amour de Dieu s'est manifesté."
+    },
+    {
+      "axis_code": "soteriologie",
+      "label": "Sotériologie",
+      "strength": "porte",
+      "rationale": "La sotériologie est présente via la vie par le Fils (v. 9) et l'expiation (v. 10), mais elle est subordonnée à la manifestation de l'amour divin. Le salut est décrit comme un effet de l'amour, non comme un objet de débat."
+    },
+    {
+      "axis_code": "ecclesiologie",
+      "label": "Ecclésiologie",
+      "strength": "absent",
+      "rationale": "Aucune référence à l'Église comme institution ou communauté structurée. L'amour fraternel est mentionné, mais sans lien avec une ecclésiologie explicite."
+    },
+    {
+      "axis_code": "angelologie",
+      "label": "Angélologie",
+      "strength": "absent",
+      "rationale": "Aucune mention des anges, ni comme exemples, ni comme acteurs. Le passage se concentre sur l'amour humain et divin, sans référence au monde angélique."
+    },
+    {
+      "axis_code": "demonologie",
+      "label": "Démonologie",
+      "strength": "absent",
+      "rationale": "Aucune mention des démons ou du mal comme entité personnelle. Le mal est évoqué indirectement via le péché (v. 10), mais sans démonologie."
+    },
+    {
+      "axis_code": "eschatologie",
+      "label": "Eschatologie",
+      "strength": "absent",
+      "rationale": "Aucune référence à la fin des temps, au jugement ou à la consumation. Le passage se situe dans une perspective de présence ('Dieu demeure en nous', v. 12) sans horizon eschatologique."
+    }
+  ],
+  "caveats": [
+    "Le passage ne définit pas l'amour comme l'essence unique de Dieu, mais seulement comme une de ses caractéristiques manifestées en Christ.",
+    "L'amour n'est pas présenté comme une capacité humaine naturelle, mais comme une preuve de la nouvelle naissance ('né de Dieu')."
+  ],
+  "context": [],
+  "couples": [
+    {
+      "plan_source": "textuel",
+      "subject_matter": "biographique",
+      "feasible": false,
+      "refusal_reason": "ce passage ne porte aucun personnage nommé ou individualisé",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "textuel",
+      "subject_matter": "doctrinal",
+      "feasible": true,
+      "refusal_reason": "",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "textuel",
+      "subject_matter": "ethique",
+      "feasible": true,
+      "refusal_reason": "",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "textuel",
+      "subject_matter": "historique",
+      "feasible": false,
+      "refusal_reason": "ce passage n'est pas un récit historique mais une exhortation théologique",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "textuel",
+      "subject_matter": "typologique",
+      "feasible": false,
+      "refusal_reason": "ce passage ne contient aucune figure typologique explicite ou implicite",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "textuel",
+      "subject_matter": "prophetique",
+      "feasible": false,
+      "refusal_reason": "ce passage n'est pas une annonce prophétique mais une exhortation et une révélation de l'amour divin",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "expositif",
+      "subject_matter": "biographique",
+      "feasible": false,
+      "refusal_reason": "ce passage ne porte aucun personnage nommé ou individualisé",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "expositif",
+      "subject_matter": "doctrinal",
+      "feasible": true,
+      "refusal_reason": "",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "expositif",
+      "subject_matter": "ethique",
+      "feasible": true,
+      "refusal_reason": "",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "expositif",
+      "subject_matter": "historique",
+      "feasible": false,
+      "refusal_reason": "ce passage n'est pas un récit historique mais une exhortation théologique",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "expositif",
+      "subject_matter": "typologique",
+      "feasible": false,
+      "refusal_reason": "ce passage ne contient aucune figure typologique explicite ou implicite",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "expositif",
+      "subject_matter": "prophetique",
+      "feasible": false,
+      "refusal_reason": "ce passage n'est pas une annonce prophétique mais une exhortation et une révélation de l'amour divin",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "thematique",
+      "subject_matter": "biographique",
+      "feasible": false,
+      "refusal_reason": "ce passage ne porte aucun personnage nommé ou individualisé",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "thematique",
+      "subject_matter": "doctrinal",
+      "feasible": true,
+      "refusal_reason": "",
+      "proof_text_risk": "moyen"
+    },
+    {
+      "plan_source": "thematique",
+      "subject_matter": "ethique",
+      "feasible": true,
+      "refusal_reason": "",
+      "proof_text_risk": "moyen"
+    },
+    {
+      "plan_source": "thematique",
+      "subject_matter": "historique",
+      "feasible": false,
+      "refusal_reason": "ce passage n'est pas un récit historique mais une exhortation théologique",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "thematique",
+      "subject_matter": "typologique",
+      "feasible": false,
+      "refusal_reason": "ce passage ne contient aucune figure typologique explicite ou implicite",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "thematique",
+      "subject_matter": "prophetique",
+      "feasible": false,
+      "refusal_reason": "ce passage n'est pas une annonce prophétique mais une exhortation et une révélation de l'amour divin",
+      "proof_text_risk": "faible"
+    }
+  ],
+  "supports": [],
+  "pericope_label": "L'amour comme preuve de la connaissance de Dieu",
+  "resisting_elsewhere": [],
+  "curation_reviewed_by": "ia-mistral",
+  "corpus_snapshot": "0631af9c9994f76b",
+  "corpus_drifted": false,
+  "turn": {
+    "say": "Un thème, jamais un titre — le titre, c'est votre voix.",
+    "why": "Thème proposé à partir de l'axe retenu : theologie_propre.",
+    "ask": "Réécrivez-le, c'est votre sermon — ou écrivez vos points.",
+    "expects": "text",
+    "stage_code": "propose_theme",
+    "signature": "ia-mistral",
+    "blocks": [
+      {
+        "kind": "bearings",
+        "items": [
+          {
+            "axis_code": "theologie_propre",
+            "label": "Théologie propre (Dieu)",
+            "strength": "porte",
+            "rationale": "Le passage développe une définition de Dieu comme amour (v. 8) et enracine cette nature divine dans l'envoi du Fils pour l'expiation (v. 9-10), ce qui dépasse une simple mention de Dieu pour en faire un sujet structurant.",
+            "selected": true,
+            "selectable": false
+          },
+          {
+            "axis_code": "christologie",
+            "label": "Christologie",
+            "strength": "porte",
+            "rationale": "La christologie est centrale ici : l'envoi du Fils unique (v. 9) et sa fonction de victime expiatoire (v. 10) sont présentés comme la manifestation concrète de l'amour de Dieu, sans être développés théologiquement mais en étant indispensables au propos.",
+            "selected": false,
+            "selectable": true
+          },
+          {
+            "axis_code": "pneumatologie",
+            "label": "Pneumatologie",
+            "strength": "absent",
+            "rationale": "Aucune mention de l'Esprit, ni de son rôle dans la connaissance de Dieu ou dans l'amour fraternel. Le passage se concentre sur l'amour comme fruit de la régénération (v. 7) sans l'attribuer à une action pneumatologique.",
+            "selected": false,
+            "selectable": false
+          },
+          {
+            "axis_code": "anthropologie",
+            "label": "Anthropologie",
+            "strength": "porte",
+            "rationale": "L'anthropologie est abordée via la régénération ('né de Dieu', v. 7) et la capacité à aimer, présentée comme une preuve de la connaissance de Dieu. L'amour est un marqueur ontologique de la nouvelle naissance.",
+            "selected": false,
+            "selectable": true
+          },
+          {
+            "axis_code": "hamartiologie",
+            "label": "Hamartiologie",
+            "strength": "porte",
+            "rationale": "Le péché est mentionné indirectement à travers la notion de victime expiatoire (v. 10), mais le passage ne développe pas une doctrine du péché : il l'évoque comme ce contre quoi l'amour de Dieu s'est manifesté.",
+            "selected": false,
+            "selectable": true
+          },
+          {
+            "axis_code": "soteriologie",
+            "label": "Sotériologie",
+            "strength": "porte",
+            "rationale": "La sotériologie est présente via la vie par le Fils (v. 9) et l'expiation (v. 10), mais elle est subordonnée à la manifestation de l'amour divin. Le salut est décrit comme un effet de l'amour, non comme un objet de débat.",
+            "selected": false,
+            "selectable": true
+          },
+          {
+            "axis_code": "ecclesiologie",
+            "label": "Ecclésiologie",
+            "strength": "absent",
+            "rationale": "Aucune référence à l'Église comme institution ou communauté structurée. L'amour fraternel est mentionné, mais sans lien avec une ecclésiologie explicite.",
+            "selected": false,
+            "selectable": false
+          },
+          {
+            "axis_code": "angelologie",
+            "label": "Angélologie",
+            "strength": "absent",
+            "rationale": "Aucune mention des anges, ni comme exemples, ni comme acteurs. Le passage se concentre sur l'amour humain et divin, sans référence au monde angélique.",
+            "selected": false,
+            "selectable": false
+          },
+          {
+            "axis_code": "demonologie",
+            "label": "Démonologie",
+            "strength": "absent",
+            "rationale": "Aucune mention des démons ou du mal comme entité personnelle. Le mal est évoqué indirectement via le péché (v. 10), mais sans démonologie.",
+            "selected": false,
+            "selectable": false
+          },
+          {
+            "axis_code": "eschatologie",
+            "label": "Eschatologie",
+            "strength": "absent",
+            "rationale": "Aucune référence à la fin des temps, au jugement ou à la consumation. Le passage se situe dans une perspective de présence ('Dieu demeure en nous', v. 12) sans horizon eschatologique.",
+            "selected": false,
+            "selectable": false
+          }
+        ],
+        "caveats": [
+          "Le passage ne définit pas l'amour comme l'essence unique de Dieu, mais seulement comme une de ses caractéristiques manifestées en Christ.",
+          "L'amour n'est pas présenté comme une capacité humaine naturelle, mais comme une preuve de la nouvelle naissance ('né de Dieu')."
+        ],
+        "decide_stage": "bear_axes"
+      },
+      {
+        "kind": "feasibility",
+        "items": [
+          {
+            "plan_source": "textuel",
+            "subject_matter": "biographique",
+            "feasible": false,
+            "risk": "faible",
+            "rationale": "ce passage ne porte aucun personnage nommé ou individualisé"
+          },
+          {
+            "plan_source": "textuel",
+            "subject_matter": "doctrinal",
+            "feasible": true,
+            "risk": "faible",
+            "rationale": ""
+          },
+          {
+            "plan_source": "textuel",
+            "subject_matter": "ethique",
+            "feasible": true,
+            "risk": "faible",
+            "rationale": ""
+          },
+          {
+            "plan_source": "textuel",
+            "subject_matter": "historique",
+            "feasible": false,
+            "risk": "faible",
+            "rationale": "ce passage n'est pas un récit historique mais une exhortation théologique"
+          },
+          {
+            "plan_source": "textuel",
+            "subject_matter": "typologique",
+            "feasible": false,
+            "risk": "faible",
+            "rationale": "ce passage ne contient aucune figure typologique explicite ou implicite"
+          },
+          {
+            "plan_source": "textuel",
+            "subject_matter": "prophetique",
+            "feasible": false,
+            "risk": "faible",
+            "rationale": "ce passage n'est pas une annonce prophétique mais une exhortation et une révélation de l'amour divin"
+          },
+          {
+            "plan_source": "expositif",
+            "subject_matter": "biographique",
+            "feasible": false,
+            "risk": "faible",
+            "rationale": "ce passage ne porte aucun personnage nommé ou individualisé"
+          },
+          {
+            "plan_source": "expositif",
+            "subject_matter": "doctrinal",
+            "feasible": true,
+            "risk": "faible",
+            "rationale": ""
+          },
+          {
+            "plan_source": "expositif",
+            "subject_matter": "ethique",
+            "feasible": true,
+            "risk": "faible",
+            "rationale": ""
+          },
+          {
+            "plan_source": "expositif",
+            "subject_matter": "historique",
+            "feasible": false,
+            "risk": "faible",
+            "rationale": "ce passage n'est pas un récit historique mais une exhortation théologique"
+          },
+          {
+            "plan_source": "expositif",
+            "subject_matter": "typologique",
+            "feasible": false,
+            "risk": "faible",
+            "rationale": "ce passage ne contient aucune figure typologique explicite ou implicite"
+          },
+          {
+            "plan_source": "expositif",
+            "subject_matter": "prophetique",
+            "feasible": false,
+            "risk": "faible",
+            "rationale": "ce passage n'est pas une annonce prophétique mais une exhortation et une révélation de l'amour divin"
+          },
+          {
+            "plan_source": "thematique",
+            "subject_matter": "biographique",
+            "feasible": false,
+            "risk": "faible",
+            "rationale": "ce passage ne porte aucun personnage nommé ou individualisé"
+          },
+          {
+            "plan_source": "thematique",
+            "subject_matter": "doctrinal",
+            "feasible": true,
+            "risk": "moyen",
+            "rationale": ""
+          },
+          {
+            "plan_source": "thematique",
+            "subject_matter": "ethique",
+            "feasible": true,
+            "risk": "moyen",
+            "rationale": ""
+          },
+          {
+            "plan_source": "thematique",
+            "subject_matter": "historique",
+            "feasible": false,
+            "risk": "faible",
+            "rationale": "ce passage n'est pas un récit historique mais une exhortation théologique"
+          },
+          {
+            "plan_source": "thematique",
+            "subject_matter": "typologique",
+            "feasible": false,
+            "risk": "faible",
+            "rationale": "ce passage ne contient aucune figure typologique explicite ou implicite"
+          },
+          {
+            "plan_source": "thematique",
+            "subject_matter": "prophetique",
+            "feasible": false,
+            "risk": "faible",
+            "rationale": "ce passage n'est pas une annonce prophétique mais une exhortation et une révélation de l'amour divin"
+          }
+        ]
+      },
+      {
+        "kind": "theme",
+        "body": "theologie_propre, en textuel doctrinal"
+      },
+      {
+        "kind": "actions",
+        "items": [
+          {
+            "code": "elements",
+            "label": "Écrire mes points",
+            "enabled": true,
+            "unavailable_reason": ""
+          },
+          {
+            "code": "deck",
+            "label": "PowerPoint",
+            "enabled": false,
+            "unavailable_reason": "Le livrable n'est pas ouvert : une citation projetée doit d'abord être contrôlée."
+          },
+          {
+            "code": "sheet",
+            "label": "Fiche de chaire",
+            "enabled": false,
+            "unavailable_reason": "Le livrable n'est pas ouvert : une citation projetée doit d'abord être contrôlée."
+          }
+        ]
+      }
+    ]
+  }
+}

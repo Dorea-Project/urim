@@ -1,0 +1,201 @@
+{
+  "id": "00000000-0000-4000-8000-000000000001",
+  "status": "ouverte",
+  "entry_mode": "conviction",
+  "raw_input": "l'amour fraternel n'existe plus dans l'eglise",
+  "outcome": "await_decision",
+  "rationale": "Votre demande couvre 3 unités littéraires : L'amour comme preuve de la connaissance de Dieu · La présence de l'Esprit et la confession de Jésus comme Fils de Dieu · L'amour parfait et son lien avec la confiance et le commandement.",
+  "trace": [
+    {
+      "stage_code": "route_entry",
+      "rationale": "Lu comme une intention. Ni référence ni citation, mais une phrase lisible."
+    },
+    {
+      "stage_code": "bound_pericope",
+      "rationale": "Votre demande couvre 3 unités littéraires : L'amour comme preuve de la connaissance de Dieu · La présence de l'Esprit et la confession de Jésus comme Fils de Dieu · L'amour parfait et son lien avec la confiance et le commandement."
+    }
+  ],
+  "options": [
+    {
+      "code": "877c01e1-279c-538f-b6b4-2018b99dcb62",
+      "label": "L'amour comme preuve de la connaissance de Dieu",
+      "rationale": "Cette section développe l'idée que l'amour est la manifestation concrète de la relation avec Dieu, fondée sur l'amour de Dieu manifesté en Christ. Le motif central est l'amour comme preuve de la filiation divine et de la connaissance de Dieu, avec une insistance sur l'amour de Dieu envers nous comme fondement.",
+      "origin": "curation",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    },
+    {
+      "code": "749f8ed4-dfa6-549f-9761-0d2dae79d7c9",
+      "label": "La présence de l'Esprit et la confession de Jésus comme Fils de Dieu",
+      "rationale": "Ce passage souligne la présence de l'Esprit comme preuve de la communion avec Dieu et la confession de Jésus comme Fils de Dieu comme condition de cette communion. Il établit un lien entre l'expérience spirituelle (Esprit) et la doctrine (confession).",
+      "origin": "curation",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    },
+    {
+      "code": "698b64c7-ec50-50d2-9d49-2f9964d3e2f1",
+      "label": "L'amour parfait et son lien avec la confiance et le commandement",
+      "rationale": "Cette dernière unité approfondit les conséquences pratiques de l'amour parfait : assurance au jugement, absence de crainte, primauté de l'amour de Dieu envers nous, et l'obligation d'aimer son frère comme preuve de l'amour pour Dieu. Le motif central est l'intégration de l'amour dans la vie du croyant comme signe de sa relation avec Dieu.",
+      "origin": "curation",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    },
+    {
+      "code": "en_un_seul",
+      "label": "Le tout, en un seul sermon",
+      "rationale": "Un sermon expositif sur l'ensemble — les unités restent distinctes dans le texte, c'est le plan qui les tient.",
+      "origin": "bornage",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    }
+  ],
+  "resolved": "1 Jean 4:7-21",
+  "pericope_id": null,
+  "bounds_overridden": false,
+  "version_id": null,
+  "axis_code": null,
+  "plan_source": null,
+  "subject_matter": null,
+  "theme": null,
+  "elements": [],
+  "verses": [
+    {
+      "reference": "1 Jean 4:7",
+      "text": "Bien-aimés, aimons nous les uns les autres ; car l’amour est de Dieu, et quiconque aime est né de Dieu et connaît Dieu.",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:8",
+      "text": "Celui qui n’aime pas n’a pas connu Dieu, car Dieu est amour.",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:9",
+      "text": "L’amour de Dieu a été manifesté envers nous en ce que Dieu a envoyé son Fils  unique dans le monde, afin que nous vivions par lui.",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:10",
+      "text": "Et  cet amour consiste, non point en ce que nous avons aimé Dieu, mais en ce qu’il nous a aimés et a envoyé son Fils comme victime expiatoire pour nos péchés.",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:11",
+      "text": "Bien-aimés, si Dieu nous a ainsi aimés, nous devons aussi nous aimer les uns les autres.",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:12",
+      "text": "Personne n’a jamais vu Dieu ; si nous nous aimons les uns les autres, Dieu demeure en nous, et son amour est parfait en nous.",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:13",
+      "text": "Nous connaissons que nous demeurons en lui, et qu’il demeure en nous, en ce qu’il nous a donné de son Esprit.",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:14",
+      "text": "Et nous, nous avons vu et nous attestons que le Père a envoyé le Fils comme Sauveur du monde.",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:15",
+      "text": "Celui qui confessera que Jésus est le Fils de Dieu, Dieu demeure en lui, et lui en Dieu.",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:16",
+      "text": "Et nous, nous avons connu l’amour que Dieu a pour nous, et nous y avons cru. Dieu est amour ; et celui qui demeure dans l’amour demeure en Dieu, et Dieu demeure en lui.",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:17",
+      "text": "Tel il est, tels nous sommes aussi dans ce monde : c’est en cela que l’amour est parfait en nous, afin que nous ayons de l’assurance au jour du jugement.",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:18",
+      "text": "La crainte n’est pas dans l’amour, mais l’amour parfait bannit  la crainte ; car la crainte suppose un châtiment, et celui qui craint n’est pas parfait dans l’amour.",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:19",
+      "text": "Pour nous, nous l’aimons, parce qu’il nous a aimés le premier.",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:20",
+      "text": "Si quelqu’un dit :  J’aime Dieu, et qu’il haïsse son frère, c’est un menteur ; car celui qui n’aime pas son frère qu’il voit, comment peut-il aimer Dieu qu’il ne voit pas ?",
+      "elsewhere": []
+    },
+    {
+      "reference": "1 Jean 4:21",
+      "text": "Et nous avons de lui ce commandement : que celui qui aime Dieu aime aussi son frère.",
+      "elsewhere": []
+    }
+  ],
+  "variants": [],
+  "bearings": [],
+  "caveats": [],
+  "context": [],
+  "couples": [],
+  "supports": [],
+  "pericope_label": null,
+  "resisting_elsewhere": [],
+  "curation_reviewed_by": null,
+  "corpus_snapshot": "0631af9c9994f76b",
+  "corpus_drifted": false,
+  "turn": {
+    "say": "Vos bornes ne coïncident pas avec l'unité relue.",
+    "why": "Votre demande couvre 3 unités littéraires : L'amour comme preuve de la connaissance de Dieu · La présence de l'Esprit et la confession de Jésus comme Fils de Dieu · L'amour parfait et son lien avec la confiance et le commandement.",
+    "ask": "Lesquelles gardons-nous ?",
+    "expects": "choice",
+    "stage_code": "bound_pericope",
+    "signature": null,
+    "blocks": [
+      {
+        "kind": "bounds",
+        "items": [
+          {
+            "code": "877c01e1-279c-538f-b6b4-2018b99dcb62",
+            "label": "L'amour comme preuve de la connaissance de Dieu",
+            "hint": "Cette section développe l'idée que l'amour est la manifestation concrète de la r",
+            "origin": "curation",
+            "selected": false,
+            "signature": null
+          },
+          {
+            "code": "749f8ed4-dfa6-549f-9761-0d2dae79d7c9",
+            "label": "La présence de l'Esprit et la confession de Jésus comme Fils de Dieu",
+            "hint": "Ce passage souligne la présence de l'Esprit comme preuve de la communion avec Di",
+            "origin": "curation",
+            "selected": false,
+            "signature": null
+          },
+          {
+            "code": "698b64c7-ec50-50d2-9d49-2f9964d3e2f1",
+            "label": "L'amour parfait et son lien avec la confiance et le commandement",
+            "hint": "Cette dernière unité approfondit les conséquences pratiques de l'amour parfait :",
+            "origin": "curation",
+            "selected": false,
+            "signature": null
+          },
+          {
+            "code": "en_un_seul",
+            "label": "Le tout, en un seul sermon",
+            "hint": "Un sermon expositif sur l'ensemble — les unités restent distinctes dans le texte",
+            "origin": "bornage",
+            "selected": false,
+            "signature": null
+          }
+        ],
+        "consequence": "Si vous gardez vos bornes, je ne pourrai plus vous alerter sur un risque de proof-texting."
+      }
+    ]
+  }
+}
