@@ -163,10 +163,16 @@ puis continuer à vouvoyer serait exactement le mensonge que D13 refuse — et
 tutoyer l'interface tout en vouvoyant Urim se lirait comme une faute, pas comme
 une nuance.
 
-D'où l'ordre : le **catalogue** d'abord — sortir les phrases d'Urim du code, ce
-que le chantier bilingue a déjà fait pour les notifications (`app/_shared/messages.py`)
-et qui servira deux fois —, la question ensuite. Le salut et le nom, eux, peuvent
-partir avant : ils vivent dans la copie du produit.
+#### Un catalogue n'est pas la réponse — voir Q20
+
+J'avais recommandé de sortir les phrases dans un catalogue à deux formes
+d'adresse. C'est écarté : deux variantes de chaque phrase dérivent, et le
+tutoiement n'est que le premier axe — la proactivité en demanderait d'autres.
+Si la phrase est **rendue** plutôt qu'écrite, la forme d'adresse devient une
+consigne et non un second catalogue. C'est l'objet de **Q20**.
+
+Le salut et le nom, eux, peuvent partir avant : ils vivent dans la copie du
+produit.
 
 ### Q5bis — qui a le droit d'écrire une phrase, et laquelle — **tranchée**
 
@@ -422,6 +428,78 @@ un défaut d'ergonomie, c'est une faute.
 On sort alors d'Urim vers l'assemblée — donc vers **Q9**, et vers une promesse
 inverse de celle du profil : les préparations ne traversent jamais, mais la
 synthèse validée, si.
+
+### Q20 — Le modèle peut-il porter la voix d'Urim ? — **architecture à valider**
+
+> *« Les conversations ne peuvent pas être en dur, car on a associé Mistral pour
+> combler le vide d'interaction, être proactif, jouer plus sur l'intelligence. »*
+
+Le constat est juste, et il rejoint la plainte de Q5 : un compagnon qui dit
+« Voici ce que je peux vous proposer ici » à chaque tour est mécanique. Onze
+écrans, deux phrases chacun, répétées à l'identique — c'est le vide dont il
+s'agit.
+
+Mais le serveur a écrit l'inverse, et il faut le regarder en face :
+
+> *« Les phrases restent déterministes […] le modèle n'a aucun canal de sortie
+> en prose, et lui en ouvrir un pour annoncer ce que le moteur vient de faire
+> serait payer un appel pour une phrase qu'on écrit une fois. »*
+
+#### Le critère est déjà dans le dépôt, et il tranche
+
+`adapters/mistral.py` dit à quelle condition le modèle a le droit de parler :
+
+> *« Ni l'un ni l'autre ne peut retirer quoi que ce soit […] leur erreur est
+> inoffensive, leur absence l'est aussi. C'est la seule raison pour laquelle on
+> les autorise à parler. »*
+
+Appliqué phrase par phrase, ce critère donne trois réponses différentes.
+
+| | Le modèle peut-il ? | Pourquoi |
+|---|---|---|
+| **`why`** — le motif | **Jamais** | C'est le filet doré. Un motif réécrit par un modèle n'est plus la provenance du raisonnement : c'est un oracle qui explique après coup. Toute la différence entre un atelier et un oracle tient là. |
+| **`say`** / **`ask`** | Oui, **à partir de la phrase déterministe** | Le modèle reformule, il ne décide pas de quoi parler. Son erreur redevient inoffensive : la table reste la référence, et une sortie qui promet ce que les blocs n'ont pas est jetée. Le serveur a trouvé ce défaut **trois fois** en marchant son propre arbre — un `say` qui annonçait un contenu absent. Un modèle le refabriquerait à volonté. |
+| **Les faits nouveaux** | Il ne les invente pas, il les **dit** | Voir plus bas : c'est là qu'est la vraie proactivité. |
+
+#### Ce qui doit être résolu, sinon l'idée est malhonnête
+
+**La non-reproductibilité sous rejeu.** `GET /studies/{id}` rejoue le pipeline :
+une phrase rendue à chaque lecture serait **différente à chaque ouverture**. La
+même préparation accueillerait le pasteur autrement chaque matin, sans que rien
+n'ait changé. Ce n'est pas un désagrément, c'est le contraire de D28 — le rejeu
+est censé garantir que ce qui est dit découle de l'état, pas du hasard.
+
+La sortie : rendre la voix **sur le chemin d'écriture seulement** — ouvrir,
+décider, écarter, parler — et la garder contre l'empreinte de l'état. Une
+lecture sert la voix gardée, ou la phrase déterministe s'il n'y en a pas. Ce
+n'est pas un historique de conversation (D28 tient) : c'est le rendu de l'état
+courant, mis en cache comme tel.
+
+**Le temps.** Un tour coûte déjà huit secondes mesurées. Les appels au modèle
+tiennent en 2 à 8 secondes — et l'un d'eux, sans délai maximum, a figé une
+préparation **35 minutes** le 14 août. La voix rendue doit donc être *en plus*,
+jamais *avant* : le tour part avec sa phrase déterministe, et la voix la remplace
+si elle arrive. Un compagnon lent est pire qu'un compagnon sobre.
+
+#### La vraie proactivité n'est pas de l'éloquence
+
+C'est le point le plus important, et il ne demande presque pas de modèle.
+
+`propose_theme` sait déjà qu'un axe est une **redite** — il appelle
+`recently_preached_axes` et calcule `redite`. L'information est là, calculée, et
+elle ne sort qu'enfouie dans un motif. Un compagnon proactif dirait : *« vous
+avez déjà prêché cet axe le mois dernier — vous y revenez exprès ? »*
+
+Le vide d'interaction se comble donc d'abord avec **des faits que le moteur a
+déjà et ne dit pas**, ensuite avec une voix qui les dit bien. L'inverse — une
+belle phrase sur rien — est précisément ce qu'un oracle fait.
+
+#### Ce qui reste à trancher
+
+- Où le modèle tourne, et ce que la promesse « aucun entraînement sur ton
+  contenu » lui impose — c'est **Q3**, encore ouverte.
+- Le coût par tour, une fois la voix mise en cache : combien d'appels pour une
+  préparation menée au bout.
 
 ### Q19 — Où vivent les documents produits ? — **écartée pour l'instant**
 
