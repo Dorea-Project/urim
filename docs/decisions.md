@@ -417,13 +417,11 @@ canal, avec quel consentement.
 | Le code secret existe à deux endroits — serveur et dérivation locale. Le changer d'un côté ne met pas l'autre à jour | Avant l'écran de changement de code |
 | Le changement de code secret depuis le profil n'existe pas : seul « code oublié » permet d'en changer, et il révoque les autres appareils | Avec l'écran de compte |
 | Les églises et les appareils du profil viennent d'un jeu d'exemple en mémoire | Q9 et Q11 |
-| Le fil guidé, la relecture et les capsules sont **scriptés** : aucun moteur ne les produit | Q1, Q2, Q3, Q14 |
-| Les préparations vivent en mémoire — fermer l'application les perd | Q4 |
+| La relecture d'une prédication et les capsules de synthèse sont **scriptées** : aucun moteur ne les produit. Le fil guidé, lui, parle au vrai moteur | Q2, Q3 |
 | Le fil guidé parle le contrat du serveur, mais un build de démonstration le fait **jouer par un mannequin** (`DemoUrimEngine`) : quatre étages scriptés, aucune Écriture consultée. Il imite la forme du contrat, pas le raisonnement | Quand l'application vise le serveur par défaut |
 | **Un tour réel coûte jusqu'à onze écrans de défilement** sur un téléphone. Rien ne déborde ; c'est la longueur qui casse l'usage — dix pesées et dix-huit couples plan × matière, republiés à chaque tour comme décor ambiant, séparent le pasteur de son geste | La prochaine décision d'écran |
 | Le thème servi par le moteur est un gabarit de **codes bruts** — « theologie_propre, en textuel doctrinal ». Affiché tel quel sous « THÈME » | Côté serveur, aller chercher le libellé de l'axe |
 | Le compte rendu de séance est perdu en quittant l'écran. C'est cohérent avec D28, mais ce qui a été touché il y a cinq minutes disparaît en revenant de l'accueil | À évaluer à l'usage — un cache de session suffirait |
 | Une prédication transcrite n'a **pas d'issue moteur** : sa pastille « Retour disponible » a disparu du fil. Le serveur ne connaît que les préparations écrites — sa capture est verrouillée à l'étape 1 | Q2, avec la capture réelle |
-| La base de développement partagée est estampillée par une **branche parallèle** (bilingue) : la migration du fil ne peut pas y être appliquée depuis `main`. Le DDL est éprouvé sur la vraie base dans une transaction annulée, pas encore posé | À la fusion des deux branches — une révision de fusion Alembic sera nécessaire |
 | Aucune intégration continue | Dès que possible |
 | Le mode développeur Windows n'est pas activé — bloque les compilations Windows | Au besoin |
