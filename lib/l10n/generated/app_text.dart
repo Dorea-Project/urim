@@ -933,6 +933,12 @@ abstract class AppText {
   /// **'Le moteur répondra dès que la connexion reviendra. Rien n\'est perdu.'**
   String get gesturePendingBody;
 
+  /// `corpus_drifted` du serveur. Le tour n'est pas faux : le moteur rejoue contre un corpus qui a bouge — des unites relues, des pesees ajoutees. Ca se dit une fois, sobrement, et ca n'empeche rien.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le corpus a été relu depuis l\'ouverture — ce qu\'Urim dit ici n\'est plus mot pour mot ce qu\'il disait alors.'**
+  String get corpusDrifted;
+
   /// Ce qui est affiché vient du magasin local, pas du serveur. Le moteur rejoue à chaque lecture : ce qui a été gardé hier soir est ce qu'il disait hier soir, et le faire passer pour une réponse d'aujourd'hui serait un mensonge découvert au pire moment.
   ///
   /// In fr, this message translates to:

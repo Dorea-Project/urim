@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:urim/core/result/cached.dart';
+import 'package:urim/core/id/id_generator.dart';
 import 'package:urim/core/time/clock.dart';
 import 'package:urim/data/datasources/pending_gestures_local_data_source.dart';
 import 'package:urim/data/datasources/turn_cache_local_data_source.dart';
@@ -59,6 +60,13 @@ base class _DepotAvecGarde extends DepotFige {
 /// Ce qui se verifie ici est autant l'honnetete que la vitesse : un tour garde
 /// **doit** porter l'heure ou il a ete recu. Le moteur rejoue a chaque lecture
 /// (D28), donc ce qui a ete garde hier soir est ce qu'il disait hier soir.
+
+final class _SequentialIds implements IdGenerator {
+  int _next = 0;
+
+  @override
+  String newId() => 'cle-${_next++}';
+}
 
 final class _FixedClock implements Clock {
   const _FixedClock(this._now);
@@ -127,6 +135,7 @@ void main() {
           documents: documents,
           clock: _FixedClock(horloge ?? recu),
         ),
+        _SequentialIds(),
       ),
       documents: documents,
       reseau: reseau,
@@ -324,6 +333,68 @@ void main() {
       expect(find.byType(StaleBanner), findsOneWidget);
       expect(find.text(etude.turn!.say), findsOneWidget);
       expect(tester.takeException(), isNull);
+    });
+  });
+
+  group('quand le corpus a bouge', () {
+    testWidgets('l\'ecran le dit une fois, et n\'empeche rien',
+        (tester) async {
+      // Le serveur signale `corpus_drifted` depuis le premier jour et personne
+      // ne l'ecoutait. Le tour n'est pas faux : le moteur rejoue contre un
+      // corpus qui a bouge, et il n'est plus mot pour mot celui que le pasteur
+      // avait sous les yeux.
+      SharedPreferences.setMockInitialValues(<String, Object>{});
+      final preferences = await SharedPreferences.getInstance();
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      final brut = jsonDecode(ToursReels.json(ToursReels.theme))
+          as Map<String, dynamic>;
+      final etude = studyFromWire({...brut, 'corpus_drifted': true});
+      expect(etude.corpusDrifted, isTrue);
+
+      final depot = DepotFige(etude);
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(preferences),
+            demoConfigOverride,
+            studyRepositoryProvider.overrideWithValue(depot),
+          ],
+          child: wrapScreen(const PreparationPage(preparationId: 'etude-1')),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DriftNotice), findsOneWidget);
+      // Et le tour reste entierement utilisable : c'est une mention, pas un mur.
+      expect(find.text(etude.turn!.say), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('rien ne s\'affiche quand le corpus n\'a pas bouge',
+        (tester) async {
+      SharedPreferences.setMockInitialValues(<String, Object>{});
+      final preferences = await SharedPreferences.getInstance();
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(preferences),
+            demoConfigOverride,
+            studyRepositoryProvider
+                .overrideWithValue(DepotFige(ToursReels.etude(ToursReels.theme))),
+          ],
+          child: wrapScreen(const PreparationPage(preparationId: 'etude-1')),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DriftNotice), findsNothing);
     });
   });
 

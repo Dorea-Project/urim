@@ -4,12 +4,14 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:urim/core/error/failure.dart';
+import 'package:urim/core/id/id_generator.dart';
 import 'package:urim/core/time/clock.dart';
 import 'package:urim/data/datasources/pending_gestures_local_data_source.dart';
 import 'package:urim/data/datasources/turn_cache_local_data_source.dart';
 import 'package:urim/data/datasources/urim_remote_data_source.dart';
 import 'package:urim/data/repositories/study_repository_impl.dart';
 import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
+import 'package:urim/domain/entities/preparation/pending_gesture.dart';
 import '../support/fake_documents.dart';
 import '../support/tours_reels.dart';
 
@@ -28,6 +30,14 @@ final class _FixedClock implements Clock {
   DateTime now() => _now;
 }
 
+/// Des cles previsibles : c'est ce qu'on vient verifier.
+final class _SequentialIds implements IdGenerator {
+  int _next = 0;
+
+  @override
+  String newId() => 'cle-${_next++}';
+}
+
 /// Un reseau qu'on allume et qu'on eteint.
 final class _Reseau implements HttpClientAdapter {
   _Reseau(this.corps, {this.debout = true});
@@ -39,6 +49,9 @@ final class _Reseau implements HttpClientAdapter {
   bool refuse = false;
 
   final List<String> chemins = [];
+
+  /// Ce qui a ete envoye : c'est la que la cle se verifie.
+  final List<Object?> corpsEnvoyes = [];
 
   @override
   Future<ResponseBody> fetch(
@@ -54,6 +67,7 @@ final class _Reseau implements HttpClientAdapter {
     }
 
     chemins.add(options.path);
+    corpsEnvoyes.add(options.data);
 
     if (refuse) {
       return ResponseBody.fromString(
@@ -102,6 +116,7 @@ void main() {
         UrimRemoteDataSource(dio, cache: cache),
         cache,
         file,
+        _SequentialIds(),
       ),
       documents: documents,
       reseau: reseau,
@@ -183,16 +198,35 @@ void main() {
       );
     });
 
-    test('parler echoue au lieu d\'etre mis en file', () async {
-      // Une phrase rejouee deux fois couterait deux passages du repondeur,
-      // donc deux appels de modele : il faut une cle d'idempotence, etape 3b.
-      // La phrase n'est pas perdue pour autant — le brouillon la garde (D32).
+    test('une parole attend, avec sa cle d\'idempotence', () async {
+      // Sans cle, la renvoyer couterait un second passage du repondeur, donc
+      // un appel de modele en plus et peut-etre une autre phrase que celle que
+      // le pasteur a deja lue.
       final m = monter(debout: false);
 
-      final issue = await m.depot.say(studyId: 'etude-1', rawInput: 'Bonjour');
+      final issue = await m.depot.say(
+        studyId: 'etude-1',
+        rawInput: 'quel plan je peux tenir sur ce texte ?',
+      );
 
-      expect(issue.isFailure, isTrue);
-      expect(await m.depot.pending('etude-1'), isEmpty);
+      expect(issue.valueOrNull, isA<Queued>());
+
+      final attente = (await m.depot.pending('etude-1')).single;
+      expect(attente.kind, PendingGestureKind.say);
+      expect(attente.text, 'quel plan je peux tenir sur ce texte ?');
+      expect(attente.key, isNotEmpty);
+    });
+
+    test('la cle est tiree a la mise en file, pas a l\'envoi', () async {
+      // La tirer a chaque tentative la rendrait differente chaque fois, donc
+      // parfaitement inutile : le serveur ne reconnaitrait jamais un renvoi.
+      final m = monter(debout: false);
+      await m.depot.say(studyId: 'etude-1', rawInput: 'une phrase');
+
+      final avant = (await m.depot.pending('etude-1')).single.key;
+      final apres = (await m.depot.pending('etude-1')).single.key;
+
+      expect(apres, avant);
     });
   });
 
@@ -242,6 +276,22 @@ void main() {
         reason: 'l\'ordre d\'emission est ce qui rend le rejeu equivalent',
       );
       expect(await m.depot.pending('etude-1'), isEmpty);
+    });
+
+    test('une parole part avec sa cle, pour que le serveur la reconnaisse',
+        () async {
+      final m = monter(debout: false);
+      await m.depot.say(studyId: 'etude-1', rawInput: 'une phrase');
+      final cle = (await m.depot.pending('etude-1')).single.key;
+
+      m.reseau.debout = true;
+      await m.depot.flush('etude-1');
+
+      expect(m.reseau.chemins.single, '/urim/studies/etude-1/turns');
+      expect(m.reseau.corpsEnvoyes.single, {
+        'raw_input': 'une phrase',
+        'idempotency_key': cle,
+      });
     });
 
     test('rien en attente ne fait rien', () async {
@@ -307,6 +357,7 @@ void main() {
           clock: _FixedClock(maintenant),
         ),
         m.file,
+        _SequentialIds(),
       );
 
       final rejeu = await depot.flush('etude-1');

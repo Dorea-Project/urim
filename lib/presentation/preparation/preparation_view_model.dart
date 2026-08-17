@@ -204,25 +204,18 @@ final class PreparationThread extends AsyncNotifier<ThreadState> {
 
   /// Parler. Une phrase libre, à n'importe quel moment.
   ///
-  /// ⚠️ **Parler ne se met pas en file, et c'est délibéré.** Décider et écarter
-  /// posent un état : les rejouer donne le même résultat. Une phrase, non — le
-  /// serveur y répond, et la renvoyer deux fois coûterait deux passages du
-  /// répondeur, donc deux appels de modèle. Il faut une clé d'idempotence, et
-  /// c'est l'étape 3b de Q4, des deux côtés.
-  ///
-  /// En attendant, sans réseau la phrase échoue — mais elle n'est pas perdue :
-  /// le brouillon la garde (D32), et elle est encore dans le champ.
+  /// Parler attend le réseau comme les autres gestes, avec une **clé
+  /// d'idempotence** : le serveur qui l'a déjà vue rend l'état courant sans
+  /// repasser par son répondeur, donc sans un second appel de modèle et sans
+  /// risquer une autre phrase que celle que le pasteur a déjà lue.
   Future<Failure?> say(String text) {
     final dit = text.trim();
     if (dit.isEmpty) return Future.value();
 
     return _geste(
       said: dit,
-      action: (repository, studyId) async =>
-          (await repository.say(studyId: studyId, rawInput: dit)).fold(
-        onSuccess: (study) => Result.success(Served(study)),
-        onFailure: (failure) => Result.failed(failure),
-      ),
+      action: (repository, studyId) =>
+          repository.say(studyId: studyId, rawInput: dit),
     );
   }
 

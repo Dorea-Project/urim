@@ -23,6 +23,7 @@ final class Study extends Equatable {
     this.pericopeLabel,
     this.axisCode,
     this.boundsOverridden = false,
+    this.corpusDrifted = false,
   });
 
   final String id;
@@ -46,6 +47,14 @@ final class Study extends Equatable {
   /// les étages avals — la contrepartie assumée de la liberté.
   final bool boundsOverridden;
 
+  /// Le corpus a été relu depuis l'ouverture de cette préparation.
+  ///
+  /// Le tour n'est pas faux : le moteur rejoue simplement contre un corpus qui a
+  /// bougé — des unités ont pu être relues, des pesées ajoutées. Il n'est plus
+  /// **mot pour mot** celui que le pasteur avait sous les yeux, et l'écran le
+  /// dit une fois plutôt que de le laisser découvrir.
+  final bool corpusDrifted;
+
   @override
   List<Object?> get props => [
         id,
@@ -57,6 +66,7 @@ final class Study extends Equatable {
         pericopeLabel,
         axisCode,
         boundsOverridden,
+        corpusDrifted,
       ];
 
   @override

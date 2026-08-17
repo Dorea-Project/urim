@@ -3,6 +3,8 @@ import 'package:urim/core/config/app_config_provider.dart';
 import 'package:urim/core/error/error_mapper.dart';
 import 'package:urim/core/error/exceptions.dart';
 import 'package:urim/core/error/failure.dart';
+import 'package:urim/core/id/id_generator.dart';
+import 'package:urim/core/id/id_generator_provider.dart';
 import 'package:urim/core/network/dio_client.dart';
 import 'package:urim/core/result/cached.dart';
 import 'package:urim/core/result/result.dart';
@@ -21,11 +23,19 @@ import 'package:urim/domain/repositories/study_repository.dart';
 
 /// Le moteur tel que le serveur le tient.
 final class RemoteStudyRepository implements StudyRepository {
-  const RemoteStudyRepository(this._source, this._cache, this._file);
+  const RemoteStudyRepository(
+    this._source,
+    this._cache,
+    this._file,
+    this._ids,
+  );
 
   final UrimRemoteDataSource _source;
   final TurnCacheLocalDataSource _cache;
   final PendingGesturesLocalDataSource _file;
+
+  /// Tire les clés d'idempotence des paroles.
+  final IdGenerator _ids;
 
   @override
   Future<Cached<Study>?> cachedById(String studyId) async {
@@ -150,6 +160,11 @@ final class RemoteStudyRepository implements StudyRepository {
             stageCode: geste.stageCode,
             optionCode: geste.optionCode,
           ),
+        PendingGestureKind.say => _source.say(
+            studyId: studyId,
+            rawInput: geste.text,
+            idempotencyKey: geste.key,
+          ),
       };
 
   @override
@@ -185,11 +200,20 @@ final class RemoteStudyRepository implements StudyRepository {
   }
 
   @override
-  Future<Result<Study>> say({
+  Future<Result<GestureOutcome>> say({
     required String studyId,
     required String rawInput,
   }) =>
-      _guard(() => _source.say(studyId: studyId, rawInput: rawInput));
+      _geste(
+        studyId,
+        PendingGesture(
+          kind: PendingGestureKind.say,
+          text: rawInput,
+          // ⚠️ Tirée **maintenant**, et gardée avec le geste. La tirer à
+          // l'envoi la rendrait différente à chaque tentative, donc inutile.
+          key: 'urim-${_ids.newId()}',
+        ),
+      );
 }
 
 /// Le moteur de démonstration, adossé au magasin en mémoire.
@@ -280,11 +304,15 @@ final class MockStudyRepository implements StudyRepository {
   Future<Result<Study>?> flush(String studyId) async => null;
 
   @override
-  Future<Result<Study>> say({
+  Future<Result<GestureOutcome>> say({
     required String studyId,
     required String rawInput,
-  }) =>
-      _avec(studyId, (titre) => _engine.say(studyId, titre, rawInput));
+  }) async =>
+      (await _avec(studyId, (titre) => _engine.say(studyId, titre, rawInput)))
+          .fold(
+        onSuccess: (study) => Result.success(Served(study)),
+        onFailure: (failure) => Result.failed(failure),
+      );
 
   /// Le titre vient du magasin, le tour du mannequin. Une préparation absente
   /// est une erreur du magasin, pas du moteur : c'est lui qui répond.
@@ -369,5 +397,6 @@ final studyRepositoryProvider = Provider<StudyRepository>((ref) {
     UrimRemoteDataSource(ref.watch(dioProvider), cache: cache),
     cache,
     ref.watch(pendingGesturesProvider),
+    ref.watch(idGeneratorProvider),
   );
 });

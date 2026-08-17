@@ -80,7 +80,7 @@ tient aujourd'hui.
 | Ce qu'on garde | Pourquoi, et la règle |
 |---|---|
 | ~~**Les mots du pasteur**~~ — la barre de saisie et le formulaire d'ouverture | **Fait** (D32, D33). Restent ses points et le thème réécrit, qui n'ont pas encore d'écran. |
-| ~~**Une file de gestes**~~ — décider et écarter | **Fait** (D36, D37). Parler reste en ligne : il faut une clé d'idempotence, et c'est l'étape 3b, des deux côtés. |
+| ~~**Une file de gestes**~~ — décider, écarter **et parler** | **Fait** (D36, D37, D38). |
 | ~~**Le dernier tour reçu**~~, et la dernière liste du fil | **Fait** (D34). L'écran s'ouvre sur ce qu'il sait, dit d'où ça vient, et se rafraîchit derrière. |
 | **L'audio** d'une transcription | Fichier local, plusieurs dizaines de Mo. Dépend de **Q2**, pas d'ici. |
 
@@ -96,16 +96,23 @@ d'émission donne donc le même état que si les gestes avaient été faits en
 ligne, sans code de fusion à écrire. Une pile de phrases à réconcilier aurait
 demandé l'inverse.
 
-#### Les deux endroits où ça résiste
+#### Les deux endroits où ça résistait — les deux sont traités
 
-**`POST /turns` n'est pas une décision.** Une phrase libre rejouée deux fois
-peut coûter deux passages du répondeur — et un appel de modèle. Il faut une
-clé d'idempotence portée par le client, ou une déduplication à l'envoi.
+**`POST /turns` n'est pas une décision.** Réglé par une clé d'idempotence
+portée par le client et reconnue par le serveur (D38).
 
-**Le corpus dérive.** Un geste mis en file mardi, rejoué vendredi, peut
-rencontrer un corpus qui a changé — le serveur le signale déjà
-(`corpus_drifted`). Ce que l'écran doit dire alors reste à trancher : le tour
-n'est pas faux, il est **différent de celui qu'on avait sous les yeux**.
+**Le corpus dérive.** Le serveur le signalait déjà par `corpus_drifted`, et
+personne ne l'écoutait. L'écran le dit maintenant une fois, sobrement, et
+n'empêche rien : le tour n'est pas faux, il n'est plus **mot pour mot** celui
+que le pasteur avait sous les yeux.
+
+#### Ce qui reste : l'étape 5
+
+Ouvrir une préparation **nouvelle** sans réseau. Ce n'est plus du stockage : il
+faudrait que le moteur tourne ailleurs que sur le serveur — le corpus, les
+4 561 unités relues, les 442 889 jetons. C'est un chantier à part, et la
+question attend un arbitrage : est-ce que le pasteur doit pouvoir *ouvrir* hors
+réseau, ou seulement continuer ce qu'il a déjà ouvert ?
 
 #### Ce qui reste vrai de l'ancienne réponse
 
@@ -384,6 +391,9 @@ canal, avec quel consentement.
 | D35 | Le magasin garde le **JSON brut**, pas l'objet analysé | Deux raisons, et la seconde est la plus solide. Aucun second code de sérialisation à tenir d'accord avec le contrat : `studyFromWire` reste le seul chemin d'analyse, celui que les tests éprouvent déjà sur des charges réelles (D31). Et un champ ajouté demain côté serveur est gardé aujourd'hui, sans que rien ne le sache. L'écriture a lieu dans la source distante, seul endroit qui voit le brut, et sur **tous** les gestes — ouvrir, relire, décider, écarter, parler passent par le même point d'analyse. Un tour gardé par un contrat plus ancien qu'on ne sait plus lire vaut un tour absent : on repart du serveur plutôt que de rendre un écran de travers. |
 | D36 | Un geste fait sans réseau est **noté**, jamais simulé | Étape 3a de Q4. Décider hors réseau ne peut pas montrer le tour suivant : ce tour est ce que le pipeline aurait répondu, et le fabriquer côté client serait inventer une phrase d'Urim (D29). L'écran dit donc « noté, en attente », garde le tour précédent sous les yeux, et attend. D'où une troisième issue au geste — `Served`, `Queued`, ou un échec — parce qu'il y en a vraiment trois : le serveur a répondu, personne n'a répondu, ou le serveur a **refusé**. |
 | D37 | Seul un manque de réseau est mis en file ; un refus du serveur reste un échec | Un étage qui n'attend plus, une option inconnue : c'est un **jugement**, pas un contretemps. Le renvoyer plus tard ne le rendrait pas acceptable, et l'accumuler ferait une file qui ne se videra jamais. La distinction tient à un type — `NetworkFailure` contre le reste — et c'est tout ce qui sépare une file qui se vide d'une file qui pourrit. |
+| D38 | Une parole porte une **clé d'idempotence**, tirée à la mise en file et non à l'envoi | Étape 3b de Q4, des deux côtés. Décider et écarter posent un état : les renvoyer donne le même résultat. Une parole, non — le serveur y répond, et la renvoyer coûterait un second passage du répondeur, donc un appel de modèle en plus et peut-être **une autre phrase que celle que le pasteur a déjà lue**. La clé est tirée au moment où le geste entre en file : la tirer à l'envoi la rendrait différente à chaque tentative, c'est-à-dire inutile. Côté serveur, `urim_preparation.last_turn_key` — une colonne et non une table, parce que le client vide sa file **dans l'ordre** et **s'arrête au premier échec** : la seule parole qu'il puisse renvoyer est donc la dernière. Ce que ça ne protège pas : deux appareils agissant en même temps, dont la conséquence est un appel de modèle en trop et non un état faux. |
+| D39 | La clé se pose **après** le geste, jamais avant | La réclamer d'abord serait plus simple et perdrait la parole : un geste qui échoue laisserait sa clé brûlée, le renvoi serait ignoré, et la phrase du pasteur disparaîtrait sans que personne ne le sache. Seule une parole réellement traitée ferme la porte derrière elle. |
+| D40 | L'application peut décrire **son propre état** ; seul Urim décrit l'Écriture et son raisonnement | Où passe exactement la frontière de D29, posée en écrivant les mentions de provenance. « Gardé sur cet appareil », « le corpus a été relu depuis l'ouverture » : personne d'autre ne peut les dire, puisque le serveur ne sait pas ce que l'appareil détient. Ce qui reste interdit est intact : une phrase sur un texte, un motif, une pesée. |
 | D23 | Un seul rafraîchissement à la fois, un seul rejeu par requête | Trois écrans qui échouent ensemble ne doivent pas déclencher trois rotations : la deuxième invaliderait le jeton de la première. Et une requête qui échoue deux fois signe une session morte, pas une boucle à retenter. |
 
 ## Dettes assumées

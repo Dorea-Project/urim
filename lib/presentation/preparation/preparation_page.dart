@@ -55,10 +55,12 @@ class PreparationPage extends ConsumerWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // La provenance avant le contenu : on dit d'ou ca vient avant que
-            // le pasteur ne se mette a lire, pas apres.
+            // La provenance avant le contenu : on dit d'où ça vient avant que
+            // le pasteur ne se mette à lire, pas après.
             if (thread.value?.receivedAt case final DateTime recu)
               StaleBanner(receivedAt: recu),
+            if (thread.value?.study.corpusDrifted ?? false)
+              const DriftNotice(),
             Expanded(
               child: switch (thread) {
                 AsyncData(:final value) => _Thread(

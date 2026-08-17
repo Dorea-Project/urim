@@ -507,6 +507,10 @@ class AppTextFr extends AppText {
       'Le moteur répondra dès que la connexion reviendra. Rien n\'est perdu.';
 
   @override
+  String get corpusDrifted =>
+      'Le corpus a été relu depuis l\'ouverture — ce qu\'Urim dit ici n\'est plus mot pour mot ce qu\'il disait alors.';
+
+  @override
   String servedFromDevice(String when) {
     return 'Gardé sur cet appareil · $when';
   }

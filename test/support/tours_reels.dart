@@ -121,12 +121,12 @@ base class DepotFige implements StudyRepository {
   Future<Result<Study>?> flush(String studyId) async => null;
 
   @override
-  Future<Result<Study>> say({
+  Future<Result<GestureOutcome>> say({
     required String studyId,
     required String rawInput,
   }) async {
     paroles.add(rawInput);
-    return Result.success(etude);
+    return Result.success(Served(etude));
   }
 }
 

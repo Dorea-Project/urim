@@ -77,9 +77,18 @@ dans l'ordre au retour de la connexion — la cascade du serveur fait le reste,
 sans un mot de code de fusion. Ce qu'il ne fait pas, et ne fera pas : montrer
 le tour suivant. Seul le moteur le sait (D36).
 
-Restent dus : la recherche, et les étapes 3b à 5 de **Q4** — parler sans
-réseau demande une clé d'idempotence, des deux côtés. Une carte transcrite ne
-porte plus de pastille : le moteur ne connaît que les préparations écrites.
+**Étapes 3b et 4.** Une parole aussi attend le réseau, avec une clé
+d'idempotence que le serveur reconnaît — sans quoi la renvoyer coûterait un
+appel de modèle et peut-être une autre phrase que celle déjà lue (D38). Et quand
+le corpus a été relu depuis l'ouverture, l'écran le dit : le tour n'est pas
+faux, il n'est plus mot pour mot celui qu'on avait sous les yeux.
+
+**Q4 est close sauf son étape 5** : ouvrir une préparation *nouvelle* sans
+réseau, ce qui n'est plus du stockage mais un moteur embarqué. Elle attend un
+arbitrage.
+
+Restent dus : la recherche. Une carte transcrite ne porte plus de pastille : le
+moteur ne connaît que les préparations écrites.
 
 ### M2 — Préparation écrite
 
@@ -185,9 +194,10 @@ demande aucun modèle — s'enregistrer soi-même — pourrait sortir la premiè
 
 ## Chantiers transverses
 
-- **Hors ligne** — la capture et l'écriture doivent fonctionner sans réseau.
-  C'est **Q4**, et la promesse est déjà faite ici et dans la politique de
-  confidentialité. Elle ne tient pas encore.
+- **Hors ligne** — tenu pour l'écriture et la lecture : les mots ne se perdent
+  plus, le dernier tour se relit, et décider, écarter, parler attendent le
+  réseau (**Q4**, étapes 1 à 4). Ce qui reste hors d'atteinte est l'**ouverture**
+  d'une préparation, qui demande le moteur — étape 5.
 - **Livrable** — le serveur sait déjà écrire les deux documents : le `.pptx`
   que l'assemblée voit, le `.docx` qui porte ce qui ne monte pas à l'écran.
   C'est la **dernière case vide** de la ligne d'arrivée v1 côté serveur, et

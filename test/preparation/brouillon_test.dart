@@ -10,7 +10,7 @@ import 'package:urim/core/time/clock.dart';
 import 'package:urim/core/time/clock_provider.dart';
 import 'package:urim/data/datasources/draft_local_data_source.dart';
 import 'package:urim/data/repositories/study_repository_impl.dart';
-import 'package:urim/domain/entities/preparation/study.dart';
+import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
 import 'package:urim/domain/repositories/study_repository.dart';
 import 'package:urim/presentation/common/draft_keeper.dart';
 import 'package:urim/presentation/preparation/preparation_page.dart';
@@ -38,7 +38,7 @@ base class _DepotQuiRefuse extends DepotFige {
   _DepotQuiRefuse(super.etude);
 
   @override
-  Future<Result<Study>> say({
+  Future<Result<GestureOutcome>> say({
     required String studyId,
     required String rawInput,
   }) async {

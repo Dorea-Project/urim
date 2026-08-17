@@ -73,12 +73,19 @@ final class UrimRemoteDataSource {
       }));
 
   /// `POST /urim/studies/{id}/turns` — une phrase libre.
+  ///
+  /// [idempotencyKey] rend la parole rejouable : le serveur qui l'a déjà vue
+  /// rend l'état courant sans repasser par son répondeur — donc sans un second
+  /// appel de modèle, et sans risquer une autre phrase que celle que le pasteur
+  /// a déjà lue.
   Future<Study> say({
     required String studyId,
     required String rawInput,
+    String? idempotencyKey,
   }) async =>
       _study(await _post('/urim/studies/$studyId/turns', {
         'raw_input': rawInput,
+        'idempotency_key': ?idempotencyKey,
       }));
 
   Future<T?> _get<T>(String path) async {
@@ -170,6 +177,7 @@ Study _studyFromJson(Map<String, dynamic> json) => Study(
       pericopeLabel: json['pericope_label'] as String?,
       axisCode: json['axis_code'] as String?,
       boundsOverridden: json['bounds_overridden'] == true,
+      corpusDrifted: json['corpus_drifted'] == true,
       turn: switch (json['turn']) {
         final Map<String, dynamic> turn => _turnFromJson(turn),
         _ => null,

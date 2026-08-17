@@ -78,7 +78,10 @@ abstract interface class StudyRepository {
   /// Aucun étage dans la demande, et c'est ce qui distingue ce geste d'une
   /// décision : le pasteur parle, il ne remplit pas un formulaire. L'étage, le
   /// serveur le connaît.
-  Future<Result<Study>> say({
+  /// Trois issues comme les autres gestes : sans réseau, la parole est notée
+  /// avec une **clé d'idempotence** que le serveur reconnaîtra. Sans elle, la
+  /// renvoyer coûterait un second passage du répondeur.
+  Future<Result<GestureOutcome>> say({
     required String studyId,
     required String rawInput,
   });
