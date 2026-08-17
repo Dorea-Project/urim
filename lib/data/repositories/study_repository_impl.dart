@@ -6,39 +6,78 @@ import 'package:urim/core/error/failure.dart';
 import 'package:urim/core/network/dio_client.dart';
 import 'package:urim/core/result/result.dart';
 import 'package:urim/data/datasources/urim_remote_data_source.dart';
+import 'package:urim/data/repositories/demo_urim_engine.dart';
 import 'package:urim/data/repositories/in_memory_preparation_repository.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
+import 'package:urim/domain/entities/preparation/preparation_block.dart';
+import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/domain/repositories/study_repository.dart';
 
-/// Le fil tel que le serveur le tient.
+/// Le moteur tel que le serveur le tient.
 final class RemoteStudyRepository implements StudyRepository {
   const RemoteStudyRepository(this._source);
 
   final UrimRemoteDataSource _source;
 
   @override
-  Future<Result<List<StudySummary>>> listMine() async {
-    try {
-      return Result.success(await _source.listStudies());
-    } on AppException catch (e) {
-      return Result.failed(e.toFailure());
-    } catch (e) {
-      return Result.failed(UnexpectedFailure(message: e.toString()));
-    }
-  }
+  Future<Result<List<StudySummary>>> listMine() =>
+      _guard(_source.listStudies);
+
+  @override
+  Future<Result<Study>> open({
+    required String rawInput,
+    DateTime? serviceDate,
+  }) =>
+      _guard(() => _source.open(rawInput: rawInput, serviceDate: serviceDate));
+
+  @override
+  Future<Result<Study>> getById(String studyId) =>
+      _guard(() => _source.getStudy(studyId));
+
+  @override
+  Future<Result<Study>> decide({
+    required String studyId,
+    required String stageCode,
+    required String optionCode,
+  }) =>
+      _guard(() => _source.decide(
+            studyId: studyId,
+            stageCode: stageCode,
+            optionCode: optionCode,
+          ));
+
+  @override
+  Future<Result<Study>> dismiss({
+    required String studyId,
+    required String stageCode,
+    required String optionCode,
+  }) =>
+      _guard(() => _source.dismiss(
+            studyId: studyId,
+            stageCode: stageCode,
+            optionCode: optionCode,
+          ));
+
+  @override
+  Future<Result<Study>> say({
+    required String studyId,
+    required String rawInput,
+  }) =>
+      _guard(() => _source.say(studyId: studyId, rawInput: rawInput));
 }
 
-/// Le fil de démonstration, projeté depuis le magasin en mémoire.
+/// Le moteur de démonstration, adossé au magasin en mémoire.
 ///
 /// Il existe pour que l'application compilée reste parcourable sans serveur —
-/// même raison que les identifiants de démonstration. Ce qu'il ne fait pas :
-/// inventer un vocabulaire. Il traduit les états de la maquette vers ceux du
-/// moteur, et laisse vide ce que le moteur ne sait pas dire.
+/// même raison que les identifiants de démonstration. Le magasin tient le fil,
+/// [DemoUrimEngine] tient les tours ; les deux se rejoignent sur l'identifiant
+/// de la préparation.
 final class MockStudyRepository implements StudyRepository {
-  const MockStudyRepository(this._preparations);
+  MockStudyRepository(this._preparations);
 
   final InMemoryPreparationRepository _preparations;
+  final DemoUrimEngine _engine = DemoUrimEngine();
 
   @override
   Future<Result<List<StudySummary>>> listMine() async {
@@ -51,6 +90,90 @@ final class MockStudyRepository implements StudyRepository {
           Result.success(preparations.map(_project).toList()),
       onFailure: (failure) => Result.failed(failure),
     );
+  }
+
+  @override
+  Future<Result<Study>> open({
+    required String rawInput,
+    DateTime? serviceDate,
+  }) async {
+    final result = await _preparations.open(
+      text: rawInput,
+      serviceDate: serviceDate,
+    );
+
+    return result.fold(
+      onSuccess: (preparation) =>
+          Result.success(_engine.open(preparation.id, rawInput.trim())),
+      onFailure: (failure) => Result.failed(failure),
+    );
+  }
+
+  @override
+  Future<Result<Study>> getById(String studyId) =>
+      _avec(studyId, (titre) => _engine.read(studyId, titre));
+
+  @override
+  Future<Result<Study>> decide({
+    required String studyId,
+    required String stageCode,
+    required String optionCode,
+  }) =>
+      _avec(studyId, (titre) => _engine.decide(studyId, titre, optionCode));
+
+  @override
+  Future<Result<Study>> dismiss({
+    required String studyId,
+    required String stageCode,
+    required String optionCode,
+  }) =>
+      _avec(studyId, (titre) => _engine.dismiss(studyId, titre, optionCode));
+
+  @override
+  Future<Result<Study>> say({
+    required String studyId,
+    required String rawInput,
+  }) =>
+      _avec(studyId, (titre) => _engine.say(studyId, titre, rawInput));
+
+  /// Le titre vient du magasin, le tour du mannequin. Une préparation absente
+  /// est une erreur du magasin, pas du moteur : c'est lui qui répond.
+  Future<Result<Study>> _avec(
+    String studyId,
+    Study Function(String rawInput) rendre,
+  ) async {
+    final result = await _preparations.getById(studyId);
+
+    return result.fold(
+      onSuccess: (preparation) {
+        // À l'étage où le fil l'annonce, et une seule fois : ce que le pasteur
+        // a décidé depuis prime sur l'état d'origine.
+        _engine.ensure(preparation.id, outcome: _outcomeOf(preparation.state));
+        return Result.success(rendre(_rawInputOf(preparation)));
+      },
+      onFailure: (failure) => Result.failed(failure),
+    );
+  }
+}
+
+/// Ce que le pasteur a écrit en ouvrant.
+///
+/// Le magasin de démonstration n'a pas de champ pour cela — il garde un titre
+/// tiré des premiers mots. La phrase entière est dans le premier bloc, là où
+/// les maquettes l'avaient mise ; le serveur, lui, a un `raw_input`.
+String _rawInputOf(Preparation preparation) => switch (
+    preparation.blocks.whereType<UserBlock>().firstOrNull) {
+      final UserBlock premier => premier.text,
+      _ => preparation.title,
+    };
+
+Future<Result<T>> _guard<T>(Future<T> Function() action) async {
+  try {
+    return Result.success(await action());
+  } on AppException catch (e) {
+    return Result.failed(e.toFailure());
+  } catch (e) {
+    return Result.failed(UnexpectedFailure(message: e.toString()));
   }
 }
 
@@ -77,7 +200,7 @@ TurnOutcome? _outcomeOf(PreparationState state) => switch (state) {
       PreparationState.feedbackReady => null,
     };
 
-/// Qui tient le fil : le serveur, ou le magasin de démonstration.
+/// Qui tient le moteur : le serveur, ou le mannequin de démonstration.
 ///
 /// Même bascule que le parcours d'entrée, et c'est voulu : un build qui ne
 /// parle à personne pour entrer ne peut pas non plus lire un fil.
@@ -85,6 +208,9 @@ final studyRepositoryProvider = Provider<StudyRepository>((ref) {
   final config = ref.watch(appConfigProvider);
 
   if (config.useMockAuth) {
+    // Le mannequin garde l'état des préparations en cours : le libérer parce
+    // que plus personne ne l'écoute effacerait le travail de la session.
+    ref.keepAlive();
     return MockStudyRepository(ref.watch(preparationRepositoryProvider));
   }
 

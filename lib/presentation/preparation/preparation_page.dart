@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/core/error/failure.dart';
-import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/presentation/preparation/preparation_view_model.dart';
-import 'package:urim/presentation/preparation/widgets/block_views.dart';
+import 'package:urim/presentation/preparation/widgets/turn_views.dart';
 import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
 
-/// Une préparation et son fil.
+/// Une préparation et son tour courant.
+///
+/// **Il n'y a pas de fil de conversation à charger.** Le moteur rejoue son
+/// pipeline à chaque lecture : ce qui existe, c'est le tour d'aujourd'hui. Ce
+/// qu'on voit au-dessus est le compte rendu de la séance en cours, perdu en
+/// quittant l'écran — et c'est cohérent avec ce que le serveur promet.
 class PreparationPage extends ConsumerWidget {
   const PreparationPage({super.key, required this.preparationId});
 
@@ -17,7 +21,7 @@ class PreparationPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final preparation = ref.watch(preparationProvider(preparationId));
+    final thread = ref.watch(preparationThreadProvider(preparationId));
 
     return Scaffold(
       appBar: AppBar(
@@ -27,7 +31,11 @@ class PreparationPage extends ConsumerWidget {
           tooltip: AppText.of(context).back,
         ),
         title: Text(
-          preparation.value?.title ?? '',
+          // Le titre reste ce que le pasteur a écrit tant que rien n'est
+          // résolu ; l'unité bornée le remplace dès qu'elle existe.
+          thread.value?.study.pericopeLabel ??
+              thread.value?.study.rawInput ??
+              '',
           overflow: TextOverflow.ellipsis,
         ),
         actions: [
@@ -41,38 +49,37 @@ class PreparationPage extends ConsumerWidget {
         ],
       ),
       body: SafeArea(
-        // Répondre en touchant un choix ou en écrivant, c'est la même chose :
-        // les deux passent par le même ajout au fil.
-        child: ChoiceAnswer(
-          onAnswer: (label) => ref
-              .read(preparationComposerProvider.notifier)
-              .append(preparationId: preparationId, text: label),
-          child: Column(
-            children: [
-              Expanded(
-                child: switch (preparation) {
-                  AsyncData(:final value) => _Thread(preparation: value),
-                  AsyncError(:final error) => _ThreadError(error: error),
-                  _ => const Center(child: CircularProgressIndicator()),
-                },
-              ),
-              _Composer(preparationId: preparationId),
-            ],
-          ),
+        child: Column(
+          children: [
+            Expanded(
+              child: switch (thread) {
+                AsyncData(:final value) => _Thread(
+                    state: value,
+                    preparationId: preparationId,
+                  ),
+                AsyncError(:final error) => _ThreadError(error: error),
+                _ => const Center(child: CircularProgressIndicator()),
+              },
+            ),
+            // La barre ne se ferme jamais, quel que soit `expects` : les
+            // pastilles sont des raccourcis, pas des barreaux.
+            _Composer(preparationId: preparationId),
+          ],
         ),
       ),
     );
   }
 }
 
-class _Thread extends StatelessWidget {
-  const _Thread({required this.preparation});
+class _Thread extends ConsumerWidget {
+  const _Thread({required this.state, required this.preparationId});
 
-  final Preparation preparation;
+  final ThreadState state;
+  final String preparationId;
 
   @override
-  Widget build(BuildContext context) {
-    if (preparation.blocks.isEmpty) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (state.entries.isEmpty) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.xxl),
@@ -87,6 +94,18 @@ class _Thread extends StatelessWidget {
       );
     }
 
+    final notifier =
+        ref.read(preparationThreadProvider(preparationId).notifier);
+
+    Future<void> rapporter(Future<Failure?> geste) async {
+      final failure = await geste;
+      if (failure == null || !context.mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(failure.message)),
+      );
+    }
+
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.lg,
@@ -94,10 +113,69 @@ class _Thread extends StatelessWidget {
         AppSpacing.lg,
         AppSpacing.sm,
       ),
-      itemCount: preparation.blocks.length,
-      itemBuilder: (context, index) => BlockView(
-        block: preparation.blocks[index],
-        isLive: index == preparation.blocks.length - 1,
+      itemCount: state.entries.length,
+      itemBuilder: (context, index) => switch (state.entries[index]) {
+        SpokenByPastor(:final text) => _PastorSaid(text: text),
+        ServedTurn(:final turn, :final live) => TurnView(
+            turn: turn,
+            live: live,
+            onDecision: ({
+              required stageCode,
+              required optionCode,
+              required label,
+            }) =>
+                rapporter(notifier.decide(
+              stageCode: stageCode,
+              optionCode: optionCode,
+              label: label,
+            )),
+            onDismiss: ({required stageCode, required optionCode}) =>
+                rapporter(notifier.dismiss(
+              stageCode: stageCode,
+              optionCode: optionCode,
+            )),
+          ),
+      },
+    );
+  }
+}
+
+/// Ce que le pasteur a dit : une bulle pleine, calée à droite.
+class _PastorSaid extends StatelessWidget {
+  const _PastorSaid({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.xl),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.sizeOf(context).width * 0.78,
+          ),
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.lg,
+              vertical: AppSpacing.md,
+            ),
+            decoration: BoxDecoration(
+              color: scheme.inverseSurface,
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+            ),
+            child: Text(
+              text,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: scheme.onInverseSurface,
+                    height: 1.5,
+                  ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -133,6 +211,11 @@ class _ThreadError extends StatelessWidget {
 }
 
 /// Barre de saisie : écrire, dicter, envoyer.
+///
+/// Elle reste ouverte à tous les tours. Le pasteur peut désigner ce qui est à
+/// l'écran — « L'Église », « la péricope entière » —, poser une question, ou
+/// changer de sujet ; le serveur résout d'abord par comparaison de chaînes ce
+/// qui désigne l'écran, et ne classe que le reste.
 class _Composer extends ConsumerStatefulWidget {
   const _Composer({required this.preparationId});
 
@@ -145,6 +228,7 @@ class _Composer extends ConsumerStatefulWidget {
 class _ComposerState extends ConsumerState<_Composer> {
   final TextEditingController _controller = TextEditingController();
   bool _hasText = false;
+  bool _isBusy = false;
 
   @override
   void dispose() {
@@ -153,12 +237,15 @@ class _ComposerState extends ConsumerState<_Composer> {
   }
 
   Future<void> _send() async {
-    final failure = await ref.read(preparationComposerProvider.notifier).append(
-          preparationId: widget.preparationId,
-          text: _controller.text,
-        );
+    final dit = _controller.text;
+    setState(() => _isBusy = true);
+
+    final failure = await ref
+        .read(preparationThreadProvider(widget.preparationId).notifier)
+        .say(dit);
 
     if (!mounted) return;
+    setState(() => _isBusy = false);
 
     if (failure == null) {
       _controller.clear();
@@ -173,7 +260,6 @@ class _ComposerState extends ConsumerState<_Composer> {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final isBusy = ref.watch(preparationComposerProvider).isLoading;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(
@@ -214,8 +300,8 @@ class _ComposerState extends ConsumerState<_Composer> {
           ),
           const SizedBox(width: AppSpacing.xs),
           IconButton.filled(
-            onPressed: _hasText && !isBusy ? _send : null,
-            icon: isBusy
+            onPressed: _hasText && !_isBusy ? _send : null,
+            icon: _isBusy
                 ? SizedBox.square(
                     dimension: 18,
                     child: CircularProgressIndicator(

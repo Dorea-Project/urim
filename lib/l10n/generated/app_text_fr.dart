@@ -492,6 +492,30 @@ class AppTextFr extends AppText {
   }
 
   @override
+  String turnSignature(String signature) {
+    return 'Unité signée $signature';
+  }
+
+  @override
+  String get turnThemeLabel => 'THÈME';
+
+  @override
+  String get turnBearingsSwitchable =>
+      'Touchez un axe pour prêcher ce texte dessus.';
+
+  @override
+  String get strengthDominant => 'En fait son sujet';
+
+  @override
+  String get strengthSupports => 'Le soutient';
+
+  @override
+  String get strengthResists => 'Lui résiste';
+
+  @override
+  String get strengthAbsent => 'Absent';
+
+  @override
   String get stateHandsBack => 'Rend la main';
 
   @override

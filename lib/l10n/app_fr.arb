@@ -342,6 +342,39 @@
       }
     }
   },
+  "turnSignature": "Unité signée {signature}",
+  "@turnSignature": {
+    "description": "Qui a signé le découpage de l'unité — « ia-mistral », ou le nom d'un relecteur. Sans cela, une structure générée arriverait sur l'écran du pasteur exactement comme une structure relue par un bibliste.",
+    "placeholders": {
+      "signature": {
+        "type": "String"
+      }
+    }
+  },
+  "turnThemeLabel": "THÈME",
+  "@turnThemeLabel": {
+    "description": "Un thème, jamais un titre — le titre, c'est la voix du pasteur."
+  },
+  "turnBearingsSwitchable": "Touchez un axe pour prêcher ce texte dessus.",
+  "@turnBearingsSwitchable": {
+    "description": "Le geste existe de bout en bout côté serveur, et rien ne le disait. Une porte ouverte que personne ne voit est pire qu'une porte fermée : elle a l'air d'une fonctionnalité manquante."
+  },
+  "strengthDominant": "En fait son sujet",
+  "@strengthDominant": {
+    "description": "`dominant` du moteur : l'axe est ce dont le texte parle."
+  },
+  "strengthSupports": "Le soutient",
+  "@strengthSupports": {
+    "description": "`porte` du moteur."
+  },
+  "strengthResists": "Lui résiste",
+  "@strengthResists": {
+    "description": "`resiste` du moteur. Affiché au même rang que le reste : c'est la seule mécanique anti-proof-texting du produit."
+  },
+  "strengthAbsent": "Absent",
+  "@strengthAbsent": {
+    "description": "`absent` du moteur : rien ne se construit dessus."
+  },
   "stateHandsBack": "Rend la main",
   "@stateHandsBack": {
     "description": "`await_decision` du moteur : Urim s'est arrêté sur une question et attend. C'est ce qui met la préparation en tête de l'accueil."

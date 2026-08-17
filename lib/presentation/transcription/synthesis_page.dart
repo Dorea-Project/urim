@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:urim/domain/entities/transcription/synthesis_draft.dart';
 import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/common/ruled_content.dart';
-import 'package:urim/presentation/preparation/widgets/block_views.dart';
+import 'package:urim/presentation/common/passage_view.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
 import 'package:urim/presentation/transcription/transcription_page.dart';

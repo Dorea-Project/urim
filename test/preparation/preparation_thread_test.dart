@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:urim/core/id/id_generator.dart';
 import 'package:urim/core/id/id_generator_provider.dart';
-import 'package:urim/core/storage/shared_preferences_provider.dart';
 import 'package:urim/core/time/clock.dart';
 import 'package:urim/core/time/clock_provider.dart';
 import 'package:urim/data/repositories/in_memory_preparation_repository.dart';
@@ -12,11 +9,8 @@ import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/domain/entities/preparation/preparation_block.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/l10n/generated/app_text_fr.dart';
-import 'package:urim/presentation/common/domain_labels.dart';
 import 'package:urim/presentation/home/home_view_model.dart';
-import 'package:urim/presentation/preparation/preparation_page.dart';
-import 'package:urim/presentation/preparation/widgets/block_views.dart';
-import '../support/pump_app.dart';
+import 'package:urim/presentation/common/passage_view.dart';
 
 /// Horloge figée : les étiquettes « HIER 20:58 » doivent être vérifiables.
 final class _FixedClock implements Clock {
@@ -48,12 +42,6 @@ void main() {
         ],
       );
 
-  /// Le fil applique les réglages de lecture : sans préférences, l'écran ne se
-  /// monte pas.
-  Future<SharedPreferences> emptyPreferences() async {
-    SharedPreferences.setMockInitialValues(<String, Object>{});
-    return SharedPreferences.getInstance();
-  }
 
   group('jeu d\'exemple', () {
     test('les quatre états des maquettes sont représentés', () async {
@@ -222,131 +210,4 @@ void main() {
     });
   });
 
-  group('écran du fil', () {
-    Future<String> pumpThread(WidgetTester tester) async {
-      late String preparationId;
-      final preferences = await emptyPreferences();
-
-      // Une surface haute : le fil compte plusieurs blocs, et un écran de
-      // test standard en laisserait la fin hors du viewport — donc hors de
-      // l'arbre, donc introuvable.
-      tester.view.physicalSize = const Size(1000, 4000);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.reset);
-
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            clockProvider.overrideWithValue(_FixedClock(fixedNow)),
-            idGeneratorProvider.overrideWithValue(_SequentialIds()),
-            sharedPreferencesProvider.overrideWithValue(preferences),
-          ],
-          child: Consumer(
-            builder: (context, ref, _) {
-              preparationId = ref.watch(preparationRepositoryProvider).seededId!;
-              return wrapScreen(
-                PreparationPage(preparationId: preparationId),
-              );
-            },
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-
-      return preparationId;
-    }
-
-    testWidgets('le tour d\'Urim montre son raisonnement et ses choix',
-        (tester) async {
-      await pumpThread(tester);
-
-      expect(find.textContaining('Six de tes mots sont dans l\'Écriture'),
-          findsOneWidget);
-      expect(find.text('Sur quel axe veux-tu prêcher ?'), findsOneWidget);
-      expect(find.text('L\'Église'), findsWidgets);
-      expect(find.text('Le péché'), findsOneWidget);
-      expect(find.textContaining('Voir les dix loci'), findsOneWidget);
-    });
-
-    testWidgets('les textes qui résistent sont affichés au même rang',
-        (tester) async {
-      await pumpThread(tester);
-
-      expect(find.text(textStanceLabel(texte, TextStance.subject)), findsOneWidget);
-      expect(find.text(textStanceLabel(texte, TextStance.supports)), findsOneWidget);
-      expect(find.text(textStanceLabel(texte, TextStance.complicates)), findsNWidgets(2));
-      expect(find.text('1 Corinthiens 11:17-22'), findsOneWidget);
-    });
-
-    testWidgets('« Comment j\'en suis arrivé là » se déplie', (tester) async {
-      await pumpThread(tester);
-
-      expect(find.textContaining('Tes mots recoupent le vocabulaire'),
-          findsNothing);
-
-      await tester.tap(find.text('Comment j\'en suis arrivé là'));
-      await tester.pumpAndSettle();
-
-      expect(
-        find.textContaining('Tes mots recoupent le vocabulaire'),
-        findsOneWidget,
-      );
-    });
-
-    testWidgets('répondre par un choix ajoute la réponse au fil',
-        (tester) async {
-      await pumpThread(tester);
-
-      await tester.tap(find.text('La péricope entière'));
-      await tester.pumpAndSettle();
-
-      // La réponse devient une bulle : le libellé apparaît une seconde fois.
-      expect(find.text('La péricope entière'), findsNWidgets(2));
-    });
-
-    testWidgets('seule la dernière question est cliquable', (tester) async {
-      await pumpThread(tester);
-
-      await tester.tap(find.text('Le péché'));
-      await tester.pumpAndSettle();
-
-      expect(
-        find.text('Le péché'),
-        findsOneWidget,
-        reason: 'une question déjà répondue ne se rejoue pas',
-      );
-    });
-
-    testWidgets('écrire dans la barre ajoute un bloc au fil', (tester) async {
-      await pumpThread(tester);
-
-      await tester.enterText(
-        find.byType(TextField),
-        'Je garde la péricope entière.',
-      );
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.byIcon(Icons.arrow_upward));
-      await tester.pumpAndSettle();
-
-      expect(find.text('Je garde la péricope entière.'), findsOneWidget);
-    });
-
-    testWidgets('la dictée est visible mais inactive', (tester) async {
-      await pumpThread(tester);
-
-      final mic = tester.widget<IconButton>(
-        find.ancestor(
-          of: find.byIcon(Icons.mic_none),
-          matching: find.byType(IconButton),
-        ),
-      );
-
-      expect(
-        mic.onPressed,
-        isNull,
-        reason: 'la dictée dépend du moteur de reconnaissance vocale (Q2)',
-      );
-    });
-  });
 }

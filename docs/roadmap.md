@@ -41,7 +41,7 @@ Les arbitrages et les questions en attente vivent dans
 | Persistance des préparations | **Bloqué par Q4** |
 | Profil et réglages | Fait — églises et appareils **simulés** |
 | Accueil | Branché sur le **vrai fil** du serveur (`GET /urim/studies`) |
-| Création, fil guidé | Écrans faits — les réponses d'Urim sont **scriptées** |
+| Création, fil guidé | Bâtis sur le **contrat du serveur** (`TurnView`) — le moteur, lui, reste dû |
 | Relecture d'une prédication, synthèse à valider | Écrans faits — transcription et capsules **scriptées** |
 
 Le domaine du discernement pastoral (`PastoralQuestion`, `ScriptureAnchor`,
@@ -71,13 +71,24 @@ préparations écrites.
 
 ### M2 — Préparation écrite
 
-**Écrans faits, moteur absent.** Le fil est un dialogue : Urim expose son
-raisonnement, pèse des textes, pose une question, et attend (D14). Répondre
-par un choix ou par la barre de saisie revient au même.
+**Bâti sur le contrat du serveur.** Le fil rend un `TurnView` : trois phrases
+qui ne viennent pas du même endroit — ce qu'Urim vient de faire, **son motif
+tel quel**, et sa question — puis les sept natures de bloc, dans l'ordre où le
+serveur les donne.
 
-Ce qui manque est le moteur lui-même : les axes (**Q14**), les textes pesés
-(**Q1**), les bornes de péricope (**Q15**). Les réponses affichées sont
-scriptées.
+Quatre gestes, et ils disent le produit : ouvrir, **décider**, **écarter**,
+**parler**. Écarter n'avance aucun étage ; il apprend seulement au tour suivant
+de ne pas reproposer — sans quoi un moteur qui rejoue n'a aucun moyen de s'en
+souvenir. Les pesées postent sur **leur** étage, pas sur celui du tour.
+
+Ce qui a disparu : l'historique. Le moteur rejoue à chaque lecture (D28), donc
+il n'y a qu'un tour, et ce qui est au-dessus est le compte rendu de la séance.
+Ce qui a été gagné : la barre ne se ferme jamais, et écrire « L'Église » vaut
+la toucher — le serveur résout d'abord ce qui désigne l'écran.
+
+Le moteur lui-même reste dû : les axes (**Q14**), les textes pesés (**Q1**),
+les bornes (**Q15**). Un build de démonstration le fait jouer par un mannequin
+qui imite la forme du contrat, pas le raisonnement.
 
 ### M3 — Enregistrement et transcription
 

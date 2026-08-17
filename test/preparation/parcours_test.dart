@@ -136,7 +136,9 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(PreparationPage), findsOneWidget);
-      expect(find.text('Sur quel axe veux-tu prêcher ?'), findsOneWidget);
+      // Ce que la carte annonçait — « Rend la main » — se retrouve derrière
+      // elle : le moteur s'est arrêté sur une question.
+      expect(find.text('Lequel retenez-vous ?'), findsOneWidget);
     });
   });
 
@@ -202,12 +204,10 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(PreparationPage), findsOneWidget);
-      expect(find.text('Que l\'amour fraternel continue.'), findsOneWidget);
-      expect(
-        find.text('Que l\'amour fraternel continue'),
-        findsOneWidget,
-        reason: 'le titre reprend les premiers mots, sans le point final',
-      );
+      // La phrase d'ouverture est la seule chose que le pasteur ait dite que
+      // le serveur garde vraiment : elle ouvre le fil, et tient lieu de titre
+      // tant qu'aucune unité n'est bornée.
+      expect(find.text('Que l\'amour fraternel continue.'), findsNWidgets(2));
     });
 
     testWidgets('la préparation ouverte rejoint l\'accueil', (tester) async {

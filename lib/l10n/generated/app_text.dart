@@ -921,6 +921,48 @@ abstract class AppText {
   /// **'· {activity} · dimanche {service}'**
   String homeCardMetaWithService(String activity, String service);
 
+  /// Qui a signé le découpage de l'unité — « ia-mistral », ou le nom d'un relecteur. Sans cela, une structure générée arriverait sur l'écran du pasteur exactement comme une structure relue par un bibliste.
+  ///
+  /// In fr, this message translates to:
+  /// **'Unité signée {signature}'**
+  String turnSignature(String signature);
+
+  /// Un thème, jamais un titre — le titre, c'est la voix du pasteur.
+  ///
+  /// In fr, this message translates to:
+  /// **'THÈME'**
+  String get turnThemeLabel;
+
+  /// Le geste existe de bout en bout côté serveur, et rien ne le disait. Une porte ouverte que personne ne voit est pire qu'une porte fermée : elle a l'air d'une fonctionnalité manquante.
+  ///
+  /// In fr, this message translates to:
+  /// **'Touchez un axe pour prêcher ce texte dessus.'**
+  String get turnBearingsSwitchable;
+
+  /// `dominant` du moteur : l'axe est ce dont le texte parle.
+  ///
+  /// In fr, this message translates to:
+  /// **'En fait son sujet'**
+  String get strengthDominant;
+
+  /// `porte` du moteur.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le soutient'**
+  String get strengthSupports;
+
+  /// `resiste` du moteur. Affiché au même rang que le reste : c'est la seule mécanique anti-proof-texting du produit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lui résiste'**
+  String get strengthResists;
+
+  /// `absent` du moteur : rien ne se construit dessus.
+  ///
+  /// In fr, this message translates to:
+  /// **'Absent'**
+  String get strengthAbsent;
+
   /// `await_decision` du moteur : Urim s'est arrêté sur une question et attend. C'est ce qui met la préparation en tête de l'accueil.
   ///
   /// In fr, this message translates to:
