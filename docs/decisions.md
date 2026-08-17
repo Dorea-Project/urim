@@ -501,6 +501,100 @@ belle phrase sur rien — est précisément ce qu'un oracle fait.
 - Le coût par tour, une fois la voix mise en cache : combien d'appels pour une
   préparation menée au bout.
 
+### Q21 — Le pasteur est imprévisible : que fait Urim ? — **recommandation**
+
+Née d'une préparation menée **en vrai** contre le moteur, sur Marc 10:46-52. En
+dix minutes, trois défauts, et ils n'en font qu'un.
+
+#### Ce que la séance a trouvé
+
+| Ce que le pasteur écrit | Ce qui arrive |
+|---|---|
+| `Marc 10:23, Bartimée` | Lu comme une intention sur la richesse. Le nom est ignoré — deux textes du même chapitre, rien à voir, et **aucune question posée**. |
+| `Marc 10:46-52` | Lu comme une référence. Résolu, unité bornée : « La guérison de Bartimée ». |
+| `Je veux prêcher sur Marc 10:46-52` | Lu comme une intention. **La référence est perdue.** |
+| « je veux faire ressortir que Jésus peut tout guérir » | Le répondeur explique ce qu'est un thème, et reserre les douze mêmes plans. |
+
+**1. Une référence n'est vue que si elle est seule.** Cinq mots de politesse
+autour et `route_entry` la classe en intention. C'est la façon dont tout le monde
+parle.
+
+**2. Les drapeaux de risque ne se lèvent que sur le chemin conviction.**
+`study_service` : `if chemin == "conviction": … assiste.lever(lisible)` — sinon
+`drapeaux = ()`. Un pasteur entré par une référence n'aura **jamais** de
+garde-fou sur son intention, quoi qu'il dise ensuite. Combiné au défaut 1 :
+
+> **On peut avoir son texte, ou son garde-fou. Pas les deux.**
+
+**3. La parole la plus substantielle produit la réponse la plus creuse.**
+« Jésus peut tout guérir » est une généralisation depuis une guérison, et
+« aveugles physiques et spirituels » une lecture typologique — que le tableau
+d'à côté chiffre à *risque moyen*. Urim avait le chiffre et ne l'a pas relié.
+
+#### Le vrai défaut est en dessous des trois
+
+`Tour` rend `decision`, `refus`, `reponse`. La phrase fondatrice du parcours en
+promet quatre : *« désigner, écarter, **questionner**, changer d'avis »*.
+**`questionner` est le seul verbe sans issue.**
+
+Et la question suivante du pasteur allait être : *« est-ce que je peux avoir le
+contexte historique du livre de Marc, la signification de Bartimée ? »*
+
+Urim **avait** les deux réponses. `ContextView` — littéraire et historique — est
+déjà dans chaque `StudyView`. `OriginalWordView` sert « ce que sa forme fait ».
+La concordance dit où un mot paraît ailleurs. Il n'avait pas le **chemin**.
+
+#### La recommandation
+
+**1. Nommer le quatrième geste : demander.** Une quatrième issue au `Tour`, pas
+une branche par sujet. Le canal de parole est le seul par lequel l'imprévisible
+arrive, et c'est aujourd'hui le plus pauvre des trois.
+
+**2. Ce qui répond est le corpus, jamais le modèle.** Même règle que
+`adapters/mistral.py`, qui rend `{found, book, chapter, verse}` et jamais le
+verset : ici le modèle rend *« demande de contexte sur l'unité courante »*, et
+jamais le contexte. Son erreur redevient inoffensive — un mauvais encart, pas
+une doctrine inventée.
+
+**3. L'imprévisibilité se borne par un inventaire, pas par des branches.** On ne
+devine pas ce qu'un pasteur demandera ; on liste ce qu'Urim **peut** servir sur
+l'état courant, et le classement devient une question fermée sur cette liste.
+Elle est déjà écrite, et elle tient en sept :
+
+| Ce qu'il sait servir | Ce qui le sert |
+|---|---|
+| le contexte, littéraire et historique | `ContextView`, déjà dans la vue |
+| ce que fait la forme d'un mot de l'original | `OriginalWordView` |
+| où ce mot paraît ailleurs | la concordance |
+| ce que les versions font de ce verset | `VariantView` |
+| les textes qui résistent, venus d'ailleurs | `ResistingElsewhereView` |
+| un passage entier, hors préparation | `PassageDetailView` |
+| ce que j'ai déjà prêché, et sous quels loci | l'archive, la couverture |
+
+« Signification de Bartimée » → un mot de l'original. « Contexte historique de
+Marc » → le contexte. Ce qui tombe hors liste va au répondeur, qui existe déjà —
+mais en **disant ce qu'il sait faire**. Face à l'imprévisible, la bonne réponse
+n'est pas de tout prévoir : c'est de savoir nommer ce dont on est capable.
+
+**4. Demander ne fait pas avancer le pipeline.** Geste latéral, comme écarter.
+Le pasteur pose sa question, reçoit sa réponse, et **le tour reste le même** — il
+n'a pas perdu sa place. Sans cette règle, chaque question déplacerait sa
+préparation, et l'imprévisibilité deviendrait destructrice au lieu d'être
+servie.
+
+**5. Et ça déplace Q20.** La proactivité du modèle n'est pas de mieux *parler*,
+c'est de mieux **router**. Une reformulation élégante de « Voici ce que je peux
+vous proposer ici » n'aurait rien changé à cette séance ; un aiguillage vers le
+contexte, si.
+
+#### Ce qui reste à mesurer
+
+La correspondance n'est pas garantie pour toute question — « signification de
+Bartimée » est un nom propre, et le gloss est dans le verset lui-même (Marc le
+traduit : *« fils de Timée »*). L'inventaire dit ce qu'on sait servir ; il ne
+promet pas que chaque demande y trouve sa case. C'est précisément pourquoi le
+répondeur doit rester le fond du canal.
+
 ### Q19 — Où vivent les documents produits ? — **écartée pour l'instant**
 
 À la fin d'une conversation, le pasteur — ou Urim — propose de générer le moment
