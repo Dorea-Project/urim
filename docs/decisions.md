@@ -54,20 +54,64 @@ modèle distant reste possible si le fournisseur s'y engage contractuellement,
 mais cela doit être dit à l'utilisateur — la politique actuelle laisse
 entendre que rien ne sort de l'appareil.
 
-### Q4 — Comment stocker les préparations ? — **sans objet**
+### Q4 — Que garde l'appareil ? — **la question centrale de M1 et M2**
 
-Elle supposait que l'application était propriétaire des préparations. Elle ne
-l'est pas : **les préparations vivent sur le serveur**, et il n'y a rien à
-stocker localement — pas même le fil, puisqu'il n'existe pas (D28). Ce que le
-serveur garde, ce sont les décisions ; les phrases se refabriquent au rejeu.
+J'ai écrit un jour qu'elle était « sans objet » parce que les préparations
+vivent sur le serveur. C'était faux, et de la mauvaise façon : la question n'a
+pas disparu, elle a changé de forme et **elle est devenue plus dure**. Ce n'est
+plus « où est la vérité » — c'est le serveur, et c'est réglé. C'est **ce que
+l'appareil garde pour que l'outil serve quand le réseau ne sert pas.**
 
-Ce qui reste de la question est une **autre** question, plus étroite : le hors
-connexion. Écrire sans réseau suppose de retenir un geste et de le rejouer plus
-tard, pas de recopier une base. Et l'audio d'une transcription, lui, restera
-bien un fichier local — mais il dépend de **Q2**, pas d'ici.
+Deux mesures posent le problème mieux qu'un argument :
 
-Ce que la question disait de Drift reste vrai le jour où le hors connexion se
-fera ; ce n'est simplement plus ce qui bloque M1.
+- **huit secondes par tour**, en local, sans réseau du tout — quatre appels en
+  32 s au banc `live`. Chaque lecture rejoue les huit étages du pipeline ;
+  c'est le prix de D28, et il est payé à chaque ouverture d'écran.
+- **Abidjan, samedi soir.** Sans réseau, une application qui ne garde rien
+  n'affiche rien : ni le fil, ni le dernier tour, ni les mots que le pasteur
+  vient d'écrire. Elle devient une brique le jour où elle sert le plus.
+
+La feuille de route promet déjà le hors connexion, et la politique de
+confidentialité promet que le travail reste à son auteur. Ni l'un ni l'autre ne
+tient aujourd'hui.
+
+#### Quatre choses à garder, et elles n'ont pas les mêmes règles
+
+| Ce qu'on garde | Pourquoi, et la règle |
+|---|---|
+| **Les mots du pasteur** — sa saisie en cours, ses points, le thème qu'il a réécrit | Non négociable, et écrit **avant** tout appel réseau. Perdre les phrases d'un homme parce qu'une requête a échoué est la seule faute que cet outil n'a pas le droit de commettre. |
+| **Une file de gestes** — décider, écarter, parler faits sans réseau | Rejouée **dans l'ordre** à la reconnexion. C'est la synchronisation, et elle n'a pas besoin d'être inventée : voir plus bas. |
+| **Le dernier tour reçu**, par préparation | Pour que l'écran s'ouvre tout de suite et se lise sans réseau. Il porte l'heure où il a été reçu : au rejeu de demain, le moteur peut dire autre chose (D28), et l'écran ne doit pas prétendre le contraire. |
+| **L'audio** d'une transcription | Fichier local, plusieurs dizaines de Mo. Dépend de **Q2**, pas d'ici. |
+
+#### Ce qui rend la synchronisation possible, et c'est le serveur qui l'offre
+
+Le modèle de D28 — *aucun historique, seulement des décisions* — n'est pas un
+obstacle au hors connexion : c'en est la clé.
+
+Les décisions sont un petit ensemble ordonné, et le serveur les **périme en
+cascade** : décider un étage amont invalide mécaniquement l'unité, la
+faisabilité et le thème qui en dépendaient. Rejouer une file dans l'ordre
+d'émission donne donc le même état que si les gestes avaient été faits en
+ligne, sans code de fusion à écrire. Une pile de phrases à réconcilier aurait
+demandé l'inverse.
+
+#### Les deux endroits où ça résiste
+
+**`POST /turns` n'est pas une décision.** Une phrase libre rejouée deux fois
+peut coûter deux passages du répondeur — et un appel de modèle. Il faut une
+clé d'idempotence portée par le client, ou une déduplication à l'envoi.
+
+**Le corpus dérive.** Un geste mis en file mardi, rejoué vendredi, peut
+rencontrer un corpus qui a changé — le serveur le signale déjà
+(`corpus_drifted`). Ce que l'écran doit dire alors reste à trancher : le tour
+n'est pas faux, il est **différent de celui qu'on avait sous les yeux**.
+
+#### Ce qui reste vrai de l'ancienne réponse
+
+Drift (SQLite) pour la file et les tours gardés, `path_provider` pour l'audio.
+Les préférences système ne conviennent pas : une file grandit, et un tour réel
+pèse jusqu'à 27 ko de JSON.
 
 ### Q5 — « tu » ou « vous » ?
 

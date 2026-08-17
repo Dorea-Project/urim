@@ -38,7 +38,7 @@ Les arbitrages et les questions en attente vivent dans
 | Socle sécurité : jetons au coffre, rotation, identifiant d'appareil | Fait |
 | Politique de confidentialité | Fait |
 | Domaine des préparations | Fait |
-| Persistance des préparations | Sur le **serveur** — Q4 est sans objet |
+| Persistance des préparations | Sur le **serveur**. Ce que l'appareil garde reste **ouvert — Q4** |
 | Profil et réglages | Fait — églises et appareils **simulés** |
 | Accueil | Branché sur le **vrai fil** du serveur (`GET /urim/studies`) |
 | Création, fil guidé | Bâtis sur le **contrat du serveur** (`TurnView`) — le moteur, lui, reste dû |
@@ -65,9 +65,11 @@ la préparation.
 Un build de démonstration garde son fil : le magasin en mémoire est projeté sur
 le même contrat, sur la même bascule que le parcours d'entrée simulé.
 
-Restent dus : la recherche, et le hors connexion — ce qui restait de **Q4**
-une fois les préparations passées au serveur. Une carte transcrite ne porte
-plus de pastille : le moteur ne connaît que les préparations écrites.
+Restent dus : la recherche, et surtout **Q4** — ce que l'appareil garde. Huit
+secondes par tour en local, et rien du tout sans réseau : aujourd'hui
+l'accueil est vide et le fil illisible dès que la connexion tombe. Une carte
+transcrite ne porte plus de pastille : le moteur ne connaît que les
+préparations écrites.
 
 ### M2 — Préparation écrite
 
@@ -174,6 +176,8 @@ demande aucun modèle — s'enregistrer soi-même — pourrait sortir la premiè
 ## Chantiers transverses
 
 - **Hors ligne** — la capture et l'écriture doivent fonctionner sans réseau.
+  C'est **Q4**, et la promesse est déjà faite ici et dans la politique de
+  confidentialité. Elle ne tient pas encore.
 - **Livrable** — le serveur sait déjà écrire les deux documents : le `.pptx`
   que l'assemblée voit, le `.docx` qui porte ce qui ne monte pas à l'écran.
   C'est la **dernière case vide** de la ligne d'arrivée v1 côté serveur, et
