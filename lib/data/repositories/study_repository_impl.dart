@@ -4,7 +4,9 @@ import 'package:urim/core/error/error_mapper.dart';
 import 'package:urim/core/error/exceptions.dart';
 import 'package:urim/core/error/failure.dart';
 import 'package:urim/core/network/dio_client.dart';
+import 'package:urim/core/result/cached.dart';
 import 'package:urim/core/result/result.dart';
+import 'package:urim/data/datasources/turn_cache_local_data_source.dart';
 import 'package:urim/data/datasources/urim_remote_data_source.dart';
 import 'package:urim/data/repositories/demo_urim_engine.dart';
 import 'package:urim/data/repositories/in_memory_preparation_repository.dart';
@@ -16,9 +18,39 @@ import 'package:urim/domain/repositories/study_repository.dart';
 
 /// Le moteur tel que le serveur le tient.
 final class RemoteStudyRepository implements StudyRepository {
-  const RemoteStudyRepository(this._source);
+  const RemoteStudyRepository(this._source, this._cache);
 
   final UrimRemoteDataSource _source;
+  final TurnCacheLocalDataSource _cache;
+
+  @override
+  Future<Cached<Study>?> cachedById(String studyId) async {
+    final garde = await _cache.readStudy(studyId);
+    if (garde == null) return null;
+
+    try {
+      return Cached.at(
+        studyFromWire(garde.body as Map<String, dynamic>),
+        garde.at,
+      );
+    } catch (_) {
+      // Un tour garde par une version plus ancienne du contrat : on repart du
+      // serveur plutot que de rendre un ecran de travers.
+      return null;
+    }
+  }
+
+  @override
+  Future<Cached<List<StudySummary>>?> cachedFeed() async {
+    final garde = await _cache.readFeed();
+    if (garde == null) return null;
+
+    try {
+      return Cached.at(feedFromWire(garde.body as List<dynamic>), garde.at);
+    } catch (_) {
+      return null;
+    }
+  }
 
   @override
   Future<Result<List<StudySummary>>> listMine() =>
@@ -75,6 +107,15 @@ final class RemoteStudyRepository implements StudyRepository {
 /// de la préparation.
 final class MockStudyRepository implements StudyRepository {
   MockStudyRepository(this._preparations);
+
+  /// Le mannequin ne garde rien, et c'est juste : son magasin **est** en
+  /// memoire. Rendre nul dit « rien de garde », et l'ecran passe par le chemin
+  /// normal — instantane de toute facon.
+  @override
+  Future<Cached<Study>?> cachedById(String studyId) async => null;
+
+  @override
+  Future<Cached<List<StudySummary>>?> cachedFeed() async => null;
 
   final InMemoryPreparationRepository _preparations;
   final DemoUrimEngine _engine = DemoUrimEngine();
@@ -214,5 +255,9 @@ final studyRepositoryProvider = Provider<StudyRepository>((ref) {
     return MockStudyRepository(ref.watch(preparationRepositoryProvider));
   }
 
-  return RemoteStudyRepository(UrimRemoteDataSource(ref.watch(dioProvider)));
+  final cache = ref.watch(turnCacheProvider);
+  return RemoteStudyRepository(
+    UrimRemoteDataSource(ref.watch(dioProvider), cache: cache),
+    cache,
+  );
 });

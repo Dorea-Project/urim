@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:urim/core/error/failure.dart';
+import 'package:urim/core/result/cached.dart';
 import 'package:urim/data/repositories/in_memory_preparation_repository.dart';
 import 'package:urim/data/repositories/study_repository_impl.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
@@ -9,14 +10,44 @@ import 'package:urim/domain/entities/preparation/study_summary.dart';
 /// Une lecture, pas un abonnement. Le serveur sert une liste sur demande — un
 /// flux ferait croire à une fraîcheur qu'aucune des deux implémentations ne
 /// tient. Ce qui change le fil l'invalide (voir [PreparationOpener]).
-final studyFeedProvider = FutureProvider<List<StudySummary>>((ref) async {
-  final result = await ref.watch(studyRepositoryProvider).listMine();
+///
+/// **Ce qu'on sait d'abord, ce que le serveur dit ensuite.** La dernière liste
+/// reçue s'affiche tout de suite, marquée de son heure, et le rafraîchissement
+/// la remplace quand il arrive. Sans réseau, l'accueil montre le travail en
+/// cours au lieu d'un écran vide.
+final studyFeedProvider =
+    AsyncNotifierProvider<StudyFeed, Cached<List<StudySummary>>>(
+  StudyFeed.new,
+);
 
-  return result.fold(
-    onSuccess: (summaries) => summaries,
-    onFailure: (failure) => throw failure,
-  );
-});
+final class StudyFeed extends AsyncNotifier<Cached<List<StudySummary>>> {
+  @override
+  Future<Cached<List<StudySummary>>> build() async {
+    final repository = ref.watch(studyRepositoryProvider);
+
+    if (await repository.cachedFeed() case final Cached<List<StudySummary>> g) {
+      Future.microtask(_rafraichir);
+      return g;
+    }
+
+    final result = await repository.listMine();
+
+    return result.fold(
+      onSuccess: Cached.fresh,
+      onFailure: (failure) => throw failure,
+    );
+  }
+
+  /// Un échec laisse la liste gardée en place : l'accueil reste utilisable.
+  Future<void> _rafraichir() async {
+    final result = await ref.read(studyRepositoryProvider).listMine();
+
+    result.fold(
+      onSuccess: (summaries) => state = AsyncData(Cached.fresh(summaries)),
+      onFailure: (_) {},
+    );
+  }
+}
 
 /// Ouverture d'une nouvelle préparation depuis le formulaire.
 final class PreparationOpener extends Notifier<AsyncValue<void>> {

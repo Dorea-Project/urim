@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:urim/core/network/dio_error_mapper.dart';
+import 'package:urim/data/datasources/turn_cache_local_data_source.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
@@ -11,17 +12,27 @@ import 'package:urim/domain/entities/preparation/turn.dart';
 /// `stage_code`, `decide_stage`) : la conversion vers le vocabulaire du domaine
 /// se fait ici, et nulle part ailleurs.
 final class UrimRemoteDataSource {
-  const UrimRemoteDataSource(this._dio);
+  const UrimRemoteDataSource(this._dio, {TurnCacheLocalDataSource? cache})
+      : _cache = cache;
 
   final Dio _dio;
+
+  /// Le magasin local, quand il y en a un. C'est **ici** que l'écriture a lieu,
+  /// et nulle part ailleurs : c'est le seul endroit qui voit le JSON brut, et
+  /// garder le brut plutôt que l'objet analysé évite d'avoir un second code de
+  /// sérialisation à tenir d'accord avec le contrat.
+  final TurnCacheLocalDataSource? _cache;
 
   /// `GET /urim/studies` — le fil, sans rejouer le moteur.
   ///
   /// Ce que la réponse ne contient pas : aucune phrase d'Urim. Le serveur s'y
   /// refuse pour ne pas rejouer son pipeline vingt fois, et l'application n'a
   /// donc rien à en attendre.
-  Future<List<StudySummary>> listStudies() async =>
-      feedFromWire(await _get<List<dynamic>>('/urim/studies') ?? const []);
+  Future<List<StudySummary>> listStudies() async {
+    final rows = await _get<List<dynamic>>('/urim/studies') ?? const [];
+    await _cache?.writeFeed(rows);
+    return feedFromWire(rows);
+  }
 
   /// `POST /urim/studies` — une préparation **personnelle**, sans église.
   ///
@@ -88,13 +99,21 @@ final class UrimRemoteDataSource {
       throw mapDioException(e);
     }
   }
-}
 
-Study _study(Map<String, dynamic>? json) {
-  if (json == null) {
-    throw const FormatException('Le serveur n\'a rendu aucune préparation.');
+  /// Analyse la réponse, et **garde le brut au passage**.
+  ///
+  /// Tous les gestes passent ici — ouvrir, relire, décider, écarter, parler —
+  /// donc le tour gardé est toujours le dernier reçu, quel que soit le geste
+  /// qui l'a obtenu. C'était la raison de faire de cette fonction une méthode.
+  Future<Study> _study(Map<String, dynamic>? json) async {
+    if (json == null) {
+      throw const FormatException('Le serveur n\'a rendu aucune préparation.');
+    }
+
+    final etude = studyFromWire(json);
+    await _cache?.writeStudy(etude.id, json);
+    return etude;
   }
-  return studyFromWire(json);
 }
 
 /// L'analyse d'une préparation, séparée du transport.

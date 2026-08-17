@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:urim/core/error/failure.dart';
+import 'package:urim/core/result/cached.dart';
 import 'package:urim/core/result/result.dart';
 import 'package:urim/data/repositories/study_repository_impl.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
@@ -44,10 +45,25 @@ final class ServedTurn extends ThreadEntry {
 
 /// L'état de l'écran : la préparation, et le compte rendu de la séance.
 final class ThreadState {
-  const ThreadState({required this.study, this.entries = const []});
+  const ThreadState({
+    required this.study,
+    this.entries = const [],
+    this.receivedAt,
+  });
 
   final Study study;
   final List<ThreadEntry> entries;
+
+  /// L'heure à laquelle ce tour a été reçu, **quand il vient du magasin
+  /// local**. Nul veut dire frais.
+  ///
+  /// L'écran doit le dire. Le moteur rejoue à chaque lecture (D28) : ce qui a
+  /// été gardé hier soir est ce qu'il disait hier soir, et le faire passer
+  /// pour une réponse d'aujourd'hui serait un mensonge que le pasteur
+  /// découvrirait au pire moment.
+  final DateTime? receivedAt;
+
+  bool get isStale => receivedAt != null;
 
   Turn? get turn => study.turn;
 }
@@ -58,13 +74,34 @@ final class PreparationThread extends AsyncNotifier<ThreadState> {
 
   final String studyId;
 
+  /// **Ce qu'on sait d'abord, ce que le serveur dit ensuite.**
+  ///
+  /// Chaque lecture rejoue les huit étages du pipeline : huit secondes mesurées
+  /// en local, et un écran vide sans réseau. Le tour gardé s'affiche donc tout
+  /// de suite, marqué de son heure, et le rafraîchissement le remplace quand il
+  /// arrive. Sans réseau, il ne le remplace pas — et c'est encore lisible.
   @override
   Future<ThreadState> build() async {
-    final result = await ref.watch(studyRepositoryProvider).getById(studyId);
+    final repository = ref.watch(studyRepositoryProvider);
+
+    if (await repository.cachedById(studyId) case final Cached<Study> garde) {
+      // Le rafraîchissement part sans qu'on l'attende : l'écran est déjà
+      // utilisable, et un échec de réseau ne doit pas l'effacer.
+      Future.microtask(_rafraichir);
+      return _depuis(garde.value, receivedAt: garde.receivedAt);
+    }
+
+    final result = await repository.getById(studyId);
 
     return result.fold(
-      onSuccess: (study) => ThreadState(
+      onSuccess: (study) => _depuis(study),
+      onFailure: (failure) => throw failure,
+    );
+  }
+
+  ThreadState _depuis(Study study, {DateTime? receivedAt}) => ThreadState(
         study: study,
+        receivedAt: receivedAt,
         entries: [
           // Ce que le pasteur a écrit en ouvrant — la seule chose qu'il ait
           // dite que le serveur garde vraiment. Tout le reste de ce qu'il dit
@@ -72,8 +109,26 @@ final class PreparationThread extends AsyncNotifier<ThreadState> {
           if (study.rawInput.isNotEmpty) SpokenByPastor(study.rawInput),
           if (study.turn case final Turn turn) ServedTurn(turn, live: true),
         ],
-      ),
-      onFailure: (failure) => throw failure,
+      );
+
+  /// Relit au serveur et remplace le tour gardé — **sans jamais effacer**.
+  ///
+  /// Un échec laisse l'écran tel quel : le pasteur garde ce qu'il avait sous
+  /// les yeux. Bascule en erreur ferait payer la panne de réseau deux fois.
+  Future<void> _rafraichir() async {
+    final result = await ref.read(studyRepositoryProvider).getById(studyId);
+
+    result.fold(
+      onSuccess: (study) {
+        // Si le pasteur a déjà touché quelque chose entre-temps, on ne revient
+        // pas en arrière : sa séance a avancé.
+        if (state.value?.entries.whereType<SpokenByPastor>().length case
+            final int dits when dits > 1) {
+          return;
+        }
+        state = AsyncData(_depuis(study));
+      },
+      onFailure: (_) {},
     );
   }
 

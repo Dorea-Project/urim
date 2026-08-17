@@ -65,14 +65,16 @@ la préparation.
 Un build de démonstration garde son fil : le magasin en mémoire est projeté sur
 le même contrat, sur la même bascule que le parcours d'entrée simulé.
 
-**Q4, étape 1 : ce que le pasteur écrit ne se perd plus.** La barre de saisie
-et le formulaire d'ouverture posent leur texte sur l'appareil avant tout
-appel, et le reprennent en revenant. Un envoi refusé garde la phrase (D32).
+**Q4, étapes 1 et 2 faites.** Ce que le pasteur écrit ne se perd plus : la
+barre de saisie et le formulaire d'ouverture posent leur texte sur l'appareil
+avant tout appel, et un envoi refusé garde la phrase (D32). Et l'accueil comme
+le fil s'ouvrent sur ce qu'ils savent déjà, en disant d'où ça vient, puis se
+rafraîchissent (D34) — huit secondes de blanc deviennent zéro, et un accueil
+vide devient le travail en cours.
 
-Restent dus : la recherche, et les étapes 2 à 5 de **Q4** — huit secondes par
-tour en local, et un accueil vide dès que la connexion tombe. Une carte
-transcrite ne porte plus de pastille : le moteur ne connaît que les
-préparations écrites.
+Restent dus : la recherche, et les étapes 3 à 5 de **Q4** — répondre sans
+réseau demande une file de gestes. Une carte transcrite ne porte plus de
+pastille : le moteur ne connaît que les préparations écrites.
 
 ### M2 — Préparation écrite
 

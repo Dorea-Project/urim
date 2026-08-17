@@ -1,3 +1,4 @@
+import 'package:urim/core/result/cached.dart';
 import 'package:urim/core/result/result.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
@@ -28,6 +29,21 @@ abstract interface class StudyRepository {
 
   /// Relire. La trace est **rejouée**, jamais relue d'un journal.
   Future<Result<Study>> getById(String studyId);
+
+  /// Ce que l'appareil a gardé de la dernière lecture, ou nul.
+  ///
+  /// Rendu **immédiatement**, sans réseau. C'est ce qui remplace huit secondes
+  /// de blanc par un écran, et un écran vide par un écran quand il n'y a pas de
+  /// réseau du tout.
+  ///
+  /// Le [Cached] porte l'heure de réception, et l'appelant doit la dire : le
+  /// moteur rejoue à chaque lecture (D28), donc ce qui a été gardé hier soir
+  /// est ce qu'il disait hier soir. Ne pas le dire serait faire passer un
+  /// souvenir pour une réponse.
+  Future<Cached<Study>?> cachedById(String studyId);
+
+  /// Idem pour le fil.
+  Future<Cached<List<StudySummary>>?> cachedFeed();
 
   /// Répondre à un étage qui rend la main. Le pipeline repart du début.
   ///

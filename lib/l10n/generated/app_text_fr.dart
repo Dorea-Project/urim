@@ -492,6 +492,11 @@ class AppTextFr extends AppText {
   }
 
   @override
+  String servedFromDevice(String when) {
+    return 'Gardé sur cet appareil · $when';
+  }
+
+  @override
   String turnSignature(String signature) {
     return 'Unité signée $signature';
   }

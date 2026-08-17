@@ -921,6 +921,12 @@ abstract class AppText {
   /// **'· {activity} · dimanche {service}'**
   String homeCardMetaWithService(String activity, String service);
 
+  /// Ce qui est affiché vient du magasin local, pas du serveur. Le moteur rejoue à chaque lecture : ce qui a été gardé hier soir est ce qu'il disait hier soir, et le faire passer pour une réponse d'aujourd'hui serait un mensonge découvert au pire moment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Gardé sur cet appareil · {when}'**
+  String servedFromDevice(String when);
+
   /// Qui a signé le découpage de l'unité — « ia-mistral », ou le nom d'un relecteur. Sans cela, une structure générée arriverait sur l'écran du pasteur exactement comme une structure relue par un bibliste.
   ///
   /// In fr, this message translates to:

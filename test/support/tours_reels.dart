@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:urim/core/result/cached.dart';
 import 'package:urim/core/result/result.dart';
 import 'package:urim/data/datasources/urim_remote_data_source.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
@@ -70,6 +71,14 @@ base class DepotFige implements StudyRepository {
   @override
   Future<Result<List<StudySummary>>> listMine() async =>
       const Result.success([]);
+
+  /// Rien de garde : les tests d'ecran passent par le chemin normal, qui est
+  /// instantane puisque la doublure ne touche pas au reseau.
+  @override
+  Future<Cached<Study>?> cachedById(String studyId) async => null;
+
+  @override
+  Future<Cached<List<StudySummary>>?> cachedFeed() async => null;
 
   @override
   Future<Result<Study>> open({

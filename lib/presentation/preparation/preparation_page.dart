@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:urim/core/error/failure.dart';
 import 'package:urim/data/datasources/draft_local_data_source.dart';
 import 'package:urim/presentation/common/draft_keeper.dart';
+import 'package:urim/presentation/common/stale_banner.dart';
 import 'package:urim/presentation/preparation/preparation_view_model.dart';
 import 'package:urim/presentation/preparation/widgets/turn_views.dart';
 import 'package:urim/l10n/generated/app_text.dart';
@@ -53,6 +54,10 @@ class PreparationPage extends ConsumerWidget {
       body: SafeArea(
         child: Column(
           children: [
+            // La provenance avant le contenu : on dit d'ou ca vient avant que
+            // le pasteur ne se mette a lire, pas apres.
+            if (thread.value?.receivedAt case final DateTime recu)
+              StaleBanner(receivedAt: recu),
             Expanded(
               child: switch (thread) {
                 AsyncData(:final value) => _Thread(

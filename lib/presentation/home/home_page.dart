@@ -6,6 +6,7 @@ import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/home/home_view_model.dart';
 import 'package:urim/presentation/home/widgets/preparation_card.dart';
+import 'package:urim/presentation/common/stale_banner.dart';
 import 'package:urim/presentation/home/widgets/task_sheet.dart';
 import 'package:urim/presentation/profile/profile_view_model.dart';
 import 'package:urim/presentation/profile/widgets/profile_avatar.dart';
@@ -37,9 +38,11 @@ class HomePage extends ConsumerWidget {
       body: SafeArea(
         child: Column(
           children: [
+            if (feed.value?.receivedAt case final DateTime recu)
+              StaleBanner(receivedAt: recu),
             Expanded(
               child: switch (feed) {
-                AsyncData(:final value) => _Feed(summaries: value),
+                AsyncData(:final value) => _Feed(summaries: value.value),
                 AsyncError() => const _FeedError(),
                 _ => const Center(child: CircularProgressIndicator()),
               },
