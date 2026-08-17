@@ -55,7 +55,10 @@ abstract final class ToursReels {
 }
 
 /// Un depot qui sert une preparation capturee, et note les gestes recus.
-final class DepotFige implements StudyRepository {
+///
+/// `base` plutot que `final` : les tests du brouillon en derivent un depot qui
+/// **refuse**, et c'est le seul etat ou un brouillon a un role.
+base class DepotFige implements StudyRepository {
   DepotFige(this.etude);
 
   Study etude;

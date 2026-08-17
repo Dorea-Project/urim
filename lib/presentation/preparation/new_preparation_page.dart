@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/core/router/app_routes.dart';
+import 'package:urim/data/datasources/draft_local_data_source.dart';
+import 'package:urim/presentation/common/draft_keeper.dart';
 import 'package:urim/presentation/common/french_dates.dart';
 import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/common/section_card.dart';
@@ -22,11 +24,35 @@ class NewPreparationPage extends ConsumerStatefulWidget {
 
 class _NewPreparationPageState extends ConsumerState<NewPreparationPage> {
   final TextEditingController _controller = TextEditingController();
+  late final DraftKeeper _brouillon;
   DateTime? _serviceDate;
   bool _hasText = false;
 
   @override
+  void initState() {
+    super.initState();
+    _brouillon = DraftKeeper(
+      source: ref.read(draftLocalDataSourceProvider),
+      key: DraftLocalDataSource.ouvertureKey,
+    );
+    _reprendre();
+  }
+
+  /// La phrase de depart est ce qui a couté le plus cher à écrire : c'est celle
+  /// qu'on est allé chercher, et souvent la seule qu'on avait. Elle revient si
+  /// l'ouverture n'a pas abouti.
+  Future<void> _reprendre() async {
+    final garde = await _brouillon.restore();
+    if (garde == null || !mounted || _controller.text.isNotEmpty) return;
+
+    _controller.text = garde.text;
+    setState(() => _hasText = garde.text.trim().isNotEmpty);
+  }
+
+  @override
   void dispose() {
+    // On ecrit d'abord, on detruit ensuite.
+    _brouillon.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -57,6 +83,7 @@ class _NewPreparationPageState extends ConsumerState<NewPreparationPage> {
     if (!mounted) return;
 
     if (id == null) {
+      // L'ouverture a echoue : le brouillon reste, et c'est tout l'interet.
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -67,6 +94,12 @@ class _NewPreparationPageState extends ConsumerState<NewPreparationPage> {
       );
       return;
     }
+
+    // La préparation existe côté serveur : la copie locale n'a plus de raison
+    // d'être. **Sans attendre** — ranger le brouillon est du ménage, et faire
+    // dépendre la navigation d'une écriture locale ferait rater sa préparation
+    // au pasteur pour une raison qui ne le concerne pas.
+    _brouillon.forget();
 
     // On remplace le formulaire : revenir dessus depuis le fil n'aurait aucun
     // sens, la préparation est déjà ouverte.
@@ -119,8 +152,10 @@ class _NewPreparationPageState extends ConsumerState<NewPreparationPage> {
                     autofocus: true,
                     keyboardType: TextInputType.multiline,
                     textCapitalization: TextCapitalization.sentences,
-                    onChanged: (value) =>
-                        setState(() => _hasText = value.trim().isNotEmpty),
+                    onChanged: (value) {
+                      _brouillon.remember(value);
+                      setState(() => _hasText = value.trim().isNotEmpty);
+                    },
                     decoration: InputDecoration(
                       hintText: text.newPreparationHint,
                     ),

@@ -51,6 +51,7 @@ dependencies:
   # Jetons et identifiant d'appareil : trousseau matériel (Keystore / Keychain),
   # jamais les préférences système.
   flutter_secure_storage: ^11.0.0
+  path_provider: ^2.1.6
 
 dev_dependencies:
   flutter_test:

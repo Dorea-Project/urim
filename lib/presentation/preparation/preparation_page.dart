@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/core/error/failure.dart';
+import 'package:urim/data/datasources/draft_local_data_source.dart';
+import 'package:urim/presentation/common/draft_keeper.dart';
 import 'package:urim/presentation/preparation/preparation_view_model.dart';
 import 'package:urim/presentation/preparation/widgets/turn_views.dart';
 import 'package:urim/l10n/generated/app_text.dart';
@@ -227,11 +229,34 @@ class _Composer extends ConsumerStatefulWidget {
 
 class _ComposerState extends ConsumerState<_Composer> {
   final TextEditingController _controller = TextEditingController();
+  late final DraftKeeper _brouillon;
   bool _hasText = false;
   bool _isBusy = false;
 
   @override
+  void initState() {
+    super.initState();
+    _brouillon = DraftKeeper(
+      source: ref.read(draftLocalDataSourceProvider),
+      key: DraftLocalDataSource.composerKey(widget.preparationId),
+    );
+    _reprendre();
+  }
+
+  /// Ce qui avait été écrit et jamais envoyé revient dans le champ.
+  Future<void> _reprendre() async {
+    final garde = await _brouillon.restore();
+    if (garde == null || !mounted || _controller.text.isNotEmpty) return;
+
+    _controller.text = garde.text;
+    setState(() => _hasText = garde.text.trim().isNotEmpty);
+  }
+
+  @override
   void dispose() {
+    // L'ordre compte : on écrit d'abord, on détruit ensuite. C'est ici que le
+    // texte se perdait.
+    _brouillon.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -248,6 +273,10 @@ class _ComposerState extends ConsumerState<_Composer> {
     setState(() => _isBusy = false);
 
     if (failure == null) {
+      // Le serveur a pris la phrase : la copie locale n'a plus de raison
+      // d'être. En cas d'échec elle reste, et c'est tout l'intérêt.
+      // Sans attendre : vider le champ ne dépend pas du ménage.
+      _brouillon.forget();
       _controller.clear();
       setState(() => _hasText = false);
     } else {
@@ -282,8 +311,10 @@ class _ComposerState extends ConsumerState<_Composer> {
               maxLines: 5,
               textInputAction: TextInputAction.newline,
               keyboardType: TextInputType.multiline,
-              onChanged: (value) =>
-                  setState(() => _hasText = value.trim().isNotEmpty),
+              onChanged: (value) {
+                _brouillon.remember(value);
+                setState(() => _hasText = value.trim().isNotEmpty);
+              },
               decoration: InputDecoration(
                 hintText: AppText.of(context).preparationComposerHint,
               ),

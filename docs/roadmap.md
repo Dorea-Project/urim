@@ -65,9 +65,12 @@ la préparation.
 Un build de démonstration garde son fil : le magasin en mémoire est projeté sur
 le même contrat, sur la même bascule que le parcours d'entrée simulé.
 
-Restent dus : la recherche, et surtout **Q4** — ce que l'appareil garde. Huit
-secondes par tour en local, et rien du tout sans réseau : aujourd'hui
-l'accueil est vide et le fil illisible dès que la connexion tombe. Une carte
+**Q4, étape 1 : ce que le pasteur écrit ne se perd plus.** La barre de saisie
+et le formulaire d'ouverture posent leur texte sur l'appareil avant tout
+appel, et le reprennent en revenant. Un envoi refusé garde la phrase (D32).
+
+Restent dus : la recherche, et les étapes 2 à 5 de **Q4** — huit secondes par
+tour en local, et un accueil vide dès que la connexion tombe. Une carte
 transcrite ne porte plus de pastille : le moteur ne connaît que les
 préparations écrites.
 
