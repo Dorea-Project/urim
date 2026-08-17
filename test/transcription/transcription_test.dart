@@ -182,6 +182,7 @@ void main() {
             clockProvider.overrideWithValue(_FixedClock(fixedNow)),
             idGeneratorProvider.overrideWithValue(_SequentialIds()),
             sharedPreferencesProvider.overrideWithValue(preferences),
+            demoConfigOverride,
           ],
           child: wrapRouter(router),
         ),

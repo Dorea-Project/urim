@@ -498,10 +498,13 @@ class AppTextFr extends AppText {
   String get stateServed => 'Matière servie';
 
   @override
-  String get stateFeedbackReady => 'Retour disponible';
+  String get stateDegraded => 'Réponse partielle';
 
   @override
   String get stateRefused => 'Refus motivé';
+
+  @override
+  String get stateFeedbackReady => 'Retour disponible';
 
   @override
   String get taskSheetTitle => 'Quelle tâche ?';

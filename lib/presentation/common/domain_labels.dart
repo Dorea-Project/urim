@@ -1,5 +1,6 @@
 import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/domain/entities/preparation/preparation_block.dart';
+import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/domain/entities/transcription/transcription_review.dart';
 import 'package:urim/l10n/generated/app_text.dart';
 
@@ -12,6 +13,19 @@ import 'package:urim/l10n/generated/app_text.dart';
 /// Rassemblées ici plutôt qu'éparpillées dans les écrans : le même état
 /// s'affiche sur l'accueil et dans le fil, et deux `switch` finiraient par
 /// diverger d'un mot — celui qu'un pasteur remarquerait.
+/// Comment le fil nomme le dernier tour du moteur.
+///
+/// Le `switch` est la seule traduction entre le vocabulaire du serveur et le
+/// français affiché. Elle vit ici, à un seul endroit : le moteur dit
+/// `await_decision`, l'écran dit « Rend la main », et rien entre les deux n'a
+/// le droit d'inventer un troisième mot.
+String turnOutcomeLabel(AppText text, TurnOutcome outcome) => switch (outcome) {
+      TurnOutcome.handsBack => text.stateHandsBack,
+      TurnOutcome.kept => text.stateServed,
+      TurnOutcome.refused => text.stateRefused,
+      TurnOutcome.degraded => text.stateDegraded,
+    };
+
 String preparationStateLabel(AppText text, PreparationState state) =>
     switch (state) {
       PreparationState.handsBack => text.stateHandsBack,

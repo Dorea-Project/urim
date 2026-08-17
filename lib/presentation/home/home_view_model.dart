@@ -1,16 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:urim/core/error/failure.dart';
 import 'package:urim/data/repositories/in_memory_preparation_repository.dart';
-import 'package:urim/domain/entities/preparation/preparation.dart';
+import 'package:urim/data/repositories/study_repository_impl.dart';
+import 'package:urim/domain/entities/preparation/study_summary.dart';
 
-/// Les préparations, de la plus récemment touchée à la plus ancienne.
-final preparationListProvider = StreamProvider<List<Preparation>>((ref) {
-  return ref.watch(preparationRepositoryProvider).watchPreparations().map(
-        (result) => result.fold(
-          onSuccess: (preparations) => preparations,
-          onFailure: (failure) => throw failure,
-        ),
-      );
+/// Le fil : les préparations, de la plus récemment touchée à la plus ancienne.
+///
+/// Une lecture, pas un abonnement. Le serveur sert une liste sur demande — un
+/// flux ferait croire à une fraîcheur qu'aucune des deux implémentations ne
+/// tient. Ce qui change le fil l'invalide (voir [PreparationOpener]).
+final studyFeedProvider = FutureProvider<List<StudySummary>>((ref) async {
+  final result = await ref.watch(studyRepositoryProvider).listMine();
+
+  return result.fold(
+    onSuccess: (summaries) => summaries,
+    onFailure: (failure) => throw failure,
+  );
 });
 
 /// Ouverture d'une nouvelle préparation depuis le formulaire.
@@ -33,6 +38,9 @@ final class PreparationOpener extends Notifier<AsyncValue<void>> {
     return result.fold(
       onSuccess: (preparation) {
         state = const AsyncData(null);
+        // Le fil est une lecture, pas un abonnement : c'est ici qu'on lui dit
+        // qu'il a vieilli.
+        ref.invalidate(studyFeedProvider);
         return (preparation.id, null);
       },
       onFailure: (failure) {
@@ -57,11 +65,11 @@ enum Recency { thisWeek, earlier }
 final class PreparationGroup {
   const PreparationGroup({
     required this.recency,
-    required this.preparations,
+    required this.summaries,
   });
 
   final Recency recency;
-  final List<Preparation> preparations;
+  final List<StudySummary> summaries;
 }
 
 /// Regroupe par récence de dernière activité.
@@ -70,22 +78,20 @@ final class PreparationGroup {
 /// Un découpage plus fin — hier, avant-hier — multiplierait les intitulés sans
 /// rien apprendre à celui qui cherche son travail en cours.
 List<PreparationGroup> groupByRecency(
-  List<Preparation> preparations, {
+  List<StudySummary> summaries, {
   required DateTime now,
 }) {
   final limit = now.subtract(const Duration(days: 7));
 
-  final thisWeek = preparations
-      .where((preparation) => preparation.updatedAt.isAfter(limit))
-      .toList();
-  final earlier = preparations
-      .where((preparation) => !preparation.updatedAt.isAfter(limit))
-      .toList();
+  final thisWeek =
+      summaries.where((s) => s.lastActivity.isAfter(limit)).toList();
+  final earlier =
+      summaries.where((s) => !s.lastActivity.isAfter(limit)).toList();
 
   return [
     if (thisWeek.isNotEmpty)
-      PreparationGroup(recency: Recency.thisWeek, preparations: thisWeek),
+      PreparationGroup(recency: Recency.thisWeek, summaries: thisWeek),
     if (earlier.isNotEmpty)
-      PreparationGroup(recency: Recency.earlier, preparations: earlier),
+      PreparationGroup(recency: Recency.earlier, summaries: earlier),
   ];
 }

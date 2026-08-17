@@ -344,11 +344,24 @@
   },
   "stateHandsBack": "Rend la main",
   "@stateHandsBack": {
-    "description": "Urim a posé une question et attend. C'est ce qui met la préparation en tête de l'accueil."
+    "description": "`await_decision` du moteur : Urim s'est arrêté sur une question et attend. C'est ce qui met la préparation en tête de l'accueil."
   },
   "stateServed": "Matière servie",
-  "stateFeedbackReady": "Retour disponible",
+  "@stateServed": {
+    "description": "`continue` du moteur : il est allé au bout du tour sans rien demander."
+  },
+  "stateDegraded": "Réponse partielle",
+  "@stateDegraded": {
+    "description": "`degrade` du moteur : il a servi moins qu'il ne voulait, et l'annonce. À ne pas confondre avec un refus — il y a de la matière, incomplète."
+  },
   "stateRefused": "Refus motivé",
+  "@stateRefused": {
+    "description": "`refuse` du moteur : il n'a pas voulu travailler, et dit pourquoi."
+  },
+  "stateFeedbackReady": "Retour disponible",
+  "@stateFeedbackReady": {
+    "description": "Une prédication déjà prêchée dont Urim a quelque chose à dire. Ne vient pas du moteur de préparation mais de la branche transcription, qui reste une maquette."
+  },
   "taskSheetTitle": "Quelle tâche ?",
   "taskSheetSubtitle": "Deux travaux différents, pas deux façons d'écrire.",
   "taskWriteTitle": "Préparer un message",

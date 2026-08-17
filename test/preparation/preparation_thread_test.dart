@@ -10,6 +10,7 @@ import 'package:urim/core/time/clock_provider.dart';
 import 'package:urim/data/repositories/in_memory_preparation_repository.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/domain/entities/preparation/preparation_block.dart';
+import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/l10n/generated/app_text_fr.dart';
 import 'package:urim/presentation/common/domain_labels.dart';
 import 'package:urim/presentation/home/home_view_model.dart';
@@ -167,12 +168,10 @@ void main() {
   });
 
   group('regroupement de l\'accueil', () {
-    Preparation at(DateTime when) => Preparation(
+    StudySummary at(DateTime when) => StudySummary(
           id: when.toIso8601String(),
-          title: 'x',
-          origin: PreparationOrigin.written,
-          createdAt: when,
-          updatedAt: when,
+          rawInput: 'x',
+          lastActivity: when,
         );
 
     test('la semaine d\'un côté, le reste de l\'autre', () {
@@ -189,8 +188,8 @@ void main() {
         groups.map((group) => group.recency),
         [Recency.thisWeek, Recency.earlier],
       );
-      expect(groups.first.preparations, hasLength(2));
-      expect(groups.last.preparations, hasLength(1));
+      expect(groups.first.summaries, hasLength(2));
+      expect(groups.last.summaries, hasLength(1));
     });
 
     test('un groupe vide ne s\'affiche pas', () {

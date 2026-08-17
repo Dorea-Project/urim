@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/core/router/app_routes.dart';
-import 'package:urim/domain/entities/preparation/preparation.dart';
+import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/home/home_view_model.dart';
 import 'package:urim/presentation/home/widgets/preparation_card.dart';
@@ -21,7 +21,7 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final preparations = ref.watch(preparationListProvider);
+    final feed = ref.watch(studyFeedProvider);
     final initials = ref.watch(profileViewModelProvider).value?.profile.initials;
 
     return Scaffold(
@@ -38,8 +38,8 @@ class HomePage extends ConsumerWidget {
         child: Column(
           children: [
             Expanded(
-              child: switch (preparations) {
-                AsyncData(:final value) => _Feed(preparations: value),
+              child: switch (feed) {
+                AsyncData(:final value) => _Feed(summaries: value),
                 AsyncError() => const _FeedError(),
                 _ => const Center(child: CircularProgressIndicator()),
               },
@@ -71,16 +71,16 @@ class HomePage extends ConsumerWidget {
 }
 
 class _Feed extends StatelessWidget {
-  const _Feed({required this.preparations});
+  const _Feed({required this.summaries});
 
-  final List<Preparation> preparations;
+  final List<StudySummary> summaries;
 
   @override
   Widget build(BuildContext context) {
-    if (preparations.isEmpty) return const _FeedEmpty();
+    if (summaries.isEmpty) return const _FeedEmpty();
 
     final text = AppText.of(context);
-    final groups = groupByRecency(preparations, now: DateTime.now());
+    final groups = groupByRecency(summaries, now: DateTime.now());
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(
@@ -107,8 +107,8 @@ class _Feed extends StatelessWidget {
                   ),
             ),
           ),
-          for (final preparation in group.preparations) ...[
-            PreparationCard(preparation: preparation),
+          for (final summary in group.summaries) ...[
+            PreparationCard(summary: summary),
             const SizedBox(height: AppSpacing.md),
           ],
           const SizedBox(height: AppSpacing.lg),
@@ -171,7 +171,7 @@ class _FeedError extends ConsumerWidget {
             ),
             const SizedBox(height: AppSpacing.xl),
             OutlinedButton(
-              onPressed: () => ref.invalidate(preparationListProvider),
+              onPressed: () => ref.invalidate(studyFeedProvider),
               child: Text(AppText.of(context).retry),
             ),
           ],

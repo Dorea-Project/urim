@@ -921,29 +921,35 @@ abstract class AppText {
   /// **'· {activity} · dimanche {service}'**
   String homeCardMetaWithService(String activity, String service);
 
-  /// Urim a posé une question et attend. C'est ce qui met la préparation en tête de l'accueil.
+  /// `await_decision` du moteur : Urim s'est arrêté sur une question et attend. C'est ce qui met la préparation en tête de l'accueil.
   ///
   /// In fr, this message translates to:
   /// **'Rend la main'**
   String get stateHandsBack;
 
-  /// No description provided for @stateServed.
+  /// `continue` du moteur : il est allé au bout du tour sans rien demander.
   ///
   /// In fr, this message translates to:
   /// **'Matière servie'**
   String get stateServed;
 
-  /// No description provided for @stateFeedbackReady.
+  /// `degrade` du moteur : il a servi moins qu'il ne voulait, et l'annonce. À ne pas confondre avec un refus — il y a de la matière, incomplète.
   ///
   /// In fr, this message translates to:
-  /// **'Retour disponible'**
-  String get stateFeedbackReady;
+  /// **'Réponse partielle'**
+  String get stateDegraded;
 
-  /// No description provided for @stateRefused.
+  /// `refuse` du moteur : il n'a pas voulu travailler, et dit pourquoi.
   ///
   /// In fr, this message translates to:
   /// **'Refus motivé'**
   String get stateRefused;
+
+  /// Une prédication déjà prêchée dont Urim a quelque chose à dire. Ne vient pas du moteur de préparation mais de la branche transcription, qui reste une maquette.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retour disponible'**
+  String get stateFeedbackReady;
 
   /// No description provided for @taskSheetTitle.
   ///

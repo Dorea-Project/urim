@@ -9,7 +9,7 @@ import 'package:urim/core/router/app_routes.dart';
 import 'package:urim/core/storage/shared_preferences_provider.dart';
 import 'package:urim/core/time/clock.dart';
 import 'package:urim/core/time/clock_provider.dart';
-import 'package:urim/domain/entities/preparation/preparation.dart';
+import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/l10n/generated/app_text_fr.dart';
 import 'package:urim/presentation/common/domain_labels.dart';
 import 'package:urim/presentation/home/home_page.dart';
@@ -80,6 +80,7 @@ void main() {
           clockProvider.overrideWithValue(_FixedClock(fixedNow)),
           idGeneratorProvider.overrideWithValue(_SequentialIds()),
           sharedPreferencesProvider.overrideWithValue(preferences),
+          demoConfigOverride,
         ],
         child: wrapRouter(router),
       ),
@@ -97,18 +98,35 @@ void main() {
       expect(find.text('Actes 2:42-47'), findsOneWidget);
     });
 
-    testWidgets('chaque carte dit à qui est la main', (tester) async {
+    testWidgets('la carte dit où le moteur s\'est arrêté', (tester) async {
       await pumpParcours(tester);
 
-      for (final state in PreparationState.values) {
-        final libelle = preparationStateLabel(texte, state);
+      // Le vocabulaire affiché est celui du moteur, traduit une seule fois :
+      // « rend la main » **est** `await_decision`. Les états inventés côté
+      // application ont disparu du fil, et ce test empêche leur retour.
+      for (final outcome in [
+        TurnOutcome.handsBack,
+        TurnOutcome.kept,
+        TurnOutcome.refused,
+      ]) {
+        final libelle = turnOutcomeLabel(texte, outcome);
 
         expect(
           find.text(libelle),
-          findsOneWidget,
-          reason: 'l\'état « $libelle » doit se lire sur la liste',
+          findsWidgets,
+          reason: 'l\'issue « $libelle » doit se lire sur la liste',
         );
       }
+    });
+
+    testWidgets('une prédication déjà prêchée ne porte pas de pastille',
+        (tester) async {
+      await pumpParcours(tester);
+
+      // « Retour disponible » ne vient pas du moteur de préparation mais de la
+      // branche transcription, qui reste une maquette. Tant qu'aucune issue ne
+      // le porte côté serveur, la carte se tait plutôt que d'inventer.
+      expect(find.text(texte.stateFeedbackReady), findsNothing);
     });
 
     testWidgets('ouvrir une carte mène à son fil', (tester) async {

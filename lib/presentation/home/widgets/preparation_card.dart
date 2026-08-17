@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/core/router/app_routes.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
+import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/presentation/common/domain_labels.dart';
 import 'package:urim/presentation/common/french_dates.dart';
 import 'package:urim/l10n/generated/app_text.dart';
@@ -11,10 +12,14 @@ import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
 
 /// Une préparation sur l'accueil : ce qu'elle est, où elle en est, et quand.
+///
+/// Ce qu'elle n'affiche pas : la phrase d'Urim. Le fil ne la reçoit pas — elle
+/// naît du rejeu du moteur, et vingt cartes feraient vingt rejeux. Elle attend
+/// derrière la carte, sur l'écran de la préparation.
 class PreparationCard extends ConsumerWidget {
-  const PreparationCard({super.key, required this.preparation});
+  const PreparationCard({super.key, required this.summary});
 
-  final Preparation preparation;
+  final StudySummary summary;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,26 +38,34 @@ class PreparationCard extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Ce que le pasteur a écrit en ouvrant, tant que rien n'est résolu.
           Text(
-            preparation.title,
+            summary.rawInput,
             style: theme.textTheme.titleLarge,
           ),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            preparation.summary,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: colors.textSecondary,
-              height: 1.45,
+          if (summary.subtitle case final String subtitle) ...[
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              subtitle,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: colors.textSecondary,
+                height: 1.45,
+              ),
             ),
-          ),
+          ],
           const SizedBox(height: AppSpacing.md),
           Row(
             children: [
-              _StateChip(state: preparation.state),
-              const SizedBox(width: AppSpacing.sm),
+              // Pas de pastille tant que le moteur n'a rendu aucun tour : une
+              // préparation qui vient de naître n'a pas d'état, et lui en
+              // inventer un serait revenir d'où l'on vient.
+              if (summary.lastOutcome case final TurnOutcome outcome) ...[
+                _OutcomeChip(outcome: outcome),
+                const SizedBox(width: AppSpacing.sm),
+              ],
               Flexible(
                 child: Text(
-                  _meta(text, preparation),
+                  _meta(text, summary),
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: colors.textSecondary,
@@ -70,14 +83,14 @@ class PreparationCard extends ConsumerWidget {
       // Une prédication transcrite s'ouvre sur sa relecture, pas sur le fil :
       // ce qu'on vient y chercher, c'est ce qui a été dit.
       onTap: () => context.pushNamed(
-        preparation.origin == PreparationOrigin.transcribed
+        summary.origin == PreparationOrigin.transcribed
             ? AppRoutes.transcriptionName
             : AppRoutes.preparationName,
-        pathParameters: {'id': preparation.id},
+        pathParameters: {'id': summary.id},
       ),
       // Ce qui attend une réponse porte un filet : la pastille dit l'état, le
       // filet le rend visible d'un coup d'œil sur la liste entière.
-      child: preparation.state.waitsForUser
+      child: summary.waitsForUser
           ? RuledContent(
               color: colors.textPrimary,
               gap: AppSpacing.md,
@@ -88,11 +101,11 @@ class PreparationCard extends ConsumerWidget {
   }
 }
 
-/// Pastille d'état : « Rend la main », « Matière servie »…
-class _StateChip extends StatelessWidget {
-  const _StateChip({required this.state});
+/// Pastille du dernier tour : « Rend la main », « Matière servie »…
+class _OutcomeChip extends StatelessWidget {
+  const _OutcomeChip({required this.outcome});
 
-  final PreparationState state;
+  final TurnOutcome outcome;
 
   @override
   Widget build(BuildContext context) {
@@ -108,9 +121,9 @@ class _StateChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.md),
       ),
       child: Text(
-        preparationStateLabel(AppText.of(context), state),
+        turnOutcomeLabel(AppText.of(context), outcome),
         style: theme.textTheme.bodyMedium?.copyWith(
-          fontWeight: state.waitsForUser ? FontWeight.w600 : FontWeight.w400,
+          fontWeight: outcome.waitsForUser ? FontWeight.w600 : FontWeight.w400,
         ),
       ),
     );
@@ -118,14 +131,14 @@ class _StateChip extends StatelessWidget {
 }
 
 /// « Hier, 21:14 », « Jeudi · dimanche 17 août ».
-String _meta(AppText text, Preparation preparation, {DateTime? now}) {
+String _meta(AppText text, StudySummary summary, {DateTime? now}) {
   final activity = _activityLabel(
     text,
-    preparation.updatedAt,
+    summary.lastActivity,
     now ?? DateTime.now(),
   );
 
-  if (preparation.serviceDate case final DateTime service) {
+  if (summary.serviceDate case final DateTime service) {
     return text.homeCardMetaWithService(activity, frenchDayMonth(service));
   }
 

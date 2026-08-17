@@ -40,7 +40,8 @@ Les arbitrages et les questions en attente vivent dans
 | Domaine des préparations | Fait |
 | Persistance des préparations | **Bloqué par Q4** |
 | Profil et réglages | Fait — églises et appareils **simulés** |
-| Accueil, création, fil guidé | Écrans faits — les réponses d'Urim sont **scriptées** |
+| Accueil | Branché sur le **vrai fil** du serveur (`GET /urim/studies`) |
+| Création, fil guidé | Écrans faits — les réponses d'Urim sont **scriptées** |
 | Relecture d'une prédication, synthèse à valider | Écrans faits — transcription et capsules **scriptées** |
 
 Le domaine du discernement pastoral (`PastoralQuestion`, `ScriptureAnchor`,
@@ -51,13 +52,22 @@ pas à ce que fait Urim ; il attend une réponse à Q7.
 
 ### M1 — Accueil et création
 
-**Écrans faits.** Les travaux sont groupés par récence, chaque carte dit à qui
-est la main — « Rend la main », « Matière servie », « Retour disponible »,
-« Refus motivé » — et la feuille « Quelle tâche ? » ouvre les deux voies. Le
-formulaire d'ouverture crée une vraie préparation, avec sa date de culte.
+**Branché sur le serveur.** `GET /api/mobile/urim/studies` rend une ligne par
+préparation, la plus fraîchement touchée en tête, **sans rejouer le moteur** —
+rejouer est le mode normal de lecture d'*une* préparation, pas de vingt.
 
-Restent dus : la recherche, et la persistance — **Q4**. Aujourd'hui, fermer
-l'application perd tout.
+Ce que cela a changé : les quatre états inventés côté application ont laissé la
+place au vocabulaire du moteur. `await_decision` **est** « Rend la main » ; la
+traduction en français vit à un seul endroit (D26). Ce que le fil ne porte pas,
+et ne portera pas : la phrase d'Urim. Elle naît du rejeu, et arrive en ouvrant
+la préparation.
+
+Un build de démonstration garde son fil : le magasin en mémoire est projeté sur
+le même contrat, sur la même bascule que le parcours d'entrée simulé.
+
+Restent dus : la recherche, et la persistance côté appareil — **Q4**. Une carte
+transcrite ne porte plus de pastille : le serveur ne connaît que les
+préparations écrites.
 
 ### M2 — Préparation écrite
 
