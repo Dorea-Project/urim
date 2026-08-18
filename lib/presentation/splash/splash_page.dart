@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/common/brand_mark.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
 
@@ -86,7 +87,7 @@ class _SplashPageState extends State<SplashPage>
               child: Padding(
                 padding: const EdgeInsets.only(bottom: AppSpacing.xl),
                 child: Text(
-                  'Propulsé par Dorea',
+                  AppText.of(context).splashPoweredBy,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: scheme.onPrimary.withValues(alpha: 0.75),
                       ),

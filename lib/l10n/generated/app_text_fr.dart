@@ -12,6 +12,9 @@ class AppTextFr extends AppText {
   String get appTitle => 'Urim';
 
   @override
+  String get splashPoweredBy => 'Propulsé par Dorea';
+
+  @override
   String get onboardingSkip => 'Passer';
 
   @override
@@ -563,6 +566,34 @@ class AppTextFr extends AppText {
     );
     return '$_temp0';
   }
+
+  @override
+  String studyText(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Le texte — $count versets',
+      one: 'Le texte — 1 verset',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyContext(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Le contexte — $count notes',
+      one: 'Le contexte',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get studyContextLiterary => 'Littéraire';
+
+  @override
+  String get studyContextHistorical => 'Historique';
 
   @override
   String get turnThemeLabel => 'THÈME';

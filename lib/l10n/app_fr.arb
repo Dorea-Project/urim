@@ -4,6 +4,10 @@
   "@appTitle": {
     "description": "Nom de l'application, affiché par le système."
   },
+  "splashPoweredBy": "Propulsé par Dorea",
+  "@splashPoweredBy": {
+    "description": "Mention en bas de l'écran de lancement."
+  },
   "onboardingSkip": "Passer",
   "@onboardingSkip": {
     "description": "Sortie de la présentation, en haut à droite."
@@ -394,6 +398,21 @@
   "turnFoldedUnits": "{count, plural, =1{1 texte relu} other{{count} textes relus}}",
   "@turnFoldedUnits": {
     "placeholders": { "count": { "type": "int" } }
+  },
+  "studyText": "{count, plural, =1{Le texte — 1 verset} other{Le texte — {count} versets}}",
+  "@studyText": {
+    "description": "Les versets servis par le corpus. Aucun bloc du tour ne les porte : le pasteur travaillait sur un passage qu'il ne voyait nulle part.",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "studyContext": "{count, plural, =1{Le contexte} other{Le contexte — {count} notes}}",
+  "@studyContext": {
+    "description": "Calcule a l'ouverture et jamais montre. Absent du corpus sur certaines unites : on n'affiche alors rien plutot qu'une section vide."
+    , "placeholders": { "count": { "type": "int" } }
+  },
+  "studyContextLiterary": "Littéraire",
+  "studyContextHistorical": "Historique",
+  "@studyContextHistorical": {
+    "description": "`kind` du corpus, nomme en francais a un seul endroit."
   },
   "turnThemeLabel": "THÈME",
   "@turnThemeLabel": {

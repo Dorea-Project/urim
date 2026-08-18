@@ -99,6 +99,12 @@ abstract class AppText {
   /// **'Urim'**
   String get appTitle;
 
+  /// Mention en bas de l'écran de lancement.
+  ///
+  /// In fr, this message translates to:
+  /// **'Propulsé par Dorea'**
+  String get splashPoweredBy;
+
   /// Sortie de la présentation, en haut à droite.
   ///
   /// In fr, this message translates to:
@@ -974,6 +980,30 @@ abstract class AppText {
   /// In fr, this message translates to:
   /// **'{count, plural, =1{1 texte relu} other{{count} textes relus}}'**
   String turnFoldedUnits(int count);
+
+  /// Les versets servis par le corpus. Aucun bloc du tour ne les porte : le pasteur travaillait sur un passage qu'il ne voyait nulle part.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Le texte — 1 verset} other{Le texte — {count} versets}}'**
+  String studyText(int count);
+
+  /// Calcule a l'ouverture et jamais montre. Absent du corpus sur certaines unites : on n'affiche alors rien plutot qu'une section vide.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Le contexte} other{Le contexte — {count} notes}}'**
+  String studyContext(int count);
+
+  /// No description provided for @studyContextLiterary.
+  ///
+  /// In fr, this message translates to:
+  /// **'Littéraire'**
+  String get studyContextLiterary;
+
+  /// `kind` du corpus, nomme en francais a un seul endroit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Historique'**
+  String get studyContextHistorical;
 
   /// Un thème, jamais un titre — le titre, c'est la voix du pasteur.
   ///

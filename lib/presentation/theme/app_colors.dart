@@ -19,14 +19,6 @@ final class AppColors extends ThemeExtension<AppColors> {
     required this.surfaceWarm,
     required this.success,
     required this.warning,
-    required this.statusPending,
-    required this.statusActive,
-    required this.statusSettled,
-    required this.statusPaused,
-    required this.statusDropped,
-    required this.anchorSupports,
-    required this.anchorChallenges,
-    required this.anchorInforms,
   });
 
   /// Texte courant. Contraste très élevé sur le fond correspondant.
@@ -48,34 +40,6 @@ final class AppColors extends ThemeExtension<AppColors> {
   final Color success;
   final Color warning;
 
-  // --- Étapes du discernement (DiscernmentStatus) ---------------------------
-
-  /// `open` — question posée, discernement pas encore engagé.
-  final Color statusPending;
-
-  /// `discerning` — en cours.
-  final Color statusActive;
-
-  /// `decided` — une décision est consignée.
-  final Color statusSettled;
-
-  /// `suspended` — en attente délibérée.
-  final Color statusPaused;
-
-  /// `abandoned` — close sans décision.
-  final Color statusDropped;
-
-  // --- Poids d'un passage (AnchorWeight) ------------------------------------
-
-  /// `supports` — le passage oriente vers la piste envisagée.
-  final Color anchorSupports;
-
-  /// `challenges` — le passage la met en question.
-  final Color anchorChallenges;
-
-  /// `informs` — le passage éclaire sans trancher.
-  final Color anchorInforms;
-
   static const AppColors light = AppColors(
     textPrimary: AppPalette.navy800,
     textSecondary: AppPalette.gray500,
@@ -84,14 +48,6 @@ final class AppColors extends ThemeExtension<AppColors> {
     surfaceWarm: AppPalette.sand100,
     success: Color(0xFF2F6B4F),
     warning: AppPalette.orange700,
-    statusPending: AppPalette.gray400,
-    statusActive: AppPalette.orange600,
-    statusSettled: AppPalette.navy500,
-    statusPaused: AppPalette.amber700,
-    statusDropped: AppPalette.gray300,
-    anchorSupports: AppPalette.navy500,
-    anchorChallenges: AppPalette.brick500,
-    anchorInforms: AppPalette.gray500,
   );
 
   static const AppColors dark = AppColors(
@@ -102,14 +58,6 @@ final class AppColors extends ThemeExtension<AppColors> {
     surfaceWarm: AppPalette.navy700,
     success: Color(0xFF7FBF9B),
     warning: AppPalette.orange300,
-    statusPending: AppPalette.gray400,
-    statusActive: AppPalette.orange400,
-    statusSettled: AppPalette.navy200,
-    statusPaused: AppPalette.amber500,
-    statusDropped: AppPalette.gray600,
-    anchorSupports: AppPalette.navy200,
-    anchorChallenges: AppPalette.brick300,
-    anchorInforms: AppPalette.gray300,
   );
 
   @override
@@ -121,14 +69,6 @@ final class AppColors extends ThemeExtension<AppColors> {
     Color? surfaceWarm,
     Color? success,
     Color? warning,
-    Color? statusPending,
-    Color? statusActive,
-    Color? statusSettled,
-    Color? statusPaused,
-    Color? statusDropped,
-    Color? anchorSupports,
-    Color? anchorChallenges,
-    Color? anchorInforms,
   }) =>
       AppColors(
         textPrimary: textPrimary ?? this.textPrimary,
@@ -138,14 +78,6 @@ final class AppColors extends ThemeExtension<AppColors> {
         surfaceWarm: surfaceWarm ?? this.surfaceWarm,
         success: success ?? this.success,
         warning: warning ?? this.warning,
-        statusPending: statusPending ?? this.statusPending,
-        statusActive: statusActive ?? this.statusActive,
-        statusSettled: statusSettled ?? this.statusSettled,
-        statusPaused: statusPaused ?? this.statusPaused,
-        statusDropped: statusDropped ?? this.statusDropped,
-        anchorSupports: anchorSupports ?? this.anchorSupports,
-        anchorChallenges: anchorChallenges ?? this.anchorChallenges,
-        anchorInforms: anchorInforms ?? this.anchorInforms,
       );
 
   @override
@@ -160,14 +92,6 @@ final class AppColors extends ThemeExtension<AppColors> {
       surfaceWarm: mix(surfaceWarm, other.surfaceWarm),
       success: mix(success, other.success),
       warning: mix(warning, other.warning),
-      statusPending: mix(statusPending, other.statusPending),
-      statusActive: mix(statusActive, other.statusActive),
-      statusSettled: mix(statusSettled, other.statusSettled),
-      statusPaused: mix(statusPaused, other.statusPaused),
-      statusDropped: mix(statusDropped, other.statusDropped),
-      anchorSupports: mix(anchorSupports, other.anchorSupports),
-      anchorChallenges: mix(anchorChallenges, other.anchorChallenges),
-      anchorInforms: mix(anchorInforms, other.anchorInforms),
     );
   }
 }
