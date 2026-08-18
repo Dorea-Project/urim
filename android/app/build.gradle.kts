@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.urim"
+    namespace = "app.dorea.urim"
     // Imposé par flutter_secure_storage 11, qui compile contre l'API 37 : le
     // défaut de Flutter reste en dessous, et la compilation échoue sans autre
     // explication qu'un « compileSdk trop bas ». À suivre le jour où le SDK par
@@ -25,7 +25,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.urim"
+        applicationId = "app.dorea.urim"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion

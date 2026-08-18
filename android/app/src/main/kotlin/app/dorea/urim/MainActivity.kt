@@ -1,4 +1,4 @@
-package com.example.urim
+package app.dorea.urim
 
 import io.flutter.embedding.android.FlutterActivity
 
