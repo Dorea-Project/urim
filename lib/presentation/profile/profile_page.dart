@@ -9,6 +9,7 @@ import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/common/french_dates.dart';
 import 'package:urim/presentation/common/section_card.dart';
 import 'package:urim/presentation/profile/profile_view_model.dart';
+import 'package:urim/presentation/profile/sign_out_view_model.dart';
 import 'package:urim/presentation/profile/widgets/display_name_dialog.dart';
 import 'package:urim/presentation/profile/widgets/profile_avatar.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
@@ -208,7 +209,111 @@ class _ProfileList extends ConsumerWidget {
             ),
           ],
         ),
+        const SizedBox(height: AppSpacing.xl),
+
+        SectionCard(
+          children: [
+            _SignOutRow(onTap: () => _confirmSignOut(context, ref)),
+          ],
+        ),
       ],
+    );
+  }
+}
+
+/// Rangée de déconnexion : couleur d'erreur, libellé sans ambiguïté.
+class _SignOutRow extends StatelessWidget {
+  const _SignOutRow({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.lg,
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.logout, size: 20, color: scheme.error),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Text(
+                AppText.of(context).profileSignOut,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(color: scheme.error),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Confirmation : elle dit ce que la déconnexion **ne détruit pas**.
+///
+/// C'est la seule inquiétude réelle au moment de toucher ce bouton — perdre
+/// son travail. Le dialogue y répond avant de la laisser naître.
+Future<void> _confirmSignOut(BuildContext context, WidgetRef ref) async {
+  final text = AppText.of(context);
+  final scheme = Theme.of(context).colorScheme;
+  var everywhere = false;
+
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (dialogContext) => StatefulBuilder(
+      builder: (dialogContext, setDialogState) => AlertDialog(
+        title: Text(text.profileSignOutTitle),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(text.profileSignOutBody),
+            const SizedBox(height: AppSpacing.sm),
+            CheckboxListTile(
+              value: everywhere,
+              onChanged: (value) =>
+                  setDialogState(() => everywhere = value ?? false),
+              title: Text(text.profileSignOutEverywhere),
+              contentPadding: EdgeInsets.zero,
+              controlAffinity: ListTileControlAffinity.leading,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(text.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            style: TextButton.styleFrom(foregroundColor: scheme.error),
+            child: Text(text.profileSignOutConfirm),
+          ),
+        ],
+      ),
+    ),
+  );
+
+  if (confirmed != true || !context.mounted) return;
+
+  final failure = await ref
+      .read(signOutViewModelProvider.notifier)
+      .signOut(everywhere: everywhere);
+
+  // La session locale est fermée quoi qu'il arrive : la redirection reprend la
+  // main d'elle-même. Un échec serveur se dit, il ne retient personne.
+  if (failure != null && context.mounted) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(text.profileSignOutFailed)),
     );
   }
 }

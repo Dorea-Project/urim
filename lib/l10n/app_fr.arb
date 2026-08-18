@@ -4,6 +4,30 @@
   "@appTitle": {
     "description": "Nom de l'application, affiché par le système."
   },
+  "profileSignOut": "Se déconnecter",
+  "@profileSignOut": {
+    "description": "Ferme la session sur cet appareil, depuis le profil."
+  },
+  "profileSignOutTitle": "Fermer la session ?",
+  "@profileSignOutTitle": {
+    "description": "Titre du dialogue de déconnexion."
+  },
+  "profileSignOutBody": "Tes préparations restent sur cet appareil. Il faudra ton code secret, ou un nouveau code par SMS si l'appareil n'est plus reconnu.",
+  "@profileSignOutBody": {
+    "description": "Dit ce que la déconnexion ne détruit pas, et ce qu'il faudra pour revenir."
+  },
+  "profileSignOutEverywhere": "Sur tous mes appareils",
+  "@profileSignOutEverywhere": {
+    "description": "Option du dialogue : ferme aussi les sessions des autres appareils."
+  },
+  "profileSignOutConfirm": "Se déconnecter",
+  "@profileSignOutConfirm": {
+    "description": "Bouton de confirmation du dialogue de déconnexion."
+  },
+  "profileSignOutFailed": "La session est fermée ici, mais le serveur n'a pas répondu.",
+  "@profileSignOutFailed": {
+    "description": "L'effacement local a eu lieu ; l'appel distant a échoué."
+  },
   "splashPoweredBy": "Propulsé par Dorea",
   "@splashPoweredBy": {
     "description": "Mention en bas de l'écran de lancement."

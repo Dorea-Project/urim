@@ -12,6 +12,26 @@ class AppTextFr extends AppText {
   String get appTitle => 'Urim';
 
   @override
+  String get profileSignOut => 'Se déconnecter';
+
+  @override
+  String get profileSignOutTitle => 'Fermer la session ?';
+
+  @override
+  String get profileSignOutBody =>
+      'Tes préparations restent sur cet appareil. Il faudra ton code secret, ou un nouveau code par SMS si l\'appareil n\'est plus reconnu.';
+
+  @override
+  String get profileSignOutEverywhere => 'Sur tous mes appareils';
+
+  @override
+  String get profileSignOutConfirm => 'Se déconnecter';
+
+  @override
+  String get profileSignOutFailed =>
+      'La session est fermée ici, mais le serveur n\'a pas répondu.';
+
+  @override
   String get splashPoweredBy => 'Propulsé par Dorea';
 
   @override

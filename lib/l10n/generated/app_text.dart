@@ -99,6 +99,42 @@ abstract class AppText {
   /// **'Urim'**
   String get appTitle;
 
+  /// Ferme la session sur cet appareil, depuis le profil.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se déconnecter'**
+  String get profileSignOut;
+
+  /// Titre du dialogue de déconnexion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermer la session ?'**
+  String get profileSignOutTitle;
+
+  /// Dit ce que la déconnexion ne détruit pas, et ce qu'il faudra pour revenir.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes préparations restent sur cet appareil. Il faudra ton code secret, ou un nouveau code par SMS si l\'appareil n\'est plus reconnu.'**
+  String get profileSignOutBody;
+
+  /// Option du dialogue : ferme aussi les sessions des autres appareils.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sur tous mes appareils'**
+  String get profileSignOutEverywhere;
+
+  /// Bouton de confirmation du dialogue de déconnexion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se déconnecter'**
+  String get profileSignOutConfirm;
+
+  /// L'effacement local a eu lieu ; l'appel distant a échoué.
+  ///
+  /// In fr, this message translates to:
+  /// **'La session est fermée ici, mais le serveur n\'a pas répondu.'**
+  String get profileSignOutFailed;
+
   /// Mention en bas de l'écran de lancement.
   ///
   /// In fr, this message translates to:
