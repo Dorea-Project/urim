@@ -389,6 +389,21 @@ class AppTextFr extends AppText {
   String get profileSectionChurches => 'Églises';
 
   @override
+  String get profileSecretCodeChangeTitle => 'Changer ton code secret ?';
+
+  @override
+  String profileSecretCodeChangeBody(String phone) {
+    return 'Un code te sera envoyé par SMS au $phone. Tes autres appareils devront se reconnecter : changer la serrure laisse rarement les anciennes clés en circulation.';
+  }
+
+  @override
+  String get profileSecretCodeChangeConfirm => 'Recevoir le code';
+
+  @override
+  String get profileSecretCodeChangeFailed =>
+      'Le code n\'a pas pu être envoyé.';
+
+  @override
   String get profileSectionDevices => 'Appareils';
 
   @override

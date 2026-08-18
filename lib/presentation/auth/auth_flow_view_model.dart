@@ -318,6 +318,21 @@ final class AuthFlowViewModel extends Notifier<AuthFlowState> {
     );
   }
 
+  /// Change son code secret depuis le profil.
+  ///
+  /// Même mécanique que « code oublié » : le serveur ne connaît qu'un chemin
+  /// pour reposer une serrure, et il passe par un SMS. Un pasteur connecté
+  /// n'a donc pas à se déconnecter pour changer son code — mais il doit
+  /// toujours prouver qu'il tient le numéro.
+  Future<bool> startSecretCodeChange(PhoneNumber phone) async {
+    state = state.copyWith(
+      dialCode: phone.dialCode,
+      nationalNumber: phone.nationalNumber,
+    );
+
+    return requestSecretCodeReset();
+  }
+
   /// Code secret oublié — pose le nouveau code et ouvre la session.
   Future<bool> confirmSecretCodeReset(String newSecretCode) async {
     state = state.copyWith(isSubmitting: true, clearFailure: true);
@@ -328,7 +343,14 @@ final class AuthFlowViewModel extends Notifier<AuthFlowState> {
           newSecretCode: newSecretCode,
         );
 
-    return _settle(result);
+    final settled = _settle(result);
+
+    // La porte se referme derrière soi. Sans cela, la redirection continuerait
+    // d'autoriser les écrans du parcours d'entrée à un utilisateur qui vient
+    // d'y terminer son affaire, et il resterait bloqué dessus.
+    if (settled) state = state.copyWith(door: AuthDoor.signIn);
+
+    return settled;
   }
 
   bool _settle(Result<AuthSession> result) => result.fold(

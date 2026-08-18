@@ -109,14 +109,23 @@ final class SecretCodeViewModel extends Notifier<SecretCodeState> {
     final flow = ref.read(authFlowViewModelProvider.notifier);
     final hasSession = ref.read(authSessionProvider).value != null;
 
-    if (hasSession) return true;
-
     return switch (ref.read(authFlowViewModelProvider).door) {
-      AuthDoor.registration => flow.confirmRegistration(state.firstEntry),
+      // Une session ouverte ne dispense pas d'inscrire : elle rendrait
+      // l'inscription impossible à terminer.
+      AuthDoor.registration when !hasSession =>
+        flow.confirmRegistration(state.firstEntry),
+      AuthDoor.registration => true,
+
+      // **Toujours le serveur**, session ouverte ou non. C'est la porte du
+      // changement volontaire : ne poser que la serrure locale laisserait
+      // l'ancien code valable partout ailleurs, et le pasteur croirait
+      // l'avoir change.
       AuthDoor.secretCodeReset =>
         flow.confirmSecretCodeReset(state.firstEntry),
-      // Sans session et sans porte posée, il n'y a rien à confirmer : la
-      // serrure locale suffit, la redirection dira si l'accès s'ouvre.
+
+      // Connexion depuis un appareil qui n'avait pas encore de serrure
+      // locale : le serveur a deja son code, celui-ci ne fait que
+      // deverrouiller.
       AuthDoor.signIn => true,
     };
   }

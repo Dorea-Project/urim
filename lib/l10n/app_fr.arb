@@ -274,6 +274,23 @@
   },
   "profileSectionAccount": "Compte",
   "profileSectionChurches": "Églises",
+  "profileSecretCodeChangeTitle": "Changer ton code secret ?",
+  "@profileSecretCodeChangeTitle": {
+    "description": "Titre du dialogue lancé depuis le profil."
+  },
+  "profileSecretCodeChangeBody": "Un code te sera envoyé par SMS au {phone}. Tes autres appareils devront se reconnecter : changer la serrure laisse rarement les anciennes clés en circulation.",
+  "@profileSecretCodeChangeBody": {
+    "description": "Dit ce que le changement entraîne, avant de le lancer.",
+    "placeholders": { "phone": { "type": "String" } }
+  },
+  "profileSecretCodeChangeConfirm": "Recevoir le code",
+  "@profileSecretCodeChangeConfirm": {
+    "description": "Bouton qui déclenche l'envoi du SMS."
+  },
+  "profileSecretCodeChangeFailed": "Le code n'a pas pu être envoyé.",
+  "@profileSecretCodeChangeFailed": {
+    "description": "L'appel au serveur a échoué avant même le SMS."
+  },
   "profileSectionDevices": "Appareils",
   "profileDevicesCount": "{count} sur {max}",
   "@profileDevicesCount": {

@@ -77,6 +77,17 @@ abstract final class AppRoutes {
     secretCodePath,
   };
 
+  /// Les deux écrans qu'un utilisateur **déjà connecté** peut rouvrir pour
+  /// changer son code secret : le SMS, puis le nouveau code.
+  ///
+  /// Ils appartiennent aussi à [entryPaths] — ce sont les mêmes écrans. Seule
+  /// la porte empruntée dit laquelle des deux situations on est en train de
+  /// vivre.
+  static const Set<String> secretCodeChangePaths = {
+    otpPath,
+    secretCodeSetupPath,
+  };
+
   /// Routes atteignables tant que personne n'est connecté.
   ///
   /// La création du code secret n'en fait pas partie : elle suppose une session

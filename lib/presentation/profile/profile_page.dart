@@ -6,7 +6,9 @@ import 'package:urim/core/router/app_routes.dart';
 import 'package:urim/domain/entities/account/device_roster.dart';
 import 'package:urim/domain/entities/account/known_device.dart';
 import 'package:urim/domain/entities/account/user_profile.dart';
+import 'package:urim/domain/entities/auth/phone_number.dart';
 import 'package:urim/l10n/generated/app_text.dart';
+import 'package:urim/presentation/auth/auth_flow_view_model.dart';
 import 'package:urim/presentation/common/french_dates.dart';
 import 'package:urim/presentation/common/section_card.dart';
 import 'package:urim/presentation/profile/profile_view_model.dart';
@@ -142,7 +144,7 @@ class _ProfileList extends ConsumerWidget {
             SettingNavRow(
               title: text.profileSecretCode,
               value: text.profileSecretCodeAction,
-              subtitle: text.profileSecretCodePending,
+              onTap: () => _changeSecretCode(context, ref, profile.phone),
             ),
           ],
         ),
@@ -232,6 +234,57 @@ class _ProfileList extends ConsumerWidget {
       ],
     );
   }
+}
+
+/// Changer son code secret, depuis le profil.
+///
+/// Le serveur ne connaît qu'un chemin pour reposer une serrure, et il passe
+/// par un SMS — le même que « code oublié ». Un pasteur connecté n'a donc pas
+/// à se déconnecter pour changer son code, mais il doit toujours prouver
+/// qu'il tient le numéro.
+Future<void> _changeSecretCode(
+  BuildContext context,
+  WidgetRef ref,
+  PhoneNumber phone,
+) async {
+  final text = AppText.of(context);
+
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (dialogContext) => AlertDialog(
+      title: Text(text.profileSecretCodeChangeTitle),
+      content: Text(text.profileSecretCodeChangeBody(phone.e164)),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(dialogContext).pop(false),
+          child: Text(text.cancel),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(dialogContext).pop(true),
+          child: Text(text.profileSecretCodeChangeConfirm),
+        ),
+      ],
+    ),
+  );
+
+  if (confirmed != true || !context.mounted) return;
+
+  final sent = await ref
+      .read(authFlowViewModelProvider.notifier)
+      .startSecretCodeChange(phone);
+
+  if (!context.mounted) return;
+
+  if (!sent) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(text.profileSecretCodeChangeFailed)),
+    );
+    return;
+  }
+
+  // La porte est ouverte : la redirection laisse désormais passer les deux
+  // écrans du parcours, et les refermera dès que le nouveau code sera posé.
+  context.pushNamed(AppRoutes.otpName);
 }
 
 /// Rangée de déconnexion : couleur d'erreur, libellé sans ambiguïté.

@@ -753,6 +753,30 @@ abstract class AppText {
   /// **'Églises'**
   String get profileSectionChurches;
 
+  /// Titre du dialogue lancé depuis le profil.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer ton code secret ?'**
+  String get profileSecretCodeChangeTitle;
+
+  /// Dit ce que le changement entraîne, avant de le lancer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un code te sera envoyé par SMS au {phone}. Tes autres appareils devront se reconnecter : changer la serrure laisse rarement les anciennes clés en circulation.'**
+  String profileSecretCodeChangeBody(String phone);
+
+  /// Bouton qui déclenche l'envoi du SMS.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recevoir le code'**
+  String get profileSecretCodeChangeConfirm;
+
+  /// L'appel au serveur a échoué avant même le SMS.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le code n\'a pas pu être envoyé.'**
+  String get profileSecretCodeChangeFailed;
+
   /// No description provided for @profileSectionDevices.
   ///
   /// In fr, this message translates to:

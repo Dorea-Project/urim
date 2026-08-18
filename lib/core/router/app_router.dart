@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/core/config/app_config_provider.dart';
 import 'package:urim/core/router/app_routes.dart';
+import 'package:urim/presentation/auth/auth_flow_view_model.dart';
 import 'package:urim/presentation/auth/auth_gate.dart';
 import 'package:urim/presentation/auth/otp_page.dart';
 import 'package:urim/presentation/auth/phone_page.dart';
@@ -91,9 +92,16 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             ? null
             : AppRoutes.secretCodePath,
 
-        // Accès ouvert : plus aucune route d'entrée n'est atteignable.
-        AuthGate.ready =>
-          AppRoutes.entryPaths.contains(location) ? AppRoutes.homePath : null,
+        // Accès ouvert : plus aucune route d'entrée n'est atteignable — sauf
+        // les deux écrans du changement de code secret, et seulement tant que
+        // cette porte-là est ouverte. Sans cette exception, changer son code
+        // depuis le profil renverrait aussitôt à l'accueil.
+        AuthGate.ready => _isChangingSecretCode(ref) &&
+                AppRoutes.secretCodeChangePaths.contains(location)
+            ? null
+            : (AppRoutes.entryPaths.contains(location)
+                ? AppRoutes.homePath
+                : null),
       };
     },
     routes: [
@@ -182,6 +190,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     errorBuilder: (context, state) => _RouteErrorPage(error: state.error),
   );
 });
+
+/// La porte du changement de code secret est-elle ouverte ?
+///
+/// Lue sans écouter : la redirection est déjà réévaluée à chaque navigation et
+/// à chaque changement de la porte d'accès. S'abonner ici ferait recalculer le
+/// routeur à chaque frappe dans le formulaire.
+bool _isChangingSecretCode(Ref ref) =>
+    ref.read(authFlowViewModelProvider).door == AuthDoor.secretCodeReset;
 
 /// Écran de repli pour une route inconnue ou en échec.
 class _RouteErrorPage extends StatelessWidget {
