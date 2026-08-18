@@ -29,6 +29,7 @@ final RegExp technique = RegExp(
   r'[a-z_.]+|' // une clé pointée : settings.readingTextSize.v1
   r'[/a-z0-9:_-]+|' // un chemin ou une route
   r'[A-Za-z]+[0-9]*|' // NovaCut, MaterialIcons
+  r'(\\[nrt])+|' // une séquence d'échappement : le « \n » d'un join
   r'\W+' // ponctuation seule, séparateurs
   r')$',
 );

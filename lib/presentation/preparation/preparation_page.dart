@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -5,7 +6,9 @@ import 'package:urim/core/error/failure.dart';
 import 'package:urim/data/datasources/draft_local_data_source.dart';
 import 'package:urim/presentation/common/draft_keeper.dart';
 import 'package:urim/presentation/common/stale_banner.dart';
+import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/presentation/preparation/preparation_view_model.dart';
+import 'package:urim/presentation/preparation/study_export.dart';
 import 'package:urim/presentation/preparation/widgets/pending_banner.dart';
 import 'package:urim/presentation/preparation/widgets/study_material.dart';
 import 'package:urim/presentation/preparation/widgets/turn_views.dart';
@@ -44,13 +47,20 @@ class PreparationPage extends ConsumerWidget {
           overflow: TextOverflow.ellipsis,
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            // Renommer, exporter, supprimer : rien de tout cela n'existe
-            // encore.
-            onPressed: null,
-            tooltip: AppText.of(context).options,
-          ),
+          // Renommer et supprimer n'existent pas encore ; copier, si. Le menu
+          // n'apparaît donc que quand il a quelque chose à offrir — un menu
+          // ouvert sur une seule entrée grisée serait pire que pas de menu.
+          if (thread.value?.study case final Study study)
+            PopupMenuButton<void>(
+              icon: const Icon(Icons.more_vert),
+              tooltip: AppText.of(context).options,
+              itemBuilder: (menuContext) => [
+                PopupMenuItem<void>(
+                  onTap: () => _copyStudy(context, study),
+                  child: Text(AppText.of(menuContext).preparationExport),
+                ),
+              ],
+            ),
         ],
       ),
       body: SafeArea(
@@ -80,6 +90,24 @@ class PreparationPage extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// Met la préparation dans le presse-papiers.
+///
+/// Le presse-papiers plutôt qu'un fichier partagé : il ne demande aucun
+/// greffon, fonctionne sur les cinq plateformes, et le pasteur colle où il
+/// veut — un carnet, un message, un document. Le partage de fichier reste à
+/// décider.
+Future<void> _copyStudy(BuildContext context, Study study) async {
+  final text = AppText.of(context);
+
+  await Clipboard.setData(ClipboardData(text: exportStudyAsText(study, text)));
+
+  if (!context.mounted) return;
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(text.preparationExportDone)),
+  );
 }
 
 class _Thread extends ConsumerWidget {

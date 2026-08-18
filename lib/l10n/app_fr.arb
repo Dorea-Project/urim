@@ -255,8 +255,32 @@
   "settingsWifiOnlyPending": "Rien n'est encore synchronisé : tes préparations ne quittent pas cet appareil.",
   "settingsReminderInProgress": "Préparation en cours",
   "settingsReminderInProgressPending": "Un rappel le samedi si un message n'est pas terminé — dès qu'une préparation saura dire qu'elle ne l'est pas.",
+  "exportStartingPoint": "Point de départ",
+  "@exportStartingPoint": {
+    "description": "Intitulé de l'export : ce que le pasteur avait écrit en ouvrant."
+  },
+  "exportTheme": "Thème",
+  "@exportTheme": {
+    "description": "Intitulé de l'export : le thème dégagé."
+  },
+  "exportVerses": "Le texte",
+  "@exportVerses": {
+    "description": "Intitulé de l'export : les versets servis."
+  },
+  "exportContext": "Le contexte",
+  "@exportContext": {
+    "description": "Intitulé de l'export : les notes de contexte."
+  },
+  "preparationExport": "Copier en texte",
+  "@preparationExport": {
+    "description": "Menu de la préparation : met son contenu dans le presse-papiers."
+  },
+  "preparationExportDone": "Préparation copiée. Colle-la où tu veux.",
+  "@preparationExportDone": {
+    "description": "Confirmation après copie dans le presse-papiers."
+  },
   "settingsExport": "Exporter mes préparations",
-  "settingsExportPending": "Texte ou PDF — l'export arrive avec la synthèse.",
+  "settingsExportPending": "Une par une, depuis le menu d'une préparation. L'export de tout, et le PDF, restent à faire.",
   "settingsStorageUsed": "Espace utilisé",
   "settingsStorageUsedPending": "Mesurable une fois le stockage des préparations choisi.",
   "settingsTrainingNotice": "Urim n'utilise jamais tes préparations pour entraîner un modèle.",

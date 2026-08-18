@@ -675,6 +675,42 @@ abstract class AppText {
   /// **'Un rappel le samedi si un message n\'est pas terminé — dès qu\'une préparation saura dire qu\'elle ne l\'est pas.'**
   String get settingsReminderInProgressPending;
 
+  /// Intitulé de l'export : ce que le pasteur avait écrit en ouvrant.
+  ///
+  /// In fr, this message translates to:
+  /// **'Point de départ'**
+  String get exportStartingPoint;
+
+  /// Intitulé de l'export : le thème dégagé.
+  ///
+  /// In fr, this message translates to:
+  /// **'Thème'**
+  String get exportTheme;
+
+  /// Intitulé de l'export : les versets servis.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le texte'**
+  String get exportVerses;
+
+  /// Intitulé de l'export : les notes de contexte.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le contexte'**
+  String get exportContext;
+
+  /// Menu de la préparation : met son contenu dans le presse-papiers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Copier en texte'**
+  String get preparationExport;
+
+  /// Confirmation après copie dans le presse-papiers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Préparation copiée. Colle-la où tu veux.'**
+  String get preparationExportDone;
+
   /// No description provided for @settingsExport.
   ///
   /// In fr, this message translates to:
@@ -684,7 +720,7 @@ abstract class AppText {
   /// No description provided for @settingsExportPending.
   ///
   /// In fr, this message translates to:
-  /// **'Texte ou PDF — l\'export arrive avec la synthèse.'**
+  /// **'Une par une, depuis le menu d\'une préparation. L\'export de tout, et le PDF, restent à faire.'**
   String get settingsExportPending;
 
   /// No description provided for @settingsStorageUsed.

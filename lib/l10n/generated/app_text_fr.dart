@@ -346,11 +346,30 @@ class AppTextFr extends AppText {
       'Un rappel le samedi si un message n\'est pas terminé — dès qu\'une préparation saura dire qu\'elle ne l\'est pas.';
 
   @override
+  String get exportStartingPoint => 'Point de départ';
+
+  @override
+  String get exportTheme => 'Thème';
+
+  @override
+  String get exportVerses => 'Le texte';
+
+  @override
+  String get exportContext => 'Le contexte';
+
+  @override
+  String get preparationExport => 'Copier en texte';
+
+  @override
+  String get preparationExportDone =>
+      'Préparation copiée. Colle-la où tu veux.';
+
+  @override
   String get settingsExport => 'Exporter mes préparations';
 
   @override
   String get settingsExportPending =>
-      'Texte ou PDF — l\'export arrive avec la synthèse.';
+      'Une par une, depuis le menu d\'une préparation. L\'export de tout, et le PDF, restent à faire.';
 
   @override
   String get settingsStorageUsed => 'Espace utilisé';
