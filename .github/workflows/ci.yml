@@ -45,4 +45,11 @@ jobs:
         run: flutter analyze
 
       - name: Tests
-        run: flutter test
+        # Les tests marqués `live` interrogent un vrai serveur et demandent des
+        # identifiants : sans backend joignable, ils échouent pour une raison
+        # qui n'apprend rien sur le code. Une CI rouge en permanence cesse
+        # d'être lue, et c'est le seul défaut qui la rend inutile.
+        #
+        # Ils restent lancés à la main, quand le serveur tourne :
+        #   flutter test --tags live --dart-define=OTP=...
+        run: flutter test --exclude-tags live
