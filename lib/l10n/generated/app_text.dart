@@ -759,6 +759,24 @@ abstract class AppText {
   /// **'Appareils'**
   String get profileSectionDevices;
 
+  /// Occupation des places d'appareils, à côté du titre de section.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} sur {max}'**
+  String profileDevicesCount(int count, int max);
+
+  /// Affiché quand les deux places sont prises. Dit quoi faire, pas seulement que c'est plein.
+  ///
+  /// In fr, this message translates to:
+  /// **'Deux appareils au maximum. Pour en lier un nouveau, retire d\'abord l\'un de ceux-ci — sinon la connexion y sera refusée.'**
+  String get profileDevicesFull;
+
+  /// Affiché quand il reste de la place.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Une place reste pour un autre appareil.} other{{count} places restent pour d\'autres appareils.}}'**
+  String profileDevicesRoom(int count);
+
   /// No description provided for @profileDisplayName.
   ///
   /// In fr, this message translates to:

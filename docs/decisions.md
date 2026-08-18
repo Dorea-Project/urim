@@ -734,6 +734,22 @@ que j'ai*, elle est simple. Le jour où l'un de ces objets se partage, il sort d
 pasteur et entre dans l'assemblée — et rouvre **Q18** : qui voit quoi, par quel
 canal, avec quel consentement.
 
+### Q23 — Que répond le serveur au troisième appareil ?
+
+**Bloque** le message affiché au bon moment.
+
+La règle est posée : deux appareils au maximum (D45). Le profil la rend
+visible — « 2 sur 2 », et ce qu'il faut libérer. Mais c'est le serveur qui la
+tient, et **on ne sait pas ce qu'il renvoie** quand un troisième téléphone
+tente de se lier : `api_error.dart` ne connaît aucun code d'appareil.
+
+Sans ce code, l'écran de connexion affichera un refus générique là où il
+devrait dire « tu as déjà deux appareils, retire-en un depuis ton profil ».
+
+Deux choses à obtenir : le code d'erreur, et **qui décide** — le serveur
+refuse-t-il, ou propose-t-il de remplacer le plus ancien ? Refuser est plus
+honnête : remplacer d'office déconnecterait un appareil sans que personne
+l'ait demandé.
 ## Décisions prises
 
 | # | Décision | Pourquoi |
@@ -781,6 +797,7 @@ canal, avec quel consentement.
 | D42 | Le tour dit **de quoi il parle** ; l'écran déplie ce bloc-là et replie le reste | Premier geste de Q22. La valeur existait : `_forme` la calcule pour choisir la phrase, puis la jetait — le client recevait des blocs sans hiérarchie et les dépliait tous. Or les pesées et les couples accompagnent **tous** les tours qui suivent l'étage qui les a produits : c'est du décor ambiant, voulu, et il se réaffichait à l'identique. Mesuré sur un téléphone de 844 px : l'étage des mises en forme passe de **11,1 à 3,4 écrans**, le thème de 9,0 à 1,3. Un pasteur qui prépare le samedi soir n'a pas dix écrans de matière déjà lue à traverser. |
 | D43 | Replier n'est pas cacher : l'intitulé porte **le nombre**, et une touche rouvre | Ce qui sépare ranger d'escamoter. Les refusés d'une grille de faisabilité doivent rester atteignables — les cacher laisserait croire qu'on n'y a pas pensé, et c'est la règle que le serveur applique déjà en les servant avec les faisables. Un geste ouvert, lui, ne se replie jamais : un bouton replié est un bouton perdu. |
 | D44 | Ce que la préparation **porte déjà** s'offre sous le tour, replié — le texte, puis le contexte | Deuxième geste de Q22. Le contexte littéraire est calculé à l'ouverture par `load_context`, écrit dans la trace, stocké — et n'était montré nulle part : un pasteur l'a demandé en séance alors que la réponse était **déjà dans sa préparation**. Les versets, eux, n'ont jamais eu de bloc — le fil parlait de l'unité, la pesait, proposait des plans, et ne montrait pas le texte que seul le document imprimé portait. Offert, donc, sans qu'il ait à le demander, mais **replié** sous son intitulé et son nombre comme le décor (D43) : nommer coûte **0,1 écran**, déplier en coûterait six. Trois règles tiennent le reste. Rien ne s'affiche de ce que le corpus n'a pas — toutes les unités ne portent pas de note de contexte, et une section vide promettrait ce qu'elle n'a pas. Le bandeau d'attente reste **le dernier** élément : la matière se range au-dessus, c'est le geste en vol que le pasteur regarde après avoir touché. Et le repli est **le même objet** des deux côtés (`FoldedSection`) : deux chromes pour un seul geste apprendraient deux grammaires au pasteur. |
+| D45 | Deux appareils au maximum par compte | Un pasteur a son téléphone, parfois une tablette ; au troisième ce n'est plus un compte personnel mais un compte prêté, et les préparations sont ce qu'Urim promet de garder à leur auteur. La limite est tenue par le serveur, qui seul connaît la liste complète ; le profil la rend **lisible avant qu'elle ne se manifeste** — « 2 sur 2 », et ce qu'il faut libérer. Découvrir un refus en pleine connexion sur un téléphone neuf serait le découvrir au pire moment. L'appareil courant reste non retirable : ce serait une déconnexion déguisée, qui a son propre bouton. |
 | D23 | Un seul rafraîchissement à la fois, un seul rejeu par requête | Trois écrans qui échouent ensemble ne doivent pas déclencher trois rotations : la deuxième invaliderait le jeton de la première. Et une requête qui échoue deux fois signe une session morte, pas une boucle à retenter. |
 
 ## Dettes assumées
@@ -799,5 +816,4 @@ canal, avec quel consentement.
 | Le thème servi par le moteur est un gabarit de **codes bruts** — « theologie_propre, en textuel doctrinal ». Affiché tel quel sous « THÈME » | Côté serveur, aller chercher le libellé de l'axe |
 | Le compte rendu de séance est perdu en quittant l'écran. C'est cohérent avec D28, mais ce qui a été touché il y a cinq minutes disparaît en revenant de l'accueil | À évaluer à l'usage — un cache de session suffirait |
 | Une prédication transcrite n'a **pas d'issue moteur** : sa pastille « Retour disponible » a disparu du fil. Le serveur ne connaît que les préparations écrites — sa capture est verrouillée à l'étape 1 | Q2, avec la capture réelle |
-| Aucune intégration continue | Dès que possible |
 | Le mode développeur Windows n'est pas activé — bloque les compilations Windows | Au besoin |

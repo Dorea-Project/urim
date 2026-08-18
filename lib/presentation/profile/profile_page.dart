@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/core/error/failure.dart';
 import 'package:urim/core/router/app_routes.dart';
+import 'package:urim/domain/entities/account/device_roster.dart';
 import 'package:urim/domain/entities/account/known_device.dart';
 import 'package:urim/domain/entities/account/user_profile.dart';
 import 'package:urim/l10n/generated/app_text.dart';
@@ -109,6 +110,7 @@ class _ProfileList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = state.profile;
     final text = AppText.of(context);
+    final roster = DeviceRoster(state.devices);
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(
@@ -172,7 +174,10 @@ class _ProfileList extends ConsumerWidget {
         const SizedBox(height: AppSpacing.xl),
 
         // --- Appareils -------------------------------------------------------
-        SectionLabel(text.profileSectionDevices),
+        SectionLabel(
+          '${text.profileSectionDevices} · '
+          '${text.profileDevicesCount(roster.count, DeviceRoster.maxDevices)}',
+        ),
         SectionCard(
           children: [
             for (final device in state.devices)
@@ -194,6 +199,14 @@ class _ProfileList extends ConsumerWidget {
                     : null,
               ),
           ],
+        ),
+        // Dire ce qu'il reste, ou ce qu'il faut libérer. Découvrir la limite
+        // en pleine connexion sur un téléphone neuf serait la découvrir au
+        // pire moment.
+        SectionNote(
+          roster.isFull
+              ? text.profileDevicesFull
+              : text.profileDevicesRoom(roster.freeSlots),
         ),
         const SizedBox(height: AppSpacing.xl),
 

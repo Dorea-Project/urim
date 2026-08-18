@@ -275,6 +275,23 @@
   "profileSectionAccount": "Compte",
   "profileSectionChurches": "Églises",
   "profileSectionDevices": "Appareils",
+  "profileDevicesCount": "{count} sur {max}",
+  "@profileDevicesCount": {
+    "description": "Occupation des places d'appareils, à côté du titre de section.",
+    "placeholders": {
+      "count": { "type": "int" },
+      "max": { "type": "int" }
+    }
+  },
+  "profileDevicesFull": "Deux appareils au maximum. Pour en lier un nouveau, retire d'abord l'un de ceux-ci — sinon la connexion y sera refusée.",
+  "@profileDevicesFull": {
+    "description": "Affiché quand les deux places sont prises. Dit quoi faire, pas seulement que c'est plein."
+  },
+  "profileDevicesRoom": "{count, plural, =1{Une place reste pour un autre appareil.} other{{count} places restent pour d'autres appareils.}}",
+  "@profileDevicesRoom": {
+    "description": "Affiché quand il reste de la place.",
+    "placeholders": { "count": { "type": "int" } }
+  },
   "profileDisplayName": "Nom affiché",
   "profileDisplayNameEmpty": "À définir",
   "profileDisplayNameHint": "Kouadio Aristide",

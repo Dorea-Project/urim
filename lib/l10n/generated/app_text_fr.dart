@@ -392,6 +392,26 @@ class AppTextFr extends AppText {
   String get profileSectionDevices => 'Appareils';
 
   @override
+  String profileDevicesCount(int count, int max) {
+    return '$count sur $max';
+  }
+
+  @override
+  String get profileDevicesFull =>
+      'Deux appareils au maximum. Pour en lier un nouveau, retire d\'abord l\'un de ceux-ci — sinon la connexion y sera refusée.';
+
+  @override
+  String profileDevicesRoom(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count places restent pour d\'autres appareils.',
+      one: 'Une place reste pour un autre appareil.',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get profileDisplayName => 'Nom affiché';
 
   @override
