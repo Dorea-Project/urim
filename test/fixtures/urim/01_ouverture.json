@@ -45,8 +45,8 @@
     },
     {
       "code": "axe:anthropologie",
-      "label": "L'homme sans charité",
-      "rationale": "Pourquoi l'amour entre frères est-il le signe de la vraie vie chrétienne.",
+      "label": "L'homme et son prochain",
+      "rationale": "Pourquoi l'amour entre croyants s'éteint-il et comment le raviver.",
       "origin": "locus",
       "dismissed": false,
       "strength": null,
@@ -73,7 +73,7 @@
     {
       "code": "axe:ecclesiologie",
       "label": "L'Église sans amour",
-      "rationale": "Ce que devient la communauté quand l'amour fraternel disparaît.",
+      "rationale": "Ce que devient une communauté quand l'amour fraternel disparaît.",
       "origin": "locus",
       "dismissed": false,
       "strength": null,
@@ -219,8 +219,8 @@
           },
           {
             "code": "axe:anthropologie",
-            "label": "L'homme sans charité",
-            "hint": "Pourquoi l'amour entre frères est-il le signe de la vraie vie chrétienne.",
+            "label": "L'homme et son prochain",
+            "hint": "Pourquoi l'amour entre croyants s'éteint-il et comment le raviver.",
             "origin": "locus",
             "selected": false,
             "signature": "ia-mistral"
@@ -244,7 +244,7 @@
           {
             "code": "axe:ecclesiologie",
             "label": "L'Église sans amour",
-            "hint": "Ce que devient la communauté quand l'amour fraternel disparaît.",
+            "hint": "Ce que devient une communauté quand l'amour fraternel disparaît.",
             "origin": "locus",
             "selected": false,
             "signature": "ia-mistral"
@@ -323,6 +323,7 @@
           }
         ]
       }
-    ]
+    ],
+    "speaks": "chips"
   }
 }

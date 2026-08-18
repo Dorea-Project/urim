@@ -29,6 +29,7 @@ final class Turn extends Equatable {
     this.ask = '',
     this.signature,
     this.blocks = const [],
+    this.speaks = '',
   });
 
   final String say;
@@ -48,6 +49,36 @@ final class Turn extends Equatable {
   /// Dans l'ordre de l'écran, de haut en bas. Le serveur le fixe ; l'écran rend
   /// ce qu'on lui donne dans l'ordre où on le lui donne.
   final List<TurnBlock> blocks;
+
+  /// ⚠️ **Le bloc dont ce tour parle**, et la seule chose qui permette de ne pas
+  /// tout redéplier.
+  ///
+  /// Les pesées et les couples accompagnent **tous** les tours qui suivent
+  /// l'étage qui les a produits : c'est du décor ambiant, voulu, et il se
+  /// réaffichait à l'identique à chaque fois. Mesuré sur un téléphone, un tour
+  /// de `shape_homiletic` faisait onze écrans, dont neuf de matière déjà lue.
+  ///
+  /// Porte un `kind` de bloc, ou `rien` / `epuise` / `correction` quand ce qui
+  /// parle n'est pas un bloc.
+  final String speaks;
+
+  /// Ce bloc est-il le sujet du tour ?
+  ///
+  /// Sert à déplier l'un et replier les autres — **jamais à en cacher un** : le
+  /// décor reste là, sous son intitulé et son nombre. Les refusés voyagent
+  /// toujours avec les faisables.
+  bool isSpoken(TurnBlock block) => switch (block) {
+        ChipsBlock() => speaks == 'chips' || speaks == 'correction',
+        UnitsBlock() => speaks == 'units',
+        BoundsBlock() => speaks == 'bounds',
+        BearingsBlock() => speaks == 'bearings',
+        FeasibilityBlock() => speaks == 'feasibility',
+        ThemeBlock() => speaks == 'theme',
+        // Les sorties accompagnent le thème, elles ne le remplacent pas — mais
+        // un bouton ouvert est un geste, et un geste ne se replie pas.
+        ActionsBlock() => true,
+        UnknownBlock() => false,
+      };
 
   /// Vrai quand le tour offre quelque chose à toucher.
   bool get offersChoice => blocks.any((block) => block.isTouchable);

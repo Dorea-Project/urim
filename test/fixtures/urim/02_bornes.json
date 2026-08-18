@@ -196,6 +196,7 @@
         ],
         "consequence": "Si vous gardez vos bornes, je ne pourrai plus vous alerter sur un risque de proof-texting."
       }
-    ]
+    ],
+    "speaks": "bounds"
   }
 }

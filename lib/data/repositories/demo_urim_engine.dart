@@ -133,6 +133,7 @@ final class DemoUrimEngine {
             ask: 'Lequel retenez-vous ?',
             expects: TurnExpects.choice,
             stageCode: 'weigh_conviction',
+            speaks: 'chips',
             blocks: [ChipsBlock(state.keep(_axes))],
           ),
         _Step.units => Turn(
@@ -144,6 +145,7 @@ final class DemoUrimEngine {
             ask: 'Lequel ouvrons-nous ?',
             expects: TurnExpects.choice,
             stageCode: 'find_units',
+            speaks: 'units',
             blocks: const [UnitsBlock(_unites)],
           ),
         _Step.bounds => Turn(
@@ -154,6 +156,7 @@ final class DemoUrimEngine {
             ask: 'Lesquelles gardons-nous ?',
             expects: TurnExpects.choice,
             stageCode: 'bound_pericope',
+            speaks: 'bounds',
             blocks: [
               BoundsBlock(
                 items: state.keep(_bornes),
@@ -172,6 +175,10 @@ final class DemoUrimEngine {
                 'ailleurs, ou ouvrez un autre passage.',
             expects: TurnExpects.text,
             stageCode: 'bear_axes',
+            // Le bloc le plus avance parle : les pesees accompagnent, le theme
+            // est ce que ce tour vient d'apporter. Meme regle que `_forme`
+            // cote serveur.
+            speaks: 'theme',
             signature: 'ia-mistral',
             blocks: const [
               BearingsBlock(items: _pesees, caveats: _reserves),
@@ -187,6 +194,7 @@ final class DemoUrimEngine {
             ask: 'Donnez-moi un passage, ou reprenez votre sujet en clair.',
             expects: TurnExpects.text,
             stageCode: 'route_entry',
+            speaks: 'rien',
           ),
       };
 }

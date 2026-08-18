@@ -79,13 +79,35 @@ class TurnView extends StatelessWidget {
                     ),
                   for (final block in turn.blocks) ...[
                     const SizedBox(height: AppSpacing.lg),
-                    _BlockView(
-                      block: block,
-                      turn: turn,
-                      live: live,
-                      onDecision: onDecision,
-                      onDismiss: onDismiss,
-                    ),
+                    // ⚠️ **Ce dont le tour parle est déplié ; le reste se
+                    // replie sous son intitulé et son nombre.**
+                    //
+                    // Les pesées et les couples accompagnent tous les tours qui
+                    // suivent l'étage qui les a produits : c'est du décor
+                    // ambiant, voulu, et il se réaffichait à l'identique. Un
+                    // tour de `shape_homiletic` faisait onze écrans sur un
+                    // téléphone, dont neuf de matière déjà lue — un pasteur qui
+                    // prépare le samedi soir n'a pas ce temps-là.
+                    //
+                    // Replier n'est pas cacher : le nombre est dans l'intitulé,
+                    // et une touche rouvre. Les refusés voyagent toujours avec
+                    // les faisables.
+                    if (turn.isSpoken(block))
+                      _BlockView(
+                        block: block,
+                        turn: turn,
+                        live: live,
+                        onDecision: onDecision,
+                        onDismiss: onDismiss,
+                      )
+                    else
+                      _Folded(
+                        block: block,
+                        turn: turn,
+                        live: live,
+                        onDecision: onDecision,
+                        onDismiss: onDismiss,
+                      ),
                   ],
                   // La question vient après ce qu'il y a à regarder : on ne
                   // demande pas de choisir avant d'avoir montré entre quoi.
@@ -198,6 +220,109 @@ class _BlockView extends StatelessWidget {
         UnknownBlock() => const SizedBox.shrink(),
       };
 }
+
+/// Un bloc de décor, replié sous son intitulé et son nombre.
+///
+/// **Il n'est pas caché** : l'intitulé dit ce qu'il y a dedans et combien, et
+/// une touche l'ouvre. C'est la différence entre ranger et escamoter — les
+/// refusés d'une grille de faisabilité doivent rester atteignables, sinon on
+/// laisse croire qu'on n'y a pas pensé.
+class _Folded extends StatefulWidget {
+  const _Folded({
+    required this.block,
+    required this.turn,
+    required this.live,
+    required this.onDecision,
+    required this.onDismiss,
+  });
+
+  final TurnBlock block;
+  final Turn turn;
+  final bool live;
+  final OnDecision onDecision;
+  final OnDismiss onDismiss;
+
+  @override
+  State<_Folded> createState() => _FoldedState();
+}
+
+class _FoldedState extends State<_Folded> {
+  bool _ouvert = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final intitule = _intitule(AppText.of(context), widget.block);
+
+    // Un bloc sans intitulé connu n'a rien à replier : on le rend tel quel
+    // plutôt que d'offrir une porte qui ne dit pas ce qu'elle cache.
+    if (intitule == null) {
+      return _BlockView(
+        block: widget.block,
+        turn: widget.turn,
+        live: widget.live,
+        onDecision: widget.onDecision,
+        onDismiss: widget.onDismiss,
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        InkWell(
+          onTap: () => setState(() => _ouvert = !_ouvert),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  _ouvert ? Icons.expand_less : Icons.expand_more,
+                  size: 20,
+                  color: context.colors.textSecondary,
+                ),
+                const SizedBox(width: AppSpacing.xs),
+                Flexible(
+                  child: Text(
+                    intitule,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: context.colors.textSecondary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (_ouvert) ...[
+          const SizedBox(height: AppSpacing.sm),
+          _BlockView(
+            block: widget.block,
+            turn: widget.turn,
+            live: widget.live,
+            onDecision: widget.onDecision,
+            onDismiss: widget.onDismiss,
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+/// Ce que le repli annonce — **avec son nombre**, pour que le pasteur sache ce
+/// qu'il n'a pas sous les yeux.
+String? _intitule(AppText text, TurnBlock block) => switch (block) {
+      BearingsBlock(:final items) => text.turnFoldedBearings(items.length),
+      FeasibilityBlock(:final items) =>
+        text.turnFoldedFeasibility(items.length),
+      ChipsBlock(:final items) => text.turnFoldedChips(items.length),
+      UnitsBlock(:final groups) => text.turnFoldedUnits(
+          groups.fold(0, (total, groupe) => total + groupe.items.length),
+        ),
+      // Les bornes portent une conséquence qu'on ne replie pas, le thème est
+      // court, les sorties sont des gestes, et l'inconnu ne se nomme pas.
+      _ => null,
+    };
 
 /// Une carte tactile, l'unité visuelle de tous les choix.
 class _OptionCard extends StatelessWidget {

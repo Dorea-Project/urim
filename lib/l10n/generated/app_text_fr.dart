@@ -521,6 +521,50 @@ class AppTextFr extends AppText {
   }
 
   @override
+  String turnFoldedBearings(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ce que le texte porte — $count axes',
+      one: 'Ce que le texte porte — 1 axe',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String turnFoldedFeasibility(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Les plans que ce texte tient — $count',
+      one: 'Les plans que ce texte tient — 1',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String turnFoldedChips(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count autres propositions',
+      one: '1 autre proposition',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String turnFoldedUnits(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count textes relus',
+      one: '1 texte relu',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get turnThemeLabel => 'THÈME';
 
   @override

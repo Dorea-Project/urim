@@ -8,6 +8,7 @@ import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/domain/entities/preparation/turn.dart';
 import 'package:urim/presentation/preparation/preparation_page.dart';
 import '../support/pump_app.dart';
+import 'package:urim/l10n/generated/app_text_fr.dart';
 import '../support/tours_reels.dart';
 
 /// L'ecran d'un telephone ordinaire, pas la surface geante des autres tests.
@@ -16,6 +17,9 @@ import '../support/tours_reels.dart';
 /// tienne dans l'arbre. C'est commode et c'est exactement ce qui masquerait le
 /// probleme cherche ici : **un tour reel deborde-t-il un vrai telephone ?**
 const _telephone = Size(390, 844);
+
+/// Les libelles viennent de la meme source que l'ecran.
+final texte = AppTextFr();
 
 void main() {
   group('ce que le moteur envoie vraiment', () {
@@ -223,23 +227,28 @@ void main() {
       expect(place.bottom, lessThanOrEqualTo(_telephone.height));
     });
 
-    testWidgets('un tour reel coute jusqu\'a onze ecrans de defilement',
+    testWidgets('un tour reel tient en quelques ecrans, decor replie',
         (tester) async {
-      // ⚠️ **Le vrai probleme, et il n'est pas un debordement.** Rien ne casse ;
-      // c'est la longueur qui casse l'usage. Un tour de l'etage des mises en
-      // forme fait 9 400 px sur un telephone de 844 px de haut : le pasteur
-      // traverse onze ecrans de decor ambiant — dix pesees et dix-huit couples
-      // plan x matiere, republiees a chaque tour — pour atteindre son geste.
+      // ⚠️ **Le chiffre qui dit si le compagnon fait gagner du temps.**
       //
-      // Ce test enregistre le cout d'aujourd'hui. Il tombera le jour ou on
-      // repliera le decor, et c'est exactement ce qu'on veut : que la
-      // decision soit prise, pas subie.
+      // 🔴 Avant le repli, un tour de `shape_homiletic` faisait **11,1 ecrans**
+      // sur un telephone de 844 px, le theme 9,0 et la parole 9,3 — parce que
+      // dix pesees et dix-huit couples plan x matiere se republiaient a chaque
+      // tour. Le pasteur traversait sa propre matiere deja lue pour atteindre
+      // son geste, et il n'a pas ce temps-la.
+      //
+      // Depuis que le tour dit **de quoi il parle** (`speaks`), l'ecran deplie
+      // ce bloc-la et replie le reste sous son intitule et son nombre :
+      // 11,1 → 3,4 ecrans, 9,0 → 1,3.
+      //
+      // Ce test garde le gain. Il tombera si le decor se redeplie.
       final couts = <String, double>{};
 
       for (final nom in [
         ToursReels.ouverture,
         ToursReels.bornes,
         ToursReels.miseEnForme,
+        ToursReels.theme,
       ]) {
         await pumpTour(tester, ToursReels.etude(nom));
 
@@ -253,9 +262,64 @@ void main() {
       expect(couts[ToursReels.bornes], lessThan(3),
           reason: 'un tour sans decor tient en deux ecrans');
       expect(couts[ToursReels.ouverture], inInclusiveRange(3, 6),
-          reason: 'seize pastilles, sans decor');
-      expect(couts[ToursReels.miseEnForme], greaterThan(8),
-          reason: 'avec le decor ambiant, on depasse huit ecrans');
+          reason: 'seize pastilles, et c\'est bien d\'elles que le tour parle');
+      expect(couts[ToursReels.miseEnForme], lessThan(5),
+          reason: 'le decor est replie, pas supprime');
+      expect(couts[ToursReels.theme], lessThan(3),
+          reason: 'le theme est court : rien ne doit l\'enterrer');
+    });
+
+    testWidgets('le tour deplie ce dont il parle, et replie le reste',
+        (tester) async {
+      final etude = ToursReels.etude(ToursReels.theme);
+      await pumpTour(tester, etude);
+
+      // Le serveur dit que ce tour parle du theme.
+      expect(etude.turn!.speaks, 'theme');
+      expect(find.text('THÈME'), findsOneWidget);
+
+      // Les dix pesees et les dix-huit couples sont replies — leur intitule
+      // porte leur nombre, parce que replier n'est pas cacher.
+      expect(find.text(texte.turnFoldedBearings(10)), findsOneWidget);
+      expect(find.text(texte.turnFoldedFeasibility(18)), findsOneWidget);
+
+      // Et leur contenu n'est pas a l'ecran. On prend un libelle de la charge
+      // elle-meme : une capture neuve peut n'avoir aucun axe dominant, et un
+      // test qui suppose le contenu du corpus tombe sans que rien ne soit
+      // casse.
+      final pesees =
+          etude.turn!.blocks.whereType<BearingsBlock>().single.items;
+      expect(find.text(pesees.first.label), findsNothing);
+    });
+
+    testWidgets('un decor replie se rouvre, et rien n\'a disparu',
+        (tester) async {
+      // La garde qui distingue ranger d'escamoter. Les refuses d'une grille de
+      // faisabilite doivent rester atteignables : les cacher laisserait croire
+      // qu'on n'y a pas pense.
+      final etude = ToursReels.etude(ToursReels.theme);
+      await pumpTour(tester, etude);
+
+      final pesees =
+          etude.turn!.blocks.whereType<BearingsBlock>().single.items;
+
+      await tester.tap(find.text(texte.turnFoldedBearings(pesees.length)));
+      await tester.pumpAndSettle();
+
+      // Les dix axes sont revenus, avec leur motif — y compris les absents,
+      // que le corpus a relus et dont il dit « le texte n'en dit rien ».
+      for (final axe in pesees) {
+        expect(find.text(axe.label), findsWidgets, reason: axe.label);
+      }
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('un geste ouvert ne se replie jamais', (tester) async {
+      // Les sorties accompagnent le theme sans etre son sujet — mais « Ecrire
+      // mes points » est un geste, et un geste replie est un geste perdu.
+      await pumpTour(tester, ToursReels.etude(ToursReels.theme));
+
+      expect(find.text('Écrire mes points'), findsOneWidget);
     });
 
     testWidgets('toucher une pastille poste l\'etage du tour', (tester) async {
@@ -314,6 +378,15 @@ void main() {
           child: wrapScreen(const PreparationPage(preparationId: 'x')),
         ),
       );
+      await tester.pumpAndSettle();
+
+      // ⚠️ Les pesees sont du decor a cet etage : elles sont **repliees**. Le
+      // geste doit rester atteignable — c'est toute la difference entre ranger
+      // et escamoter.
+      final repli = find.text(texte.turnFoldedBearings(pesees.items.length));
+      await tester.ensureVisible(repli);
+      await tester.pumpAndSettle();
+      await tester.tap(repli);
       await tester.pumpAndSettle();
 
       await tester.ensureVisible(find.text(choisissable.label));

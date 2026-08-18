@@ -951,6 +951,30 @@ abstract class AppText {
   /// **'Unité signée {signature}'**
   String turnSignature(String signature);
 
+  /// Le decor ambiant replie. Le nombre est dedans exprès : replier n'est pas cacher, et le pasteur doit savoir ce qu'il n'a pas sous les yeux.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Ce que le texte porte — 1 axe} other{Ce que le texte porte — {count} axes}}'**
+  String turnFoldedBearings(int count);
+
+  /// Idem. Les refuses voyagent toujours avec les faisables, replies sous ce nombre.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Les plans que ce texte tient — 1} other{Les plans que ce texte tient — {count}}}'**
+  String turnFoldedFeasibility(int count);
+
+  /// No description provided for @turnFoldedChips.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 autre proposition} other{{count} autres propositions}}'**
+  String turnFoldedChips(int count);
+
+  /// No description provided for @turnFoldedUnits.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 texte relu} other{{count} textes relus}}'**
+  String turnFoldedUnits(int count);
+
   /// Un thème, jamais un titre — le titre, c'est la voix du pasteur.
   ///
   /// In fr, this message translates to:

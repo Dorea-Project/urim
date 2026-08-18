@@ -191,6 +191,7 @@ Turn _turnFromJson(Map<String, dynamic> json) => Turn(
       expects: TurnExpects.fromWire(json['expects'] as String?),
       stageCode: json['stage_code'] as String? ?? '',
       signature: json['signature'] as String?,
+      speaks: json['speaks'] as String? ?? '',
       blocks: [
         for (final block in json['blocks'] as List<dynamic>? ?? const [])
           _blockFromJson(block as Map<String, dynamic>),

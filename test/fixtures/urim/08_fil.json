@@ -1,6 +1,6 @@
 [
   {
-    "id": "e5d5f6e6-2e30-4274-8f8a-221af42a68a3",
+    "id": "4eabf09f-0e51-40a7-88d0-a7c2a92ffd19",
     "raw_input": "ma voiture 406 a besoin de reparation",
     "pericope_label": null,
     "theme": null,
@@ -9,8 +9,8 @@
     "status": "ouverte",
     "last_outcome": "await_decision",
     "last_stage_code": "weigh_conviction",
-    "last_turn_at": "2026-08-17T04:02:50.576325Z",
-    "opened_at": "2026-08-17T04:02:50.566509Z"
+    "last_turn_at": "2026-08-17T23:27:43.417740Z",
+    "opened_at": "2026-08-17T23:27:43.410892Z"
   },
   {
     "id": "00000000-0000-4000-8000-000000000001",
@@ -22,85 +22,85 @@
     "status": "ouverte",
     "last_outcome": "continue",
     "last_stage_code": "propose_theme",
-    "last_turn_at": "2026-08-17T04:02:45.900347Z",
-    "opened_at": "2026-08-17T04:02:30.878494Z"
+    "last_turn_at": "2026-08-17T23:27:36.621311Z",
+    "opened_at": "2026-08-17T23:27:07.197730Z"
   },
   {
-    "id": "bbb39614-c600-446d-a08c-7fa677f61174",
-    "raw_input": "l'amour fraternel n'existe plus dans l'eglise",
-    "pericope_label": "L'amour comme preuve de la connaissance de Dieu",
-    "theme": "theologie_propre, en textuel doctrinal",
-    "axis_code": "theologie_propre",
-    "service_date": null,
-    "status": "ouverte",
-    "last_outcome": "continue",
-    "last_stage_code": "propose_theme",
-    "last_turn_at": "2026-08-17T03:19:49.650396Z",
-    "opened_at": "2026-08-17T03:19:30.811029Z"
-  },
-  {
-    "id": "5fede351-c593-4830-af82-4c75692a8a2c",
+    "id": "a76bd8ab-56e7-442a-bf22-00b5ee05e84d",
     "raw_input": "l'amour fraternel n'existe plus dans l'eglise",
     "pericope_label": null,
     "theme": null,
-    "axis_code": "ecclesiologie",
+    "axis_code": null,
     "service_date": null,
     "status": "ouverte",
     "last_outcome": "await_decision",
     "last_stage_code": "weigh_conviction",
-    "last_turn_at": "2026-08-17T03:19:04.589662Z",
-    "opened_at": "2026-08-17T03:18:57.646299Z"
+    "last_turn_at": "2026-08-17T23:26:13.073406Z",
+    "opened_at": "2026-08-17T23:26:12.908548Z"
   },
   {
-    "id": "173c11f1-fa2b-4e34-98f4-abd33bf1596f",
-    "raw_input": "l'amour fraternel n'existe plus dans l'eglise",
-    "pericope_label": "Installation de l'arche et organisation du culte",
-    "theme": "anthropologie, en textuel doctrinal",
-    "axis_code": "anthropologie",
+    "id": "3af0fb8a-b91a-4d17-b357-1e13f43c555d",
+    "raw_input": "Marc 10:46-52",
+    "pericope_label": "La guérison de Bartimée",
+    "theme": "christologie, en textuel typologique",
+    "axis_code": "christologie",
     "service_date": null,
     "status": "ouverte",
     "last_outcome": "continue",
     "last_stage_code": "propose_theme",
-    "last_turn_at": "2026-08-17T03:17:28.212247Z",
-    "opened_at": "2026-08-17T03:17:11.639374Z"
+    "last_turn_at": "2026-08-17T19:23:10.227104Z",
+    "opened_at": "2026-08-17T19:05:44.171742Z"
   },
   {
-    "id": "6df9c158-dd67-4dca-b531-e0fc4367ab3a",
-    "raw_input": "L'ascension",
+    "id": "d50a99ea-0503-4d83-8fd8-f421085d0525",
+    "raw_input": "Je veux precher sur Marc 10:46-52",
     "pericope_label": null,
     "theme": null,
     "axis_code": null,
     "service_date": null,
     "status": "ouverte",
-    "last_outcome": null,
-    "last_stage_code": null,
-    "last_turn_at": null,
-    "opened_at": "2026-08-10T15:54:34.777276Z"
+    "last_outcome": "await_decision",
+    "last_stage_code": "weigh_conviction",
+    "last_turn_at": "2026-08-17T19:05:04.227128Z",
+    "opened_at": "2026-08-17T19:05:04.216820Z"
   },
   {
-    "id": "5db74583-5b44-4be7-848b-1e4e40334f9b",
-    "raw_input": "L'ascension ,passage: 1 verset 1-14",
-    "pericope_label": null,
+    "id": "45162463-23a0-4252-85a1-6edb9bfa2228",
+    "raw_input": "Marc 10:46-52",
+    "pericope_label": "La guérison de Bartimée",
     "theme": null,
     "axis_code": null,
-    "service_date": "2026-08-10",
+    "service_date": null,
     "status": "ouverte",
-    "last_outcome": null,
-    "last_stage_code": null,
-    "last_turn_at": null,
-    "opened_at": "2026-08-10T13:14:50.034935Z"
+    "last_outcome": "await_decision",
+    "last_stage_code": "bear_axes",
+    "last_turn_at": "2026-08-17T19:05:01.869921Z",
+    "opened_at": "2026-08-17T19:05:01.843779Z"
   },
   {
-    "id": "e104896b-8e5d-4d66-ad49-6a9a85e8579e",
-    "raw_input": "𝑃𝑎𝑟 𝑙𝑒 𝑆𝑎𝑖𝑛𝑡-𝐸𝑠𝑝𝑟𝑖𝑡 𝑟𝑒𝑡𝑜𝑢𝑟𝑛𝑜𝑛𝑠 𝑎̀ 𝑛𝑜𝑠 𝑓𝑜𝑛𝑑𝑎𝑚𝑒𝑛𝑡𝑎𝑢𝑥 𝑒́𝑡𝑎𝑛𝑡 𝑑𝑒𝑠 𝑡𝑒́𝑚𝑜𝑖𝑛𝑠.",
+    "id": "495a79cc-cdb5-4629-998a-54ed0de7d610",
+    "raw_input": "Je veux precher sur Marc 10:23, Bathime",
     "pericope_label": null,
     "theme": null,
     "axis_code": null,
     "service_date": null,
     "status": "ouverte",
-    "last_outcome": null,
-    "last_stage_code": null,
-    "last_turn_at": null,
-    "opened_at": "2026-08-10T01:53:51.101530Z"
+    "last_outcome": "await_decision",
+    "last_stage_code": "weigh_conviction",
+    "last_turn_at": "2026-08-17T19:00:35.742358Z",
+    "opened_at": "2026-08-17T19:00:35.651524Z"
+  },
+  {
+    "id": "521eedeb-6644-4f1f-8355-b0fb5f66d927",
+    "raw_input": "1 Jean 4:7-21",
+    "pericope_label": "L'amour comme preuve de la connaissance de Dieu",
+    "theme": null,
+    "axis_code": "christologie",
+    "service_date": null,
+    "status": "ouverte",
+    "last_outcome": "await_decision",
+    "last_stage_code": "shape_homiletic",
+    "last_turn_at": "2026-08-17T14:47:15.543663Z",
+    "opened_at": "2026-08-17T14:47:05.272290Z"
   }
 ]

@@ -117,8 +117,11 @@ Ce que cette confrontation a appris, et qu'aucune donnée écrite à la main
 n'aurait dit : le tour d'ouverture sert **seize** pastilles mêlant les dix loci
 et des passages, un motif peut faire **1 423 caractères**, et dix pesées plus
 dix-huit couples plan × matière reviennent à **chaque** tour comme décor
-ambiant. Rien ne déborde — mais un tour fait jusqu'à **onze écrans**. C'est la
-prochaine décision d'écran.
+ambiant. Rien ne débordait — mais un tour faisait jusqu'à **onze écrans**.
+
+**Réparé** : le tour dit désormais de quoi il parle (`speaks`), l'écran déplie
+ce bloc-là et replie le reste sous son intitulé et son nombre. 11,1 → 3,4
+écrans à l'étage des mises en forme, 9,0 → 1,3 au thème (D42, D43).
 
 Le moteur, lui, n'est plus le trou qu'on croyait : **Q14 et Q15 sont
 répondues**, et 4 561 unités relues couvrent les 66 livres. Un build de
