@@ -11,6 +11,7 @@ import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/auth/auth_flow_view_model.dart';
 import 'package:urim/presentation/common/french_dates.dart';
 import 'package:urim/presentation/common/section_card.dart';
+import 'package:urim/presentation/profile/account_erasure_view_model.dart';
 import 'package:urim/presentation/profile/profile_view_model.dart';
 import 'package:urim/presentation/profile/sign_out_view_model.dart';
 import 'package:urim/presentation/profile/widgets/display_name_dialog.dart';
@@ -229,6 +230,11 @@ class _ProfileList extends ConsumerWidget {
         SectionCard(
           children: [
             _SignOutRow(onTap: () => _confirmSignOut(context, ref)),
+            _DestructiveRow(
+              icon: Icons.delete_outline,
+              label: text.profileDeleteAccount,
+              onTap: () => _confirmErasure(context, ref),
+            ),
           ],
         ),
       ],
@@ -294,6 +300,29 @@ class _SignOutRow extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
+  Widget build(BuildContext context) => _DestructiveRow(
+        icon: Icons.logout,
+        label: AppText.of(context).profileSignOut,
+        onTap: onTap,
+      );
+}
+
+/// Une action qui défait quelque chose : icône, couleur d'erreur, et rien
+/// d'autre. Les deux du bas du profil se ressemblent parce qu'elles sont de
+/// même nature — les distinguer par le chrome laisserait croire que l'une est
+/// plus anodine.
+class _DestructiveRow extends StatelessWidget {
+  const _DestructiveRow({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
 
@@ -306,11 +335,11 @@ class _SignOutRow extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(Icons.logout, size: 20, color: scheme.error),
+            Icon(icon, size: 20, color: scheme.error),
             const SizedBox(width: AppSpacing.md),
             Expanded(
               child: Text(
-                AppText.of(context).profileSignOut,
+                label,
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium
@@ -322,6 +351,49 @@ class _SignOutRow extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Confirmation de suppression : elle dit ce qui part **et ce qui reste**.
+///
+/// Taire que le numéro demeure connu du service serait une seconde promesse
+/// non tenue, juste après celle qu'on vient d'honorer.
+Future<void> _confirmErasure(BuildContext context, WidgetRef ref) async {
+  final text = AppText.of(context);
+  final scheme = Theme.of(context).colorScheme;
+
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (dialogContext) => AlertDialog(
+      title: Text(text.profileDeleteAccountTitle),
+      content: Text(text.profileDeleteAccountBody),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(dialogContext).pop(false),
+          child: Text(text.cancel),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(dialogContext).pop(true),
+          style: TextButton.styleFrom(foregroundColor: scheme.error),
+          child: Text(text.profileDeleteAccountConfirm),
+        ),
+      ],
+    ),
+  );
+
+  if (confirmed != true || !context.mounted) return;
+
+  final failure =
+      await ref.read(accountErasureViewModelProvider.notifier).erase();
+
+  if (!context.mounted) return;
+
+  // La redirection reprend la main d'elle-même : plus de session, plus de
+  // présentation vue, donc retour au tout début.
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(failure?.message ?? text.profileDeleteAccountDone),
+    ),
+  );
 }
 
 /// Confirmation : elle dit ce que la déconnexion **ne détruit pas**.

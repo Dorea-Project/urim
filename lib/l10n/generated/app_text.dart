@@ -99,6 +99,36 @@ abstract class AppText {
   /// **'Urim'**
   String get appTitle;
 
+  /// Rangée destructrice du profil, promise par la politique.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer mon compte'**
+  String get profileDeleteAccount;
+
+  /// Titre du dialogue de suppression.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer ton compte ?'**
+  String get profileDeleteAccountTitle;
+
+  /// Dit ce qui part, et surtout ce qui ne part pas.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes brouillons, tes réglages et ton code secret seront effacés de cet appareil. Rien n\'est récupérable.\n\nTon numéro reste connu du service : la résiliation à distance n\'existe pas encore.'**
+  String get profileDeleteAccountBody;
+
+  /// Bouton de confirmation de la suppression.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout supprimer'**
+  String get profileDeleteAccountConfirm;
+
+  /// Confirmation après une suppression réussie.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton compte a été supprimé de cet appareil.'**
+  String get profileDeleteAccountDone;
+
   /// Ferme la session sur cet appareil, depuis le profil.
   ///
   /// In fr, this message translates to:

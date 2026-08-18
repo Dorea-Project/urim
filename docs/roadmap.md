@@ -173,12 +173,16 @@ Ce qui marche vraiment : le nom affiché, la taille du texte de lecture,
 l'affichage systématique de la référence. Tout le reste est montré **inactif**
 avec ce qu'il attend (D13).
 
+La suppression du compte, promise par la politique de confidentialité, est
+**tenue** : le bouton efface brouillons, réglages, session et code secret de
+l'appareil, et dit dans le même dialogue ce qui ne part pas — le numéro reste
+connu du service, faute de résiliation côté serveur (**D47**). Le changement de
+code secret passe désormais par le profil (**D46**).
+
 Restent dus :
 
-- la suppression du compte et de son contenu, promise par la politique de
-  confidentialité ;
-- le changement de numéro et de code secret, aujourd'hui réservés au parcours
-  d'entrée ;
+- le changement de numéro, encore réservé au parcours d'entrée ;
+- la résiliation **côté serveur**, qui n'existe dans aucun contrat ;
 - les églises et les appareils réels — **Q9** et **Q11** ;
 - les trois réglages hors connexion — **Q1**, **Q2**, **Q10** ;
 - le rappel du samedi — **Q12** ;

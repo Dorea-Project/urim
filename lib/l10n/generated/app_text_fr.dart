@@ -12,6 +12,23 @@ class AppTextFr extends AppText {
   String get appTitle => 'Urim';
 
   @override
+  String get profileDeleteAccount => 'Supprimer mon compte';
+
+  @override
+  String get profileDeleteAccountTitle => 'Supprimer ton compte ?';
+
+  @override
+  String get profileDeleteAccountBody =>
+      'Tes brouillons, tes réglages et ton code secret seront effacés de cet appareil. Rien n\'est récupérable.\n\nTon numéro reste connu du service : la résiliation à distance n\'existe pas encore.';
+
+  @override
+  String get profileDeleteAccountConfirm => 'Tout supprimer';
+
+  @override
+  String get profileDeleteAccountDone =>
+      'Ton compte a été supprimé de cet appareil.';
+
+  @override
   String get profileSignOut => 'Se déconnecter';
 
   @override

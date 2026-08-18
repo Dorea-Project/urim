@@ -4,6 +4,26 @@
   "@appTitle": {
     "description": "Nom de l'application, affiché par le système."
   },
+  "profileDeleteAccount": "Supprimer mon compte",
+  "@profileDeleteAccount": {
+    "description": "Rangée destructrice du profil, promise par la politique."
+  },
+  "profileDeleteAccountTitle": "Supprimer ton compte ?",
+  "@profileDeleteAccountTitle": {
+    "description": "Titre du dialogue de suppression."
+  },
+  "profileDeleteAccountBody": "Tes brouillons, tes réglages et ton code secret seront effacés de cet appareil. Rien n'est récupérable.\n\nTon numéro reste connu du service : la résiliation à distance n'existe pas encore.",
+  "@profileDeleteAccountBody": {
+    "description": "Dit ce qui part, et surtout ce qui ne part pas."
+  },
+  "profileDeleteAccountConfirm": "Tout supprimer",
+  "@profileDeleteAccountConfirm": {
+    "description": "Bouton de confirmation de la suppression."
+  },
+  "profileDeleteAccountDone": "Ton compte a été supprimé de cet appareil.",
+  "@profileDeleteAccountDone": {
+    "description": "Confirmation après une suppression réussie."
+  },
   "profileSignOut": "Se déconnecter",
   "@profileSignOut": {
     "description": "Ferme la session sur cet appareil, depuis le profil."
