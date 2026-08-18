@@ -18,9 +18,10 @@ class _FakeAuthRepository extends Mock implements AuthRepository {}
 
 /// Changer son code secret depuis le profil.
 ///
-/// Le serveur ne connaît qu'un chemin pour reposer une serrure, et il passe
-/// par un SMS : c'est le même que « code oublié ». Ce qui change, c'est qu'une
-/// session est déjà ouverte — et c'est précisément là que le piège était.
+/// Le serveur a **sa propre route** pour ça (`/account/change-password`),
+/// authentifiée par le jeton : ni numéro à donner, ni appareil révoqué, ni
+/// session rouverte. Emprunter « code oublié » aurait déconnecté la tablette
+/// du pasteur pour un simple changement de code.
 void main() {
   const phone = PhoneNumber(dialCode: '+225', nationalNumber: '0700000000');
 
@@ -36,6 +37,14 @@ void main() {
 
   setUp(() {
     repository = _FakeAuthRepository();
+    when(() => repository.requestSecretCodeChange())
+        .thenAnswer((_) async => const Result.success(null));
+    when(
+      () => repository.confirmSecretCodeChange(
+        otp: any(named: 'otp'),
+        newSecretCode: any(named: 'newSecretCode'),
+      ),
+    ).thenAnswer((_) async => const Result.success(null));
     when(() => repository.requestSecretCodeReset(any()))
         .thenAnswer((_) async => const Result.success(null));
     when(
@@ -61,7 +70,7 @@ void main() {
   }
 
   group('lancer le changement', () {
-    test('le numéro du profil sert au SMS', () async {
+    test("la route dédiée est appelée, pas celle de l'oubli", () async {
       final container = await makeContainer();
 
       final sent = await container
@@ -69,7 +78,25 @@ void main() {
           .startSecretCodeChange(phone);
 
       expect(sent, isTrue);
-      verify(() => repository.requestSecretCodeReset(phone)).called(1);
+      verify(() => repository.requestSecretCodeChange()).called(1);
+      verifyNever(
+        () => repository.requestSecretCodeReset(any()),
+      );
+    });
+
+    test("le numéro reste connu de l'écran", () async {
+      final container = await makeContainer();
+
+      await container
+          .read(authFlowViewModelProvider.notifier)
+          .startSecretCodeChange(phone);
+
+      expect(
+        container.read(authFlowViewModelProvider).phone,
+        phone,
+        reason: "l'écran affiche où part le code ; le serveur, lui, le lit "
+            'dans le jeton',
+      );
     });
 
     test('la porte du changement s\'ouvre', () async {
@@ -81,14 +108,14 @@ void main() {
 
       expect(
         container.read(authFlowViewModelProvider).door,
-        AuthDoor.secretCodeReset,
+        AuthDoor.secretCodeChange,
         reason: 'c\'est elle qui autorise la redirection à laisser passer les '
             'deux écrans du parcours',
       );
     });
 
     test('un envoi refusé n\'ouvre rien', () async {
-      when(() => repository.requestSecretCodeReset(any())).thenAnswer(
+      when(() => repository.requestSecretCodeChange()).thenAnswer(
         (_) async => const Result.failed(
           NetworkFailure(message: 'Serveur injoignable.'),
         ),
@@ -101,6 +128,12 @@ void main() {
           .startSecretCodeChange(phone);
 
       expect(sent, isFalse);
+      expect(
+        container.read(authFlowViewModelProvider).door,
+        isNot(AuthDoor.secretCodeChange),
+        reason: "laisser la porte ouverte après un refus autoriserait les "
+            "écrans d'entrée sans qu'aucun code ne soit parti",
+      );
     });
   });
 
@@ -110,15 +143,30 @@ void main() {
       final flow = container.read(authFlowViewModelProvider.notifier);
 
       await flow.startSecretCodeChange(phone);
-      await flow.confirmSecretCodeReset('2749');
+      await flow.confirmSecretCodeChange('2749');
 
       verify(
-        () => repository.confirmSecretCodeReset(
-          phone: phone,
+        () => repository.confirmSecretCodeChange(
           otp: any(named: 'otp'),
           newSecretCode: '2749',
         ),
       ).called(1);
+    });
+
+    test("aucun appareil n'est révoqué au passage", () async {
+      final container = await makeContainer();
+      final flow = container.read(authFlowViewModelProvider.notifier);
+
+      await flow.startSecretCodeChange(phone);
+      await flow.confirmSecretCodeChange('2749');
+
+      verifyNever(
+        () => repository.confirmSecretCodeReset(
+          phone: any(named: 'phone'),
+          otp: any(named: 'otp'),
+          newSecretCode: any(named: 'newSecretCode'),
+        ),
+      );
     });
 
     test('la porte se referme derrière soi', () async {
@@ -126,11 +174,11 @@ void main() {
       final flow = container.read(authFlowViewModelProvider.notifier);
 
       await flow.startSecretCodeChange(phone);
-      await flow.confirmSecretCodeReset('2749');
+      await flow.confirmSecretCodeChange('2749');
 
       expect(
         container.read(authFlowViewModelProvider).door,
-        isNot(AuthDoor.secretCodeReset),
+        isNot(AuthDoor.secretCodeChange),
         reason: 'sinon la redirection continuerait d\'autoriser les écrans '
             'd\'entrée, et l\'utilisateur resterait bloqué dessus',
       );

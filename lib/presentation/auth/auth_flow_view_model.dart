@@ -45,6 +45,14 @@ enum AuthDoor {
   /// révoqués — changer la serrure laisse rarement les anciennes clés en
   /// circulation.
   secretCodeReset,
+
+  /// Changer son code depuis le profil, **en étant connecté**.
+  ///
+  /// Ce n'est pas un oubli : le serveur a sa propre route, authentifiée par le
+  /// jeton. Elle n'ouvre pas de session — il y en a déjà une — et ne révoque
+  /// personne. Passer par « code oublié » aurait déconnecté la tablette du
+  /// pasteur pour un simple changement de code.
+  secretCodeChange,
 }
 
 /// État partagé par les écrans du parcours d'entrée.
@@ -318,19 +326,71 @@ final class AuthFlowViewModel extends Notifier<AuthFlowState> {
     );
   }
 
-  /// Change son code secret depuis le profil.
+  /// Change son code secret depuis le profil — demande le SMS.
   ///
-  /// Même mécanique que « code oublié » : le serveur ne connaît qu'un chemin
-  /// pour reposer une serrure, et il passe par un SMS. Un pasteur connecté
-  /// n'a donc pas à se déconnecter pour changer son code — mais il doit
-  /// toujours prouver qu'il tient le numéro.
+  /// Route dédiée du serveur, authentifiée par le jeton : le numéro n'est là
+  /// que pour l'écran, qui affiche où part le code. Un pasteur connecté n'a
+  /// donc ni à se déconnecter, ni à emprunter le chemin de l'oubli — celui-ci
+  /// révoque les autres appareils.
   Future<bool> startSecretCodeChange(PhoneNumber phone) async {
     state = state.copyWith(
       dialCode: phone.dialCode,
       nationalNumber: phone.nationalNumber,
+      isSubmitting: true,
+      door: AuthDoor.secretCodeChange,
+      clearFailure: true,
     );
 
-    return requestSecretCodeReset();
+    final result =
+        await ref.read(authRepositoryProvider).requestSecretCodeChange();
+
+    return result.fold(
+      onSuccess: (_) {
+        state = state.copyWith(
+          isSubmitting: false,
+          otp: '',
+          otpRequestedAt: ref.read(clockProvider).now(),
+        );
+        return true;
+      },
+      onFailure: (failure) {
+        // La porte se referme : laisser `secretCodeChange` ouverte après un
+        // refus autoriserait les écrans du parcours d'entrée sans qu'aucun
+        // code n'ait été envoyé.
+        state = state.copyWith(
+          isSubmitting: false,
+          door: AuthDoor.signIn,
+          failure: failure,
+        );
+        return false;
+      },
+    );
+  }
+
+  /// Change son code secret — pose le nouveau code.
+  ///
+  /// La session ne bouge pas : elle était déjà ouverte, et le serveur ne rend
+  /// pas de jetons. Seule la dérivation locale de déverrouillage suit, sinon
+  /// l'application continuerait d'ouvrir sur l'ancien code hors connexion.
+  Future<bool> confirmSecretCodeChange(String newSecretCode) async {
+    state = state.copyWith(isSubmitting: true, clearFailure: true);
+
+    final result = await ref.read(authRepositoryProvider).confirmSecretCodeChange(
+          otp: state.otp,
+          newSecretCode: newSecretCode,
+        );
+
+    switch (result) {
+      case Success():
+        await _adoptUnlockCode(newSecretCode);
+        // La porte se referme derrière soi : la redirection cesse d'autoriser
+        // les écrans du parcours d'entrée à qui vient d'y terminer son affaire.
+        state = state.copyWith(isSubmitting: false, door: AuthDoor.signIn);
+        return true;
+      case Failed(:final failure):
+        state = state.copyWith(isSubmitting: false, failure: failure);
+        return false;
+    }
   }
 
   /// Code secret oublié — pose le nouveau code et ouvre la session.

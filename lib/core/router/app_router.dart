@@ -197,7 +197,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 /// à chaque changement de la porte d'accès. S'abonner ici ferait recalculer le
 /// routeur à chaque frappe dans le formulaire.
 bool _isChangingSecretCode(Ref ref) =>
-    ref.read(authFlowViewModelProvider).door == AuthDoor.secretCodeReset;
+    ref.read(authFlowViewModelProvider).door == AuthDoor.secretCodeChange;
 
 /// Écran de repli pour une route inconnue ou en échec.
 class _RouteErrorPage extends StatelessWidget {

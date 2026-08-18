@@ -33,6 +33,10 @@ final class DevAuthDataSource implements AuthDataSource {
   /// Codes secrets posés pendant la session de démonstration.
   final Map<String, String> _secretCodes = {};
 
+  /// Le numéro de la dernière session ouverte : le serveur le lit dans le
+  /// jeton, la démonstration n'a que sa mémoire.
+  String? _connected;
+
   @override
   Future<void> requestRegistration(PhoneNumber phone) async {
     _challenged.add(phone.e164);
@@ -50,6 +54,7 @@ final class DevAuthDataSource implements AuthDataSource {
     _requireOtp(otp);
 
     _secretCodes[phone.e164] = secretCode;
+    _connected = phone.e164;
 
     return _issue();
   }
@@ -76,6 +81,8 @@ final class DevAuthDataSource implements AuthDataSource {
       );
     }
 
+    _connected = phone.e164;
+
     return SignInOutcome.session(_issue());
   }
 
@@ -86,6 +93,8 @@ final class DevAuthDataSource implements AuthDataSource {
     required String deviceId,
   }) async {
     _requireOtp(otp);
+    _connected = phone.e164;
+
     return _issue();
   }
 
@@ -107,8 +116,32 @@ final class DevAuthDataSource implements AuthDataSource {
     _requireOtp(otp);
 
     _secretCodes[phone.e164] = newSecretCode;
+    _connected = phone.e164;
 
     return _issue();
+  }
+
+  @override
+  Future<void> requestSecretCodeChange() async {
+    debugPrint('[DEMO] Code de changement : $_otp');
+  }
+
+  @override
+  Future<void> confirmSecretCodeChange({
+    required String otp,
+    required String newSecretCode,
+  }) async {
+    _requireOtp(otp);
+
+    final phone = _connected;
+    if (phone == null) {
+      throw const UnauthorizedException(
+        'Aucune session ouverte.',
+        code: 'NOT_AUTHENTICATED',
+      );
+    }
+
+    _secretCodes[phone] = newSecretCode;
   }
 
   @override

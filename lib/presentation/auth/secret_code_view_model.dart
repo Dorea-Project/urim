@@ -102,7 +102,7 @@ final class SecretCodeViewModel extends Notifier<SecretCodeState> {
 
   /// Ce que le serveur doit faire de ce code, selon la porte empruntée.
   ///
-  /// Trois cas, et un seul n'appelle personne : quand la session est déjà
+  /// Quatre cas, et un seul n'appelle personne : quand la session est déjà
   /// ouverte — connexion depuis un appareil qui n'avait pas encore de serrure
   /// locale — le code ne sert qu'à déverrouiller, et le serveur a déjà le sien.
   Future<bool> _settleWithServer() async {
@@ -116,12 +116,16 @@ final class SecretCodeViewModel extends Notifier<SecretCodeState> {
         flow.confirmRegistration(state.firstEntry),
       AuthDoor.registration => true,
 
-      // **Toujours le serveur**, session ouverte ou non. C'est la porte du
-      // changement volontaire : ne poser que la serrure locale laisserait
-      // l'ancien code valable partout ailleurs, et le pasteur croirait
-      // l'avoir change.
+      // **Toujours le serveur**, session ouverte ou non : ne poser que la
+      // serrure locale laisserait l'ancien code valable partout ailleurs, et
+      // le pasteur croirait l'avoir change.
       AuthDoor.secretCodeReset =>
         flow.confirmSecretCodeReset(state.firstEntry),
+
+      // Changement volontaire depuis le profil : route dediee, session
+      // conservee, aucun appareil revoque.
+      AuthDoor.secretCodeChange =>
+        flow.confirmSecretCodeChange(state.firstEntry),
 
       // Connexion depuis un appareil qui n'avait pas encore de serrure
       // locale : le serveur a deja son code, celui-ci ne fait que

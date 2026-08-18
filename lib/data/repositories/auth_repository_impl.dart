@@ -121,6 +121,20 @@ final class AuthRepositoryImpl implements AuthRepository {
       });
 
   @override
+  Future<Result<void>> requestSecretCodeChange() =>
+      _guard(() => _source.requestSecretCodeChange());
+
+  @override
+  Future<Result<void>> confirmSecretCodeChange({
+    required String otp,
+    required String newSecretCode,
+  }) =>
+      _guard(() => _source.confirmSecretCodeChange(
+            otp: otp,
+            newSecretCode: newSecretCode,
+          ));
+
+  @override
   Future<Result<AuthSession?>> currentSession() async {
     try {
       final session = await _sessions.read();

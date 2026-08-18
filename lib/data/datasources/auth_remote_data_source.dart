@@ -102,6 +102,24 @@ final class AuthRemoteDataSource implements AuthDataSource {
   }
 
   @override
+  Future<void> requestSecretCodeChange() async {
+    // Aucun corps : le serveur lit le compte dans le jeton. Lui passer un
+    // numéro laisserait croire qu'on peut changer le code d'un autre.
+    await _post('/account/change-password/request', const {});
+  }
+
+  @override
+  Future<void> confirmSecretCodeChange({
+    required String otp,
+    required String newSecretCode,
+  }) async {
+    await _post('/account/change-password/confirm', {
+      'otp': otp,
+      'new_secret_code': newSecretCode,
+    });
+  }
+
+  @override
   Future<void> signOut({bool everywhere = false}) async {
     await _post('/auth/logout', {'everywhere': everywhere});
   }

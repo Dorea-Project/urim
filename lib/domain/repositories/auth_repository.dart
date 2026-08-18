@@ -70,6 +70,18 @@ abstract interface class AuthRepository {
     required String newSecretCode,
   });
 
+  /// Changer son code secret en étant connecté — demande le code par SMS.
+  ///
+  /// Distincte de la réinitialisation : elle n'ouvre pas de session, elle en
+  /// suppose une, et ne révoque aucun appareil.
+  Future<Result<void>> requestSecretCodeChange();
+
+  /// Changer son code secret — pose le nouveau code, sans toucher la session.
+  Future<Result<void>> confirmSecretCodeChange({
+    required String otp,
+    required String newSecretCode,
+  });
+
   /// Session locale, `null` si personne n'est connecté.
   Future<Result<AuthSession?>> currentSession();
 

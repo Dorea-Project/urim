@@ -82,6 +82,22 @@ abstract interface class AuthDataSource {
     required String deviceId,
   });
 
+  /// Changer son code secret **en étant connecté** — demande l'OTP.
+  ///
+  /// Route distincte de « code oublié » : elle s'authentifie par le jeton, ne
+  /// prend pas de numéro, et ne révoque aucun appareil. Le serveur l'a prévue
+  /// (`/account/change-password`), et la confondre avec la réinitialisation
+  /// déconnecterait la tablette du pasteur pour un simple changement de code.
+  Future<void> requestSecretCodeChange();
+
+  /// Changer son code secret — pose le nouveau code.
+  ///
+  /// Ne renvoie pas de jetons : la session en cours reste la sienne.
+  Future<void> confirmSecretCodeChange({
+    required String otp,
+    required String newSecretCode,
+  });
+
   /// Révoque cet appareil, ou tous.
   Future<void> signOut({bool everywhere});
 }

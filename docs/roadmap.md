@@ -177,11 +177,13 @@ La suppression du compte, promise par la politique de confidentialité, est
 **tenue** : le bouton efface brouillons, réglages, session et code secret de
 l'appareil, et dit dans le même dialogue ce qui ne part pas — le numéro reste
 connu du service, faute de résiliation côté serveur (**D47**). Le changement de
-code secret passe désormais par le profil (**D46**).
+code secret passe désormais par le profil, sur la route que le serveur avait
+prévue pour lui — `/account/change-password` (**D46**).
 
 Restent dus :
 
-- le changement de numéro, encore réservé au parcours d'entrée ;
+- le changement de numéro : `/account/change-phone/{request,confirm}` **existe
+  côté serveur**, rien ne l'appelle côté application ;
 - la résiliation **côté serveur**, qui n'existe dans aucun contrat ;
 - les églises et les appareils réels — **Q9** et **Q11** ;
 - les trois réglages hors connexion — **Q1**, **Q2**, **Q10** ;
