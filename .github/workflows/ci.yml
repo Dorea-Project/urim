@@ -1,0 +1,48 @@
+# Analyse statique et tests, à chaque poussée.
+#
+# Ce qui est vérifié ici l'était jusqu'à présent à la main, sur une seule
+# machine. Une suite de tests que rien ne lance automatiquement finit par ne
+# plus être lancée du tout.
+#
+# La CI tourne sous Linux : elle échappe donc au mode développeur Windows qui
+# fait échouer l'étape des liens symboliques en local.
+name: Analyse et tests
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+# Une poussée annule la vérification précédente sur la même branche : c'est le
+# dernier état qui compte.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verification:
+    name: Analyse et tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          # Version épinglée, et non « stable » : une montée de version doit
+          # être une décision visible dans un commit, pas une surprise un
+          # matin.
+          flutter-version: 3.41.2
+          channel: stable
+          cache: true
+
+      - name: Résoudre les dépendances
+        run: flutter pub get
+
+      - name: Analyse statique
+        run: flutter analyze
+
+      - name: Tests
+        run: flutter test
