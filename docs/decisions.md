@@ -664,10 +664,39 @@ moment où l'unité est bornée. Le tour devrait le **nommer** — pas le dépli
 juste dire qu'il l'a. Q21 route la question du pasteur ; celle-ci lui épargne de
 la poser.
 
-**3. Le banc gagne un second chiffre.** Un tour est **vide** quand ce qu'il sert
-est inclus dans ce que le tour précédent servait — mêmes blocs, mêmes items,
-aucun fait nouveau. Une phrase seule ne compte pas comme un gain. Ce chiffre
-doit être **0 sur les chemins réels**, au même titre que les murs.
+**3. Le banc gagne un second chiffre.** ✅ **Fait** — et il a rendu son verdict.
+
+    murs sur les chemins reelle       0/44
+    tours vides sur les chemins reelle       1/44
+    tours vides sur les chemins absurde      1/43
+
+Un tour est **vide** quand ce qu'il sert est inclus dans ce que le tour
+précédent servait. Une phrase seule ne compte pas comme un gain : c'est tout
+l'objet de la mesure.
+
+**Deux corrections que la mesure a imposées d'elle-même**, et qui valent d'être
+notées parce qu'elles disent comment lire un instrument :
+
+- **Une relecture n'est pas un vide.** La première version comptait 22 vides sur
+  127, *tous* à la relecture finale. Or une relecture rejoue le même état par
+  définition — c'est `GET /studies/{id}`, pas une réponse à un geste. Un tour est
+  vide quand il **répond à un geste** sans rien apporter.
+- **Le banc ne savait pas parler.** Sa boucle s'arrête dès que le pipeline
+  continue : elle n'allait donc jamais au-delà du thème, et **le canal par lequel
+  arrive tout l'imprévisible n'était pas marché du tout**. D'où un geste
+  nouveau — `PARLER` : suivre jusqu'au bout, puis poser sa vraie question.
+
+#### Les deux vides, nommés
+
+**`Marc 10:46-52` · après une parole · `load_context`** — 32 éléments servis,
+tous déjà lus. C'est le tour exact rencontré en séance réelle : *« Ce que je peux
+dire de votre travail est déjà sous vos yeux… »* au-dessus de blocs inchangés.
+Sa réparation est **Q21** : la parole n'a pas d'issue « demander », donc elle
+retombe sur un répondeur.
+
+**Micro resté ouvert · tour 1 · `route_entry`** — découvert par la mesure, pas
+soupçonné. Le pasteur agit sur l'écran de confirmation d'une dictée et reçoit
+**les deux mêmes options**. Deux éléments, déjà servis au tour 0.
 
 #### Ce que ça dit du reste
 
