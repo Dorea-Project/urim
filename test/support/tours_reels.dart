@@ -31,6 +31,10 @@ abstract final class ToursReels {
   static const String horsChamp = '07_hors_champ';
   static const String fil = '08_fil';
 
+  /// La preparation de Marc 10:46-52 — la seule capture dont le corpus
+  /// porte une note de contexte. Toutes les unites n'en ont pas.
+  static const String bartimee = '09_bartimee';
+
   /// Tous les tours, dans l'ordre du parcours.
   static const List<String> tous = [
     ouverture,

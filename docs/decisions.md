@@ -658,11 +658,12 @@ avait été calculé **à l'ouverture**, écrit dans la trace à l'étage
 qui a **changé** ; le reste se renvoie, replié. C'est de la mise en page, aucun
 étage à toucher — et c'est le plus gros gain de la liste.
 
-**2. Ce qui est déjà calculé s'offre, au lieu d'attendre la question.** Le
-contexte, les variantes de version, les mots de l'original : tout est là au
-moment où l'unité est bornée. Le tour devrait le **nommer** — pas le déplier,
-juste dire qu'il l'a. Q21 route la question du pasteur ; celle-ci lui épargne de
-la poser.
+**2. Ce qui est déjà calculé s'offre, au lieu d'attendre la question.**
+✅ **Fait** pour le texte et le contexte (**D44**). Le tour les **nomme** sous
+lui — pas dépliés, juste dits — et une touche les ouvre. Restent les variantes
+de version et les mots de l'original, servis dans la même charge et toujours
+sans écran. Q21 route la question du pasteur ; celle-ci lui épargne de la
+poser.
 
 **3. Le banc gagne un second chiffre.** ✅ **Fait** — et il a rendu son verdict.
 
@@ -779,6 +780,7 @@ canal, avec quel consentement.
 | D41 | **On continue sans réseau, on n'ouvre pas** | La réponse à l'étape 5 de Q4, et la frontière du hors connexion. Ouvrir n'est pas enregistrer une phrase, c'est la faire **lire** : l'étage 0 regarde si les mots se suivent comme dans l'Écriture, la pesée interroge 4 561 unités relues et 442 889 jetons. Ces informations sont externes par nature ; les embarquer serait un autre produit. Le refus dit donc sa raison et rappelle que la phrase est gardée — un « Pas de connexion » sec ferait croire au pasteur qu'il vient de perdre ce qu'il a écrit. |
 | D42 | Le tour dit **de quoi il parle** ; l'écran déplie ce bloc-là et replie le reste | Premier geste de Q22. La valeur existait : `_forme` la calcule pour choisir la phrase, puis la jetait — le client recevait des blocs sans hiérarchie et les dépliait tous. Or les pesées et les couples accompagnent **tous** les tours qui suivent l'étage qui les a produits : c'est du décor ambiant, voulu, et il se réaffichait à l'identique. Mesuré sur un téléphone de 844 px : l'étage des mises en forme passe de **11,1 à 3,4 écrans**, le thème de 9,0 à 1,3. Un pasteur qui prépare le samedi soir n'a pas dix écrans de matière déjà lue à traverser. |
 | D43 | Replier n'est pas cacher : l'intitulé porte **le nombre**, et une touche rouvre | Ce qui sépare ranger d'escamoter. Les refusés d'une grille de faisabilité doivent rester atteignables — les cacher laisserait croire qu'on n'y a pas pensé, et c'est la règle que le serveur applique déjà en les servant avec les faisables. Un geste ouvert, lui, ne se replie jamais : un bouton replié est un bouton perdu. |
+| D44 | Ce que la préparation **porte déjà** s'offre sous le tour, replié — le texte, puis le contexte | Deuxième geste de Q22. Le contexte littéraire est calculé à l'ouverture par `load_context`, écrit dans la trace, stocké — et n'était montré nulle part : un pasteur l'a demandé en séance alors que la réponse était **déjà dans sa préparation**. Les versets, eux, n'ont jamais eu de bloc — le fil parlait de l'unité, la pesait, proposait des plans, et ne montrait pas le texte que seul le document imprimé portait. Offert, donc, sans qu'il ait à le demander, mais **replié** sous son intitulé et son nombre comme le décor (D43) : nommer coûte **0,1 écran**, déplier en coûterait six. Trois règles tiennent le reste. Rien ne s'affiche de ce que le corpus n'a pas — toutes les unités ne portent pas de note de contexte, et une section vide promettrait ce qu'elle n'a pas. Le bandeau d'attente reste **le dernier** élément : la matière se range au-dessus, c'est le geste en vol que le pasteur regarde après avoir touché. Et le repli est **le même objet** des deux côtés (`FoldedSection`) : deux chromes pour un seul geste apprendraient deux grammaires au pasteur. |
 | D23 | Un seul rafraîchissement à la fois, un seul rejeu par requête | Trois écrans qui échouent ensemble ne doivent pas déclencher trois rotations : la deuxième invaliderait le jeton de la première. Et une requête qui échoue deux fois signe une session morte, pas une boucle à retenter. |
 
 ## Dettes assumées

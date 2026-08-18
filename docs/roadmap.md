@@ -123,6 +123,15 @@ ambiant. Rien ne débordait — mais un tour faisait jusqu'à **onze écrans**.
 ce bloc-là et replie le reste sous son intitulé et son nombre. 11,1 → 3,4
 écrans à l'étage des mises en forme, 9,0 → 1,3 au thème (D42, D43).
 
+**Offert aussi** : le texte et le contexte. Ils étaient dans la charge depuis le
+premier jour — les versets qu'aucun bloc ne portait, la note de contexte
+calculée à l'ouverture, écrite dans la trace, stockée, et jamais montrée. Ils se
+nomment maintenant sous le tour, repliés, et une touche les ouvre : 0,1 écran de
+plus, et une question que le pasteur n'a plus à poser (D44).
+
+Restent dans la même charge et toujours sans écran : les **variantes de
+version** et les mots de l'original.
+
 Le moteur, lui, n'est plus le trou qu'on croyait : **Q14 et Q15 sont
 répondues**, et 4 561 unités relues couvrent les 66 livres. Un build de
 démonstration garde un mannequin qui imite la forme du contrat, pas le

@@ -21,6 +21,30 @@ const _telephone = Size(390, 844);
 /// Les libelles viennent de la meme source que l'ecran.
 final texte = AppTextFr();
 
+/// Ce que le tour coute vraiment, **en ecrans**.
+///
+/// ⚠️ Une liste paresseuse n'a pas d'etendue exacte : ce qui n'est pas encore
+/// pose est **estime** a la taille moyenne de ce qui l'est. Depuis que la
+/// matiere offerte forme un second element, un tour de six ecrans faisait
+/// estimer six ecrans de plus a une ligne repliee. On descend donc jusqu'a ce
+/// que le chiffre ne bouge plus : alors tout est pose, et il est exact.
+Future<double> coutEnEcrans(WidgetTester tester) async {
+  ScrollPosition position() =>
+      tester.state<ScrollableState>(find.byType(Scrollable).first).position;
+
+  var etendue = position().maxScrollExtent;
+  for (var i = 0; i < 20; i++) {
+    position().jumpTo(etendue);
+    await tester.pumpAndSettle();
+
+    final mesure = position().maxScrollExtent;
+    if ((mesure - etendue).abs() < 0.5) break;
+    etendue = mesure;
+  }
+
+  return (etendue + position().viewportDimension) / _telephone.height;
+}
+
 void main() {
   group('ce que le moteur envoie vraiment', () {
     test('le tour d\'ouverture melange axes et passages', () async {
@@ -251,12 +275,7 @@ void main() {
         ToursReels.theme,
       ]) {
         await pumpTour(tester, ToursReels.etude(nom));
-
-        final position =
-            tester.state<ScrollableState>(find.byType(Scrollable).first).position;
-        couts[nom] =
-            (position.maxScrollExtent + position.viewportDimension) /
-                _telephone.height;
+        couts[nom] = await coutEnEcrans(tester);
       }
 
       expect(couts[ToursReels.bornes], lessThan(3),

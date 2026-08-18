@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:urim/domain/entities/preparation/turn.dart';
 import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/common/ruled_content.dart';
+import 'package:urim/presentation/preparation/widgets/folded_section.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
 
@@ -227,7 +228,7 @@ class _BlockView extends StatelessWidget {
 /// une touche l'ouvre. C'est la différence entre ranger et escamoter — les
 /// refusés d'une grille de faisabilité doivent rester atteignables, sinon on
 /// laisse croire qu'on n'y a pas pensé.
-class _Folded extends StatefulWidget {
+class _Folded extends StatelessWidget {
   const _Folded({
     required this.block,
     required this.turn,
@@ -242,70 +243,23 @@ class _Folded extends StatefulWidget {
   final OnDecision onDecision;
   final OnDismiss onDismiss;
 
-  @override
-  State<_Folded> createState() => _FoldedState();
-}
-
-class _FoldedState extends State<_Folded> {
-  bool _ouvert = false;
+  Widget _bloc(BuildContext context) => _BlockView(
+        block: block,
+        turn: turn,
+        live: live,
+        onDecision: onDecision,
+        onDismiss: onDismiss,
+      );
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final intitule = _intitule(AppText.of(context), widget.block);
+    final intitule = _intitule(AppText.of(context), block);
 
-    // Un bloc sans intitulé connu n'a rien à replier : on le rend tel quel
-    // plutôt que d'offrir une porte qui ne dit pas ce qu'elle cache.
-    if (intitule == null) {
-      return _BlockView(
-        block: widget.block,
-        turn: widget.turn,
-        live: widget.live,
-        onDecision: widget.onDecision,
-        onDismiss: widget.onDismiss,
-      );
-    }
+    // Un bloc sans intitule connu n'a rien a replier : on le rend tel quel
+    // plutot que d'offrir une porte qui ne dit pas ce qu'elle cache.
+    if (intitule == null) return _bloc(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        InkWell(
-          onTap: () => setState(() => _ouvert = !_ouvert),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  _ouvert ? Icons.expand_less : Icons.expand_more,
-                  size: 20,
-                  color: context.colors.textSecondary,
-                ),
-                const SizedBox(width: AppSpacing.xs),
-                Flexible(
-                  child: Text(
-                    intitule,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: context.colors.textSecondary,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        if (_ouvert) ...[
-          const SizedBox(height: AppSpacing.sm),
-          _BlockView(
-            block: widget.block,
-            turn: widget.turn,
-            live: widget.live,
-            onDecision: widget.onDecision,
-            onDismiss: widget.onDismiss,
-          ),
-        ],
-      ],
-    );
+    return FoldedSection(label: intitule, builder: _bloc);
   }
 }
 

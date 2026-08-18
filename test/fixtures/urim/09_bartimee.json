@@ -1,0 +1,555 @@
+{
+  "id": "00000000-0000-4000-8000-000000000009",
+  "status": "ouverte",
+  "entry_mode": "reference",
+  "raw_input": "Marc 10:46-52",
+  "outcome": "await_decision",
+  "rationale": "2 axes dominent ce texte, au même rang.",
+  "trace": [
+    {
+      "stage_code": "route_entry",
+      "rationale": "Lu comme une référence. Nom de livre en bloc contigu : Marc."
+    },
+    {
+      "stage_code": "resolve_passage",
+      "rationale": "Passage identifié : Marc 10:46-52."
+    },
+    {
+      "stage_code": "bound_pericope",
+      "rationale": "Bornes conformes à l'unité littéraire « La guérison de Bartimée ». Ce segment forme une unité narrative et théologique centrée sur la guérison de l'aveugle Bartimée. Il commence par une introduction (v. 46), suivie d'un dialogue entre Bartimée et Jésus (vv. 47-52). La structure est marquée par une progression : appel de Bartimée, réponse de Jésus, et guérison. La coupure après le v. 52 est logique car elle clôt ce récit et termine le chapitre."
+    },
+    {
+      "stage_code": "serve_corpus",
+      "rationale": "Texte servi depuis une version du domaine public."
+    },
+    {
+      "stage_code": "load_context",
+      "rationale": "Contexte : litteraire — Le passage répond directement à la discussion des disciples sur la grandeur et le service (10:35-45) : la guérison de Bartimée illustre concrètement la leçon de Jésus sur le service et la foi qui sauve, en contraste avec la quête de pouvoir des disciples. (Marc 10:46-52 (LSG 1910) — renvois resolus, non relu)"
+    },
+    {
+      "stage_code": "bear_axes",
+      "rationale": "2 axes dominent ce texte, au même rang."
+    }
+  ],
+  "options": [
+    {
+      "code": "christologie",
+      "label": "Christologie",
+      "rationale": "Le texte met en scène Jésus comme celui qui répond à la foi de Bartimée et accomplit la guérison par sa parole ('ta foi t'a sauvé', v. 52), ce qui est le cœur de l'action et de la révélation christologique.",
+      "origin": "curation",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    },
+    {
+      "code": "soteriologie",
+      "label": "Sotériologie",
+      "rationale": "La guérison de Bartimée est présentée comme un acte de salut ('ta foi t'a sauvé', v. 52), ce qui en fait le locus sotériologique central du texte.",
+      "origin": "curation",
+      "dismissed": false,
+      "strength": null,
+      "signature": null
+    }
+  ],
+  "resolved": "Marc 10:46-52",
+  "pericope_id": "a4eb4155-cd7a-5e77-81a2-5612e194d1df",
+  "bounds_overridden": false,
+  "version_id": "a3a06fb7-a7b2-54bb-a165-0627c1746887",
+  "axis_code": null,
+  "plan_source": null,
+  "subject_matter": null,
+  "theme": null,
+  "elements": [],
+  "verses": [
+    {
+      "reference": "Marc 10:46",
+      "text": "Ils arrivèrent à Jéricho. Et, lorsque Jésus en  sortit, avec ses disciples et une assez grande foule, le fils de Timée, Bartimée, mendiant aveugle, était assis au bord du chemin.",
+      "elsewhere": []
+    },
+    {
+      "reference": "Marc 10:47",
+      "text": "Il entendit que c’était Jésus de Nazareth, et il se mit à crier  ; Fils de David, Jésus aie pitié de moi !",
+      "elsewhere": []
+    },
+    {
+      "reference": "Marc 10:48",
+      "text": "Plusieurs le reprenaient, pour le faire taire ; mais il criait beaucoup plus fort ; Fils de David, aie pitié de moi !",
+      "elsewhere": []
+    },
+    {
+      "reference": "Marc 10:49",
+      "text": "Jésus s’arrêta, et dit : Appelez-le.  Ils appelèrent l’aveugle, en lui disant : Prends courage, lève-toi, il t’appelle.",
+      "elsewhere": []
+    },
+    {
+      "reference": "Marc 10:50",
+      "text": "L’aveugle jeta son manteau, et, se levant d’un bond, vint vers Jésus.",
+      "elsewhere": []
+    },
+    {
+      "reference": "Marc 10:51",
+      "text": "Jésus, prenant la parole, lui dit : Que veux-tu que je te fasse ?  Rabbouni, lui répondit l’aveugle, que je recouvre la vue.",
+      "elsewhere": []
+    },
+    {
+      "reference": "Marc 10:52",
+      "text": "Et Jésus lui dit : Va, ta foi t’a sauvé.  Aussitôt il recouvra la vue, et suivit Jésus dans le chemin.",
+      "elsewhere": []
+    }
+  ],
+  "variants": [],
+  "bearings": [
+    {
+      "axis_code": "theologie_propre",
+      "label": "Théologie propre (Dieu)",
+      "strength": "porte",
+      "rationale": "Le passage révèle l'identité de Jésus comme 'Fils de David' (v. 47), ce qui implique une affirmation de sa messianité et de sa relation à Dieu, bien que ce ne soit pas le sujet central du récit."
+    },
+    {
+      "axis_code": "christologie",
+      "label": "Christologie",
+      "strength": "dominant",
+      "rationale": "Le texte met en scène Jésus comme celui qui répond à la foi de Bartimée et accomplit la guérison par sa parole ('ta foi t'a sauvé', v. 52), ce qui est le cœur de l'action et de la révélation christologique."
+    },
+    {
+      "axis_code": "pneumatologie",
+      "label": "Pneumatologie",
+      "strength": "absent",
+      "rationale": "Aucune mention de l'Esprit, ni de son action ou de sa présence dans ce passage."
+    },
+    {
+      "axis_code": "anthropologie",
+      "label": "Anthropologie",
+      "strength": "porte",
+      "rationale": "Le récit montre l'aveugle Bartimée comme un être humain en situation de vulnérabilité (mendiant, aveugle) qui cherche à être restauré, illustrant ainsi la condition humaine et sa capacité à croire."
+    },
+    {
+      "axis_code": "hamartiologie",
+      "label": "Hamartiologie",
+      "strength": "absent",
+      "rationale": "Aucune référence au péché ou à la chute dans ce passage."
+    },
+    {
+      "axis_code": "soteriologie",
+      "label": "Sotériologie",
+      "strength": "dominant",
+      "rationale": "La guérison de Bartimée est présentée comme un acte de salut ('ta foi t'a sauvé', v. 52), ce qui en fait le locus sotériologique central du texte."
+    },
+    {
+      "axis_code": "ecclesiologie",
+      "label": "Ecclésiologie",
+      "strength": "absent",
+      "rationale": "Aucune mention de l'Église ou de la communauté des croyants."
+    },
+    {
+      "axis_code": "angelologie",
+      "label": "Angélologie",
+      "strength": "absent",
+      "rationale": "Aucune référence aux anges dans ce passage."
+    },
+    {
+      "axis_code": "demonologie",
+      "label": "Démonologie",
+      "strength": "absent",
+      "rationale": "Aucune mention des démons ou de l'activité démoniaque."
+    },
+    {
+      "axis_code": "eschatologie",
+      "label": "Eschatologie",
+      "strength": "absent",
+      "rationale": "Aucun élément eschatologique n'est présent dans ce récit."
+    }
+  ],
+  "caveats": [],
+  "context": [
+    {
+      "kind": "litteraire",
+      "body": "Le passage répond directement à la discussion des disciples sur la grandeur et le service (10:35-45) : la guérison de Bartimée illustre concrètement la leçon de Jésus sur le service et la foi qui sauve, en contraste avec la quête de pouvoir des disciples.",
+      "source_ref": "Marc 10:46-52 (LSG 1910) — renvois resolus, non relu"
+    }
+  ],
+  "couples": [
+    {
+      "plan_source": "textuel",
+      "subject_matter": "ethique",
+      "feasible": true,
+      "refusal_reason": "",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "textuel",
+      "subject_matter": "doctrinal",
+      "feasible": true,
+      "refusal_reason": "",
+      "proof_text_risk": "moyen"
+    },
+    {
+      "plan_source": "textuel",
+      "subject_matter": "biographique",
+      "feasible": true,
+      "refusal_reason": "",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "textuel",
+      "subject_matter": "historique",
+      "feasible": false,
+      "refusal_reason": "ce passage ne relate pas un événement historique au sens large (guerre, alliance, etc.), mais une guérison individuelle",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "textuel",
+      "subject_matter": "typologique",
+      "feasible": true,
+      "refusal_reason": "",
+      "proof_text_risk": "moyen"
+    },
+    {
+      "plan_source": "textuel",
+      "subject_matter": "prophetique",
+      "feasible": false,
+      "refusal_reason": "ce passage ne contient aucune annonce prophétique explicite ou implicite",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "expositif",
+      "subject_matter": "biographique",
+      "feasible": true,
+      "refusal_reason": "",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "expositif",
+      "subject_matter": "doctrinal",
+      "feasible": true,
+      "refusal_reason": "",
+      "proof_text_risk": "moyen"
+    },
+    {
+      "plan_source": "expositif",
+      "subject_matter": "ethique",
+      "feasible": true,
+      "refusal_reason": "",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "expositif",
+      "subject_matter": "historique",
+      "feasible": false,
+      "refusal_reason": "ce passage ne relate pas un événement historique au sens large (guerre, alliance, etc.), mais une guérison individuelle",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "expositif",
+      "subject_matter": "typologique",
+      "feasible": true,
+      "refusal_reason": "",
+      "proof_text_risk": "moyen"
+    },
+    {
+      "plan_source": "expositif",
+      "subject_matter": "prophetique",
+      "feasible": false,
+      "refusal_reason": "ce passage ne contient aucune annonce prophétique explicite ou implicite",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "thematique",
+      "subject_matter": "biographique",
+      "feasible": true,
+      "refusal_reason": "",
+      "proof_text_risk": "moyen"
+    },
+    {
+      "plan_source": "thematique",
+      "subject_matter": "doctrinal",
+      "feasible": true,
+      "refusal_reason": "",
+      "proof_text_risk": "eleve"
+    },
+    {
+      "plan_source": "thematique",
+      "subject_matter": "ethique",
+      "feasible": true,
+      "refusal_reason": "",
+      "proof_text_risk": "moyen"
+    },
+    {
+      "plan_source": "thematique",
+      "subject_matter": "historique",
+      "feasible": false,
+      "refusal_reason": "ce passage ne relate pas un événement historique au sens large (guerre, alliance, etc.), mais une guérison individuelle",
+      "proof_text_risk": "faible"
+    },
+    {
+      "plan_source": "thematique",
+      "subject_matter": "typologique",
+      "feasible": true,
+      "refusal_reason": "",
+      "proof_text_risk": "eleve"
+    },
+    {
+      "plan_source": "thematique",
+      "subject_matter": "prophetique",
+      "feasible": false,
+      "refusal_reason": "ce passage ne contient aucune annonce prophétique explicite ou implicite",
+      "proof_text_risk": "faible"
+    }
+  ],
+  "supports": [],
+  "pericope_label": "La guérison de Bartimée",
+  "resisting_elsewhere": [],
+  "curation_reviewed_by": "ia-mistral",
+  "corpus_snapshot": "0631af9c9994f76b",
+  "corpus_drifted": false,
+  "turn": {
+    "say": "Plusieurs axes disent quelque chose de ce texte, au même rang.",
+    "why": "2 axes dominent ce texte, au même rang.",
+    "ask": "Lequel prêchez-vous ?",
+    "expects": "choice",
+    "stage_code": "bear_axes",
+    "signature": "ia-mistral",
+    "blocks": [
+      {
+        "kind": "chips",
+        "items": [
+          {
+            "code": "christologie",
+            "label": "Christologie",
+            "hint": "Le texte met en scène Jésus comme celui qui répond à la foi de Bartimée et accom",
+            "origin": "curation",
+            "selected": false,
+            "signature": null
+          },
+          {
+            "code": "soteriologie",
+            "label": "Sotériologie",
+            "hint": "La guérison de Bartimée est présentée comme un acte de salut ('ta foi t'a sauvé'",
+            "origin": "curation",
+            "selected": false,
+            "signature": null
+          }
+        ]
+      },
+      {
+        "kind": "bearings",
+        "items": [
+          {
+            "axis_code": "theologie_propre",
+            "label": "Théologie propre (Dieu)",
+            "strength": "porte",
+            "rationale": "Le passage révèle l'identité de Jésus comme 'Fils de David' (v. 47), ce qui implique une affirmation de sa messianité et de sa relation à Dieu, bien que ce ne soit pas le sujet central du récit.",
+            "selected": false,
+            "selectable": true
+          },
+          {
+            "axis_code": "christologie",
+            "label": "Christologie",
+            "strength": "dominant",
+            "rationale": "Le texte met en scène Jésus comme celui qui répond à la foi de Bartimée et accomplit la guérison par sa parole ('ta foi t'a sauvé', v. 52), ce qui est le cœur de l'action et de la révélation christologique.",
+            "selected": false,
+            "selectable": true
+          },
+          {
+            "axis_code": "pneumatologie",
+            "label": "Pneumatologie",
+            "strength": "absent",
+            "rationale": "Aucune mention de l'Esprit, ni de son action ou de sa présence dans ce passage.",
+            "selected": false,
+            "selectable": false
+          },
+          {
+            "axis_code": "anthropologie",
+            "label": "Anthropologie",
+            "strength": "porte",
+            "rationale": "Le récit montre l'aveugle Bartimée comme un être humain en situation de vulnérabilité (mendiant, aveugle) qui cherche à être restauré, illustrant ainsi la condition humaine et sa capacité à croire.",
+            "selected": false,
+            "selectable": true
+          },
+          {
+            "axis_code": "hamartiologie",
+            "label": "Hamartiologie",
+            "strength": "absent",
+            "rationale": "Aucune référence au péché ou à la chute dans ce passage.",
+            "selected": false,
+            "selectable": false
+          },
+          {
+            "axis_code": "soteriologie",
+            "label": "Sotériologie",
+            "strength": "dominant",
+            "rationale": "La guérison de Bartimée est présentée comme un acte de salut ('ta foi t'a sauvé', v. 52), ce qui en fait le locus sotériologique central du texte.",
+            "selected": false,
+            "selectable": true
+          },
+          {
+            "axis_code": "ecclesiologie",
+            "label": "Ecclésiologie",
+            "strength": "absent",
+            "rationale": "Aucune mention de l'Église ou de la communauté des croyants.",
+            "selected": false,
+            "selectable": false
+          },
+          {
+            "axis_code": "angelologie",
+            "label": "Angélologie",
+            "strength": "absent",
+            "rationale": "Aucune référence aux anges dans ce passage.",
+            "selected": false,
+            "selectable": false
+          },
+          {
+            "axis_code": "demonologie",
+            "label": "Démonologie",
+            "strength": "absent",
+            "rationale": "Aucune mention des démons ou de l'activité démoniaque.",
+            "selected": false,
+            "selectable": false
+          },
+          {
+            "axis_code": "eschatologie",
+            "label": "Eschatologie",
+            "strength": "absent",
+            "rationale": "Aucun élément eschatologique n'est présent dans ce récit.",
+            "selected": false,
+            "selectable": false
+          }
+        ],
+        "caveats": [],
+        "decide_stage": "bear_axes"
+      },
+      {
+        "kind": "feasibility",
+        "items": [
+          {
+            "plan_source": "textuel",
+            "subject_matter": "ethique",
+            "feasible": true,
+            "risk": "faible",
+            "rationale": ""
+          },
+          {
+            "plan_source": "textuel",
+            "subject_matter": "doctrinal",
+            "feasible": true,
+            "risk": "moyen",
+            "rationale": ""
+          },
+          {
+            "plan_source": "textuel",
+            "subject_matter": "biographique",
+            "feasible": true,
+            "risk": "faible",
+            "rationale": ""
+          },
+          {
+            "plan_source": "textuel",
+            "subject_matter": "historique",
+            "feasible": false,
+            "risk": "faible",
+            "rationale": "ce passage ne relate pas un événement historique au sens large (guerre, alliance, etc.), mais une guérison individuelle"
+          },
+          {
+            "plan_source": "textuel",
+            "subject_matter": "typologique",
+            "feasible": true,
+            "risk": "moyen",
+            "rationale": ""
+          },
+          {
+            "plan_source": "textuel",
+            "subject_matter": "prophetique",
+            "feasible": false,
+            "risk": "faible",
+            "rationale": "ce passage ne contient aucune annonce prophétique explicite ou implicite"
+          },
+          {
+            "plan_source": "expositif",
+            "subject_matter": "biographique",
+            "feasible": true,
+            "risk": "faible",
+            "rationale": ""
+          },
+          {
+            "plan_source": "expositif",
+            "subject_matter": "doctrinal",
+            "feasible": true,
+            "risk": "moyen",
+            "rationale": ""
+          },
+          {
+            "plan_source": "expositif",
+            "subject_matter": "ethique",
+            "feasible": true,
+            "risk": "faible",
+            "rationale": ""
+          },
+          {
+            "plan_source": "expositif",
+            "subject_matter": "historique",
+            "feasible": false,
+            "risk": "faible",
+            "rationale": "ce passage ne relate pas un événement historique au sens large (guerre, alliance, etc.), mais une guérison individuelle"
+          },
+          {
+            "plan_source": "expositif",
+            "subject_matter": "typologique",
+            "feasible": true,
+            "risk": "moyen",
+            "rationale": ""
+          },
+          {
+            "plan_source": "expositif",
+            "subject_matter": "prophetique",
+            "feasible": false,
+            "risk": "faible",
+            "rationale": "ce passage ne contient aucune annonce prophétique explicite ou implicite"
+          },
+          {
+            "plan_source": "thematique",
+            "subject_matter": "biographique",
+            "feasible": true,
+            "risk": "moyen",
+            "rationale": ""
+          },
+          {
+            "plan_source": "thematique",
+            "subject_matter": "doctrinal",
+            "feasible": true,
+            "risk": "eleve",
+            "rationale": ""
+          },
+          {
+            "plan_source": "thematique",
+            "subject_matter": "ethique",
+            "feasible": true,
+            "risk": "moyen",
+            "rationale": ""
+          },
+          {
+            "plan_source": "thematique",
+            "subject_matter": "historique",
+            "feasible": false,
+            "risk": "faible",
+            "rationale": "ce passage ne relate pas un événement historique au sens large (guerre, alliance, etc.), mais une guérison individuelle"
+          },
+          {
+            "plan_source": "thematique",
+            "subject_matter": "typologique",
+            "feasible": true,
+            "risk": "eleve",
+            "rationale": ""
+          },
+          {
+            "plan_source": "thematique",
+            "subject_matter": "prophetique",
+            "feasible": false,
+            "risk": "faible",
+            "rationale": "ce passage ne contient aucune annonce prophétique explicite ou implicite"
+          }
+        ]
+      }
+    ],
+    "speaks": "chips"
+  }
+}

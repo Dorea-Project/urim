@@ -178,6 +178,21 @@ Study _studyFromJson(Map<String, dynamic> json) => Study(
       axisCode: json['axis_code'] as String?,
       boundsOverridden: json['bounds_overridden'] == true,
       corpusDrifted: json['corpus_drifted'] == true,
+      verses: [
+        for (final v in json['verses'] as List<dynamic>? ?? const [])
+          ServedVerse(
+            reference: (v as Map<String, dynamic>)['reference'] as String? ?? '',
+            text: v['text'] as String? ?? '',
+          ),
+      ],
+      context: [
+        for (final c in json['context'] as List<dynamic>? ?? const [])
+          ContextNote(
+            kind: (c as Map<String, dynamic>)['kind'] as String? ?? '',
+            body: c['body'] as String? ?? '',
+            sourceRef: c['source_ref'] as String? ?? '',
+          ),
+      ],
       turn: switch (json['turn']) {
         final Map<String, dynamic> turn => _turnFromJson(turn),
         _ => null,

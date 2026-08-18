@@ -7,6 +7,7 @@ import 'package:urim/presentation/common/draft_keeper.dart';
 import 'package:urim/presentation/common/stale_banner.dart';
 import 'package:urim/presentation/preparation/preparation_view_model.dart';
 import 'package:urim/presentation/preparation/widgets/pending_banner.dart';
+import 'package:urim/presentation/preparation/widgets/study_material.dart';
 import 'package:urim/presentation/preparation/widgets/turn_views.dart';
 import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
@@ -116,6 +117,14 @@ class _Thread extends ConsumerWidget {
       );
     }
 
+    // Sous le dernier tour : ce que la preparation porte et que personne ne
+    // montrait — le texte, le contexte. Puis le bandeau d'attente, qui reste
+    // **dernier** : c'est la ou le pasteur regarde apres avoir touche.
+    final apres = <Widget>[
+      if (_porteDeLaMatiere(state)) StudyMaterial(study: state.study),
+      if (state.isWaitingToSend) PendingBanner(pending: state.pending),
+    ];
+
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.lg,
@@ -123,11 +132,9 @@ class _Thread extends ConsumerWidget {
         AppSpacing.lg,
         AppSpacing.sm,
       ),
-      // Le bandeau d'attente vient en dernier, sous le geste qui attend :
-      // c'est la ou le pasteur regarde apres avoir touche.
-      itemCount: state.entries.length + (state.isWaitingToSend ? 1 : 0),
-      itemBuilder: (context, index) => index == state.entries.length
-          ? PendingBanner(pending: state.pending)
+      itemCount: state.entries.length + apres.length,
+      itemBuilder: (context, index) => index >= state.entries.length
+          ? apres[index - state.entries.length]
           : switch (state.entries[index]) {
         SpokenByPastor(:final text) => _PastorSaid(text: text),
         ServedTurn(:final turn, :final live) => TurnView(
@@ -153,6 +160,10 @@ class _Thread extends ConsumerWidget {
     );
   }
 }
+
+/// La preparation porte-t-elle de quoi offrir quelque chose ?
+bool _porteDeLaMatiere(ThreadState state) =>
+    state.study.verses.isNotEmpty || state.study.context.isNotEmpty;
 
 /// Ce que le pasteur a dit : une bulle pleine, calée à droite.
 class _PastorSaid extends StatelessWidget {
