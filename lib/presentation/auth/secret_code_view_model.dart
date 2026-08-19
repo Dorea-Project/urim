@@ -131,6 +131,10 @@ final class SecretCodeViewModel extends Notifier<SecretCodeState> {
       // locale : le serveur a deja son code, celui-ci ne fait que
       // deverrouiller.
       AuthDoor.signIn => true,
+
+      // Cet ecran n'appartient pas au parcours de suppression : celui-ci
+      // s'acheve sur le code SMS, sans serrure a poser.
+      AuthDoor.accountDeletion => true,
     };
   }
 }

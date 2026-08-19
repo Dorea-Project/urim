@@ -46,6 +46,13 @@ enum AuthDoor {
   /// circulation.
   secretCodeReset,
 
+  /// Supprimer son compte, depuis le profil.
+  ///
+  /// Un SMS d'abord : la suppression ne se défait pas, et c'est la seule
+  /// opération où un téléphone déverrouillé oublié sur une table coûterait
+  /// des années de préparations.
+  accountDeletion,
+
   /// Changer son code depuis le profil, **en étant connecté**.
   ///
   /// Ce n'est pas un oubli : le serveur a sa propre route, authentifiée par le
@@ -325,6 +332,45 @@ final class AuthFlowViewModel extends Notifier<AuthFlowState> {
       },
     );
   }
+
+  /// Supprimer son compte — demande le SMS.
+  ///
+  /// Rien n'est détruit ici : le code seulement part. Tant qu'il n'est pas
+  /// saisi, le compte est intact.
+  Future<bool> startAccountDeletion(PhoneNumber phone) async {
+    state = state.copyWith(
+      dialCode: phone.dialCode,
+      nationalNumber: phone.nationalNumber,
+      isSubmitting: true,
+      door: AuthDoor.accountDeletion,
+      clearFailure: true,
+    );
+
+    final result =
+        await ref.read(authRepositoryProvider).requestAccountDeletion();
+
+    return result.fold(
+      onSuccess: (_) {
+        state = state.copyWith(
+          isSubmitting: false,
+          otp: '',
+          otpRequestedAt: ref.read(clockProvider).now(),
+        );
+        return true;
+      },
+      onFailure: (failure) {
+        state = state.copyWith(
+          isSubmitting: false,
+          door: AuthDoor.signIn,
+          failure: failure,
+        );
+        return false;
+      },
+    );
+  }
+
+  /// Referme la porte de suppression — l'utilisateur a renoncé, ou c'est fini.
+  void closeDoor() => state = state.copyWith(door: AuthDoor.signIn);
 
   /// Change son code secret depuis le profil — demande le SMS.
   ///

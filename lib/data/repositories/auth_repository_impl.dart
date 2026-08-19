@@ -135,6 +135,14 @@ final class AuthRepositoryImpl implements AuthRepository {
           ));
 
   @override
+  Future<Result<void>> requestAccountDeletion() =>
+      _guard(() => _source.requestAccountDeletion());
+
+  @override
+  Future<Result<void>> confirmAccountDeletion({required String otp}) =>
+      _guard(() => _source.confirmAccountDeletion(otp: otp));
+
+  @override
   Future<Result<AuthSession?>> currentSession() async {
     try {
       final session = await _sessions.read();

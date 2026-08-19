@@ -19,14 +19,18 @@ class AppTextFr extends AppText {
 
   @override
   String get profileDeleteAccountBody =>
-      'Tes brouillons, tes réglages et ton code secret seront effacés de cet appareil. Rien n\'est récupérable.\n\nTon numéro reste connu du service : la résiliation à distance n\'existe pas encore.';
+      'Tes préparations, tes enregistrements et ton compte seront effacés — sur cet appareil comme sur le serveur. Rien n\'est récupérable.\n\nUn code va partir par SMS : il faut le saisir pour confirmer.';
 
   @override
-  String get profileDeleteAccountConfirm => 'Tout supprimer';
+  String get profileDeleteAccountConfirm => 'Recevoir le code';
 
   @override
   String get profileDeleteAccountDone =>
-      'Ton compte a été supprimé de cet appareil.';
+      'Ton compte et son contenu ont été supprimés.';
+
+  @override
+  String get profileDeleteAccountFailed =>
+      'Le code n\'est pas parti. Ton compte est intact.';
 
   @override
   String get profileSignOut => 'Se déconnecter';

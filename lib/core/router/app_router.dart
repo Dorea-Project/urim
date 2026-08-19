@@ -96,8 +96,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         // les deux écrans du changement de code secret, et seulement tant que
         // cette porte-là est ouverte. Sans cette exception, changer son code
         // depuis le profil renverrait aussitôt à l'accueil.
-        AuthGate.ready => _isChangingSecretCode(ref) &&
-                AppRoutes.secretCodeChangePaths.contains(location)
+        AuthGate.ready => _isFinishingSensitiveOperation(ref, location)
             ? null
             : (AppRoutes.entryPaths.contains(location)
                 ? AppRoutes.homePath
@@ -196,8 +195,20 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 /// Lue sans écouter : la redirection est déjà réévaluée à chaque navigation et
 /// à chaque changement de la porte d'accès. S'abonner ici ferait recalculer le
 /// routeur à chaque frappe dans le formulaire.
-bool _isChangingSecretCode(Ref ref) =>
-    ref.read(authFlowViewModelProvider).door == AuthDoor.secretCodeChange;
+/// Les écrans d'entrée qu'une porte ouverte depuis le profil autorise à
+/// rouvrir, et seulement tant qu'elle l'est.
+///
+/// Sans cette exception, changer son code ou supprimer son compte depuis le
+/// profil renverrait aussitôt à l'accueil.
+bool _isFinishingSensitiveOperation(Ref ref, String location) =>
+    switch (ref.read(authFlowViewModelProvider).door) {
+      AuthDoor.secretCodeChange =>
+        AppRoutes.secretCodeChangePaths.contains(location),
+      AuthDoor.accountDeletion =>
+        AppRoutes.accountDeletionPaths.contains(location),
+      AuthDoor.registration || AuthDoor.signIn || AuthDoor.secretCodeReset =>
+        false,
+    };
 
 /// Écran de repli pour une route inconnue ou en échec.
 class _RouteErrorPage extends StatelessWidget {

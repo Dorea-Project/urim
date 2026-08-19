@@ -145,6 +145,30 @@ final class DevAuthDataSource implements AuthDataSource {
   }
 
   @override
+  Future<void> requestAccountDeletion() async {
+    debugPrint('[DEMO] Code de suppression : $_otp');
+  }
+
+  @override
+  Future<void> confirmAccountDeletion({required String otp}) async {
+    _requireOtp(otp);
+
+    final phone = _connected;
+    if (phone == null) {
+      throw const UnauthorizedException(
+        'Aucune session ouverte.',
+        code: 'NOT_AUTHENTICATED',
+      );
+    }
+
+    // Le compte de démonstration disparaît vraiment : se reconnecter avec ce
+    // numéro doit échouer, comme après une suppression réelle.
+    _secretCodes.remove(phone);
+    _challenged.remove(phone);
+    _connected = null;
+  }
+
+  @override
   Future<void> signOut({bool everywhere = false}) async {
     if (everywhere) _secretCodes.clear();
   }

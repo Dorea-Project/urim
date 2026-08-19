@@ -82,6 +82,16 @@ abstract interface class AuthRepository {
     required String newSecretCode,
   });
 
+  /// Supprimer son compte — demande le code par SMS.
+  Future<Result<void>> requestAccountDeletion();
+
+  /// Supprimer son compte — le serveur efface le contenu et ferme le compte.
+  ///
+  /// Ne touche pas à ce que l'appareil garde : l'effacement local suit, et
+  /// dans cet ordre — un appareil vidé alors que le serveur a refusé
+  /// laisserait un compte vivant sans plus rien pour l'atteindre.
+  Future<Result<void>> confirmAccountDeletion({required String otp});
+
   /// Session locale, `null` si personne n'est connecté.
   Future<Result<AuthSession?>> currentSession();
 

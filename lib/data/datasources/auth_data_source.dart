@@ -98,6 +98,16 @@ abstract interface class AuthDataSource {
     required String newSecretCode,
   });
 
+  /// Supprimer son compte — demande l'OTP.
+  ///
+  /// La suppression ne se défait pas : c'est l'opération qui a le plus besoin
+  /// d'une preuve de possession du numéro, un téléphone déverrouillé volé
+  /// suffirait sans elle.
+  Future<void> requestAccountDeletion();
+
+  /// Supprimer son compte — efface le contenu serveur et ferme le compte.
+  Future<void> confirmAccountDeletion({required String otp});
+
   /// Révoque cet appareil, ou tous.
   Future<void> signOut({bool everywhere});
 }

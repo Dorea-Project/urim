@@ -111,23 +111,29 @@ abstract class AppText {
   /// **'Supprimer ton compte ?'**
   String get profileDeleteAccountTitle;
 
-  /// Dit ce qui part, et surtout ce qui ne part pas.
+  /// Dit ce qui part, et par quoi il faut passer pour le confirmer.
   ///
   /// In fr, this message translates to:
-  /// **'Tes brouillons, tes réglages et ton code secret seront effacés de cet appareil. Rien n\'est récupérable.\n\nTon numéro reste connu du service : la résiliation à distance n\'existe pas encore.'**
+  /// **'Tes préparations, tes enregistrements et ton compte seront effacés — sur cet appareil comme sur le serveur. Rien n\'est récupérable.\n\nUn code va partir par SMS : il faut le saisir pour confirmer.'**
   String get profileDeleteAccountBody;
 
-  /// Bouton de confirmation de la suppression.
+  /// Bouton qui déclenche l'envoi du SMS de suppression.
   ///
   /// In fr, this message translates to:
-  /// **'Tout supprimer'**
+  /// **'Recevoir le code'**
   String get profileDeleteAccountConfirm;
 
   /// Confirmation après une suppression réussie.
   ///
   /// In fr, this message translates to:
-  /// **'Ton compte a été supprimé de cet appareil.'**
+  /// **'Ton compte et son contenu ont été supprimés.'**
   String get profileDeleteAccountDone;
+
+  /// Refus du serveur au moment de demander le code de suppression.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le code n\'est pas parti. Ton compte est intact.'**
+  String get profileDeleteAccountFailed;
 
   /// Ferme la session sur cet appareil, depuis le profil.
   ///

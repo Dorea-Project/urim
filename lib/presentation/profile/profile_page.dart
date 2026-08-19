@@ -11,7 +11,6 @@ import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/auth/auth_flow_view_model.dart';
 import 'package:urim/presentation/common/french_dates.dart';
 import 'package:urim/presentation/common/section_card.dart';
-import 'package:urim/presentation/profile/account_erasure_view_model.dart';
 import 'package:urim/presentation/profile/profile_view_model.dart';
 import 'package:urim/presentation/profile/sign_out_view_model.dart';
 import 'package:urim/presentation/profile/widgets/display_name_dialog.dart';
@@ -233,7 +232,7 @@ class _ProfileList extends ConsumerWidget {
             _DestructiveRow(
               icon: Icons.delete_outline,
               label: text.profileDeleteAccount,
-              onTap: () => _confirmErasure(context, ref),
+              onTap: () => _confirmErasure(context, ref, profile.phone),
             ),
           ],
         ),
@@ -357,7 +356,11 @@ class _DestructiveRow extends StatelessWidget {
 ///
 /// Taire que le numéro demeure connu du service serait une seconde promesse
 /// non tenue, juste après celle qu'on vient d'honorer.
-Future<void> _confirmErasure(BuildContext context, WidgetRef ref) async {
+Future<void> _confirmErasure(
+  BuildContext context,
+  WidgetRef ref,
+  PhoneNumber phone,
+) async {
   final text = AppText.of(context);
   final scheme = Theme.of(context).colorScheme;
 
@@ -382,18 +385,23 @@ Future<void> _confirmErasure(BuildContext context, WidgetRef ref) async {
 
   if (confirmed != true || !context.mounted) return;
 
-  final failure =
-      await ref.read(accountErasureViewModelProvider.notifier).erase();
+  // Ce bouton n'efface rien : il fait partir un SMS. Rien n'est détruit tant
+  // que le code n'est pas saisi — c'est la seule opération irréversible du
+  // profil, et la seule qui mérite deux gestes.
+  final sent = await ref
+      .read(authFlowViewModelProvider.notifier)
+      .startAccountDeletion(phone);
 
   if (!context.mounted) return;
 
-  // La redirection reprend la main d'elle-même : plus de session, plus de
-  // présentation vue, donc retour au tout début.
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(failure?.message ?? text.profileDeleteAccountDone),
-    ),
-  );
+  if (!sent) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(text.profileDeleteAccountFailed)),
+    );
+    return;
+  }
+
+  context.pushNamed(AppRoutes.otpName);
 }
 
 /// Confirmation : elle dit ce que la déconnexion **ne détruit pas**.

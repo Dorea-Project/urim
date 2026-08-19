@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:urim/core/error/failure.dart';
+import 'package:urim/core/router/app_routes.dart';
 import 'package:urim/core/result/result.dart';
 import 'package:urim/core/security/auth_tokens.dart';
 import 'package:urim/core/security/device_identity.dart';
 import 'package:urim/core/security/token_store.dart';
 import 'package:urim/core/storage/local_documents.dart';
 import 'package:urim/core/storage/shared_preferences_provider.dart';
+import 'package:urim/data/repositories/auth_repository_impl.dart';
 import 'package:urim/data/repositories/local_account_erasure.dart';
 import 'package:urim/domain/entities/auth/auth_session.dart';
 import 'package:urim/domain/entities/auth/phone_number.dart';
-import 'package:urim/domain/repositories/account_erasure.dart';
+import 'package:urim/domain/repositories/auth_repository.dart';
 import 'package:urim/l10n/generated/app_text_fr.dart';
+import 'package:urim/presentation/auth/auth_flow_view_model.dart';
 import 'package:urim/presentation/auth/auth_gate.dart';
+import 'package:urim/presentation/profile/account_erasure_view_model.dart';
 import 'package:urim/presentation/profile/profile_page.dart';
 
 import '../support/fake_documents.dart';
@@ -127,13 +134,91 @@ void main() {
     expect(await tokens.read(), isNotNull);
   });
 
+  group("le serveur d'abord, l'appareil ensuite", () {
+    late _FakeAuthRepository depot;
+
+    Future<ProviderContainer> conteneur() async {
+      depot = _FakeAuthRepository();
+      when(() => depot.requestAccountDeletion())
+          .thenAnswer((_) async => const Result.success(null));
+      when(() => depot.confirmAccountDeletion(otp: any(named: 'otp')))
+          .thenAnswer((_) async => const Result.success(null));
+
+      await documents.write('etude.brouillon.1', '{}');
+      await tokens.save(jetons);
+
+      return ProviderContainer.test(
+        overrides: [
+          demoConfigOverride,
+          sharedPreferencesProvider.overrideWithValue(preferences),
+          localDocumentsProvider.overrideWithValue(documents),
+          tokenStoreProvider.overrideWithValue(tokens),
+          authRepositoryProvider.overrideWithValue(depot),
+        ],
+      );
+    }
+
+    test('le code accepté efface les deux côtés', () async {
+      final container = await conteneur();
+
+      final failure = await container
+          .read(accountErasureViewModelProvider.notifier)
+          .erase('123456');
+
+      expect(failure, isNull);
+      verify(() => depot.confirmAccountDeletion(otp: '123456')).called(1);
+      expect(await documents.keys(), isEmpty);
+      expect(await tokens.read(), isNull);
+    });
+
+    test('un refus du serveur ne vide pas le téléphone', () async {
+      final container = await conteneur();
+      when(() => depot.confirmAccountDeletion(otp: any(named: 'otp')))
+          .thenAnswer(
+        (_) async => const Result.failed(
+          AuthFailure(message: 'Code incorrect.'),
+        ),
+      );
+
+      final failure = await container
+          .read(accountErasureViewModelProvider.notifier)
+          .erase('000000');
+
+      expect(failure, isNotNull);
+      expect(
+        await documents.keys(),
+        isNotEmpty,
+        reason: 'un appareil vidé devant un compte encore vivant serait un '
+            "compte que plus rien ne permet d'atteindre",
+      );
+      expect(await tokens.read(), isNotNull);
+    });
+
+    test('la session se referme quand tout est parti', () async {
+      final container = await conteneur();
+      container.read(sessionUnlockedProvider.notifier).unlock();
+
+      await container
+          .read(accountErasureViewModelProvider.notifier)
+          .erase('123456');
+
+      expect(container.read(sessionUnlockedProvider), isFalse);
+      expect(
+        container.read(authFlowViewModelProvider).door,
+        isNot(AuthDoor.accountDeletion),
+      );
+    });
+  });
+
   group('écran', () {
-    late _SuppressionEspionne espionne;
+    late _FakeAuthRepository depot;
 
     Future<void> pumpProfile(WidgetTester tester) async {
       SharedPreferences.setMockInitialValues(<String, Object>{});
-      final preferences = await SharedPreferences.getInstance();
-      espionne = _SuppressionEspionne();
+      final prefs = await SharedPreferences.getInstance();
+      depot = _FakeAuthRepository();
+      when(() => depot.requestAccountDeletion())
+          .thenAnswer((_) async => const Result.success(null));
 
       tester.view.physicalSize = const Size(1000, 3000);
       tester.view.devicePixelRatio = 1;
@@ -143,8 +228,8 @@ void main() {
         ProviderScope(
           overrides: [
             demoConfigOverride,
-            sharedPreferencesProvider.overrideWithValue(preferences),
-            accountErasureProvider.overrideWithValue(espionne),
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            authRepositoryProvider.overrideWithValue(depot),
             authSessionProvider.overrideWith(
               (ref) async => AuthSession(
                 userId: 'utilisateur-1',
@@ -156,28 +241,36 @@ void main() {
               ),
             ),
           ],
-          child: wrapScreen(const ProfilePage()),
+          // Un routeur minuscule : la demande de code **quitte** le profil
+          // pour l'écran du SMS, et c'est ce départ qu'il faut pouvoir voir.
+          child: wrapRouter(
+            GoRouter(
+              routes: [
+                GoRoute(path: '/', builder: (_, _) => const ProfilePage()),
+                GoRoute(
+                  path: AppRoutes.otpPath,
+                  name: AppRoutes.otpName,
+                  builder: (_, _) => const Scaffold(body: Text('écran du code')),
+                ),
+              ],
+            ),
+          ),
         ),
       );
       await tester.pumpAndSettle();
     }
 
-    testWidgets('le dialogue dit ce qui part et ce qui reste', (tester) async {
+    testWidgets('le dialogue dit ce qui part, des deux côtés', (tester) async {
       await pumpProfile(tester);
 
       await tester.tap(find.text(texte.profileDeleteAccount));
       await tester.pumpAndSettle();
 
       expect(find.text(texte.profileDeleteAccountTitle), findsOneWidget);
-      expect(
-        find.text(texte.profileDeleteAccountBody),
-        findsOneWidget,
-        reason: 'taire que le numéro reste connu du service serait une '
-            'seconde promesse non tenue',
-      );
+      expect(find.text(texte.profileDeleteAccountBody), findsOneWidget);
     });
 
-    testWidgets('annuler n\'efface rien', (tester) async {
+    testWidgets("annuler n'envoie rien", (tester) async {
       await pumpProfile(tester);
 
       await tester.tap(find.text(texte.profileDeleteAccount));
@@ -185,10 +278,11 @@ void main() {
       await tester.tap(find.text(texte.cancel));
       await tester.pumpAndSettle();
 
-      expect(espionne.appels, 0);
+      verifyNever(() => depot.requestAccountDeletion());
     });
 
-    testWidgets('confirmer efface', (tester) async {
+    testWidgets('confirmer demande le code, sans rien détruire',
+        (tester) async {
       await pumpProfile(tester);
 
       await tester.tap(find.text(texte.profileDeleteAccount));
@@ -202,19 +296,15 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(espionne.appels, 1);
-      expect(find.text(texte.profileDeleteAccountDone), findsOneWidget);
+      verify(() => depot.requestAccountDeletion()).called(1);
+      verifyNever(() => depot.confirmAccountDeletion(otp: any(named: 'otp')));
+      expect(
+        find.text('écran du code'),
+        findsOneWidget,
+        reason: 'la suppression se termine sur le code, pas sur le profil',
+      );
     });
   });
 }
 
-/// Compte les suppressions, sans rien effacer.
-final class _SuppressionEspionne implements AccountErasure {
-  int appels = 0;
-
-  @override
-  Future<Result<void>> eraseEverything() async {
-    appels++;
-    return const Result.success(null);
-  }
-}
+class _FakeAuthRepository extends Mock implements AuthRepository {}

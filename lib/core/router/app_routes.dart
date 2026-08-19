@@ -88,6 +88,11 @@ abstract final class AppRoutes {
     secretCodeSetupPath,
   };
 
+  /// Le seul écran qu'un utilisateur connecté rouvre pour supprimer son
+  /// compte : le code reçu par SMS. Il n'y a pas de second écran — après le
+  /// code, il n'y a plus de compte.
+  static const Set<String> accountDeletionPaths = {otpPath};
+
   /// Routes atteignables tant que personne n'est connecté.
   ///
   /// La création du code secret n'en fait pas partie : elle suppose une session

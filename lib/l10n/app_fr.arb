@@ -12,17 +12,21 @@
   "@profileDeleteAccountTitle": {
     "description": "Titre du dialogue de suppression."
   },
-  "profileDeleteAccountBody": "Tes brouillons, tes réglages et ton code secret seront effacés de cet appareil. Rien n'est récupérable.\n\nTon numéro reste connu du service : la résiliation à distance n'existe pas encore.",
+  "profileDeleteAccountBody": "Tes préparations, tes enregistrements et ton compte seront effacés — sur cet appareil comme sur le serveur. Rien n'est récupérable.\n\nUn code va partir par SMS : il faut le saisir pour confirmer.",
   "@profileDeleteAccountBody": {
-    "description": "Dit ce qui part, et surtout ce qui ne part pas."
+    "description": "Dit ce qui part, et par quoi il faut passer pour le confirmer."
   },
-  "profileDeleteAccountConfirm": "Tout supprimer",
+  "profileDeleteAccountConfirm": "Recevoir le code",
   "@profileDeleteAccountConfirm": {
-    "description": "Bouton de confirmation de la suppression."
+    "description": "Bouton qui déclenche l'envoi du SMS de suppression."
   },
-  "profileDeleteAccountDone": "Ton compte a été supprimé de cet appareil.",
+  "profileDeleteAccountDone": "Ton compte et son contenu ont été supprimés.",
   "@profileDeleteAccountDone": {
     "description": "Confirmation après une suppression réussie."
+  },
+  "profileDeleteAccountFailed": "Le code n'est pas parti. Ton compte est intact.",
+  "@profileDeleteAccountFailed": {
+    "description": "Refus du serveur au moment de demander le code de suppression."
   },
   "profileSignOut": "Se déconnecter",
   "@profileSignOut": {

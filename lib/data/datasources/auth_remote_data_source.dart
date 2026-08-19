@@ -120,6 +120,16 @@ final class AuthRemoteDataSource implements AuthDataSource {
   }
 
   @override
+  Future<void> requestAccountDeletion() async {
+    await _post('/account/delete/request', const {});
+  }
+
+  @override
+  Future<void> confirmAccountDeletion({required String otp}) async {
+    await _post('/account/delete/confirm', {'otp': otp});
+  }
+
+  @override
   Future<void> signOut({bool everywhere = false}) async {
     await _post('/auth/logout', {'everywhere': everywhere});
   }

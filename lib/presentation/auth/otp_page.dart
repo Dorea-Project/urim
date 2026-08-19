@@ -13,6 +13,7 @@ import 'package:urim/presentation/auth/auth_flow_view_model.dart';
 import 'package:urim/presentation/common/brand_mark.dart';
 import 'package:urim/presentation/common/demo_banner.dart';
 import 'package:urim/presentation/common/code_input.dart';
+import 'package:urim/presentation/profile/account_erasure_view_model.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
 
@@ -73,9 +74,17 @@ class _OtpPageState extends ConsumerState<OtpPage> {
     final viewModel = ref.read(authFlowViewModelProvider.notifier);
     viewModel.setOtp(_code);
 
+    final door = ref.read(authFlowViewModelProvider).door;
+
+    // La suppression n'a pas de second écran : après le code, il n'y a plus
+    // de compte.
+    if (door == AuthDoor.accountDeletion) {
+      await _erase();
+      return;
+    }
+
     // Inscription et code oublié posent une serrure : le code SMS les
     // accompagne dans le même appel, une fois le code secret choisi.
-    final door = ref.read(authFlowViewModelProvider).door;
     if (door != AuthDoor.signIn) {
       if (mounted) context.goNamed(AppRoutes.secretCodeSetupName);
       return;
@@ -88,6 +97,29 @@ class _OtpPageState extends ConsumerState<OtpPage> {
       _inputKey.currentState?.reset();
       setState(() => _code = '');
     }
+  }
+
+  /// Supprime le compte, puis laisse la redirection ramener au tout début.
+  Future<void> _erase() async {
+    final text = AppText.of(context);
+    final failure =
+        await ref.read(accountErasureViewModelProvider.notifier).erase(_code);
+
+    if (!mounted) return;
+
+    if (failure != null) {
+      // Le compte est toujours là : l'écran redemande le code plutôt que de
+      // laisser croire que quelque chose s'est passé.
+      _inputKey.currentState?.reset();
+      setState(() => _code = '');
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(failure.message)));
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(text.profileDeleteAccountDone)),
+    );
   }
 
   Future<void> _resend() async {
