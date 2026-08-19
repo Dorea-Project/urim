@@ -284,6 +284,7 @@ class _OptionCard extends StatelessWidget {
     required this.label,
     required this.hint,
     required this.live,
+    this.reference = '',
     this.selected = false,
     this.onTap,
     this.onLongPress,
@@ -292,6 +293,13 @@ class _OptionCard extends StatelessWidget {
 
   final String label;
   final String hint;
+
+  /// La référence du passage, quand l'option en désigne un.
+  ///
+  /// Elle vient **avant** le motif et après l'intitulé : « Adresse et action
+  /// de grâces initiale » convient à quatre épîtres, et l'écran offrait
+  /// jusqu'ici dix-huit textes du canon sans dire lequel était lequel.
+  final String reference;
   final bool live;
   final bool selected;
   final VoidCallback? onTap;
@@ -331,6 +339,19 @@ class _OptionCard extends StatelessWidget {
               if (badge case final Widget badge) badge,
             ],
           ),
+          // Rien à répéter quand l'intitulé **est** la référence : les
+          // passages proposés par le sens s'appellent « 1 Jean 4:7-21 ».
+          if (reference.isNotEmpty && reference != label) ...[
+            const SizedBox(height: AppSpacing.xs),
+            Text(
+              reference,
+              style: theme.textTheme.labelLarge?.copyWith(
+                fontSize: 12.5,
+                letterSpacing: 0.2,
+                color: live ? colors.textSecondary : colors.textMuted,
+              ),
+            ),
+          ],
           if (hint.isNotEmpty) ...[
             const SizedBox(height: AppSpacing.xs),
             Text(
@@ -382,6 +403,7 @@ class _Chips extends StatelessWidget {
           for (final item in items) ...[
             _OptionCard(
               label: item.label,
+              reference: item.reference,
               hint: item.hint,
               live: live,
               selected: item.selected,
@@ -465,6 +487,7 @@ class _Units extends StatelessWidget {
           for (final item in group.items) ...[
             _OptionCard(
               label: item.label,
+              reference: item.reference,
               hint: item.rationale,
               live: live,
               onTap: () => onDecision(
@@ -534,6 +557,7 @@ class _Bounds extends StatelessWidget {
         for (final item in items) ...[
           _OptionCard(
             label: item.label,
+            reference: item.reference,
             hint: item.hint,
             live: live,
             onTap: () => onDecision(

@@ -121,6 +121,7 @@ final class ChipItem extends Equatable {
   const ChipItem({
     required this.code,
     required this.label,
+    this.reference = '',
     this.hint = '',
     this.origin = 'moteur',
     this.selected = false,
@@ -129,6 +130,11 @@ final class ChipItem extends Equatable {
 
   final String code;
   final String label;
+
+  /// La référence du passage désigné — « Colossiens 3:18-25 ». Vide pour ce
+  /// qui n'en désigne aucun : un locus, un couple plan × matière.
+  final String reference;
+
   final String hint;
 
   /// D'où vient la **proposition** — `locus`, `sens`, `correction`…
@@ -141,7 +147,8 @@ final class ChipItem extends Equatable {
   final String? signature;
 
   @override
-  List<Object?> get props => [code, label, hint, origin, selected, signature];
+  List<Object?> get props =>
+      [code, label, reference, hint, origin, selected, signature];
 }
 
 final class ChipsBlock extends TurnBlock {

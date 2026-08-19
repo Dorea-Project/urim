@@ -258,6 +258,7 @@ List<ChipItem> _chips(Object? items) => [
 ChipItem _chipFromJson(Map<String, dynamic> json) => ChipItem(
       code: json['code'] as String,
       label: json['label'] as String? ?? '',
+      reference: json['reference'] as String? ?? '',
       hint: json['hint'] as String? ?? '',
       origin: json['origin'] as String? ?? 'moteur',
       selected: json['selected'] == true,
