@@ -46,6 +46,11 @@ enum AuthDoor {
   /// circulation.
   secretCodeReset,
 
+  /// Changer de numéro, depuis le profil.
+  ///
+  /// Le code part au **nouveau** numéro : c'est lui qu'il faut prouver.
+  phoneChange,
+
   /// Supprimer son compte, depuis le profil.
   ///
   /// Un SMS d'abord : la suppression ne se défait pas, et c'est la seule
@@ -324,6 +329,66 @@ final class AuthFlowViewModel extends Notifier<AuthFlowState> {
           otp: '',
           otpRequestedAt: ref.read(clockProvider).now(),
         );
+        return true;
+      },
+      onFailure: (failure) {
+        state = state.copyWith(isSubmitting: false, failure: failure);
+        return false;
+      },
+    );
+  }
+
+  /// Changer de numéro — demande le SMS au nouveau numéro.
+  ///
+  /// L'état porte désormais le **nouveau** numéro : c'est celui que l'écran du
+  /// code doit afficher, et celui que la confirmation posera.
+  Future<bool> startPhoneChange(PhoneNumber newPhone) async {
+    state = state.copyWith(
+      dialCode: newPhone.dialCode,
+      nationalNumber: newPhone.nationalNumber,
+      isSubmitting: true,
+      door: AuthDoor.phoneChange,
+      clearFailure: true,
+    );
+
+    final result =
+        await ref.read(authRepositoryProvider).requestPhoneChange(newPhone);
+
+    return result.fold(
+      onSuccess: (_) {
+        state = state.copyWith(
+          isSubmitting: false,
+          otp: '',
+          otpRequestedAt: ref.read(clockProvider).now(),
+        );
+        return true;
+      },
+      onFailure: (failure) {
+        state = state.copyWith(
+          isSubmitting: false,
+          door: AuthDoor.signIn,
+          failure: failure,
+        );
+        return false;
+      },
+    );
+  }
+
+  /// Changer de numéro — pose le nouveau numéro sur le compte.
+  Future<bool> confirmPhoneChange() async {
+    state = state.copyWith(isSubmitting: true, clearFailure: true);
+
+    final result = await ref.read(authRepositoryProvider).confirmPhoneChange(
+          newPhone: state.phone,
+          otp: state.otp,
+        );
+
+    return result.fold(
+      onSuccess: (_) {
+        state = state.copyWith(isSubmitting: false, door: AuthDoor.signIn);
+        // Le profil lit la session : sans cela, il afficherait l'ancien numéro
+        // jusqu'au prochain lancement.
+        ref.invalidate(authSessionProvider);
         return true;
       },
       onFailure: (failure) {

@@ -132,9 +132,10 @@ final class SecretCodeViewModel extends Notifier<SecretCodeState> {
       // deverrouiller.
       AuthDoor.signIn => true,
 
-      // Cet ecran n'appartient pas au parcours de suppression : celui-ci
-      // s'acheve sur le code SMS, sans serrure a poser.
-      AuthDoor.accountDeletion => true,
+      // Cet ecran n'appartient ni au parcours de suppression ni a celui du
+      // changement de numero : tous deux s'achevent sur le code SMS, sans
+      // serrure a poser.
+      AuthDoor.accountDeletion || AuthDoor.phoneChange => true,
     };
   }
 }

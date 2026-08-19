@@ -486,8 +486,21 @@ class AppTextFr extends AppText {
   String get profilePhone => 'Numéro de téléphone';
 
   @override
-  String get profilePhonePending =>
-      'Changer de numéro suppose un nouveau code par SMS.';
+  String get profilePhoneChangeTitle => 'Changer de numéro';
+
+  @override
+  String get profilePhoneChangeBody =>
+      'Le code partira sur le nouveau numéro : il faut l\'avoir en main.';
+
+  @override
+  String get profilePhoneChangeConfirm => 'Recevoir le code';
+
+  @override
+  String get profilePhoneChangeFailed =>
+      'Le code n\'est pas parti. Ton numéro n\'a pas changé.';
+
+  @override
+  String get profilePhoneChangeDone => 'Ton numéro a été changé.';
 
   @override
   String get profileSecretCode => 'Code à 4 chiffres';

@@ -135,6 +135,32 @@ final class AuthRepositoryImpl implements AuthRepository {
           ));
 
   @override
+  Future<Result<void>> requestPhoneChange(PhoneNumber newPhone) =>
+      _guard(() => _source.requestPhoneChange(newPhone));
+
+  @override
+  Future<Result<AuthSession>> confirmPhoneChange({
+    required PhoneNumber newPhone,
+    required String otp,
+  }) =>
+      _guard(() async {
+        await _source.confirmPhoneChange(newPhone: newPhone, otp: otp);
+
+        // La trace locale porte le numéro affiché sur le profil : la laisser
+        // sur l'ancien montrerait à l'utilisateur un numéro que le serveur ne
+        // connaît plus.
+        final current = await _sessions.read();
+        final session = AuthSession(
+          userId: current?.userId ?? '',
+          phone: newPhone,
+          openedAt: current?.openedAt ?? DateTime.now(),
+        );
+        await _sessions.write(session);
+
+        return session;
+      });
+
+  @override
   Future<Result<void>> requestAccountDeletion() =>
       _guard(() => _source.requestAccountDeletion());
 

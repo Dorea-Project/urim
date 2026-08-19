@@ -120,6 +120,22 @@ final class AuthRemoteDataSource implements AuthDataSource {
   }
 
   @override
+  Future<void> requestPhoneChange(PhoneNumber newPhone) async {
+    await _post('/account/change-phone/request', {'new_phone': newPhone.e164});
+  }
+
+  @override
+  Future<void> confirmPhoneChange({
+    required PhoneNumber newPhone,
+    required String otp,
+  }) async {
+    await _post('/account/change-phone/confirm', {
+      'new_phone': newPhone.e164,
+      'otp': otp,
+    });
+  }
+
+  @override
   Future<void> requestAccountDeletion() async {
     await _post('/account/delete/request', const {});
   }

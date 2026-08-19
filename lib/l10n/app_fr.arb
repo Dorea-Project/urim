@@ -369,7 +369,11 @@
     "description": "Annonce vocale de la silhouette qui remplace les initiales. Jamais affichée."
   },
   "profilePhone": "Numéro de téléphone",
-  "profilePhonePending": "Changer de numéro suppose un nouveau code par SMS.",
+  "profilePhoneChangeTitle": "Changer de numéro",
+  "profilePhoneChangeBody": "Le code partira sur le nouveau numéro : il faut l'avoir en main.",
+  "profilePhoneChangeConfirm": "Recevoir le code",
+  "profilePhoneChangeFailed": "Le code n'est pas parti. Ton numéro n'a pas changé.",
+  "profilePhoneChangeDone": "Ton numéro a été changé.",
   "profileSecretCode": "Code à 4 chiffres",
   "profileSecretCodeAction": "Modifier",
   "profileSecretCodePending": "Le changement passera par l'écran de création, encore réservé au premier accès.",

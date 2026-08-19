@@ -206,6 +206,7 @@ bool _isFinishingSensitiveOperation(Ref ref, String location) =>
         AppRoutes.secretCodeChangePaths.contains(location),
       AuthDoor.accountDeletion =>
         AppRoutes.accountDeletionPaths.contains(location),
+      AuthDoor.phoneChange => AppRoutes.phoneChangePaths.contains(location),
       AuthDoor.registration || AuthDoor.signIn || AuthDoor.secretCodeReset =>
         false,
     };

@@ -83,6 +83,12 @@ class _OtpPageState extends ConsumerState<OtpPage> {
       return;
     }
 
+    // Le changement de numéro non plus : le code posé, on revient au profil.
+    if (door == AuthDoor.phoneChange) {
+      await _changePhone();
+      return;
+    }
+
     // Inscription et code oublié posent une serrure : le code SMS les
     // accompagne dans le même appel, une fois le code secret choisi.
     if (door != AuthDoor.signIn) {
@@ -97,6 +103,27 @@ class _OtpPageState extends ConsumerState<OtpPage> {
       _inputKey.currentState?.reset();
       setState(() => _code = '');
     }
+  }
+
+  /// Pose le nouveau numéro, puis rend la main au profil.
+  Future<void> _changePhone() async {
+    final text = AppText.of(context);
+    final done =
+        await ref.read(authFlowViewModelProvider.notifier).confirmPhoneChange();
+
+    if (!mounted) return;
+
+    if (!done) {
+      _inputKey.currentState?.reset();
+      setState(() => _code = '');
+      return;
+    }
+
+    if (context.canPop()) context.pop();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(text.profilePhoneChangeDone)),
+    );
   }
 
   /// Supprime le compte, puis laisse la redirection ramener au tout début.

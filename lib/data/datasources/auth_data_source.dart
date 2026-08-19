@@ -98,6 +98,18 @@ abstract interface class AuthDataSource {
     required String newSecretCode,
   });
 
+  /// Changer de numéro — demande l'OTP, envoyé au **nouveau** numéro.
+  ///
+  /// C'est le nouveau qui doit être prouvé : l'ancien l'a été le jour de
+  /// l'inscription, et le jeton atteste déjà du compte.
+  Future<void> requestPhoneChange(PhoneNumber newPhone);
+
+  /// Changer de numéro — le pose sur le compte.
+  Future<void> confirmPhoneChange({
+    required PhoneNumber newPhone,
+    required String otp,
+  });
+
   /// Supprimer son compte — demande l'OTP.
   ///
   /// La suppression ne se défait pas : c'est l'opération qui a le plus besoin

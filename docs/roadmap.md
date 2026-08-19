@@ -178,12 +178,12 @@ La suppression du compte, promise par la politique de confidentialité, est
 (`/account/delete`, confirmé par SMS), l'appareil se vide ensuite (**D47**).
 Le numéro redevient libre — se réinscrire crée un compte neuf, qui ne retrouve
 rien. Le changement de code secret passe par le profil, sur la route que le
-serveur avait prévue pour lui — `/account/change-password` (**D46**).
+serveur avait prévue pour lui — `/account/change-password` (**D46**) ; le
+changement de numéro aussi, avec le code envoyé sur le nouveau numéro
+(**D48**).
 
 Restent dus :
 
-- le changement de numéro : `/account/change-phone/{request,confirm}` **existe
-  côté serveur**, rien ne l'appelle côté application ;
 - les églises et les appareils réels — **Q9** et **Q11** ;
 - les trois réglages hors connexion — **Q1**, **Q2**, **Q10** ;
 - le rappel du samedi — **Q12** ;

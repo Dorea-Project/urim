@@ -145,6 +145,33 @@ final class DevAuthDataSource implements AuthDataSource {
   }
 
   @override
+  Future<void> requestPhoneChange(PhoneNumber newPhone) async {
+    debugPrint('[DEMO] Code de changement de numéro au ${newPhone.e164} : $_otp');
+  }
+
+  @override
+  Future<void> confirmPhoneChange({
+    required PhoneNumber newPhone,
+    required String otp,
+  }) async {
+    _requireOtp(otp);
+
+    final ancien = _connected;
+    if (ancien == null) {
+      throw const UnauthorizedException(
+        'Aucune session ouverte.',
+        code: 'NOT_AUTHENTICATED',
+      );
+    }
+
+    // Le compte suit son numéro : le code secret déménage avec lui, sinon la
+    // démonstration refuserait la prochaine connexion.
+    final code = _secretCodes.remove(ancien);
+    if (code != null) _secretCodes[newPhone.e164] = code;
+    _connected = newPhone.e164;
+  }
+
+  @override
   Future<void> requestAccountDeletion() async {
     debugPrint('[DEMO] Code de suppression : $_otp');
   }

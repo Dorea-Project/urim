@@ -909,11 +909,35 @@ abstract class AppText {
   /// **'Numéro de téléphone'**
   String get profilePhone;
 
-  /// No description provided for @profilePhonePending.
+  /// No description provided for @profilePhoneChangeTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Changer de numéro suppose un nouveau code par SMS.'**
-  String get profilePhonePending;
+  /// **'Changer de numéro'**
+  String get profilePhoneChangeTitle;
+
+  /// No description provided for @profilePhoneChangeBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le code partira sur le nouveau numéro : il faut l\'avoir en main.'**
+  String get profilePhoneChangeBody;
+
+  /// No description provided for @profilePhoneChangeConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recevoir le code'**
+  String get profilePhoneChangeConfirm;
+
+  /// No description provided for @profilePhoneChangeFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le code n\'est pas parti. Ton numéro n\'a pas changé.'**
+  String get profilePhoneChangeFailed;
+
+  /// No description provided for @profilePhoneChangeDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton numéro a été changé.'**
+  String get profilePhoneChangeDone;
 
   /// No description provided for @profileSecretCode.
   ///

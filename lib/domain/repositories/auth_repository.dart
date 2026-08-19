@@ -82,6 +82,15 @@ abstract interface class AuthRepository {
     required String newSecretCode,
   });
 
+  /// Changer de numéro — demande le code, envoyé au **nouveau** numéro.
+  Future<Result<void>> requestPhoneChange(PhoneNumber newPhone);
+
+  /// Changer de numéro — le pose sur le compte, et sur la trace locale.
+  Future<Result<AuthSession>> confirmPhoneChange({
+    required PhoneNumber newPhone,
+    required String otp,
+  });
+
   /// Supprimer son compte — demande le code par SMS.
   Future<Result<void>> requestAccountDeletion();
 

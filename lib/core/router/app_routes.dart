@@ -93,6 +93,9 @@ abstract final class AppRoutes {
   /// code, il n'y a plus de compte.
   static const Set<String> accountDeletionPaths = {otpPath};
 
+  /// Le seul écran du changement de numéro : le code reçu sur le nouveau.
+  static const Set<String> phoneChangePaths = {otpPath};
+
   /// Routes atteignables tant que personne n'est connecté.
   ///
   /// La création du code secret n'en fait pas partie : elle suppose une session

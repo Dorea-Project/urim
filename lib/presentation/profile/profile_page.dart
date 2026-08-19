@@ -14,6 +14,7 @@ import 'package:urim/presentation/common/section_card.dart';
 import 'package:urim/presentation/profile/profile_view_model.dart';
 import 'package:urim/presentation/profile/sign_out_view_model.dart';
 import 'package:urim/presentation/profile/widgets/display_name_dialog.dart';
+import 'package:urim/presentation/profile/widgets/phone_change_dialog.dart';
 import 'package:urim/presentation/profile/widgets/profile_avatar.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
@@ -139,7 +140,7 @@ class _ProfileList extends ConsumerWidget {
             SettingNavRow(
               title: text.profilePhone,
               value: formatPhone(profile),
-              subtitle: text.profilePhonePending,
+              onTap: () => _changePhone(context, ref, profile.phone),
             ),
             SettingNavRow(
               title: text.profileSecretCode,
@@ -239,6 +240,37 @@ class _ProfileList extends ConsumerWidget {
       ],
     );
   }
+}
+
+/// Changer de numéro, depuis le profil.
+///
+/// Le code part sur le **nouveau** numéro : l'ancien a été prouvé le jour de
+/// l'inscription, et le jeton atteste déjà du compte. Ce qu'il reste à
+/// vérifier, c'est que celui qui demande tient bien la nouvelle ligne.
+Future<void> _changePhone(
+  BuildContext context,
+  WidgetRef ref,
+  PhoneNumber current,
+) async {
+  final text = AppText.of(context);
+
+  final wanted = await askNewPhone(context: context, current: current);
+
+  if (wanted == null || !context.mounted) return;
+
+  final sent =
+      await ref.read(authFlowViewModelProvider.notifier).startPhoneChange(wanted);
+
+  if (!context.mounted) return;
+
+  if (!sent) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(text.profilePhoneChangeFailed)),
+    );
+    return;
+  }
+
+  context.pushNamed(AppRoutes.otpName);
 }
 
 /// Changer son code secret, depuis le profil.
