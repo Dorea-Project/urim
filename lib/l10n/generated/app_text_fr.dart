@@ -483,6 +483,10 @@ class AppTextFr extends AppText {
   String get profileNoNameAvatar => 'Aucun nom défini';
 
   @override
+  String get preparationActionAVenir =>
+      'Le serveur accepte déjà tes points ; l\'écran pour les écrire n\'existe pas encore.';
+
+  @override
   String get profilePhone => 'Numéro de téléphone';
 
   @override

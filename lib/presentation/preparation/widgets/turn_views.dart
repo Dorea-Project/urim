@@ -756,14 +756,28 @@ class _Theme extends StatelessWidget {
 
 /// Les sorties. Un bouton fermé **porte toujours son motif** : un bouton grisé
 /// muet est un mensonge poli.
+/// Les gestes qui suivent le tour — écrire ses points, sortir un document.
+///
+/// ⚠️ **Aucun n'est encore servi par l'application.** Le contrat les décrit et
+/// le serveur les accepte ; il manque les écrans. Tant qu'ils manquent, un
+/// geste s'affiche **fermé, avec son motif** — c'est D13 : un bouton actif qui
+/// ne fait rien est un mensonge que le pasteur découvre au pire moment, après
+/// avoir traversé quatre étages.
+///
+/// Le jour où un écran existe, son code entre dans [_servis] et la ligne
+/// s'ouvre.
 class _Actions extends StatelessWidget {
   const _Actions({required this.items});
+
+  /// Les gestes que cette application sait ouvrir. Vide, et ce vide est dit.
+  static const Set<String> _servis = {};
 
   final List<ActionItem> items;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final text = AppText.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -773,7 +787,9 @@ class _Actions extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(
-                item.enabled ? Icons.arrow_forward : Icons.lock_outline,
+                item.enabled && _servis.contains(item.code)
+                    ? Icons.arrow_forward
+                    : Icons.lock_outline,
                 size: 16,
                 color: context.colors.textSecondary,
               ),
@@ -785,11 +801,21 @@ class _Actions extends StatelessWidget {
                     Text(
                       item.label,
                       style: theme.textTheme.titleMedium?.copyWith(
-                        color: item.enabled
-                            ? context.colors.textPrimary
-                            : context.colors.textSecondary,
+                        color: context.colors.textSecondary,
                       ),
                     ),
+                    // Le motif du serveur quand il en donne un, le nôtre quand
+                    // c'est l'écran qui manque. Jamais rien.
+                    if (item.unavailableReason.isEmpty) ...[
+                      const SizedBox(height: AppSpacing.xs),
+                      Text(
+                        text.preparationActionAVenir,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: context.colors.textSecondary,
+                          height: 1.45,
+                        ),
+                      ),
+                    ],
                     if (item.unavailableReason.isNotEmpty) ...[
                       const SizedBox(height: AppSpacing.xs),
                       Text(

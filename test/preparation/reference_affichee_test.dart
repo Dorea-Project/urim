@@ -9,6 +9,8 @@ import 'package:urim/data/datasources/urim_remote_data_source.dart';
 import 'package:urim/data/repositories/study_repository_impl.dart';
 import 'package:urim/presentation/preparation/preparation_page.dart';
 
+import 'package:urim/l10n/generated/app_text_fr.dart';
+
 import '../support/pump_app.dart';
 import '../support/tours_reels.dart';
 
@@ -19,6 +21,8 @@ import '../support/tours_reels.dart';
 /// convient à quatre épîtres — et le pasteur a choisi sans savoir où il allait.
 /// Le serveur mettait l'identifiant de l'unité dans le champ `reference`, et le
 /// client ne rendait pas ce champ.
+final texte = AppTextFr();
+
 void main() {
   /// La capture réelle, avec la référence que le serveur pose désormais sur
   /// chaque option qui désigne un passage. Le reste de la charge ne bouge pas :
@@ -85,5 +89,20 @@ void main() {
 
     expect(find.textContaining('texte:'), findsNothing);
     expect(find.textContaining('-4000-'), findsNothing);
+  });
+
+  testWidgets("un geste que l'écran ne sait pas ouvrir se montre fermé",
+      (tester) async {
+    // La capture du thème porte les trois gestes de fin de fil : « Écrire mes
+    // points », déclarée active par le serveur — la route existe — et les deux
+    // livrables, fermés avec leur motif.
+    await pumpEtude(tester, avecReferences(ToursReels.theme, 'Colossiens 1:1-14'));
+
+    expect(
+      find.byIcon(Icons.arrow_forward),
+      findsNothing,
+      reason: "aucun geste n'est servi par l'application : aucune flèche",
+    );
+    expect(find.text(texte.preparationActionAVenir), findsWidgets);
   });
 }

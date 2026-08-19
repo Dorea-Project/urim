@@ -903,6 +903,12 @@ abstract class AppText {
   /// **'Aucun nom défini'**
   String get profileNoNameAvatar;
 
+  /// Motif d'un geste que le contrat sert et que l'application ne sait pas encore ouvrir.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le serveur accepte déjà tes points ; l\'écran pour les écrire n\'existe pas encore.'**
+  String get preparationActionAVenir;
+
   /// No description provided for @profilePhone.
   ///
   /// In fr, this message translates to:
