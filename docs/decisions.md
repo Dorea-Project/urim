@@ -520,6 +520,8 @@ belle phrase sur rien — est précisément ce qu'un oracle fait.
 
 ### Q21 — Le pasteur est imprévisible : que fait Urim ? — **recommandation**
 
+**Preuve de terrain, 19/08.** Séance jouée avec un pasteur, sur « Jésus notre vrai idole », unité Colossiens 1:1-14. Au moment de choisir un plan, il demande : *« je peux avoir le sens original de idole ? »* — la question la plus normale du monde à cet endroit. Le produit n'a **ni l'écran** (la concordance est servie par `GET /urim/lemmes`, aucun écran ne l'appelle), **ni le geste** (la parole part vers l'aiguilleur, qui n'a pas d'issue « questionner »), **ni la donnée** (voir la dette sur les gloses). Trois manques pour une seule question, et c'est celle-là qu'il faut garder en tête pour trancher Q21 : le quatrième geste n'est pas un confort, c'est le moment où le pasteur travaille.
+
 Née d'une préparation menée **en vrai** contre le moteur, sur Marc 10:46-52. En
 dix minutes, trois défauts, et ils n'en font qu'un.
 
@@ -848,4 +850,5 @@ rien retirer tant que rien ne liste.
 | Une parole qui nomme **deux** axes n'en applique **qu'un** — celui qui vient en premier **à l'écran**, pas celui que le pasteur écrit en premier — et rien ne dit que le second est tombé. `liaison.py:331` sort de la boucle au premier appariement (`break`), même boucle pour les passages. Reproduit le 19/08 sur Colossiens 3:18 : « Christologie et Anthropologie » et « Anthropologie et Christologie » donnent tous deux `axis_code: christologie`. La décision est écrite, la préparation part avec | Avant la première vraie séance de préparation |
 | Le motif d'une pastille est coupé à 80 caractères, sans ellipse et en plein mot (`turn.py:418`, `hint=o.rationale[:80]`). Le pasteur lit « risque de proof-te » au moment précis où on l'avertit d'un risque | Avec le premier passage sur les pastilles |
 | Une préparation ne porte **qu'un axe**, et le code le tranche sans que le produit l'ait posé. Un pasteur qui veut prêcher le Christ *dans* les relations humaines — ce que dit Colossiens 3:23-24 — n'a pas de geste pour le dire | Question de produit, à ouvrir |
+| **Le corpus dit où un mot paraît, presque jamais ce qu'il veut dire** : 80 gloses pour 14 101 lemmes (0,6 %). εἴδωλον — 11 occurrences — n'en a pas. La concordance (`GET /urim/lemmes`) existe et répond ; le dictionnaire, lui, est vide à 99,4 %. La roadmap promet « les mots de l'original » : ce qui existe est la concordance, pas le sens | Avant de promettre l'original au pasteur |
 | Le mode développeur Windows n'est pas activé — bloque les compilations Windows | Au besoin |
