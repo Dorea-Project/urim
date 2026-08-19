@@ -779,6 +779,91 @@ serveur qui en accepterait dix. Ce n'est plus une question ouverte mais un
 chantier : compter à la liaison, refuser le troisième avec un code nommé,
 exposer la liste et le retrait ciblé. Q11 s'ouvre avec — « Retirer » ne peut
 rien retirer tant que rien ne liste.
+### Q24 — Élargir le périmètre, et étayer ce qu'Urim raconte — **recommandation**
+
+**Demandé le 19/08**, après une préparation jouée de bout en bout : *« il faut élargir
+son périmètre, mettre en évidence son discernement et son argumentation, il doit
+soutenir ce qu'il raconte. »*
+
+#### Ce qui a déclenché la demande
+
+Trois questions spontanées d'un pasteur en séance. Deux tombent dans le vide, et
+dans **le même** vide :
+
+| Sa question | Ce que le produit a |
+|---|---|
+| « le sens original de *idole* » | la concordance (11 occurrences d'εἴδωλον) — mais **80 gloses pour 14 101 lemmes** |
+| « le contexte historique » | **5 notes historiques** pour tout le corpus, toutes marquées `semis-demo` — contre 4 820 notes littéraires |
+| « en savoir plus sur Colossiens » | 17 unités relues, 19 notes — mais aucun écran ne sert `GET /urim/passages` |
+
+Urim est **fort sur le texte et ses échos internes, vide sur le monde autour du
+texte**. Ce n'est pas un défaut d'exécution : c'est le périmètre réel, et il ne
+correspond pas à ce qu'un pasteur attend d'un outil d'étude.
+
+#### Ce que « soutenir ce qu'il raconte » veut dire, chiffres en main
+
+La machinerie de la preuve **existe déjà** : chaque énoncé du corpus porte
+`source_ref`, `reviewed_by`, `reviewed_at` ; chaque glose porte en plus l'entrée
+d'origine mot pour mot, sa licence et le modèle qui l'a traduite. D16 est tenue.
+
+Ce que cette machinerie déclare aujourd'hui :
+
+| Table | `ia-mistral` | un humain | démo |
+|---|---|---|---|
+| Pesées doctrinales | 45 520 | **10** | 27 |
+| Faisabilité homilétique | 81 918 | 0 | 25 |
+| Unités relues | 4 552 | **1** | 8 |
+| Réserves | 2 392 | 0 | 11 |
+| Notes de contexte | 4 816 | 0 | 9 |
+
+**139 198 énoncés, 11 portent un nom humain.** Et le `source_ref` des notes le dit
+lui-même : « renvois resolus, **non relu** ». La trace est honnête ; ce qu'elle
+avoue, c'est qu'un modèle a écrit et que personne n'a relu.
+
+C'est le cœur de la demande : la trace prouve **d'où vient** un énoncé, pas qu'il
+soit **soutenu**. Un pasteur qui monte en chaire sur « ce texte ne développe aucune
+conduite éthique concrète » s'appuie aujourd'hui sur une phrase que personne n'a
+signée.
+
+#### Trois chantiers, et ils ne coûtent pas la même chose
+
+**1. Rendre la provenance visible — l'écran, pas le corpus.** Le pasteur ne peut pas
+distinguer aujourd'hui un énoncé relu d'un énoncé produit et jamais lu : l'écran ne
+montre ni `reviewed_by`, ni `source_ref`, et il n'affiche même pas la **référence**
+des unités proposées (`turn.py:448` met l'identifiant dans ce champ, et le client ne
+le rend pas). Rien à curer, tout à afficher. C'est le moins cher, et c'est ce qui
+rend les deux autres honnêtes.
+
+**2. Étendre les catégories — le corpus, pas le moteur.** Les deux trous ont déjà
+leur emplacement dans le schéma : `context_kind = 'historique'` est prévu par une
+contrainte, et `urim_corpus_lemma` porte `gloss`, `gloss_source`,
+`gloss_source_ref`, `gloss_model`. Remplir ne demande aucune architecture nouvelle —
+seulement une source citable et un relecteur.
+
+**3. Faire relire ce qui est déjà là.** 4 561 unités × dix pesées est hors de portée
+d'un homme. Le tri se fait donc par l'usage : ce qui est **montré** se relit, le
+reste attend. Une unité qu'aucun pasteur n'ouvre n'a pas besoin d'être signée.
+
+#### La règle proposée
+
+> **Rien n'entre dans le corpus sans une source citable ; rien ne sort à l'écran
+> sans dire qui l'a relu.** Et tant que personne ne l'a relu, l'écran le dit —
+> « proposé par le modèle, non relu » — au lieu de le taire.
+
+Elle a un coût que la demande doit assumer : elle **retire de la superbe** à Urim.
+Aujourd'hui il parle d'un ton égal de tout ce qu'il sert ; demain, une partie de ce
+qu'il dit portera un aveu. C'est le prix de « soutenir ce qu'il raconte », et c'est
+la même logique que D15 — les textes qui résistent s'affichent au même rang que ceux
+qui soutiennent, parce qu'un moteur qui ne montre que ce qui l'arrange fabrique la
+preuve de ce qu'on avait décidé de trouver.
+
+#### Ce que ça déplace
+
+Q20 (« le modèle peut-il porter la voix d'Urim ? ») change de question : le modèle
+**porte déjà** l'essentiel de ce qu'Urim raconte — 139 198 énoncés sur 139 209. La
+question n'est plus s'il peut parler, mais à quelles conditions ce qu'il a écrit
+peut être servi à un pasteur.
+
 ## Décisions prises
 
 | # | Décision | Pourquoi |
