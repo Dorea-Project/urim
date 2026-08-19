@@ -25,7 +25,24 @@ acquis après l'installation, et le retirer doit rendre la place. L'API distante
 seule est écartée : elle ne permettrait pas cette promesse. Reste à choisir
 entre un embarquement complet et un téléchargement à la demande.
 
+**Ce que la lecture du serveur change (19/08).** Le corpus **est déjà côté
+serveur**, et il est servi : `GET /urim/passages` rend un passage sans ouvrir
+de préparation, `GET /urim/lemmes` rend la concordance. La question n'est donc
+plus « d'où vient le texte » — il vient du même endroit que le raisonnement,
+avec la versification et les unités relues qui vont avec. Ce qui reste ouvert
+est plus étroit, et c'est le seul morceau qui bloquait vraiment : **qu'embarque
+l'appareil pour lire hors connexion**, sachant que D41 a déjà tranché qu'on
+n'ouvre pas une préparation sans réseau. M5 peut donc commencer sans attendre.
+
 ### Q2 — Quel moteur de transcription ?
+
+**La contradiction est dans le code, pas seulement dans la maquette (19/08).**
+Le serveur porte une file de travaux `urim_capture_job` dont les natures sont
+`transcrire`, `extraire_versets`, `aligner`, `purger_audio` : la transcription y
+est prévue **côté serveur**. La maquette, elle, promet « transcrit sur
+l'appareil », et la politique de confidentialité promet qu'aucun contenu ne part
+chez un tiers. Les deux ne peuvent pas être vrais en même temps ; trancher Q2,
+c'est d'abord dire laquelle des deux promesses on garde.
 
 **Bloque** M3.
 
@@ -734,7 +751,7 @@ que j'ai*, elle est simple. Le jour où l'un de ces objets se partage, il sort d
 pasteur et entre dans l'assemblée — et rouvre **Q18** : qui voit quoi, par quel
 canal, avec quel consentement.
 
-### Q23 — Que répond le serveur au troisième appareil ?
+### Q23 — Que répond le serveur au troisième appareil ? — **répondue : rien**
 
 **Bloque** le message affiché au bon moment.
 
@@ -750,6 +767,16 @@ Deux choses à obtenir : le code d'erreur, et **qui décide** — le serveur
 refuse-t-il, ou propose-t-il de remplacer le plus ancien ? Refuser est plus
 honnête : remplacer d'office déconnecterait un appareil sans que personne
 l'ait demandé.
+
+**Réponse, obtenue en lisant le serveur (19/08) : il ne répond rien de
+particulier, parce qu'il accepte.** `app/contexts/auth` ne compte aucun
+appareil — `verify-device` fait confiance sans regarder combien il y en a déjà,
+et **aucune route ne sait les lister**. La limite de deux (D45) n'existe donc
+aujourd'hui que dans l'écran du profil, qui affiche « 2 sur 2 » devant un
+serveur qui en accepterait dix. Ce n'est plus une question ouverte mais un
+chantier : compter à la liaison, refuser le troisième avec un code nommé,
+exposer la liste et le retrait ciblé. Q11 s'ouvre avec — « Retirer » ne peut
+rien retirer tant que rien ne liste.
 ## Décisions prises
 
 | # | Décision | Pourquoi |
@@ -797,7 +824,7 @@ l'ait demandé.
 | D42 | Le tour dit **de quoi il parle** ; l'écran déplie ce bloc-là et replie le reste | Premier geste de Q22. La valeur existait : `_forme` la calcule pour choisir la phrase, puis la jetait — le client recevait des blocs sans hiérarchie et les dépliait tous. Or les pesées et les couples accompagnent **tous** les tours qui suivent l'étage qui les a produits : c'est du décor ambiant, voulu, et il se réaffichait à l'identique. Mesuré sur un téléphone de 844 px : l'étage des mises en forme passe de **11,1 à 3,4 écrans**, le thème de 9,0 à 1,3. Un pasteur qui prépare le samedi soir n'a pas dix écrans de matière déjà lue à traverser. |
 | D43 | Replier n'est pas cacher : l'intitulé porte **le nombre**, et une touche rouvre | Ce qui sépare ranger d'escamoter. Les refusés d'une grille de faisabilité doivent rester atteignables — les cacher laisserait croire qu'on n'y a pas pensé, et c'est la règle que le serveur applique déjà en les servant avec les faisables. Un geste ouvert, lui, ne se replie jamais : un bouton replié est un bouton perdu. |
 | D44 | Ce que la préparation **porte déjà** s'offre sous le tour, replié — le texte, puis le contexte | Deuxième geste de Q22. Le contexte littéraire est calculé à l'ouverture par `load_context`, écrit dans la trace, stocké — et n'était montré nulle part : un pasteur l'a demandé en séance alors que la réponse était **déjà dans sa préparation**. Les versets, eux, n'ont jamais eu de bloc — le fil parlait de l'unité, la pesait, proposait des plans, et ne montrait pas le texte que seul le document imprimé portait. Offert, donc, sans qu'il ait à le demander, mais **replié** sous son intitulé et son nombre comme le décor (D43) : nommer coûte **0,1 écran**, déplier en coûterait six. Trois règles tiennent le reste. Rien ne s'affiche de ce que le corpus n'a pas — toutes les unités ne portent pas de note de contexte, et une section vide promettrait ce qu'elle n'a pas. Le bandeau d'attente reste **le dernier** élément : la matière se range au-dessus, c'est le geste en vol que le pasteur regarde après avoir touché. Et le repli est **le même objet** des deux côtés (`FoldedSection`) : deux chromes pour un seul geste apprendraient deux grammaires au pasteur. |
-| D45 | Deux appareils au maximum par compte | Un pasteur a son téléphone, parfois une tablette ; au troisième ce n'est plus un compte personnel mais un compte prêté, et les préparations sont ce qu'Urim promet de garder à leur auteur. La limite est tenue par le serveur, qui seul connaît la liste complète ; le profil la rend **lisible avant qu'elle ne se manifeste** — « 2 sur 2 », et ce qu'il faut libérer. Découvrir un refus en pleine connexion sur un téléphone neuf serait le découvrir au pire moment. L'appareil courant reste non retirable : ce serait une déconnexion déguisée, qui a son propre bouton. |
+| D45 | Deux appareils au maximum par compte — **règle posée, pas encore tenue par le serveur** (voir Q23) | Un pasteur a son téléphone, parfois une tablette ; au troisième ce n'est plus un compte personnel mais un compte prêté, et les préparations sont ce qu'Urim promet de garder à leur auteur. La limite est tenue par le serveur, qui seul connaît la liste complète ; le profil la rend **lisible avant qu'elle ne se manifeste** — « 2 sur 2 », et ce qu'il faut libérer. Découvrir un refus en pleine connexion sur un téléphone neuf serait le découvrir au pire moment. L'appareil courant reste non retirable : ce serait une déconnexion déguisée, qui a son propre bouton. |
 | D46 | Changer son code secret passe par la **route dediee du serveur**, pas par celle de l'oubli | `/account/change-password/{request,confirm}` existe cote backend : authentifiee par le jeton, sans numero a fournir, et **sans revocation d'appareil**. La premiere version faisait passer le changement par `reset-secret-code` — le chemin du code oublie — qui revoque les autres appareils : un pasteur qui change son code au telephone y perdait la session de sa tablette, pour rien. Erreur de lecture, et non d'architecture : le contrat avait ete deduit du client Flutter, ou seules les routes deja branchees apparaissent, au lieu d'etre lu dans `app/contexts/auth`. Une porte distincte (`secretCodeChange`) la separe donc de l'oubli, et la redirection ne laisse repasser les deux ecrans du parcours que tant qu'elle est ouverte — elle se referme au succes comme au refus. Correction conservee du premier jet : la pose du code court-circuitait le serveur des qu'une session existait, ce qui aurait laisse l'ancien code valable partout ailleurs. |
 | D47 | Supprimer son compte efface **les deux côtés**, et l'appareil garde sa seule identité | La politique promet « tu peux supprimer ton compte et tout son contenu à tout moment », sous une mention de la loi n° 2013-450 ; rien ne le tenait. Le serveur efface maintenant pour de bon (`/account/delete`, deux temps avec SMS) : préparations, livrables, archives, captures, transcripts, retours, réservations partent ; la ligne du compte survit **vidée de son identité** — numéro remplacé par une pierre tombale, noms, e-mail et empreintes de code effacés, statut `closed` — parce que la vie d'église s'y accroche et que détruire la ligne emporterait les registres d'une communauté avec le compte d'une personne. La loi demande qu'on ne soit plus identifiable, pas qu'on disparaisse des livres d'autrui. **L'ordre est la décision** : serveur d'abord, appareil ensuite — l'inverse laisserait, sur un refus, un téléphone vidé devant un compte vivant que plus rien ne permet d'atteindre. Côté appareil, trois magasins partent — fichiers, préférences, coffre — les fichiers en premier pour la même raison. Seul `device.id.v1` survit : ce n'est pas du contenu mais le nom de ce téléphone auprès du serveur, et l'effacer ferait passer le même appareil pour un neuf, consommant une **seconde place sur deux** (D45) qu'un fantôme garderait. Le SMS n'est pas une formalité : c'est la seule opération du profil qui ne se défait pas, et un téléphone déverrouillé oublié sur une table suffirait sans lui. |
 | D48 | Changer de numéro se fait depuis le profil, et le code part sur le **nouveau** numéro | `/account/change-phone/{request,confirm}` existait côté serveur et l'application n'en faisait rien : la ligne du profil affichait un numéro mort sous la phrase « changer de numéro suppose un nouveau code par SMS ». C'est le nouveau numéro qu'il faut prouver — l'ancien l'a été le jour de l'inscription, et le jeton atteste déjà du compte. La boîte refuse le numéro courant : demander un SMS pour ne rien changer serait un code payé pour rien. La trace locale de session est réécrite au passage, sinon le profil montrerait un numéro que le serveur ne connaît plus jusqu'au prochain lancement. Même forme que D46 et D47 : une porte (`phoneChange`), l'écran du code réemprunté tant qu'elle est ouverte, refermée au succès comme au refus. |

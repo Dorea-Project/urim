@@ -147,6 +147,27 @@ Dépend de **Q2**, et de la contradiction sur les fragments qui « attendent le
 réseau » alors que la transcription est promise sur l'appareil. La capture
 elle-même n'existe pas : « Reprendre l'enregistrement » est inactif.
 
+**Ce que le serveur en porte, lu le 19/08.** Cinq tables — capture, file de
+travaux, segments, versets cités, retour — et un module de domaine **pur de
+175 lignes** qui tient deux règles : *la capture n'est jamais refusée* (ce qui
+n'est pas capté dimanche est perdu pour toujours ; c'est la transcription qui
+est différée), et *un travail abandonné laisse le transcript en `partielle`,
+jamais un silence*. À côté de cela, **rien** : aucune route de capture, aucun
+travailleur qui consomme `urim_capture_job`, aucun port de fournisseur de
+transcription, aucune extraction de versets, aucun alignement.
+
+**Et le séquencement est verrouillé volontairement.** `capture/domain.py`
+l'écrit : capture, transport, transcript brut **non exploité**, jusqu'à mesure
+du taux d'erreur *dans trois églises réelles*. Les étapes 2, 3 et 4 —
+extraire les versets, aligner, synthétiser — n'ouvrent pas avant cette mesure.
+Écrire tout le code n'y changerait rien : ce qui manque ensuite est du terrain,
+et le terrain ne s'accélère pas.
+
+**Ce qui est donc faisable dès maintenant, et honnête :** l'étape 1 seule —
+capter, conserver l'audio sept jours, afficher le transcript brut sans rien en
+tirer. C'est exactement ce que le serveur s'autorise, et c'est ce qui permet
+d'aller mesurer.
+
 ### M4 — Synthèse d'Urim
 
 **Écran de validation fait.** Capsules horodatées, verset non réécrit, réserve
@@ -161,7 +182,11 @@ voix de synthèse, dioula, baoulé, et la voix de celui qui a prêché.
 Affichage d'un passage, contexte, comparaison de versions, reconnaissance des
 citations dans une transcription.
 
-Dépend de **Q1**.
+**Le corpus est déjà servi** : `GET /urim/passages` rend un passage sans ouvrir
+de préparation, `GET /urim/lemmes` rend la concordance. Ce que Q1 bloque encore
+n'est donc pas la lecture, c'est ce que l'appareil embarque pour lire **hors
+connexion**. Le premier écran peut se faire sans attendre ; la reconnaissance
+des citations, elle, reste derrière Q2.
 
 ### M6 — Compte
 
@@ -184,11 +209,44 @@ changement de numéro aussi, avec le code envoyé sur le nouveau numéro
 
 Restent dus :
 
-- les églises et les appareils réels — **Q9** et **Q11** ;
+- les églises — `GET /iam/me` rend le profil **et** les appartenances en un
+  appel : plus rien à trancher, seulement à brancher (**Q9**) ;
+- les appareils — et d'abord côté serveur : il ne compte rien, ne refuse pas le
+  troisième et ne sait pas les lister. L'écran affiche « 2 sur 2 » devant un
+  serveur qui en accepterait dix (**Q11**, **Q23**) ;
 - les trois réglages hors connexion — **Q1**, **Q2**, **Q10** ;
 - le rappel du samedi — **Q12** ;
 - l'espace utilisé, qui ne veut plus dire grand-chose depuis que les
   préparations vivent sur le serveur : reste l'audio des transcriptions — **Q2**.
+
+## Deux chantiers, deux ordres de grandeur
+
+Ce n'est pas la même nature de travail, et les mettre côte à côte évite de les
+arbitrer au ressenti.
+
+| | Préparation | Transcription |
+|---|---|---|
+| Contrat serveur | **complet et testé** — 21 routes, le client en appelle 6 | 5 tables et 175 lignes de domaine pur ; aucune route, aucun travailleur |
+| Moteur | réel et déterministe — 4 561 unités relues, 66 livres | aucun fournisseur choisi (**Q2**) |
+| Données à l'écran | vraies, sauf le mannequin de démonstration | **scriptées** (`InMemoryTranscriptionRepository`) |
+| Décisions en attente | aucune | Q2, Q3, et la promesse « sur l'appareil » à trancher |
+| Ce qui reste | brancher des écrans sur un contrat qui répond | bâtir la chaîne, puis **mesurer dans trois églises** |
+
+Autrement dit : préparer, c'est **assembler ce qui répond déjà** ; transcrire,
+c'est construire la chaîne entière, prendre une décision produit, et attendre
+des dimanches réels.
+
+Ce que le serveur sert et que l'application ignore encore :
+
+| Route | Ce que ça ouvre |
+|---|---|
+| `POST /urim/studies/{id}/deliverable` + `GET /urim/deliverables/{id}` + `/fichier` | Le deck et la note, soumis au contrôle des citations |
+| `POST /urim/studies/{id}/elements` | Le squelette homilétique — dix champs, aucun imposé |
+| `POST /urim/studies/{id}/supports` | La chaîne de textes, avec son contrôle de référence |
+| `POST /urim/studies/{id}/articulations` | Faire articuler un point, dans l'atelier |
+| `GET /urim/passages`, `GET /urim/lemmes` | Lire un passage, chercher un mot de l'original |
+| `POST /urim/studies/{id}/preached`, `GET /urim/preached`, `/couverture` | L'archive, et où l'on est allé dans l'Écriture |
+| `GET /iam/me` | Les églises réelles du profil |
 
 ## Les trois briques lourdes
 
