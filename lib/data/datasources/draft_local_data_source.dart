@@ -30,6 +30,30 @@ final class DraftLocalDataSource {
   /// Le brouillon de la barre de saisie d'une préparation.
   static String composerKey(String studyId) => '${_prefixe}saisie/$studyId';
 
+  /// Ce qui sépare deux champs d'une même ligne de brouillon — le caractère
+  /// nul, le seul qu'un pasteur ne tapera jamais.
+  ///
+  /// ⚠️ **Il vit ici, pas dans les écrans.** Le format d'un brouillon appartient
+  /// au magasin qui le garde : deux écrans qui le recopient finissent par le
+  /// couper différemment, et le brouillon relu n'est plus celui qui a été
+  /// écrit.
+  static const String champ = '\u0000';
+
+  /// Ce qui sépare deux lignes — une section, une diapositive.
+  static const String ligne = '\n';
+
+  /// Le squelette en cours d'écriture, avant envoi.
+  ///
+  /// ⚠️ **Deux écrans neufs perdaient la saisie en les quittant.** Le plan et
+  /// les diapositives ne gardent rien tant que le serveur n'a pas accusé
+  /// réception : un pasteur qui compose douze diapositives et reçoit un appel
+  /// repartait de zéro. C'est la même garde que la barre de saisie, sur les
+  /// deux seules autres surfaces où il écrit longtemps.
+  static String planKey(String studyId) => '${_prefixe}plan/$studyId';
+
+  /// Les diapositives en cours de composition, avant soumission au contrôle.
+  static String deckKey(String studyId) => '${_prefixe}deck/$studyId';
+
   /// Celui du formulaire d'ouverture, qui n'a pas encore d'identifiant.
   static const String ouvertureKey = '${_prefixe}ouverture';
 

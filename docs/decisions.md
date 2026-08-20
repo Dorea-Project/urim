@@ -928,7 +928,7 @@ peut être servi à un pasteur.
 | Les églises et les appareils du profil viennent d'un jeu d'exemple en mémoire | Q9 et Q11 |
 | La relecture d'une prédication et les capsules de synthèse sont **scriptées** : aucun moteur ne les produit. Le fil guidé, lui, parle au vrai moteur | Q2, Q3 |
 | Le fil guidé parle le contrat du serveur, mais un build de démonstration le fait **jouer par un mannequin** (`DemoUrimEngine`) : quatre étages scriptés, aucune Écriture consultée. Il imite la forme du contrat, pas le raisonnement | Quand l'application vise le serveur par défaut |
-| Le thème servi par le moteur est un gabarit de **codes bruts** — « theologie_propre, en textuel doctrinal ». Affiché tel quel sous « THÈME » | Côté serveur, aller chercher le libellé de l'axe |
+| Le thème reste un gabarit de codes bruts **à l'écran** — « theologie_propre, en textuel doctrinal ». Le document, lui, ne s'en sert plus pour se titrer | Côté serveur, aller chercher le libellé de l'axe |
 | Le compte rendu de séance est perdu en quittant l'écran. C'est cohérent avec D28, mais ce qui a été touché il y a cinq minutes disparaît en revenant de l'accueil | À évaluer à l'usage — un cache de session suffirait |
 | Une prédication transcrite n'a **pas d'issue moteur** : sa pastille « Retour disponible » a disparu du fil. Le serveur ne connaît que les préparations écrites — sa capture est verrouillée à l'étape 1 | Q2, avec la capture réelle |
 | La suppression n'efface que le contenu des contextes **listés** dans `get_delete_account_command` — aujourd'hui Urim seul. Un contexte qui gardera du contenu personnel sans s'y inscrire le laissera survivre à son auteur | À chaque nouveau contexte porteur de contenu personnel |

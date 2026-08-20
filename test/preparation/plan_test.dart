@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:urim/data/datasources/urim_remote_data_source.dart';
+import 'package:urim/core/storage/local_documents.dart';
 import 'package:urim/data/repositories/study_repository_impl.dart';
 import 'package:urim/domain/entities/preparation/deliverable.dart';
 import 'package:urim/domain/entities/preparation/plan_element.dart';
@@ -13,6 +14,7 @@ import 'package:urim/presentation/preparation/deck_page.dart';
 import 'package:urim/presentation/preparation/plan_page.dart';
 import 'package:urim/presentation/preparation/preparation_page.dart';
 
+import '../support/fake_documents.dart';
 import '../support/pump_app.dart';
 import '../support/tours_reels.dart';
 
@@ -285,6 +287,45 @@ void main() {
         findsOneWidget,
         reason: "il corrige la ou il regarde, pas dans un rapport a part",
       );
+    });
+  });
+
+  group('ce qui est écrit et pas encore envoyé', () {
+    testWidgets("le plan revient après avoir quitté l'écran", (tester) async {
+      // 🔴 Le plan ne part qu'au bouton. Entre la première frappe et lui, il
+      // n'existait que dans des contrôleurs que le `dispose` détruit.
+      final documents = FakeDocuments();
+      final etude = etudeAvec(const []);
+
+      Future<void> ouvrir() async {
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              demoConfigOverride,
+              studyRepositoryProvider.overrideWithValue(DepotFige(etude)),
+              localDocumentsProvider.overrideWithValue(documents),
+            ],
+            child: wrapScreen(PlanPage(study: etude)),
+          ),
+        );
+        await tester.pumpAndSettle();
+      }
+
+      tester.view.physicalSize = const Size(1000, 4000);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      await ouvrir();
+      await tester.enterText(find.byType(TextField).at(5), 'I. Sa prééminence');
+      await tester.pump(const Duration(seconds: 1));
+
+      // Quitter sans envoyer — l'appel reçu, le retour touché par erreur.
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpAndSettle();
+
+      await ouvrir();
+
+      expect(find.text('I. Sa prééminence'), findsOneWidget);
     });
   });
 }

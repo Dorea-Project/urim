@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:urim/data/datasources/draft_local_data_source.dart';
 import 'package:urim/domain/entities/preparation/deliverable.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/l10n/generated/app_text.dart';
+import 'package:urim/presentation/common/draft_keeper.dart';
 import 'package:urim/presentation/preparation/deliverable_view_model.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
@@ -26,6 +28,13 @@ class DeckPage extends ConsumerStatefulWidget {
 class _DeckPageState extends ConsumerState<DeckPage> {
   late List<Slide> _slides = _depuisLeTexte();
 
+  /// Ce qui est composé et pas encore soumis.
+  ///
+  /// ⚠️ Rien ne part avant le bouton. Douze diapositives coupées et reprises,
+  /// un appel reçu, et le travail disparaissait — la même perte que la barre de
+  /// saisie avant qu'elle soit gardée.
+  late final DraftKeeper _brouillon;
+
   /// Les versets servis par le corpus, un par diapositive.
   ///
   /// Le pasteur part de ce que le texte porte plutôt que d'une page blanche —
@@ -41,7 +50,54 @@ class _DeckPageState extends ConsumerState<DeckPage> {
   final Map<int, TextEditingController> _textes = {};
 
   @override
+  void initState() {
+    super.initState();
+    _brouillon = DraftKeeper(
+      source: ref.read(draftLocalDataSourceProvider),
+      key: DraftLocalDataSource.deckKey(widget.study.id),
+    );
+    _reprendre();
+  }
+
+  /// Ce qui avait été composé et jamais soumis revient à l'écran.
+  ///
+  /// Il remplace ce que le corpus avait pré-rempli : la composition du pasteur
+  /// est postérieure, et lui rendre les versets nus effacerait ses coupes.
+  Future<void> _reprendre() async {
+    final garde = await _brouillon.restore();
+    if (garde == null || !mounted || garde.text.isEmpty) return;
+
+    final reprises = <Slide>[];
+    for (final ligne in garde.text.split(DraftLocalDataSource.ligne)) {
+      final morceaux = ligne.split(DraftLocalDataSource.champ);
+      if (morceaux.length != 3) continue;
+      reprises.add(Slide(
+        title: morceaux[0],
+        reference: morceaux[1],
+        projectedText: morceaux[2],
+      ));
+    }
+
+    if (reprises.isEmpty) return;
+
+    setState(() {
+      _slides = reprises;
+      _references.clear();
+      _textes.clear();
+    });
+  }
+
+  /// Une diapositive par ligne — titre, référence, texte — séparés par un
+  /// caractère nul, le seul qu'un pasteur ne tapera jamais.
+  void _noter() => _brouillon.remember([
+        for (final slide in _slides)
+          [slide.title, slide.reference, slide.projectedText].join(DraftLocalDataSource.champ),
+      ].join(DraftLocalDataSource.ligne));
+
+  @override
   void dispose() {
+    // On écrit d'abord, on détruit ensuite.
+    _brouillon.dispose();
     for (final champ in [..._references.values, ..._textes.values]) {
       champ.dispose();
     }
@@ -67,6 +123,8 @@ class _DeckPageState extends ConsumerState<DeckPage> {
 
     switch (issue) {
       case DocumentReady(:final path):
+        // Le document existe : ce qui a servi à le composer n'a plus à être gardé.
+        _brouillon.forget();
         messager.showSnackBar(
           SnackBar(content: Text(text.preparationDocumentReady(path))),
         );
@@ -128,18 +186,25 @@ class _DeckPageState extends ConsumerState<DeckPage> {
                   index,
                   () => TextEditingController(text: slide.projectedText),
                 ),
-                onReference: (valeur) => setState(
-                  () => _slides[index] = slide.copyWith(reference: valeur),
-                ),
-                onTexte: (valeur) => setState(
-                  () => _slides[index] = slide.copyWith(projectedText: valeur),
-                ),
-                onRemove: () => setState(() {
-                  _slides.removeAt(index);
-                  _references.clear();
-                  _textes.clear();
-                  _verdicts = const {};
-                }),
+                onReference: (valeur) {
+                  setState(() => _slides[index] = slide.copyWith(reference: valeur));
+                  _noter();
+                },
+                onTexte: (valeur) {
+                  setState(
+                    () => _slides[index] = slide.copyWith(projectedText: valeur),
+                  );
+                  _noter();
+                },
+                onRemove: () {
+                  setState(() {
+                    _slides.removeAt(index);
+                    _references.clear();
+                    _textes.clear();
+                    _verdicts = const {};
+                  });
+                  _noter();
+                },
               ),
               const SizedBox(height: AppSpacing.lg),
             ],

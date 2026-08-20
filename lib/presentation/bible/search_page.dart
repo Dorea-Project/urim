@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:urim/core/error/failure.dart';
 import 'package:urim/domain/entities/bible/passage_detail.dart';
 import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/bible/search_view_model.dart';
@@ -105,7 +106,12 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     }
 
     if (state case AsyncError(:final error)) {
-      return _Message(body: _phrase(error));
+      // Le refus **porte sa phrase** : « εἴδωλον ne paraît dans aucun texte
+      // original de ce corpus » vaut mieux qu'un « introuvable » sec. On la lit
+      // sur l'objet, jamais dans sa représentation textuelle.
+      return _Message(
+        body: error is Failure ? error.message : text.searchEmpty,
+      );
     }
 
     final passage = passageOf(state);
@@ -117,15 +123,6 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     return _Message(body: text.searchEmpty);
   }
 
-  /// Le message du serveur quand il en a un — « ce mot ne paraît dans aucun
-  /// texte original de ce corpus » vaut mieux qu'un refus muet.
-  String _phrase(Object error) {
-    final brut = error.toString();
-
-    return brut.contains('message: ')
-        ? brut.split('message: ').last.split(',').first
-        : brut;
-  }
 }
 
 /// Qui a signé cette unité — ou l'aveu qu'aucun homme ne l'a fait.
