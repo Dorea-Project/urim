@@ -903,6 +903,132 @@ abstract class AppText {
   /// **'Aucun nom défini'**
   String get profileNoNameAvatar;
 
+  /// Titre de l’écran du squelette homilétique.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mes points'**
+  String get preparationPlanTitle;
+
+  /// Ce que l’écran promet en haut, repris du document.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le document met en page ce que tu écris. Rien n’est imposé : une section vide reste vide.'**
+  String get preparationPlanIntro;
+
+  /// Bouton qui envoie le squelette au serveur.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get preparationPlanSave;
+
+  /// Confirmation après envoi.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton plan est enregistré.'**
+  String get preparationPlanSaved;
+
+  /// Ouvre les sections que Braga ne nomme pas.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une section'**
+  String get preparationPlanAdd;
+
+  /// Dit le seuil du livrable, là où il se joue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Au moins un point : c’est ce que le document exige avant de sortir.'**
+  String get preparationPlanPointsHint;
+
+  /// Nom d’une section du squelette homilétique.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titre'**
+  String get preparationSectionTitre;
+
+  /// Nom d’une section du squelette homilétique.
+  ///
+  /// In fr, this message translates to:
+  /// **'Introduction'**
+  String get preparationSectionIntroduction;
+
+  /// Nom d’une section du squelette homilétique.
+  ///
+  /// In fr, this message translates to:
+  /// **'Proposition'**
+  String get preparationSectionProposition;
+
+  /// Nom d’une section du squelette homilétique.
+  ///
+  /// In fr, this message translates to:
+  /// **'Phrase interrogative'**
+  String get preparationSectionPhraseInterrogative;
+
+  /// Nom d’une section du squelette homilétique.
+  ///
+  /// In fr, this message translates to:
+  /// **'Phrase de transition'**
+  String get preparationSectionPhraseDeTransition;
+
+  /// Nom d’une section du squelette homilétique.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les points'**
+  String get preparationSectionDivisions;
+
+  /// Nom d’une section du squelette homilétique.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les sous-points'**
+  String get preparationSectionSubdivisions;
+
+  /// Nom d’une section du squelette homilétique.
+  ///
+  /// In fr, this message translates to:
+  /// **'Illustrations'**
+  String get preparationSectionIllustrations;
+
+  /// Nom d’une section du squelette homilétique.
+  ///
+  /// In fr, this message translates to:
+  /// **'Application'**
+  String get preparationSectionApplication;
+
+  /// Nom d’une section du squelette homilétique.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conclusion'**
+  String get preparationSectionConclusion;
+
+  /// Nom d’une section du squelette homilétique.
+  ///
+  /// In fr, this message translates to:
+  /// **'Objectif'**
+  String get preparationSectionObjectif;
+
+  /// Nom d’une section du squelette homilétique.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contexte du livre'**
+  String get preparationSectionContexte;
+
+  /// Nom d’une section du squelette homilétique.
+  ///
+  /// In fr, this message translates to:
+  /// **'Définitions'**
+  String get preparationSectionDefinitions;
+
+  /// Nom d’une section du squelette homilétique.
+  ///
+  /// In fr, this message translates to:
+  /// **'NB'**
+  String get preparationSectionNb;
+
+  /// Nom d’une section du squelette homilétique.
+  ///
+  /// In fr, this message translates to:
+  /// **'Témoignage'**
+  String get preparationSectionTemoignage;
+
   /// Motif d'un geste que le contrat sert et que l'application ne sait pas encore ouvrir.
   ///
   /// In fr, this message translates to:

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:urim/core/network/dio_error_mapper.dart';
 import 'package:urim/data/datasources/turn_cache_local_data_source.dart';
+import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
@@ -88,6 +89,27 @@ final class UrimRemoteDataSource {
         'idempotency_key': ?idempotencyKey,
       }));
 
+  /// `PUT /urim/studies/{id}/elements` — le squelette homilétique.
+  ///
+  /// **L'envoi remplace l'ensemble.** Le serveur n'a pas de geste « effacer une
+  /// section » : ne pas envoyer une section, c'est l'effacer. C'est ce qui rend
+  /// l'écran simple — il envoie ce qu'il montre — et c'est aussi le piège :
+  /// envoyer une liste partielle perdrait le reste du plan.
+  Future<Study> setElements({
+    required String studyId,
+    required List<PlanElement> elements,
+  }) async =>
+      _study(await _put('/urim/studies/$studyId/elements', {
+        'elements': [
+          for (final element in elements)
+            {
+              'element_code': element.code,
+              'ordinal': element.ordinal,
+              'body': element.body,
+            },
+        ],
+      }));
+
   Future<T?> _get<T>(String path) async {
     try {
       return (await _dio.get<T>(path)).data;
@@ -102,6 +124,17 @@ final class UrimRemoteDataSource {
   ) async {
     try {
       return (await _dio.post<Map<String, dynamic>>(path, data: body)).data;
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
+  Future<Map<String, dynamic>?> _put(
+    String path,
+    Map<String, dynamic> body,
+  ) async {
+    try {
+      return (await _dio.put<Map<String, dynamic>>(path, data: body)).data;
     } on DioException catch (e) {
       throw mapDioException(e);
     }
@@ -191,6 +224,14 @@ Study _studyFromJson(Map<String, dynamic> json) => Study(
             kind: (c as Map<String, dynamic>)['kind'] as String? ?? '',
             body: c['body'] as String? ?? '',
             sourceRef: c['source_ref'] as String? ?? '',
+          ),
+      ],
+      elements: [
+        for (final e in json['elements'] as List<dynamic>? ?? const [])
+          PlanElement(
+            code: (e as Map<String, dynamic>)['element_code'] as String? ?? '',
+            ordinal: (e['ordinal'] as num?)?.toInt() ?? 0,
+            body: e['body'] as String?,
           ),
       ],
       turn: switch (json['turn']) {

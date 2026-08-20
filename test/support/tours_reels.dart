@@ -6,6 +6,7 @@ import 'package:urim/core/result/result.dart';
 import 'package:urim/data/datasources/urim_remote_data_source.dart';
 import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
 import 'package:urim/domain/entities/preparation/pending_gesture.dart';
+import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/domain/repositories/study_repository.dart';
@@ -73,6 +74,18 @@ base class DepotFige implements StudyRepository {
   final List<(String, String)> decisions = [];
   final List<(String, String)> rejets = [];
   final List<String> paroles = [];
+
+  /// Le squelette envoye pendant le test, s'il l'a ete.
+  List<PlanElement>? elementsEnvoyes;
+
+  @override
+  Future<Result<Study>> setElements({
+    required String studyId,
+    required List<PlanElement> elements,
+  }) async {
+    elementsEnvoyes = elements;
+    return Result.success(etude);
+  }
 
   @override
   Future<Result<List<StudySummary>>> listMine() async =>

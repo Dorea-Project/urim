@@ -7,6 +7,7 @@ import 'package:urim/data/datasources/draft_local_data_source.dart';
 import 'package:urim/presentation/common/draft_keeper.dart';
 import 'package:urim/presentation/common/stale_banner.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
+import 'package:urim/presentation/preparation/plan_page.dart';
 import 'package:urim/presentation/preparation/preparation_view_model.dart';
 import 'package:urim/presentation/preparation/study_export.dart';
 import 'package:urim/presentation/preparation/widgets/pending_banner.dart';
@@ -183,6 +184,13 @@ class _Thread extends ConsumerWidget {
               stageCode: stageCode,
               optionCode: optionCode,
             )),
+            // Le seul geste de fin de fil que l'application sache ouvrir. Les
+            // autres restent fermés, avec leur motif.
+            onAction: (code) => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => PlanPage(study: state.study),
+              ),
+            ),
           ),
         },
     );

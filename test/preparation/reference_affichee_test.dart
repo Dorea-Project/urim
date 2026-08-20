@@ -91,18 +91,28 @@ void main() {
     expect(find.textContaining('-4000-'), findsNothing);
   });
 
-  testWidgets("un geste que l'écran ne sait pas ouvrir se montre fermé",
+  testWidgets("le geste servi s'ouvre, les autres restent fermés",
       (tester) async {
     // La capture du thème porte les trois gestes de fin de fil : « Écrire mes
-    // points », déclarée active par le serveur — la route existe — et les deux
-    // livrables, fermés avec leur motif.
+    // points », que l'application sait désormais ouvrir, et les deux livrables,
+    // que le serveur ferme lui-même avec leur motif.
     await pumpEtude(tester, avecReferences(ToursReels.theme, 'Colossiens 1:1-14'));
 
+    expect(find.byIcon(Icons.arrow_forward), findsOneWidget);
+    expect(find.byIcon(Icons.lock_outline), findsNWidgets(2));
+  });
+
+  testWidgets('écrire ses points ouvre le squelette', (tester) async {
+    await pumpEtude(tester, avecReferences(ToursReels.theme, 'Colossiens 1:1-14'));
+
+    await tester.tap(find.byIcon(Icons.arrow_forward));
+    await tester.pumpAndSettle();
+
+    expect(find.text(texte.preparationPlanTitle), findsOneWidget);
     expect(
-      find.byIcon(Icons.arrow_forward),
-      findsNothing,
-      reason: "aucun geste n'est servi par l'application : aucune flèche",
+      find.text(texte.preparationSectionDivisions),
+      findsOneWidget,
+      reason: "les dix de Braga s'affichent, dans leur ordre",
     );
-    expect(find.text(texte.preparationActionAVenir), findsWidgets);
   });
 }

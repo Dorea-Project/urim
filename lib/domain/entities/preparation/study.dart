@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/domain/entities/preparation/turn.dart';
 
@@ -26,6 +27,7 @@ final class Study extends Equatable {
     this.corpusDrifted = false,
     this.verses = const [],
     this.context = const [],
+    this.elements = const [],
   });
 
   final String id;
@@ -74,6 +76,19 @@ final class Study extends Equatable {
   /// Le corpus ne l'a pas pour toutes les unités : absent, rien ne s'affiche
   /// plutôt qu'une section vide qui promettrait ce qu'elle n'a pas.
   final List<ContextNote> context;
+
+  /// Le squelette homilétique, tel que le pasteur l'a écrit.
+  ///
+  /// Vide tant qu'il n'a rien posé — et c'est l'état normal d'une préparation
+  /// qui vient de s'ouvrir. Le livrable, lui, en exige au moins un point.
+  final List<PlanElement> elements;
+
+  /// Le plan porte-t-il au moins un point ? C'est le seuil du document : « les
+  /// diapositives mettent en page ce que vous avez écrit ; le moteur ne l'écrit
+  /// pas à votre place ».
+  bool get hasPlan => elements.any(
+        (e) => e.code == PlanSkeleton.pointCentral && !e.isEmpty,
+      );
 
   @override
   List<Object?> get props => [

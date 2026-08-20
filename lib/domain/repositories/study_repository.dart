@@ -2,6 +2,7 @@ import 'package:urim/core/result/cached.dart';
 import 'package:urim/core/result/result.dart';
 import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
 import 'package:urim/domain/entities/preparation/pending_gesture.dart';
+import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
 
@@ -84,6 +85,19 @@ abstract interface class StudyRepository {
   Future<Result<GestureOutcome>> say({
     required String studyId,
     required String rawInput,
+  });
+
+  /// Écrire le squelette homilétique — **l'envoi remplace l'ensemble**.
+  ///
+  /// Le serveur n'a pas de geste « effacer une section » : ce qui n'est pas
+  /// envoyé n'existe plus. L'écran envoie donc tout ce qu'il montre.
+  ///
+  /// Pas de file d'attente ici, contrairement aux trois gestes du fil : écrire
+  /// son plan hors réseau et le croire parti serait pire que d'attendre. Le
+  /// brouillon local, lui, garde la frappe.
+  Future<Result<Study>> setElements({
+    required String studyId,
+    required List<PlanElement> elements,
   });
 
   /// Les gestes en attente d'envoi pour cette préparation, dans l'ordre.

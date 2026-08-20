@@ -483,6 +483,71 @@ class AppTextFr extends AppText {
   String get profileNoNameAvatar => 'Aucun nom défini';
 
   @override
+  String get preparationPlanTitle => 'Mes points';
+
+  @override
+  String get preparationPlanIntro =>
+      'Le document met en page ce que tu écris. Rien n’est imposé : une section vide reste vide.';
+
+  @override
+  String get preparationPlanSave => 'Enregistrer';
+
+  @override
+  String get preparationPlanSaved => 'Ton plan est enregistré.';
+
+  @override
+  String get preparationPlanAdd => 'Ajouter une section';
+
+  @override
+  String get preparationPlanPointsHint =>
+      'Au moins un point : c’est ce que le document exige avant de sortir.';
+
+  @override
+  String get preparationSectionTitre => 'Titre';
+
+  @override
+  String get preparationSectionIntroduction => 'Introduction';
+
+  @override
+  String get preparationSectionProposition => 'Proposition';
+
+  @override
+  String get preparationSectionPhraseInterrogative => 'Phrase interrogative';
+
+  @override
+  String get preparationSectionPhraseDeTransition => 'Phrase de transition';
+
+  @override
+  String get preparationSectionDivisions => 'Les points';
+
+  @override
+  String get preparationSectionSubdivisions => 'Les sous-points';
+
+  @override
+  String get preparationSectionIllustrations => 'Illustrations';
+
+  @override
+  String get preparationSectionApplication => 'Application';
+
+  @override
+  String get preparationSectionConclusion => 'Conclusion';
+
+  @override
+  String get preparationSectionObjectif => 'Objectif';
+
+  @override
+  String get preparationSectionContexte => 'Contexte du livre';
+
+  @override
+  String get preparationSectionDefinitions => 'Définitions';
+
+  @override
+  String get preparationSectionNb => 'NB';
+
+  @override
+  String get preparationSectionTemoignage => 'Témoignage';
+
+  @override
   String get preparationActionAVenir =>
       'Le serveur accepte déjà tes points ; l\'écran pour les écrire n\'existe pas encore.';
 

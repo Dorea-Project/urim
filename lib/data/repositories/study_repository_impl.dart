@@ -17,6 +17,7 @@ import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/domain/entities/preparation/preparation_block.dart';
 import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
 import 'package:urim/domain/entities/preparation/pending_gesture.dart';
+import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/domain/repositories/study_repository.dart';
@@ -80,6 +81,13 @@ final class RemoteStudyRepository implements StudyRepository {
   @override
   Future<Result<Study>> getById(String studyId) =>
       _guard(() => _source.getStudy(studyId));
+
+  @override
+  Future<Result<Study>> setElements({
+    required String studyId,
+    required List<PlanElement> elements,
+  }) =>
+      _guard(() => _source.setElements(studyId: studyId, elements: elements));
 
   @override
   Future<Result<GestureOutcome>> decide({
@@ -270,6 +278,13 @@ final class MockStudyRepository implements StudyRepository {
   @override
   Future<Result<Study>> getById(String studyId) =>
       _avec(studyId, (titre) => _engine.read(studyId, titre));
+
+  @override
+  Future<Result<Study>> setElements({
+    required String studyId,
+    required List<PlanElement> elements,
+  }) =>
+      _avec(studyId, (titre) => _engine.setElements(studyId, titre, elements));
 
   @override
   Future<Result<GestureOutcome>> decide({

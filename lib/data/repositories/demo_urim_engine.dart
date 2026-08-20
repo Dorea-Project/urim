@@ -1,3 +1,4 @@
+import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/domain/entities/preparation/turn.dart';
@@ -46,6 +47,18 @@ final class DemoUrimEngine {
   }
 
   Study read(String studyId, String rawInput) => _study(studyId, rawInput);
+
+  /// Écrit le squelette — **remplace l'ensemble**, comme le serveur.
+  Study setElements(
+    String studyId,
+    String rawInput,
+    List<PlanElement> elements,
+  ) {
+    _states.putIfAbsent(studyId, () => _DemoState(step: _Step.axis)).elements =
+        List.of(elements);
+
+    return _study(studyId, rawInput);
+  }
 
   Study decide(String studyId, String rawInput, String optionCode) {
     final state = _states.putIfAbsent(studyId, () => _DemoState(step: _Step.axis));
@@ -115,6 +128,7 @@ final class DemoUrimEngine {
       pericopeLabel: state.unitCode != null ? 'Actes 2:42-47' : null,
       axisCode: state.axisCode,
       boundsOverridden: state.boundsKept == false,
+      elements: state.elements,
       outcome: switch (etape) {
         _Step.refused => TurnOutcome.refused,
         _Step.bearings => TurnOutcome.kept,
@@ -208,6 +222,9 @@ final class _DemoState {
 
   final _Step step;
   final Set<String> dismissed = {};
+
+  /// Le squelette écrit par le pasteur pendant cette session de démonstration.
+  List<PlanElement> elements = const [];
 
   String? axisCode;
   String? unitCode;

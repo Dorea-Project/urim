@@ -31,6 +31,7 @@ class TurnView extends StatelessWidget {
     required this.live,
     required this.onDecision,
     required this.onDismiss,
+    required this.onAction,
   });
 
   final Turn turn;
@@ -41,6 +42,10 @@ class TurnView extends StatelessWidget {
 
   final OnDecision onDecision;
   final OnDismiss onDismiss;
+
+  /// Ce que l'écran fait d'un geste de fin de fil — écrire ses points, sortir
+  /// un document. Appelé pour les seuls gestes qu'il sait ouvrir.
+  final void Function(String code) onAction;
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +105,7 @@ class TurnView extends StatelessWidget {
                         live: live,
                         onDecision: onDecision,
                         onDismiss: onDismiss,
+                        onAction: onAction,
                       )
                     else
                       _Folded(
@@ -108,6 +114,7 @@ class TurnView extends StatelessWidget {
                         live: live,
                         onDecision: onDecision,
                         onDismiss: onDismiss,
+                        onAction: onAction,
                       ),
                   ],
                   // La question vient après ce qu'il y a à regarder : on ne
@@ -173,6 +180,7 @@ class _BlockView extends StatelessWidget {
     required this.live,
     required this.onDecision,
     required this.onDismiss,
+    required this.onAction,
   });
 
   final TurnBlock block;
@@ -180,6 +188,7 @@ class _BlockView extends StatelessWidget {
   final bool live;
   final OnDecision onDecision;
   final OnDismiss onDismiss;
+  final void Function(String code) onAction;
 
   @override
   Widget build(BuildContext context) => switch (block) {
@@ -215,7 +224,8 @@ class _BlockView extends StatelessWidget {
           ),
         FeasibilityBlock(:final items) => _Feasibility(items: items),
         ThemeBlock(:final body) => _Theme(body: body),
-        ActionsBlock(:final items) => _Actions(items: items),
+        ActionsBlock(:final items) =>
+          _Actions(items: items, onAction: onAction),
         // Un `kind` que cette version ne connaît pas : tu plutôt que rendu de
         // travers. Le reste du tour reste lisible.
         UnknownBlock() => const SizedBox.shrink(),
@@ -235,6 +245,7 @@ class _Folded extends StatelessWidget {
     required this.live,
     required this.onDecision,
     required this.onDismiss,
+    required this.onAction,
   });
 
   final TurnBlock block;
@@ -242,6 +253,7 @@ class _Folded extends StatelessWidget {
   final bool live;
   final OnDecision onDecision;
   final OnDismiss onDismiss;
+  final void Function(String code) onAction;
 
   Widget _bloc(BuildContext context) => _BlockView(
         block: block,
@@ -249,6 +261,7 @@ class _Folded extends StatelessWidget {
         live: live,
         onDecision: onDecision,
         onDismiss: onDismiss,
+        onAction: onAction,
       );
 
   @override
@@ -767,12 +780,20 @@ class _Theme extends StatelessWidget {
 /// Le jour où un écran existe, son code entre dans [_servis] et la ligne
 /// s'ouvre.
 class _Actions extends StatelessWidget {
-  const _Actions({required this.items});
+  const _Actions({required this.items, required this.onAction});
 
-  /// Les gestes que cette application sait ouvrir. Vide, et ce vide est dit.
-  static const Set<String> _servis = {};
+  /// Les gestes que cette application sait ouvrir. Les autres se montrent
+  /// fermés, avec leur motif.
+  static const Set<String> _servis = {'elements'};
 
   final List<ActionItem> items;
+  final void Function(String code) onAction;
+
+  /// Servi par le contrat **et** par l'application : les deux conditions, parce
+  /// qu'un geste peut manquer d'un côté ou de l'autre pour des raisons
+  /// différentes, et que le pasteur n'a pas à faire la différence.
+  static bool _ouvrable(ActionItem item) =>
+      item.enabled && _servis.contains(item.code);
 
   @override
   Widget build(BuildContext context) {
@@ -783,13 +804,13 @@ class _Actions extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         for (final item in items) ...[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+          InkWell(
+            onTap: _ouvrable(item) ? () => onAction(item.code) : null,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               Icon(
-                item.enabled && _servis.contains(item.code)
-                    ? Icons.arrow_forward
-                    : Icons.lock_outline,
+                _ouvrable(item) ? Icons.arrow_forward : Icons.lock_outline,
                 size: 16,
                 color: context.colors.textSecondary,
               ),
@@ -801,12 +822,14 @@ class _Actions extends StatelessWidget {
                     Text(
                       item.label,
                       style: theme.textTheme.titleMedium?.copyWith(
-                        color: context.colors.textSecondary,
+                        color: _ouvrable(item)
+                            ? context.colors.textPrimary
+                            : context.colors.textSecondary,
                       ),
                     ),
                     // Le motif du serveur quand il en donne un, le nôtre quand
                     // c'est l'écran qui manque. Jamais rien.
-                    if (item.unavailableReason.isEmpty) ...[
+                    if (item.unavailableReason.isEmpty && !_ouvrable(item)) ...[
                       const SizedBox(height: AppSpacing.xs),
                       Text(
                         text.preparationActionAVenir,
@@ -829,7 +852,8 @@ class _Actions extends StatelessWidget {
                   ],
                 ),
               ),
-            ],
+              ],
+            ),
           ),
           if (item != items.last) const SizedBox(height: AppSpacing.md),
         ],

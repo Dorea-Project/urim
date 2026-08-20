@@ -46,3 +46,28 @@ String convocationKindLabel(AppText text, ConvocationKind kind) =>
       ConvocationKind.recognizedInQuote =>
         text.transcriptionConvokedRecognised,
     };
+
+/// Comment l'écran nomme une section du squelette.
+///
+/// Le serveur tient une liste **fermée** de codes ; le pasteur, lui, lit des
+/// mots. La traduction vit ici comme les autres, à un seul endroit — et un code
+/// inconnu se rend tel quel plutôt que de disparaître : mieux vaut un mot brut
+/// qu'une section qui s'évapore de son plan.
+String planSectionLabel(AppText text, String code) => switch (code) {
+      'titre' => text.preparationSectionTitre,
+      'introduction' => text.preparationSectionIntroduction,
+      'proposition' => text.preparationSectionProposition,
+      'phrase_interrogative' => text.preparationSectionPhraseInterrogative,
+      'phrase_de_transition' => text.preparationSectionPhraseDeTransition,
+      'divisions' => text.preparationSectionDivisions,
+      'subdivisions' => text.preparationSectionSubdivisions,
+      'illustrations' => text.preparationSectionIllustrations,
+      'application' => text.preparationSectionApplication,
+      'conclusion' => text.preparationSectionConclusion,
+      'objectif' => text.preparationSectionObjectif,
+      'contexte' => text.preparationSectionContexte,
+      'definitions' => text.preparationSectionDefinitions,
+      'nb' => text.preparationSectionNb,
+      'temoignage' => text.preparationSectionTemoignage,
+      _ => code,
+    };

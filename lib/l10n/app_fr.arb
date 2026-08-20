@@ -368,6 +368,90 @@
   "@profileNoNameAvatar": {
     "description": "Annonce vocale de la silhouette qui remplace les initiales. Jamais affichée."
   },
+  "preparationPlanTitle": "Mes points",
+  "@preparationPlanTitle": {
+    "description": "Titre de l’écran du squelette homilétique."
+  },
+  "preparationPlanIntro": "Le document met en page ce que tu écris. Rien n’est imposé : une section vide reste vide.",
+  "@preparationPlanIntro": {
+    "description": "Ce que l’écran promet en haut, repris du document."
+  },
+  "preparationPlanSave": "Enregistrer",
+  "@preparationPlanSave": {
+    "description": "Bouton qui envoie le squelette au serveur."
+  },
+  "preparationPlanSaved": "Ton plan est enregistré.",
+  "@preparationPlanSaved": {
+    "description": "Confirmation après envoi."
+  },
+  "preparationPlanAdd": "Ajouter une section",
+  "@preparationPlanAdd": {
+    "description": "Ouvre les sections que Braga ne nomme pas."
+  },
+  "preparationPlanPointsHint": "Au moins un point : c’est ce que le document exige avant de sortir.",
+  "@preparationPlanPointsHint": {
+    "description": "Dit le seuil du livrable, là où il se joue."
+  },
+  "preparationSectionTitre": "Titre",
+  "@preparationSectionTitre": {
+    "description": "Nom d’une section du squelette homilétique."
+  },
+  "preparationSectionIntroduction": "Introduction",
+  "@preparationSectionIntroduction": {
+    "description": "Nom d’une section du squelette homilétique."
+  },
+  "preparationSectionProposition": "Proposition",
+  "@preparationSectionProposition": {
+    "description": "Nom d’une section du squelette homilétique."
+  },
+  "preparationSectionPhraseInterrogative": "Phrase interrogative",
+  "@preparationSectionPhraseInterrogative": {
+    "description": "Nom d’une section du squelette homilétique."
+  },
+  "preparationSectionPhraseDeTransition": "Phrase de transition",
+  "@preparationSectionPhraseDeTransition": {
+    "description": "Nom d’une section du squelette homilétique."
+  },
+  "preparationSectionDivisions": "Les points",
+  "@preparationSectionDivisions": {
+    "description": "Nom d’une section du squelette homilétique."
+  },
+  "preparationSectionSubdivisions": "Les sous-points",
+  "@preparationSectionSubdivisions": {
+    "description": "Nom d’une section du squelette homilétique."
+  },
+  "preparationSectionIllustrations": "Illustrations",
+  "@preparationSectionIllustrations": {
+    "description": "Nom d’une section du squelette homilétique."
+  },
+  "preparationSectionApplication": "Application",
+  "@preparationSectionApplication": {
+    "description": "Nom d’une section du squelette homilétique."
+  },
+  "preparationSectionConclusion": "Conclusion",
+  "@preparationSectionConclusion": {
+    "description": "Nom d’une section du squelette homilétique."
+  },
+  "preparationSectionObjectif": "Objectif",
+  "@preparationSectionObjectif": {
+    "description": "Nom d’une section du squelette homilétique."
+  },
+  "preparationSectionContexte": "Contexte du livre",
+  "@preparationSectionContexte": {
+    "description": "Nom d’une section du squelette homilétique."
+  },
+  "preparationSectionDefinitions": "Définitions",
+  "@preparationSectionDefinitions": {
+    "description": "Nom d’une section du squelette homilétique."
+  },
+  "preparationSectionNb": "NB",
+  "@preparationSectionNb": {
+    "description": "Nom d’une section du squelette homilétique."
+  },
+  "preparationSectionTemoignage": "Témoignage",
+  "@preparationSectionTemoignage": {
+    "description": "Nom d’une section du squelette homilétique."
+  },
   "preparationActionAVenir": "Le serveur accepte déjà tes points ; l'écran pour les écrire n'existe pas encore.",
   "@preparationActionAVenir": {
     "description": "Motif d'un geste que le contrat sert et que l'application ne sait pas encore ouvrir."
