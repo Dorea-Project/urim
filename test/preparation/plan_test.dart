@@ -1,11 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:urim/data/datasources/urim_remote_data_source.dart';
 import 'package:urim/data/repositories/study_repository_impl.dart';
+import 'package:urim/domain/entities/preparation/deliverable.dart';
 import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/l10n/generated/app_text_fr.dart';
 import 'package:urim/presentation/preparation/plan_page.dart';
+import 'package:urim/presentation/preparation/preparation_page.dart';
 
 import '../support/pump_app.dart';
 import '../support/tours_reels.dart';
@@ -128,4 +133,74 @@ void main() {
 
     expect(find.text(texte.preparationPlanPointsHint), findsOneWidget);
   });
+
+  group('le document', () {
+    testWidgets('un refus de citation montre ce qui ne va pas', (tester) async {
+      // Le dossier revient « rejete » : aucun fichier n'existe, et c'est le
+      // seul écran où un verset abîmé se voit avant le dimanche.
+      final depot = DepotFige(studyFromWire(_ficheOuverte()))
+        ..dossier = const Deliverable(
+          id: 'd-1',
+          kind: 'note',
+          format: 'docx',
+          validation: 'rejete',
+          controls: [
+            CitationCheck(
+              slideNo: 1,
+              reference: 'Romains 8:1',
+              projectedText: "Il n'y a donc maintenant aucune condamnation",
+              verdict: 'altere',
+              rationale: 'Le texte projeté ne correspond à aucune version détenue.',
+            ),
+          ],
+        );
+
+      tester.view.physicalSize = const Size(1000, 4000);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            demoConfigOverride,
+            studyRepositoryProvider.overrideWithValue(depot),
+          ],
+          child: wrapScreen(const PreparationPage(preparationId: 'etude-1')),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Deux gestes ouvrables — écrire ses points, et la fiche de chaire. Le
+      // PowerPoint reste fermé : composer des diapositives demande un éditeur
+      // qui n'existe pas.
+      expect(find.byIcon(Icons.arrow_forward), findsNWidgets(2));
+      await tester.tap(find.text('Fiche de chaire'));
+      await tester.pumpAndSettle();
+
+      expect(depot.documentsDemandes, ['note']);
+      expect(find.text(texte.preparationDocumentRefusedTitle), findsOneWidget);
+      expect(find.text('Romains 8:1'), findsOneWidget);
+    });
+  });
+}
+
+/// La capture du thème, avec la fiche de chaire **ouverte**.
+///
+/// Le serveur annonçait les deux livrables fermés alors qu'ils fonctionnent —
+/// un motif qui datait d'avant le module. Il dit désormais vrai, et la capture,
+/// elle, est plus vieille que la correction.
+Map<String, dynamic> _ficheOuverte() {
+  final charge = jsonDecode(ToursReels.json(ToursReels.theme)) as Map<String, dynamic>;
+
+  for (final bloc in ((charge['turn'] as Map<String, dynamic>)['blocks'] as List)
+      .cast<Map<String, dynamic>>()) {
+    for (final item in (bloc['items'] as List? ?? const []).cast<Map<String, dynamic>>()) {
+      if (item['code'] == 'sheet') {
+        item['enabled'] = true;
+        item['unavailable_reason'] = '';
+      }
+    }
+  }
+
+  return charge;
 }

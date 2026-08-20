@@ -784,7 +784,12 @@ class _Actions extends StatelessWidget {
 
   /// Les gestes que cette application sait ouvrir. Les autres se montrent
   /// fermés, avec leur motif.
-  static const Set<String> _servis = {'elements'};
+  ///
+  /// Le `deck` n'y est pas : produire des diapositives demande de **composer**
+  /// ce qui sera projeté — un titre, une référence, le texte tel qu'il montera
+  /// à l'écran — et cet éditeur n'existe pas. Le serveur, lui, l'ouvre dès
+  /// qu'un plan porte un point ; l'application dit alors ce qui lui manque.
+  static const Set<String> _servis = {'elements', 'sheet'};
 
   final List<ActionItem> items;
   final void Function(String code) onAction;

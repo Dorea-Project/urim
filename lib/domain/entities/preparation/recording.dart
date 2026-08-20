@@ -102,3 +102,4 @@ final class Recording extends Equatable {
   @override
   String toString() => 'Recording($id, ${duration.inSeconds}s, ${status.name})';
 }
+ 

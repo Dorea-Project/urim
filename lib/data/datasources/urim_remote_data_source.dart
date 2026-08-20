@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:urim/core/network/dio_error_mapper.dart';
 import 'package:urim/data/datasources/turn_cache_local_data_source.dart';
+import 'package:urim/domain/entities/preparation/deliverable.dart';
 import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
@@ -110,6 +111,46 @@ final class UrimRemoteDataSource {
         ],
       }));
 
+  /// `POST /urim/studies/{id}/deliverable` — soumettre ce qui sortira.
+  ///
+  /// **Aucun fichier n'existe encore.** Le contrôle est en amont, parce qu'un
+  /// fichier produit est un fichier qui circule : le serveur juge chaque
+  /// citation contre toutes les versions détenues, puis dit `conforme` ou
+  /// `rejete`. Un rejet revient en 201 avec ses verdicts — c'est ce que le
+  /// produit veut montrer, pas une erreur.
+  Future<Deliverable> submitDeliverable({
+    required String studyId,
+    required String kind,
+    List<Map<String, String>> slides = const [],
+  }) async =>
+      _deliverable(await _post('/urim/studies/$studyId/deliverable', {
+        'kind': kind,
+        'diapositives': slides,
+      }));
+
+  /// `GET /urim/deliverables/{id}/fichier` — les octets.
+  ///
+  /// Le serveur ne les range nulle part : il les produit à la demande. Un
+  /// livrable rejeté rend 409, et c'est le seul endroit où le contrôle devient
+  /// un refus — demander les octets de ce qui a été rejeté, c'est demander
+  /// précisément ce que le contrôle existe pour ne pas produire.
+  Future<DeliverableFile> downloadDeliverable(String deliverableId) async {
+    try {
+      final reponse = await _dio.get<List<int>>(
+        '/urim/deliverables/$deliverableId/fichier',
+        options: Options(responseType: ResponseType.bytes),
+      );
+
+      return DeliverableFile(
+        bytes: reponse.data ?? const [],
+        filename: _nomDuFichier(reponse.headers.value('content-disposition')) ??
+            'preparation-$deliverableId',
+      );
+    } on DioException catch (e) {
+      throw mapDioException(e);
+    }
+  }
+
   Future<T?> _get<T>(String path) async {
     try {
       return (await _dio.get<T>(path)).data;
@@ -127,6 +168,27 @@ final class UrimRemoteDataSource {
     } on DioException catch (e) {
       throw mapDioException(e);
     }
+  }
+
+  Deliverable _deliverable(Map<String, dynamic>? json) {
+    final charge = json ?? const {};
+
+    return Deliverable(
+      id: charge['id'] as String? ?? '',
+      kind: charge['kind'] as String? ?? '',
+      format: charge['format'] as String? ?? '',
+      validation: charge['validation'] as String? ?? '',
+      controls: [
+        for (final c in charge['controles'] as List<dynamic>? ?? const [])
+          CitationCheck(
+            slideNo: ((c as Map<String, dynamic>)['slide_no'] as num?)?.toInt() ?? 0,
+            reference: c['reference'] as String? ?? '',
+            projectedText: c['projected_text'] as String? ?? '',
+            verdict: c['verdict'] as String? ?? '',
+            rationale: c['rationale'] as String? ?? '',
+          ),
+      ],
+    );
   }
 
   Future<Map<String, dynamic>?> _put(
@@ -355,3 +417,17 @@ DateTime? _dateFrom(Object? value) =>
 String _dayOf(DateTime date) => '${date.year.toString().padLeft(4, '0')}-'
     '${date.month.toString().padLeft(2, '0')}-'
     '${date.day.toString().padLeft(2, '0')}';
+
+/// Le nom que le serveur donne au fichier, lu dans `Content-Disposition`.
+///
+/// Il porte l'extension réelle — et c'est elle qui compte : le serveur peut
+/// servir le format natif quand la conversion PDF échoue, *aucun mur un
+/// vendredi soir*. Le client lit donc ce qu'il reçoit, jamais ce qu'il a
+/// demandé.
+String? _nomDuFichier(String? disposition) {
+  if (disposition == null) return null;
+
+  final trouve = RegExp('filename="([^"]+)"').firstMatch(disposition);
+
+  return trouve?.group(1);
+}

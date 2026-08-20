@@ -483,6 +483,22 @@ class AppTextFr extends AppText {
   String get profileNoNameAvatar => 'Aucun nom défini';
 
   @override
+  String get preparationDocumentWorking => 'Je prépare le document…';
+
+  @override
+  String preparationDocumentReady(String dossier) {
+    return 'Ton document est dans « $dossier ».';
+  }
+
+  @override
+  String get preparationDocumentRefusedTitle =>
+      'Une citation ne correspond pas au corpus';
+
+  @override
+  String get preparationDocumentRefusedBody =>
+      'Le document n’est pas produit tant qu’un verset projeté n’est pas celui de la Bible. Corrige, puis redemande.';
+
+  @override
   String get preparationPlanTitle => 'Mes points';
 
   @override

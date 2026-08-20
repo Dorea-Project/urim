@@ -7,6 +7,7 @@ import 'package:urim/data/datasources/draft_local_data_source.dart';
 import 'package:urim/presentation/common/draft_keeper.dart';
 import 'package:urim/presentation/common/stale_banner.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
+import 'package:urim/presentation/preparation/deliverable_view_model.dart';
 import 'package:urim/presentation/preparation/plan_page.dart';
 import 'package:urim/presentation/preparation/preparation_view_model.dart';
 import 'package:urim/presentation/preparation/study_export.dart';
@@ -184,13 +185,7 @@ class _Thread extends ConsumerWidget {
               stageCode: stageCode,
               optionCode: optionCode,
             )),
-            // Le seul geste de fin de fil que l'application sache ouvrir. Les
-            // autres restent fermés, avec leur motif.
-            onAction: (code) => Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => PlanPage(study: state.study),
-              ),
-            ),
+            onAction: (code) => _geste(context, ref, state.study, code),
           ),
         },
     );
@@ -405,5 +400,78 @@ class _ComposerState extends ConsumerState<_Composer> {
         ],
       ),
     );
+  }
+}
+
+/// Ce que l'écran fait d'un geste de fin de fil.
+///
+/// Écrire ses points ouvre un écran ; demander un document en produit un. Les
+/// gestes que l'application ne sait pas encore ouvrir n'arrivent jamais ici :
+/// le bloc ne les rend pas touchables.
+Future<void> _geste(
+  BuildContext context,
+  WidgetRef ref,
+  Study study,
+  String code,
+) async {
+  if (code == 'elements') {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => PlanPage(study: study)),
+    );
+    return;
+  }
+
+  final text = AppText.of(context);
+  final messager = ScaffoldMessenger.of(context);
+
+  messager.showSnackBar(
+    SnackBar(content: Text(text.preparationDocumentWorking)),
+  );
+
+  final issue = await ref.read(deliverableProducerProvider.notifier).produce(
+        studyId: study.id,
+        // « Fiche de chaire » côté écran, `note` côté contrat.
+        kind: code == 'sheet' ? 'note' : 'deck',
+      );
+
+  if (!context.mounted) return;
+
+  messager.hideCurrentSnackBar();
+
+  switch (issue) {
+    case DocumentReady(:final path):
+      messager.showSnackBar(
+        SnackBar(content: Text(text.preparationDocumentReady(path))),
+      );
+    case CitationRefused(:final dossier):
+      await showDialog<void>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Text(text.preparationDocumentRefusedTitle),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(text.preparationDocumentRefusedBody),
+              for (final controle in dossier.altered) ...[
+                const SizedBox(height: AppSpacing.md),
+                Text(
+                  controle.reference,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                Text(controle.rationale),
+              ],
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(text.back),
+            ),
+          ],
+        ),
+      );
+    case DeliverableFailed(:final failure):
+      messager.showSnackBar(SnackBar(content: Text(failure.message)));
   }
 }

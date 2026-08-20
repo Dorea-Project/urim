@@ -903,6 +903,30 @@ abstract class AppText {
   /// **'Aucun nom défini'**
   String get profileNoNameAvatar;
 
+  /// Pendant la soumission et le rendu.
+  ///
+  /// In fr, this message translates to:
+  /// **'Je prépare le document…'**
+  String get preparationDocumentWorking;
+
+  /// Dit où le fichier a été posé.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton document est dans « {dossier} ».'**
+  String preparationDocumentReady(String dossier);
+
+  /// Titre du dossier de refus.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une citation ne correspond pas au corpus'**
+  String get preparationDocumentRefusedTitle;
+
+  /// Ce que le refus veut dire, sans accuser.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le document n’est pas produit tant qu’un verset projeté n’est pas celui de la Bible. Corrige, puis redemande.'**
+  String get preparationDocumentRefusedBody;
+
   /// Titre de l’écran du squelette homilétique.
   ///
   /// In fr, this message translates to:

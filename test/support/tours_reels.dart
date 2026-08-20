@@ -6,6 +6,8 @@ import 'package:urim/core/result/result.dart';
 import 'package:urim/data/datasources/urim_remote_data_source.dart';
 import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
 import 'package:urim/domain/entities/preparation/pending_gesture.dart';
+import 'package:urim/core/error/failure.dart';
+import 'package:urim/domain/entities/preparation/deliverable.dart';
 import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
@@ -77,6 +79,35 @@ base class DepotFige implements StudyRepository {
 
   /// Le squelette envoye pendant le test, s'il l'a ete.
   List<PlanElement>? elementsEnvoyes;
+
+  /// Ce que le depot rendra quand l'ecran demandera un document. Nul = refus.
+  Deliverable? dossier;
+  DeliverableFile? fichier;
+
+  /// Les documents demandes, dans l'ordre — « note », « deck ».
+  final List<String> documentsDemandes = [];
+
+  @override
+  Future<Result<Deliverable>> submitDeliverable({
+    required String studyId,
+    required String kind,
+  }) async {
+    documentsDemandes.add(kind);
+    final rendu = dossier;
+
+    return rendu == null
+        ? const Result.failed(ServerFailure(message: 'Aucun document ici.'))
+        : Result.success(rendu);
+  }
+
+  @override
+  Future<Result<DeliverableFile>> downloadDeliverable(String deliverableId) async {
+    final rendu = fichier;
+
+    return rendu == null
+        ? const Result.failed(ServerFailure(message: 'Aucun fichier ici.'))
+        : Result.success(rendu);
+  }
 
   @override
   Future<Result<Study>> setElements({

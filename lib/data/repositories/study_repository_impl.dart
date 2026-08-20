@@ -17,6 +17,7 @@ import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/domain/entities/preparation/preparation_block.dart';
 import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
 import 'package:urim/domain/entities/preparation/pending_gesture.dart';
+import 'package:urim/domain/entities/preparation/deliverable.dart';
 import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
@@ -88,6 +89,17 @@ final class RemoteStudyRepository implements StudyRepository {
     required List<PlanElement> elements,
   }) =>
       _guard(() => _source.setElements(studyId: studyId, elements: elements));
+
+  @override
+  Future<Result<Deliverable>> submitDeliverable({
+    required String studyId,
+    required String kind,
+  }) =>
+      _guard(() => _source.submitDeliverable(studyId: studyId, kind: kind));
+
+  @override
+  Future<Result<DeliverableFile>> downloadDeliverable(String deliverableId) =>
+      _guard(() => _source.downloadDeliverable(deliverableId));
 
   @override
   Future<Result<GestureOutcome>> decide({
@@ -285,6 +297,25 @@ final class MockStudyRepository implements StudyRepository {
     required List<PlanElement> elements,
   }) =>
       _avec(studyId, (titre) => _engine.setElements(studyId, titre, elements));
+
+  /// Le mannequin ne produit **aucun document** : il n'a ni corpus à
+  /// confronter, ni écrivain de fichier. Dire non est la seule réponse vraie —
+  /// fabriquer un `.docx` de démonstration ferait croire à un contrôle qui n'a
+  /// pas eu lieu.
+  @override
+  Future<Result<Deliverable>> submitDeliverable({
+    required String studyId,
+    required String kind,
+  }) async =>
+      const Result.failed(
+        ServerFailure(message: 'Le mode démonstration ne produit pas de document.'),
+      );
+
+  @override
+  Future<Result<DeliverableFile>> downloadDeliverable(String deliverableId) async =>
+      const Result.failed(
+        ServerFailure(message: 'Le mode démonstration ne produit pas de document.'),
+      );
 
   @override
   Future<Result<GestureOutcome>> decide({

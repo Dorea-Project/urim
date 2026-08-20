@@ -2,6 +2,7 @@ import 'package:urim/core/result/cached.dart';
 import 'package:urim/core/result/result.dart';
 import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
 import 'package:urim/domain/entities/preparation/pending_gesture.dart';
+import 'package:urim/domain/entities/preparation/deliverable.dart';
 import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
@@ -99,6 +100,21 @@ abstract interface class StudyRepository {
     required String studyId,
     required List<PlanElement> elements,
   });
+
+  /// Soumettre ce qui sortira — **et le faire juger avant qu'un fichier
+  /// existe**.
+  ///
+  /// Ce n'est pas un export : c'est une soumission au contrôle. Le serveur
+  /// compare chaque citation projetée au corpus, sur toutes les versions
+  /// détenues, et rend un dossier de validation. Un rejet n'est pas une erreur,
+  /// c'est le seul écran où un verset abîmé se voit **avant** le dimanche.
+  Future<Result<Deliverable>> submitDeliverable({
+    required String studyId,
+    required String kind,
+  });
+
+  /// Les octets d'un document déjà déclaré conforme.
+  Future<Result<DeliverableFile>> downloadDeliverable(String deliverableId);
 
   /// Les gestes en attente d'envoi pour cette préparation, dans l'ordre.
   ///

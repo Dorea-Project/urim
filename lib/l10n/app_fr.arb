@@ -368,6 +368,23 @@
   "@profileNoNameAvatar": {
     "description": "Annonce vocale de la silhouette qui remplace les initiales. Jamais affichée."
   },
+  "preparationDocumentWorking": "Je prépare le document…",
+  "@preparationDocumentWorking": {
+    "description": "Pendant la soumission et le rendu."
+  },
+  "preparationDocumentReady": "Ton document est dans « {dossier} ».",
+  "@preparationDocumentReady": {
+    "placeholders": { "dossier": { "type": "String" } },
+    "description": "Dit où le fichier a été posé."
+  },
+  "preparationDocumentRefusedTitle": "Une citation ne correspond pas au corpus",
+  "@preparationDocumentRefusedTitle": {
+    "description": "Titre du dossier de refus."
+  },
+  "preparationDocumentRefusedBody": "Le document n’est pas produit tant qu’un verset projeté n’est pas celui de la Bible. Corrige, puis redemande.",
+  "@preparationDocumentRefusedBody": {
+    "description": "Ce que le refus veut dire, sans accuser."
+  },
   "preparationPlanTitle": "Mes points",
   "@preparationPlanTitle": {
     "description": "Titre de l’écran du squelette homilétique."
