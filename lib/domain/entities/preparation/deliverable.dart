@@ -75,3 +75,32 @@ final class DeliverableFile extends Equatable {
   @override
   List<Object?> get props => [filename, bytes.length];
 }
+
+/// Une diapositive composée par le pasteur.
+///
+/// `projectedText` est **le sien** — il coupe, il abrège, il glose entre
+/// crochets — et c'est ce que le serveur juge contre le corpus. La référence,
+/// elle, est obligatoire : sans elle il n'y a rien à confronter.
+final class Slide extends Equatable {
+  const Slide({
+    required this.reference,
+    this.title = '',
+    this.projectedText = '',
+  });
+
+  final String reference;
+  final String title;
+  final String projectedText;
+
+  bool get isReady => reference.trim().length >= 2;
+
+  Slide copyWith({String? reference, String? title, String? projectedText}) =>
+      Slide(
+        reference: reference ?? this.reference,
+        title: title ?? this.title,
+        projectedText: projectedText ?? this.projectedText,
+      );
+
+  @override
+  List<Object?> get props => [reference, title, projectedText];
+}

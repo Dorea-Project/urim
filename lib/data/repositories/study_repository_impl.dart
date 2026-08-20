@@ -17,6 +17,7 @@ import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/domain/entities/preparation/preparation_block.dart';
 import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
 import 'package:urim/domain/entities/preparation/pending_gesture.dart';
+import 'package:urim/domain/entities/bible/passage_detail.dart';
 import 'package:urim/domain/entities/preparation/deliverable.dart';
 import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
@@ -91,15 +92,37 @@ final class RemoteStudyRepository implements StudyRepository {
       _guard(() => _source.setElements(studyId: studyId, elements: elements));
 
   @override
+  Future<Result<Study>> setSupports({
+    required String studyId,
+    required List<String> supports,
+  }) =>
+      _guard(() => _source.setSupports(studyId: studyId, supports: supports));
+
+  @override
   Future<Result<Deliverable>> submitDeliverable({
     required String studyId,
     required String kind,
+    List<Slide> slides = const [],
   }) =>
-      _guard(() => _source.submitDeliverable(studyId: studyId, kind: kind));
+      _guard(
+        () => _source.submitDeliverable(
+          studyId: studyId,
+          kind: kind,
+          slides: slides,
+        ),
+      );
 
   @override
   Future<Result<DeliverableFile>> downloadDeliverable(String deliverableId) =>
       _guard(() => _source.downloadDeliverable(deliverableId));
+
+  @override
+  Future<Result<PassageDetail>> explorePassage(String reference) =>
+      _guard(() => _source.explorePassage(reference));
+
+  @override
+  Future<Result<Concordance>> concordance(String lemma) =>
+      _guard(() => _source.concordance(lemma));
 
   @override
   Future<Result<GestureOutcome>> decide({
@@ -298,6 +321,15 @@ final class MockStudyRepository implements StudyRepository {
   }) =>
       _avec(studyId, (titre) => _engine.setElements(studyId, titre, elements));
 
+  /// Le mannequin n'a pas de corpus : il ne peut ni résoudre une référence ni
+  /// dire qu'elle n'existe pas. Il garde les saisies telles quelles.
+  @override
+  Future<Result<Study>> setSupports({
+    required String studyId,
+    required List<String> supports,
+  }) =>
+      _avec(studyId, (titre) => _engine.read(studyId, titre));
+
   /// Le mannequin ne produit **aucun document** : il n'a ni corpus à
   /// confronter, ni écrivain de fichier. Dire non est la seule réponse vraie —
   /// fabriquer un `.docx` de démonstration ferait croire à un contrôle qui n'a
@@ -306,6 +338,7 @@ final class MockStudyRepository implements StudyRepository {
   Future<Result<Deliverable>> submitDeliverable({
     required String studyId,
     required String kind,
+    List<Slide> slides = const [],
   }) async =>
       const Result.failed(
         ServerFailure(message: 'Le mode démonstration ne produit pas de document.'),
@@ -315,6 +348,20 @@ final class MockStudyRepository implements StudyRepository {
   Future<Result<DeliverableFile>> downloadDeliverable(String deliverableId) async =>
       const Result.failed(
         ServerFailure(message: 'Le mode démonstration ne produit pas de document.'),
+      );
+
+  /// Le mannequin n'a **pas de corpus**. Rendre un passage inventé serait
+  /// exactement ce que D18 interdit : le verset ne vient jamais du modèle.
+  @override
+  Future<Result<PassageDetail>> explorePassage(String reference) async =>
+      const Result.failed(
+        ServerFailure(message: 'Le mode démonstration ne porte aucun corpus.'),
+      );
+
+  @override
+  Future<Result<Concordance>> concordance(String lemma) async =>
+      const Result.failed(
+        ServerFailure(message: 'Le mode démonstration ne porte aucun corpus.'),
       );
 
   @override

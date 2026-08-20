@@ -20,7 +20,7 @@ Trois règles tenues d'un sprint à l'autre :
 
 ---
 
-## Sprint 1 — Le pasteur emporte quelque chose
+## Sprint 1 — Le pasteur emporte quelque chose — **fait**
 
 **Le manque le plus criant.** Une préparation menée de bout en bout se termine
 aujourd'hui sur trois gestes fermés. Le pasteur traverse quatre étages, lit dix
@@ -35,14 +35,16 @@ pesées, arrive au bout — et repart les mains vides. La fiche de chaire récla
 
 **Sortie mesurable :** un pasteur ouvre une préparation, écrit trois points,
 soumet, voit le contrôle des citations verset par verset, et récupère un
-`.docx` conforme sur son téléphone.
+`.docx` conforme sur son téléphone. — **atteinte**, avec deux réserves écrites
+dans les dettes : le fichier est *posé dans un dossier* faute d'un canal de
+partage, et rien n'a encore tourné sur un vrai téléphone.
 
 **Ce que ça ferme :** la dernière case vide de la ligne d'arrivée v1 côté
 serveur, et la dette « geste servi, écran absent ».
 
 ---
 
-## Sprint 2 — Le texte, et pas seulement le raisonnement
+## Sprint 2 — Le texte, et pas seulement le raisonnement — **fait, sauf Q21**
 
 **Deux des trois questions qu'un pasteur a posées en séance** n'ont pas d'écran
 pour les recevoir, alors que le serveur y répond.
@@ -55,7 +57,14 @@ pour les recevoir, alors que le serveur y répond.
 | Le geste **questionner** : une parole qui n'est ni décider ni écarter obtient une réponse, pas un refus poli — **Q21** | `conversation.py`, fil |
 
 **Sortie mesurable :** « je peux avoir le sens original de *idole* ? » rend les
-onze occurrences d'εἴδωλον dans l'application, sans passer par la base.
+onze occurrences d'εἴδωλον dans l'application, sans passer par la base. —
+**atteinte par un écran**, pas par le fil : l'écran « Chercher » s'ouvre depuis
+l'accueil et depuis la préparation, et il dit ce que le corpus ne porte pas.
+
+**Ce qui reste, et c'est Q21 :** la même question **écrite dans la barre du
+fil** part toujours vers l'aiguilleur, qui n'a pas d'issue « questionner ». Le
+pasteur a désormais un endroit où obtenir sa réponse ; il doit encore savoir
+qu'il faut l'ouvrir. Trancher Q21 est un travail de moteur, pas d'écran.
 
 **Ce que ça ne fera pas :** donner le *sens* du mot. La glose manque pour
 14 021 lemmes sur 14 101 — c'est le sprint 5.

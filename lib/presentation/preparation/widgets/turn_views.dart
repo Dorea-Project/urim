@@ -785,11 +785,12 @@ class _Actions extends StatelessWidget {
   /// Les gestes que cette application sait ouvrir. Les autres se montrent
   /// fermés, avec leur motif.
   ///
-  /// Le `deck` n'y est pas : produire des diapositives demande de **composer**
-  /// ce qui sera projeté — un titre, une référence, le texte tel qu'il montera
-  /// à l'écran — et cet éditeur n'existe pas. Le serveur, lui, l'ouvre dès
-  /// qu'un plan porte un point ; l'application dit alors ce qui lui manque.
-  static const Set<String> _servis = {'elements', 'sheet'};
+  /// Le `deck` en fait partie depuis que l'écran de composition existe — mais
+  /// le serveur, lui, ne l'ouvre qu'une fois le plan pourvu d'un point : les
+  /// diapositives mettent en page ce que le pasteur a écrit, elles ne
+  /// l'écrivent pas à sa place. Les deux conditions se lisent dans
+  /// [_ouvrable].
+  static const Set<String> _servis = {'elements', 'sheet', 'deck'};
 
   final List<ActionItem> items;
   final void Function(String code) onAction;

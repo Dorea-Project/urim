@@ -7,6 +7,7 @@ import 'package:urim/data/datasources/urim_remote_data_source.dart';
 import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
 import 'package:urim/domain/entities/preparation/pending_gesture.dart';
 import 'package:urim/core/error/failure.dart';
+import 'package:urim/domain/entities/bible/passage_detail.dart';
 import 'package:urim/domain/entities/preparation/deliverable.dart';
 import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
@@ -87,12 +88,17 @@ base class DepotFige implements StudyRepository {
   /// Les documents demandes, dans l'ordre — « note », « deck ».
   final List<String> documentsDemandes = [];
 
+  /// Ce que l'ecran a soumis au controle.
+  List<Slide> diapositivesSoumises = const [];
+
   @override
   Future<Result<Deliverable>> submitDeliverable({
     required String studyId,
     required String kind,
+    List<Slide> slides = const [],
   }) async {
     documentsDemandes.add(kind);
+    diapositivesSoumises = slides;
     final rendu = dossier;
 
     return rendu == null
@@ -116,6 +122,53 @@ base class DepotFige implements StudyRepository {
   }) async {
     elementsEnvoyes = elements;
     return Result.success(etude);
+  }
+
+  /// Ce que le corpus rendra, si le test le decide.
+  PassageDetail? passage;
+  Concordance? concordanceRendue;
+
+  /// Ce qui a ete cherche, dans l'ordre.
+  final List<String> recherches = [];
+
+  /// Ce que le serveur rendra apres avoir lu la chaine.
+  Study? etudeApresSupports;
+
+  /// Les saisies soumises au controle de reference.
+  List<String> appuisSoumis = const [];
+
+  @override
+  Future<Result<Study>> setSupports({
+    required String studyId,
+    required List<String> supports,
+  }) async {
+    appuisSoumis = supports;
+    return Result.success(etudeApresSupports ?? etude);
+  }
+
+  @override
+  Future<Result<PassageDetail>> explorePassage(String reference) async {
+    recherches.add(reference);
+    final rendu = passage;
+
+    return rendu == null
+        ? const Result.failed(ServerFailure(message: 'Aucun passage ici.'))
+        : Result.success(rendu);
+  }
+
+  @override
+  Future<Result<Concordance>> concordance(String lemma) async {
+    recherches.add(lemma);
+    final rendu = concordanceRendue;
+
+    return rendu == null
+        ? Result.failed(
+            ServerFailure(
+              message: '« $lemma » ne parait dans aucun texte original '
+                  'de ce corpus.',
+            ),
+          )
+        : Result.success(rendu);
   }
 
   @override

@@ -47,6 +47,7 @@ final class DeliverableProducer extends Notifier<AsyncValue<void>> {
   Future<DeliverableOutcome> produce({
     required String studyId,
     required String kind,
+    List<Slide> slides = const [],
   }) async {
     state = const AsyncLoading();
 
@@ -54,6 +55,7 @@ final class DeliverableProducer extends Notifier<AsyncValue<void>> {
     final soumis = await repository.submitDeliverable(
       studyId: studyId,
       kind: kind,
+      slides: slides,
     );
 
     final dossier = soumis.valueOrNull;

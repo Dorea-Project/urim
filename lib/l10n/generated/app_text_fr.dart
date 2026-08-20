@@ -483,6 +483,111 @@ class AppTextFr extends AppText {
   String get profileNoNameAvatar => 'Aucun nom défini';
 
   @override
+  String get searchTitle => 'Chercher';
+
+  @override
+  String get searchPassageTab => 'Un passage';
+
+  @override
+  String get searchWordTab => 'Un mot de l’original';
+
+  @override
+  String get searchPassageHint => 'Marc 10:46-52';
+
+  @override
+  String get searchWordHint => 'εἴδωλον';
+
+  @override
+  String get searchAction => 'Chercher';
+
+  @override
+  String get searchEmpty =>
+      'Rien pour l’instant. Écris une référence, ou un mot de l’original.';
+
+  @override
+  String get searchUnitsTitle => 'Les unités qui couvrent ta demande';
+
+  @override
+  String searchReviewedBy(String qui) {
+    return 'Relu par $qui';
+  }
+
+  @override
+  String get searchNotReviewed => 'Proposé par le modèle, non relu';
+
+  @override
+  String get searchBearingsTitle => 'Les dix pesées, absentes comprises';
+
+  @override
+  String get searchCaveatsTitle => 'Ce que ce texte ne dit pas';
+
+  @override
+  String get searchContextTitle => 'Le contexte';
+
+  @override
+  String get searchVariantsTitle => 'Ce que les manuscrits portent';
+
+  @override
+  String searchOccurrences(int total) {
+    return '$total occurrences dans le corpus';
+  }
+
+  @override
+  String searchTruncated(int montrees) {
+    return 'Voici les $montrees premières — un extrait présenté comme un tout ferait conclure d’un échantillon.';
+  }
+
+  @override
+  String get searchNoGloss =>
+      'Le corpus ne porte pas le sens de ce mot. Voici où il paraît — c’est ce que je peux soutenir.';
+
+  @override
+  String get preparationSupportsTitle => 'Ma chaîne de textes';
+
+  @override
+  String get preparationSupportsIntro =>
+      'Dans ton ordre, pas celui du canon : l’annonce avant l’accomplissement. Écris comme tu notes — « Hb 2v29 » se lit.';
+
+  @override
+  String get preparationSupportsAdd => 'Ajouter un texte';
+
+  @override
+  String get preparationSupportsSave => 'Vérifier et enregistrer';
+
+  @override
+  String get preparationSupportsSaved => 'Ta chaîne est enregistrée.';
+
+  @override
+  String get preparationSupportsHint => 'Hb 2v29';
+
+  @override
+  String get preparationDeckTitle => 'Ce que l’assemblée verra';
+
+  @override
+  String get preparationDeckIntro =>
+      'Chaque diapositive porte une référence et le texte tel qu’il montera à l’écran. Rien ne sort tant qu’un verset projeté n’est pas celui de la Bible.';
+
+  @override
+  String get preparationDeckAdd => 'Ajouter une diapositive';
+
+  @override
+  String get preparationDeckSubmit => 'Soumettre au contrôle';
+
+  @override
+  String get preparationDeckRemove => 'Retirer cette diapositive';
+
+  @override
+  String get preparationDeckReference => 'Référence';
+
+  @override
+  String get preparationDeckProjected => 'Texte projeté';
+
+  @override
+  String preparationDeckSlide(int rang) {
+    return 'Diapositive $rang';
+  }
+
+  @override
   String get preparationDocumentWorking => 'Je prépare le document…';
 
   @override

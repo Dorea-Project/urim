@@ -7,9 +7,12 @@ import 'package:urim/data/datasources/draft_local_data_source.dart';
 import 'package:urim/presentation/common/draft_keeper.dart';
 import 'package:urim/presentation/common/stale_banner.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
+import 'package:urim/presentation/bible/search_page.dart';
+import 'package:urim/presentation/preparation/deck_page.dart';
 import 'package:urim/presentation/preparation/deliverable_view_model.dart';
 import 'package:urim/presentation/preparation/plan_page.dart';
 import 'package:urim/presentation/preparation/preparation_view_model.dart';
+import 'package:urim/presentation/preparation/supports_page.dart';
 import 'package:urim/presentation/preparation/study_export.dart';
 import 'package:urim/presentation/preparation/widgets/pending_banner.dart';
 import 'package:urim/presentation/preparation/widgets/study_material.dart';
@@ -49,6 +52,18 @@ class PreparationPage extends ConsumerWidget {
           overflow: TextOverflow.ellipsis,
         ),
         actions: [
+          // ⚠️ **Le geste qui manquait.** Un pasteur en séance a demandé le sens
+          // d'un mot et le contexte d'un livre : le serveur y répondait, aucun
+          // écran ne le servait, et la parole partait vers un aiguilleur qui
+          // n'a pas d'issue « questionner » (Q21). Chercher n'est pas parler à
+          // Urim — c'est regarder dans le corpus, sans rien engager.
+          IconButton(
+            icon: const Icon(Icons.search),
+            tooltip: AppText.of(context).searchTitle,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const SearchPage()),
+            ),
+          ),
           // Renommer et supprimer n'existent pas encore ; copier, si. Le menu
           // n'apparaît donc que quand il a quelque chose à offrir — un menu
           // ouvert sur une seule entrée grisée serait pire que pas de menu.
@@ -57,6 +72,16 @@ class PreparationPage extends ConsumerWidget {
               icon: const Icon(Icons.more_vert),
               tooltip: AppText.of(context).options,
               itemBuilder: (menuContext) => [
+                PopupMenuItem<void>(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => SupportsPage(study: study),
+                    ),
+                  ),
+                  child: Text(
+                    AppText.of(menuContext).preparationSupportsTitle,
+                  ),
+                ),
                 PopupMenuItem<void>(
                   onTap: () => _copyStudy(context, study),
                   child: Text(AppText.of(menuContext).preparationExport),
@@ -417,6 +442,15 @@ Future<void> _geste(
   if (code == 'elements') {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(builder: (_) => PlanPage(study: study)),
+    );
+    return;
+  }
+
+  // Le deck se compose avant de se produire : le contrôle porte sur ce qui
+  // sera projeté, donc il faut d'abord que le pasteur l'ait écrit.
+  if (code == 'deck') {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => DeckPage(study: study)),
     );
     return;
   }

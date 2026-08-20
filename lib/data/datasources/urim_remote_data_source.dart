@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:urim/core/network/dio_error_mapper.dart';
 import 'package:urim/data/datasources/turn_cache_local_data_source.dart';
+import 'package:urim/domain/entities/bible/passage_detail.dart';
 import 'package:urim/domain/entities/preparation/deliverable.dart';
 import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
@@ -90,6 +91,20 @@ final class UrimRemoteDataSource {
         'idempotency_key': ?idempotencyKey,
       }));
 
+  /// `PUT /urim/studies/{id}/supports` — la chaîne de textes.
+  ///
+  /// On envoie **les saisies brutes**, dans la notation du pasteur : `Hb 2v29`,
+  /// `Jn14v28`. C'est le serveur qui les lit, parce que c'est lui qui a le
+  /// corpus — et une saisie illisible n'interrompt rien, elle revient avec son
+  /// motif.
+  Future<Study> setSupports({
+    required String studyId,
+    required List<String> supports,
+  }) async =>
+      _study(await _put('/urim/studies/$studyId/supports', {
+        'supports': supports,
+      }));
+
   /// `PUT /urim/studies/{id}/elements` — le squelette homilétique.
   ///
   /// **L'envoi remplace l'ensemble.** Le serveur n'a pas de geste « effacer une
@@ -121,11 +136,18 @@ final class UrimRemoteDataSource {
   Future<Deliverable> submitDeliverable({
     required String studyId,
     required String kind,
-    List<Map<String, String>> slides = const [],
+    List<Slide> slides = const [],
   }) async =>
       _deliverable(await _post('/urim/studies/$studyId/deliverable', {
         'kind': kind,
-        'diapositives': slides,
+        'diapositives': [
+          for (final slide in slides)
+            {
+              'titre': slide.title,
+              'reference': slide.reference,
+              'texte_projete': slide.projectedText,
+            },
+        ],
       }));
 
   /// `GET /urim/deliverables/{id}/fichier` — les octets.
@@ -150,6 +172,94 @@ final class UrimRemoteDataSource {
       throw mapDioException(e);
     }
   }
+
+  /// `GET /urim/passages?ref=…` — en savoir plus sur un passage.
+  ///
+  /// Lecture pure : aucune écriture, aucune réservation, aucun appel de
+  /// modèle. On peut l'appeler six fois de suite sans conséquence, et c'est ce
+  /// qui la distingue d'une ouverture de préparation.
+  Future<PassageDetail> explorePassage(String reference) async {
+    final json = await _get<Map<String, dynamic>>(
+      '/urim/passages?ref=${Uri.encodeQueryComponent(reference)}',
+    );
+
+    return _passage(json ?? const {});
+  }
+
+  /// `GET /urim/lemmes?lemme=…` — la concordance.
+  Future<Concordance> concordance(String lemma) async {
+    final json = await _get<Map<String, dynamic>>(
+      '/urim/lemmes?lemme=${Uri.encodeQueryComponent(lemma)}',
+    );
+
+    final charge = json ?? const {};
+
+    return Concordance(
+      lemma: charge['lemma'] as String? ?? lemma,
+      language: charge['language'] as String? ?? '',
+      total: (charge['total'] as num?)?.toInt() ?? 0,
+      occurrences: [
+        for (final o in charge['occurrences'] as List<dynamic>? ?? const [])
+          Occurrence(
+            reference: (o as Map<String, dynamic>)['reference'] as String? ?? '',
+            text: o['text'] as String? ?? '',
+            surface: o['surface'] as String? ?? '',
+            morphology: o['morphology'] as String? ?? '',
+          ),
+      ],
+    );
+  }
+
+  PassageDetail _passage(Map<String, dynamic> json) => PassageDetail(
+        reference: json['reference'] as String? ?? '',
+        units: [
+          for (final u in json['units'] as List<dynamic>? ?? const [])
+            UnitRef(
+              id: (u as Map<String, dynamic>)['id'] as String? ?? '',
+              label: u['label'] as String? ?? '',
+              reference: u['reference'] as String? ?? '',
+              rationale: u['rationale'] as String? ?? '',
+            ),
+        ],
+        pericopeLabel: json['pericope_label'] as String?,
+        pericopeRationale: json['pericope_rationale'] as String?,
+        reviewedBy: json['reviewed_by'] as String?,
+        verses: [
+          for (final v in json['verses'] as List<dynamic>? ?? const [])
+            ServedVerse(
+              reference: (v as Map<String, dynamic>)['reference'] as String? ?? '',
+              text: v['text'] as String? ?? '',
+            ),
+        ],
+        bearings: [
+          for (final b in json['bearings'] as List<dynamic>? ?? const [])
+            AxisBearing(
+              axisCode: (b as Map<String, dynamic>)['axis_code'] as String? ?? '',
+              label: b['label'] as String? ?? '',
+              strength: b['strength'] as String? ?? '',
+              rationale: b['rationale'] as String? ?? '',
+            ),
+        ],
+        caveats: [
+          for (final c in json['caveats'] as List<dynamic>? ?? const [])
+            c as String,
+        ],
+        context: [
+          for (final c in json['context'] as List<dynamic>? ?? const [])
+            ContextNote(
+              kind: (c as Map<String, dynamic>)['kind'] as String? ?? '',
+              body: c['body'] as String? ?? '',
+              sourceRef: c['source_ref'] as String? ?? '',
+            ),
+        ],
+        variants: [
+          for (final v in json['variants'] as List<dynamic>? ?? const [])
+            TextualVariant(
+              reference: (v as Map<String, dynamic>)['reference'] as String? ?? '',
+              body: v['body'] as String? ?? '',
+            ),
+        ],
+      );
 
   Future<T?> _get<T>(String path) async {
     try {
@@ -294,6 +404,15 @@ Study _studyFromJson(Map<String, dynamic> json) => Study(
             code: (e as Map<String, dynamic>)['element_code'] as String? ?? '',
             ordinal: (e['ordinal'] as num?)?.toInt() ?? 0,
             body: e['body'] as String?,
+          ),
+      ],
+      supports: [
+        for (final s in json['supports'] as List<dynamic>? ?? const [])
+          SupportText(
+            raw: (s as Map<String, dynamic>)['raw'] as String? ?? '',
+            reference: s['reference'] as String? ?? '',
+            text: s['text'] as String? ?? '',
+            verdict: s['verdict'] as String? ?? '',
           ),
       ],
       turn: switch (json['turn']) {

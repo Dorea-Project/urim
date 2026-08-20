@@ -9,6 +9,7 @@ import 'package:urim/domain/entities/preparation/deliverable.dart';
 import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/l10n/generated/app_text_fr.dart';
+import 'package:urim/presentation/preparation/deck_page.dart';
 import 'package:urim/presentation/preparation/plan_page.dart';
 import 'package:urim/presentation/preparation/preparation_page.dart';
 
@@ -180,6 +181,110 @@ void main() {
       expect(depot.documentsDemandes, ['note']);
       expect(find.text(texte.preparationDocumentRefusedTitle), findsOneWidget);
       expect(find.text('Romains 8:1'), findsOneWidget);
+    });
+  });
+
+  group('les diapositives', () {
+    Future<DepotFige> pumpDeck(WidgetTester tester, {Deliverable? dossier}) async {
+      final depot = DepotFige(ToursReels.etude(ToursReels.bartimee))
+        ..dossier = dossier;
+
+      tester.view.physicalSize = const Size(1000, 6000);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            demoConfigOverride,
+            studyRepositoryProvider.overrideWithValue(depot),
+          ],
+          child: wrapScreen(DeckPage(study: depot.etude)),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      return depot;
+    }
+
+    testWidgets('le texte servi remplit les diapositives', (tester) async {
+      // Le pasteur part de ce que le corpus porte plutot que d'une page
+      // blanche — sept versets de Bartimee, sept diapositives.
+      final depot = await pumpDeck(tester);
+
+      expect(depot.etude.verses, isNotEmpty);
+      expect(
+        find.text(texte.preparationDeckSlide(1)),
+        findsOneWidget,
+        reason: "la numerotation est celle du serveur",
+      );
+      expect(
+        find.text(depot.etude.verses.first.reference),
+        findsWidgets,
+        reason: "la reference du premier verset est deja la",
+      );
+    });
+
+    testWidgets('soumettre envoie ce qui est composé', (tester) async {
+      final depot = await pumpDeck(
+        tester,
+        dossier: const Deliverable(
+          id: 'd-2',
+          kind: 'deck',
+          format: 'pptx',
+          validation: 'rejete',
+          controls: [
+            CitationCheck(
+              slideNo: 1,
+              reference: 'Marc 10:46',
+              projectedText: "un texte qui n'est pas celui du corpus",
+              verdict: 'altere',
+              rationale: 'Le texte projete ne correspond a aucune version detenue.',
+            ),
+          ],
+        ),
+      );
+
+      await tester.tap(find.text(texte.preparationDeckSubmit));
+      await tester.pumpAndSettle();
+
+      expect(depot.documentsDemandes, ['deck']);
+      expect(depot.diapositivesSoumises, isNotEmpty);
+      expect(
+        depot.diapositivesSoumises.first.reference,
+        depot.etude.verses.first.reference,
+      );
+    });
+
+    testWidgets("le verdict se lit sous la diapositive qu'il juge",
+        (tester) async {
+      await pumpDeck(
+        tester,
+        dossier: const Deliverable(
+          id: 'd-2',
+          kind: 'deck',
+          format: 'pptx',
+          validation: 'rejete',
+          controls: [
+            CitationCheck(
+              slideNo: 1,
+              reference: 'Marc 10:46',
+              projectedText: 'coupe',
+              verdict: 'altere',
+              rationale: 'Le texte projete ne correspond a aucune version detenue.',
+            ),
+          ],
+        ),
+      );
+
+      await tester.tap(find.text(texte.preparationDeckSubmit));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Le texte projete ne correspond a aucune version detenue.'),
+        findsOneWidget,
+        reason: "il corrige la ou il regarde, pas dans un rapport a part",
+      );
     });
   });
 }

@@ -903,6 +903,192 @@ abstract class AppText {
   /// **'Aucun nom défini'**
   String get profileNoNameAvatar;
 
+  /// Titre de l’écran de recherche dans le corpus.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chercher'**
+  String get searchTitle;
+
+  /// Libellé de l’écran de recherche.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un passage'**
+  String get searchPassageTab;
+
+  /// Libellé de l’écran de recherche.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un mot de l’original'**
+  String get searchWordTab;
+
+  /// Exemple de référence, affiché dans le champ.
+  ///
+  /// In fr, this message translates to:
+  /// **'Marc 10:46-52'**
+  String get searchPassageHint;
+
+  /// Exemple de lemme, affiché dans le champ.
+  ///
+  /// In fr, this message translates to:
+  /// **'εἴδωλον'**
+  String get searchWordHint;
+
+  /// Libellé de l’écran de recherche.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chercher'**
+  String get searchAction;
+
+  /// État vide de l’écran de recherche.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien pour l’instant. Écris une référence, ou un mot de l’original.'**
+  String get searchEmpty;
+
+  /// Quand le passage chevauche plusieurs unités relues.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les unités qui couvrent ta demande'**
+  String get searchUnitsTitle;
+
+  /// Qui a signé l’unité — la seule chose qui distingue un énoncé relu d’un énoncé jamais lu.
+  ///
+  /// In fr, this message translates to:
+  /// **'Relu par {qui}'**
+  String searchReviewedBy(String qui);
+
+  /// Ce que porte un énoncé que personne n’a signé.
+  ///
+  /// In fr, this message translates to:
+  /// **'Proposé par le modèle, non relu'**
+  String get searchNotReviewed;
+
+  /// Titre du bloc des pesées sur cet écran.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les dix pesées, absentes comprises'**
+  String get searchBearingsTitle;
+
+  /// Libellé de l’écran de recherche.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que ce texte ne dit pas'**
+  String get searchCaveatsTitle;
+
+  /// Libellé de l’écran de recherche.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le contexte'**
+  String get searchContextTitle;
+
+  /// Libellé de l’écran de recherche.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que les manuscrits portent'**
+  String get searchVariantsTitle;
+
+  /// Le compte réel, indépendant de ce qui est montré.
+  ///
+  /// In fr, this message translates to:
+  /// **'{total} occurrences dans le corpus'**
+  String searchOccurrences(int total);
+
+  /// Dit qu’on ne montre pas tout.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voici les {montrees} premières — un extrait présenté comme un tout ferait conclure d’un échantillon.'**
+  String searchTruncated(int montrees);
+
+  /// Ce qu’Urim répond quand la glose manque.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le corpus ne porte pas le sens de ce mot. Voici où il paraît — c’est ce que je peux soutenir.'**
+  String get searchNoGloss;
+
+  /// Titre de l’écran des textes d’appui.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ma chaîne de textes'**
+  String get preparationSupportsTitle;
+
+  /// Dit que l’ordre est le sien et que sa notation est comprise.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dans ton ordre, pas celui du canon : l’annonce avant l’accomplissement. Écris comme tu notes — « Hb 2v29 » se lit.'**
+  String get preparationSupportsIntro;
+
+  /// Libellé de l’écran de la chaîne de textes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un texte'**
+  String get preparationSupportsAdd;
+
+  /// Bouton qui envoie la chaîne au contrôle de référence.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérifier et enregistrer'**
+  String get preparationSupportsSave;
+
+  /// Confirmation après envoi.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta chaîne est enregistrée.'**
+  String get preparationSupportsSaved;
+
+  /// Exemple de notation, affiché dans le champ.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hb 2v29'**
+  String get preparationSupportsHint;
+
+  /// Titre de l’écran des diapositives.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que l’assemblée verra'**
+  String get preparationDeckTitle;
+
+  /// Dit que le contrôle précède le fichier.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chaque diapositive porte une référence et le texte tel qu’il montera à l’écran. Rien ne sort tant qu’un verset projeté n’est pas celui de la Bible.'**
+  String get preparationDeckIntro;
+
+  /// Libellé de l’écran des diapositives.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une diapositive'**
+  String get preparationDeckAdd;
+
+  /// Bouton qui envoie les diapositives au contrôle des citations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Soumettre au contrôle'**
+  String get preparationDeckSubmit;
+
+  /// Libellé de l’écran des diapositives.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer cette diapositive'**
+  String get preparationDeckRemove;
+
+  /// Libellé de l’écran des diapositives.
+  ///
+  /// In fr, this message translates to:
+  /// **'Référence'**
+  String get preparationDeckReference;
+
+  /// Libellé de l’écran des diapositives.
+  ///
+  /// In fr, this message translates to:
+  /// **'Texte projeté'**
+  String get preparationDeckProjected;
+
+  /// En-tête d’une diapositive, numérotée comme le serveur la numérote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Diapositive {rang}'**
+  String preparationDeckSlide(int rang);
+
   /// Pendant la soumission et le rendu.
   ///
   /// In fr, this message translates to:

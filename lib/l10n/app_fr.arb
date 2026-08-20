@@ -368,6 +368,134 @@
   "@profileNoNameAvatar": {
     "description": "Annonce vocale de la silhouette qui remplace les initiales. Jamais affichée."
   },
+  "searchTitle": "Chercher",
+  "@searchTitle": {
+    "description": "Titre de l’écran de recherche dans le corpus."
+  },
+  "searchPassageTab": "Un passage",
+  "@searchPassageTab": {
+    "description": "Libellé de l’écran de recherche."
+  },
+  "searchWordTab": "Un mot de l’original",
+  "@searchWordTab": {
+    "description": "Libellé de l’écran de recherche."
+  },
+  "searchPassageHint": "Marc 10:46-52",
+  "@searchPassageHint": {
+    "description": "Exemple de référence, affiché dans le champ."
+  },
+  "searchWordHint": "εἴδωλον",
+  "@searchWordHint": {
+    "description": "Exemple de lemme, affiché dans le champ."
+  },
+  "searchAction": "Chercher",
+  "@searchAction": {
+    "description": "Libellé de l’écran de recherche."
+  },
+  "searchEmpty": "Rien pour l’instant. Écris une référence, ou un mot de l’original.",
+  "@searchEmpty": {
+    "description": "État vide de l’écran de recherche."
+  },
+  "searchUnitsTitle": "Les unités qui couvrent ta demande",
+  "@searchUnitsTitle": {
+    "description": "Quand le passage chevauche plusieurs unités relues."
+  },
+  "searchReviewedBy": "Relu par {qui}",
+  "@searchReviewedBy": {
+    "placeholders": { "qui": { "type": "String" } },
+    "description": "Qui a signé l’unité — la seule chose qui distingue un énoncé relu d’un énoncé jamais lu."
+  },
+  "searchNotReviewed": "Proposé par le modèle, non relu",
+  "@searchNotReviewed": {
+    "description": "Ce que porte un énoncé que personne n’a signé."
+  },
+  "searchBearingsTitle": "Les dix pesées, absentes comprises",
+  "@searchBearingsTitle": {
+    "description": "Titre du bloc des pesées sur cet écran."
+  },
+  "searchCaveatsTitle": "Ce que ce texte ne dit pas",
+  "@searchCaveatsTitle": {
+    "description": "Libellé de l’écran de recherche."
+  },
+  "searchContextTitle": "Le contexte",
+  "@searchContextTitle": {
+    "description": "Libellé de l’écran de recherche."
+  },
+  "searchVariantsTitle": "Ce que les manuscrits portent",
+  "@searchVariantsTitle": {
+    "description": "Libellé de l’écran de recherche."
+  },
+  "searchOccurrences": "{total} occurrences dans le corpus",
+  "@searchOccurrences": {
+    "placeholders": { "total": { "type": "int" } },
+    "description": "Le compte réel, indépendant de ce qui est montré."
+  },
+  "searchTruncated": "Voici les {montrees} premières — un extrait présenté comme un tout ferait conclure d’un échantillon.",
+  "@searchTruncated": {
+    "placeholders": { "montrees": { "type": "int" } },
+    "description": "Dit qu’on ne montre pas tout."
+  },
+  "searchNoGloss": "Le corpus ne porte pas le sens de ce mot. Voici où il paraît — c’est ce que je peux soutenir.",
+  "@searchNoGloss": {
+    "description": "Ce qu’Urim répond quand la glose manque."
+  },
+  "preparationSupportsTitle": "Ma chaîne de textes",
+  "@preparationSupportsTitle": {
+    "description": "Titre de l’écran des textes d’appui."
+  },
+  "preparationSupportsIntro": "Dans ton ordre, pas celui du canon : l’annonce avant l’accomplissement. Écris comme tu notes — « Hb 2v29 » se lit.",
+  "@preparationSupportsIntro": {
+    "description": "Dit que l’ordre est le sien et que sa notation est comprise."
+  },
+  "preparationSupportsAdd": "Ajouter un texte",
+  "@preparationSupportsAdd": {
+    "description": "Libellé de l’écran de la chaîne de textes."
+  },
+  "preparationSupportsSave": "Vérifier et enregistrer",
+  "@preparationSupportsSave": {
+    "description": "Bouton qui envoie la chaîne au contrôle de référence."
+  },
+  "preparationSupportsSaved": "Ta chaîne est enregistrée.",
+  "@preparationSupportsSaved": {
+    "description": "Confirmation après envoi."
+  },
+  "preparationSupportsHint": "Hb 2v29",
+  "@preparationSupportsHint": {
+    "description": "Exemple de notation, affiché dans le champ."
+  },
+  "preparationDeckTitle": "Ce que l’assemblée verra",
+  "@preparationDeckTitle": {
+    "description": "Titre de l’écran des diapositives."
+  },
+  "preparationDeckIntro": "Chaque diapositive porte une référence et le texte tel qu’il montera à l’écran. Rien ne sort tant qu’un verset projeté n’est pas celui de la Bible.",
+  "@preparationDeckIntro": {
+    "description": "Dit que le contrôle précède le fichier."
+  },
+  "preparationDeckAdd": "Ajouter une diapositive",
+  "@preparationDeckAdd": {
+    "description": "Libellé de l’écran des diapositives."
+  },
+  "preparationDeckSubmit": "Soumettre au contrôle",
+  "@preparationDeckSubmit": {
+    "description": "Bouton qui envoie les diapositives au contrôle des citations."
+  },
+  "preparationDeckRemove": "Retirer cette diapositive",
+  "@preparationDeckRemove": {
+    "description": "Libellé de l’écran des diapositives."
+  },
+  "preparationDeckReference": "Référence",
+  "@preparationDeckReference": {
+    "description": "Libellé de l’écran des diapositives."
+  },
+  "preparationDeckProjected": "Texte projeté",
+  "@preparationDeckProjected": {
+    "description": "Libellé de l’écran des diapositives."
+  },
+  "preparationDeckSlide": "Diapositive {rang}",
+  "@preparationDeckSlide": {
+    "placeholders": { "rang": { "type": "int" } },
+    "description": "En-tête d’une diapositive, numérotée comme le serveur la numérote."
+  },
   "preparationDocumentWorking": "Je prépare le document…",
   "@preparationDocumentWorking": {
     "description": "Pendant la soumission et le rendu."

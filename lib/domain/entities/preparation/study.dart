@@ -28,6 +28,7 @@ final class Study extends Equatable {
     this.verses = const [],
     this.context = const [],
     this.elements = const [],
+    this.supports = const [],
   });
 
   final String id;
@@ -76,6 +77,10 @@ final class Study extends Equatable {
   /// Le corpus ne l'a pas pour toutes les unités : absent, rien ne s'affiche
   /// plutôt qu'une section vide qui promettrait ce qu'elle n'a pas.
   final List<ContextNote> context;
+
+  /// La chaîne de textes d'appui, dans **l'ordre du pasteur** — pas celui du
+  /// canon. Il écrit sa progression : l'annonce avant l'accomplissement.
+  final List<SupportText> supports;
 
   /// Le squelette homilétique, tel que le pasteur l'a écrit.
   ///
@@ -138,4 +143,35 @@ final class ContextNote extends Equatable {
 
   @override
   List<Object?> get props => [kind, body, sourceRef];
+}
+
+/// Un texte d'appui, **avec ce que la saisie a donné — ou pourquoi elle n'a
+/// rien donné**.
+///
+/// C'est ici que le contrôle de référence atteint le pasteur. Ses notes
+/// portaient `Hb 2v29` et `Ph 28v9` ; Urim savait dire « Hébreux 2 compte 18
+/// versets » depuis le premier jour, faute d'une surface où ces textes soient
+/// soumis.
+final class SupportText extends Equatable {
+  const SupportText({
+    required this.raw,
+    this.reference = '',
+    this.text = '',
+    this.verdict = '',
+  });
+
+  /// Ce que le pasteur a écrit, dans sa notation. **Il survit toujours** : le
+  /// perdre l'obligerait à se souvenir de ce qu'il voulait citer.
+  final String raw;
+
+  final String reference;
+  final String text;
+
+  /// Ce qui manque **au corpus**, jamais au pasteur.
+  final String verdict;
+
+  bool get isResolved => reference.isNotEmpty;
+
+  @override
+  List<Object?> get props => [raw, reference, text, verdict];
 }

@@ -2,6 +2,7 @@ import 'package:urim/core/result/cached.dart';
 import 'package:urim/core/result/result.dart';
 import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
 import 'package:urim/domain/entities/preparation/pending_gesture.dart';
+import 'package:urim/domain/entities/bible/passage_detail.dart';
 import 'package:urim/domain/entities/preparation/deliverable.dart';
 import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
@@ -111,10 +112,33 @@ abstract interface class StudyRepository {
   Future<Result<Deliverable>> submitDeliverable({
     required String studyId,
     required String kind,
+    List<Slide> slides = const [],
   });
 
   /// Les octets d'un document déjà déclaré conforme.
   Future<Result<DeliverableFile>> downloadDeliverable(String deliverableId);
+
+  /// **En savoir plus sur un passage**, sans ouvrir de préparation.
+  ///
+  /// Lecture pure. C'est ce qui permet de regarder six textes avant d'en
+  /// choisir un, au lieu de s'engager sur chacun pour le lire.
+  Future<Result<PassageDetail>> explorePassage(String reference);
+
+  /// Où ce mot de l'original paraît ailleurs.
+  ///
+  /// Elle montre le texte et ne dit rien du monde : c'est la seule pierre du
+  /// module de recherche qui ne puisse rien inventer.
+  Future<Result<Concordance>> concordance(String lemma);
+
+  /// Écrire la chaîne de textes d'appui — **les saisies brutes**.
+  ///
+  /// Le contrôle de référence vit côté serveur, avec le corpus : `Hb 2v29`
+  /// revient avec « Hébreux 2 compte 18 versets » plutôt que d'être corrigé en
+  /// silence.
+  Future<Result<Study>> setSupports({
+    required String studyId,
+    required List<String> supports,
+  });
 
   /// Les gestes en attente d'envoi pour cette préparation, dans l'ordre.
   ///

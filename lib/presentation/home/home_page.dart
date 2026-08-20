@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:urim/core/router/app_routes.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/l10n/generated/app_text.dart';
+import 'package:urim/presentation/bible/search_page.dart';
 import 'package:urim/presentation/home/home_view_model.dart';
 import 'package:urim/presentation/home/widgets/preparation_card.dart';
 import 'package:urim/presentation/common/stale_banner.dart';
@@ -29,6 +30,17 @@ class HomePage extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Urim'),
         actions: [
+          // Regarder dans le corpus sans ouvrir de préparation : c'est
+          // exactement ce que la route « en savoir plus » existe pour servir,
+          // et le pasteur ne devrait pas avoir à s'engager sur un texte pour
+          // le lire.
+          IconButton(
+            icon: const Icon(Icons.search),
+            tooltip: AppText.of(context).searchTitle,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const SearchPage()),
+            ),
+          ),
           ProfileAvatarButton(
             initials: initials ?? '',
             onPressed: () => context.pushNamed(AppRoutes.profileName),
