@@ -25,7 +25,10 @@ les dossiers.
 | Décisions | Qu'a-t-on tranché, et qu'est-ce qui reste ouvert ? |
 
 Les arbitrages et les questions en attente vivent dans
-[`decisions.md`](decisions.md), pas dans le fil d'une conversation.
+[`decisions.md`](decisions.md), pas dans le fil d'une conversation. L'ordre dans
+lequel les chantiers se prennent vit dans [`sprints.md`](sprints.md) : cette
+page-ci dit **ce qui reste**, celle-là dit **dans quel ordre et à quoi on saura
+que c'est fini**.
 
 ## État
 
