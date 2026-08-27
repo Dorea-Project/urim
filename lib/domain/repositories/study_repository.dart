@@ -3,6 +3,8 @@ import 'package:urim/core/result/result.dart';
 import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
 import 'package:urim/domain/entities/preparation/pending_gesture.dart';
 import 'package:urim/domain/entities/bible/passage_detail.dart';
+import 'package:urim/domain/entities/preparation/articulation.dart';
+import 'package:urim/domain/entities/preparation/preached.dart';
 import 'package:urim/domain/entities/preparation/deliverable.dart';
 import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
@@ -101,6 +103,79 @@ abstract interface class StudyRepository {
     required String studyId,
     required List<PlanElement> elements,
   });
+
+  /// Faire articuler **un** point — dans l'atelier, jamais dans le document.
+  ///
+  /// La seule prose qu'Urim produise, et elle se demande point par point. Elle
+  /// vit à côté du plan : elle n'atteint un fichier que si le pasteur la
+  /// reprend dans son texte, c'est-à-dire s'il l'a lue.
+  ///
+  /// ⚠️ **Le point doit être enregistré avant.** Le serveur articule ce qu'il a
+  /// en base, désigné par [elementCode] et [ordinal] ; demander sans avoir
+  /// envoyé rendrait une proposition sur une phrase déjà remplacée — un défaut
+  /// que rien à l'écran ne trahirait.
+  ///
+  /// Un succès peut porter `available: false` — aucun modèle branché, plafond
+  /// atteint, ou point vide. **Ce n'est pas un échec** : l'atelier fonctionne
+  /// sans, et le pasteur écrit son point comme il l'a toujours fait.
+  /// Faire d'une note **un point du plan** — le seul chemin du fil vers le
+  /// document.
+  ///
+  /// 🔴 **C'est ici que le verrou se tient.** Tout ce qui s'écrit dans le fil
+  /// est gardé, rangé, relisible — et n'atteint aucun fichier. Le `.docx`
+  /// n'imprime que le plan. Une note ne devient imprimable qu'en passant par ce
+  /// geste, que le pasteur seul déclenche.
+  ///
+  /// ⚠️ **On ajoute, on ne remplace pas.** Sa note est le plus souvent une
+  /// remarque *sur* le point — « le deuxième, il faut parler de la loi » — pas
+  /// le texte du point.
+  ///
+  /// [elementCode] et [ordinal] ne servent que si la note n'a pas d'adresse :
+  /// elle en a une dès qu'il a désigné un point en écrivant.
+  Future<Result<Study>> promote({
+    required String studyId,
+    required String entryId,
+    String? elementCode,
+    int? ordinal,
+  });
+
+  Future<Result<Articulation>> articulate({
+    required String studyId,
+    required String elementCode,
+    required int ordinal,
+  });
+
+  /// « J'ai prêché celle-ci. »
+  ///
+  /// ⚠️ **Rien ne s'archive parce qu'une date est passée.** C'est un geste du
+  /// pasteur, jamais une déduction du calendrier : une préparation datée du
+  /// dimanche prochain n'a pas été prêchée pour autant. Le jour par défaut est
+  /// **aujourd'hui**, pas la date de culte.
+  Future<Result<PreachedSermon>> markPreached({
+    required String studyId,
+    DateTime? preachedOn,
+  });
+
+  /// Consigner une prédication qui n'est pas passée par Urim.
+  ///
+  /// Sans elle, l'archive ne mesurerait que ce qui est passé par l'outil — et
+  /// ce n'est pas la même chose que le ministère de quelqu'un. La [reference]
+  /// s'écrit **dans la notation du pasteur** ; c'est le serveur qui la lit.
+  Future<Result<PreachedSermon>> recordPreached({
+    required String reference,
+    required DateTime preachedOn,
+    String? axisCode,
+    String? theme,
+  });
+
+  /// L'archive du prédicateur, la plus récente d'abord.
+  Future<Result<List<PreachedSermon>>> listPreached();
+
+  /// Où il est allé dans l'Écriture, et sous quels axes.
+  ///
+  /// ⚠️ **Des faits, aucune consigne.** Cet écran ne propose jamais de sermon :
+  /// un rayon vide se montre, il ne se comble pas.
+  Future<Result<PreachingCoverage>> preachingCoverage();
 
   /// Soumettre ce qui sortira — **et le faire juger avant qu'un fichier
   /// existe**.

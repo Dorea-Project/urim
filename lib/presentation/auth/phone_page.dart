@@ -116,6 +116,30 @@ class PhonePage extends ConsumerWidget {
                     : Text(text.authPhoneSubmit),
               ),
               const SizedBox(height: AppSpacing.lg),
+              // ⚠️ **Les deux portes doivent rester atteignables ici.**
+              //
+              // 🔴 `setDoor` n'était appelé que par la présentation, et la
+              // présentation ne revient jamais. Au deuxième lancement, tout
+              // pasteur retombait sur l'inscription — son numéro, un SMS, un
+              // code posé, puis « ce numéro est déjà inscrit » et aucune sortie.
+              // Un mur à l'entrée du produit, pour cent pour cent des retours,
+              // qu'aucun test d'écran ne pouvait voir : ils n'ont pas de
+              // deuxième lancement.
+              TextButton(
+                onPressed: state.isSubmitting
+                    ? null
+                    : () => viewModel.setDoor(
+                          state.door == AuthDoor.signIn
+                              ? AuthDoor.registration
+                              : AuthDoor.signIn,
+                        ),
+                child: Text(
+                  state.door == AuthDoor.signIn
+                      ? text.authSwitchToRegistration
+                      : text.authSwitchToSignIn,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
             ],
           ),
         ),

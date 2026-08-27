@@ -18,6 +18,8 @@ import 'package:urim/domain/entities/preparation/preparation_block.dart';
 import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
 import 'package:urim/domain/entities/preparation/pending_gesture.dart';
 import 'package:urim/domain/entities/bible/passage_detail.dart';
+import 'package:urim/domain/entities/preparation/articulation.dart';
+import 'package:urim/domain/entities/preparation/preached.dart';
 import 'package:urim/domain/entities/preparation/deliverable.dart';
 import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
@@ -97,6 +99,69 @@ final class RemoteStudyRepository implements StudyRepository {
     required List<String> supports,
   }) =>
       _guard(() => _source.setSupports(studyId: studyId, supports: supports));
+
+  @override
+  Future<Result<Study>> promote({
+    required String studyId,
+    required String entryId,
+    String? elementCode,
+    int? ordinal,
+  }) =>
+      _guard(
+        () => _source.promote(
+          studyId: studyId,
+          entryId: entryId,
+          elementCode: elementCode,
+          ordinal: ordinal,
+        ),
+      );
+
+  @override
+  Future<Result<Articulation>> articulate({
+    required String studyId,
+    required String elementCode,
+    required int ordinal,
+  }) =>
+      _guard(
+        () => _source.articulate(
+          studyId: studyId,
+          elementCode: elementCode,
+          ordinal: ordinal,
+        ),
+      );
+
+  @override
+  Future<Result<PreachedSermon>> markPreached({
+    required String studyId,
+    DateTime? preachedOn,
+  }) =>
+      _guard(
+        () => _source.markPreached(studyId: studyId, preachedOn: preachedOn),
+      );
+
+  @override
+  Future<Result<PreachedSermon>> recordPreached({
+    required String reference,
+    required DateTime preachedOn,
+    String? axisCode,
+    String? theme,
+  }) =>
+      _guard(
+        () => _source.recordPreached(
+          reference: reference,
+          preachedOn: preachedOn,
+          axisCode: axisCode,
+          theme: theme,
+        ),
+      );
+
+  @override
+  Future<Result<List<PreachedSermon>>> listPreached() =>
+      _guard(_source.listPreached);
+
+  @override
+  Future<Result<PreachingCoverage>> preachingCoverage() =>
+      _guard(_source.preachingCoverage);
 
   @override
   Future<Result<Deliverable>> submitDeliverable({
@@ -334,6 +399,80 @@ final class MockStudyRepository implements StudyRepository {
   /// confronter, ni écrivain de fichier. Dire non est la seule réponse vraie —
   /// fabriquer un `.docx` de démonstration ferait croire à un contrôle qui n'a
   /// pas eu lieu.
+  /// Le mannequin n'a pas de fil persisté : il n'y a rien à promouvoir.
+  @override
+  Future<Result<Study>> promote({
+    required String studyId,
+    required String entryId,
+    String? elementCode,
+    int? ordinal,
+  }) async =>
+      const Result.failed(
+        ServerFailure(message: 'Le mode démonstration ne garde pas le fil.'),
+      );
+
+  /// Le mannequin n'a pas de modèle, et le dire est **la bonne réponse** :
+  /// `disponible: false` est un état de production, pas une panne. Rendre une
+  /// `Failure` ferait apparaître un écran d'erreur là où le produit promet que
+  /// l'atelier fonctionne sans.
+  @override
+  Future<Result<Articulation>> articulate({
+    required String studyId,
+    required String elementCode,
+    required int ordinal,
+  }) async =>
+      const Result.success(Articulation.indisponible());
+
+  // -- l'archive ---------------------------------------------------------
+  //
+  // ⚠️ **Vide, jamais en échec.** Le mannequin n'a pas d'archive : rendre une
+  // panne ferait afficher un écran d'erreur là où il n'y a qu'une absence, et
+  // le build de démonstration montrerait un défaut qui n'existe pas. Une
+  // archive vide est la vérité — ce pasteur-là n'a rien prêché.
+
+  @override
+  Future<Result<PreachedSermon>> markPreached({
+    required String studyId,
+    DateTime? preachedOn,
+  }) async =>
+      Result.success(
+        PreachedSermon(
+          id: 'demo-preche-$studyId',
+          preachedOn: preachedOn ?? DateTime.now(),
+          reference: '',
+          preparationId: studyId,
+          captureKind: 'saisie',
+        ),
+      );
+
+  @override
+  Future<Result<PreachedSermon>> recordPreached({
+    required String reference,
+    required DateTime preachedOn,
+    String? axisCode,
+    String? theme,
+  }) async =>
+      Result.success(
+        PreachedSermon(
+          id: 'demo-preche-manuel',
+          preachedOn: preachedOn,
+          reference: reference,
+          axisCode: axisCode,
+          theme: theme,
+          captureKind: 'import',
+        ),
+      );
+
+  @override
+  Future<Result<List<PreachedSermon>>> listPreached() async =>
+      const Result.success([]);
+
+  @override
+  Future<Result<PreachingCoverage>> preachingCoverage() async =>
+      const Result.success(
+        PreachingCoverage(books: [], axes: [], booksUntouched: 0),
+      );
+
   @override
   Future<Result<Deliverable>> submitDeliverable({
     required String studyId,

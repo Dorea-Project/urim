@@ -15,22 +15,22 @@ class AppTextFr extends AppText {
   String get profileDeleteAccount => 'Supprimer mon compte';
 
   @override
-  String get profileDeleteAccountTitle => 'Supprimer ton compte ?';
+  String get profileDeleteAccountTitle => 'Supprimer votre compte ?';
 
   @override
   String get profileDeleteAccountBody =>
-      'Tes préparations, tes enregistrements et ton compte seront effacés — sur cet appareil comme sur le serveur. Rien n\'est récupérable.\n\nUn code va partir par SMS : il faut le saisir pour confirmer.';
+      'Vos préparations, vos enregistrements et votre compte seront effacés — sur cet appareil comme sur le serveur. Rien n\'est récupérable.\n\nUn code va partir par SMS : il faut le saisir pour confirmer.';
 
   @override
   String get profileDeleteAccountConfirm => 'Recevoir le code';
 
   @override
   String get profileDeleteAccountDone =>
-      'Ton compte et son contenu ont été supprimés.';
+      'Votre compte et son contenu ont été supprimés.';
 
   @override
   String get profileDeleteAccountFailed =>
-      'Le code n\'est pas parti. Ton compte est intact.';
+      'Le code n\'est pas parti. Votre compte est intact.';
 
   @override
   String get profileSignOut => 'Se déconnecter';
@@ -40,7 +40,7 @@ class AppTextFr extends AppText {
 
   @override
   String get profileSignOutBody =>
-      'Tes préparations restent sur cet appareil. Il faudra ton code secret, ou un nouveau code par SMS si l\'appareil n\'est plus reconnu.';
+      'Vos préparations restent sur cet appareil. Il faudra votre code secret, ou un nouveau code par SMS si l\'appareil n\'est plus reconnu.';
 
   @override
   String get profileSignOutEverywhere => 'Sur tous mes appareils';
@@ -69,7 +69,7 @@ class AppTextFr extends AppText {
 
   @override
   String get onboardingSaveFailed =>
-      'Impossible d\'enregistrer ta progression. La présentation réapparaîtra au prochain lancement.';
+      'Impossible d\'enregistrer votre progression. La présentation réapparaîtra au prochain lancement.';
 
   @override
   String onboardingStep(int position, int total) {
@@ -78,18 +78,18 @@ class AppTextFr extends AppText {
 
   @override
   String get onboardingWeighingTitle =>
-      'Écris ta phrase.\nUrim cherche le texte dedans.';
+      'Écrivez votre phrase.\nUrim cherche le texte dedans.';
 
   @override
   String get onboardingWeighingBody =>
-      'Une référence, une citation approximative, ou juste une intention. Tu n\'as aucun mode à choisir — la porte regarde si les mots se suivent comme dans l\'Écriture.';
+      'Une référence, une citation approximative, ou juste une intention. Vous n\'avez aucun mode à choisir — la porte regarde si les mots se suivent comme dans l\'Écriture.';
 
   @override
   String get onboardingHandbackTitle => 'Il s\'arrête\net te rend la main.';
 
   @override
   String get onboardingHandbackBody =>
-      'Chaque étage dit pourquoi il a fait ce qu\'il a fait. Quand il ne peut pas trancher seul, il te pose la question au lieu de choisir à ta place.';
+      'Chaque étage dit pourquoi il a fait ce qu\'il a fait. Quand il ne peut pas trancher seul, il vous pose la question au lieu de choisir à votre place.';
 
   @override
   String get onboardingResistanceTitle =>
@@ -97,7 +97,7 @@ class AppTextFr extends AppText {
 
   @override
   String get onboardingResistanceBody =>
-      'Ceux qui ne vont pas dans le sens de ta lecture. C\'est le seul moyen de ne pas faire dire au texte ce qu\'on avait décidé d\'y trouver.';
+      'Ceux qui ne vont pas dans le sens de votre lecture. C\'est le seul moyen de ne pas faire dire au texte ce qu\'on avait décidé d\'y trouver.';
 
   @override
   String get back => 'Retour';
@@ -109,13 +109,22 @@ class AppTextFr extends AppText {
   String get cancel => 'Annuler';
 
   @override
-  String get authPhoneTitleSignIn => 'Ton numéro';
+  String get authPhoneTitleSignIn => 'Votre numéro';
 
   @override
-  String get authPhoneTitleRegistration => 'Ton numéro valide';
+  String get authPhoneTitleRegistration => 'Votre numéro valide';
 
   @override
   String get authPhoneHint => '07 47 76 9069';
+
+  @override
+  String get authSwitchToSignIn => 'Déjà un compte ? Se connecter';
+
+  @override
+  String get authSwitchToRegistration => 'Pas encore de compte ? En créer un';
+
+  @override
+  String get authGoToSignIn => 'Se connecter';
 
   @override
   String get authPhoneSubmit => 'Soumettre';
@@ -154,10 +163,10 @@ class AppTextFr extends AppText {
   }
 
   @override
-  String get secretCodeChooseTitle => 'Choisis un code secret';
+  String get secretCodeChooseTitle => 'Choisissez un code secret';
 
   @override
-  String get secretCodeConfirmTitle => 'Confirme ton code secret';
+  String get secretCodeConfirmTitle => 'Confirmez votre code secret';
 
   @override
   String secretCodeChooseHelper(int count) {
@@ -165,13 +174,13 @@ class AppTextFr extends AppText {
   }
 
   @override
-  String get secretCodeConfirmHelper => 'Saisis-le une seconde fois';
+  String get secretCodeConfirmHelper => 'Saisissez-le une seconde fois';
 
   @override
-  String get secretCodeUnlockTitle => 'Ton code secret';
+  String get secretCodeUnlockTitle => 'Votre code secret';
 
   @override
-  String get secretCodeUnlockHelper => 'Saisis tes chiffres';
+  String get secretCodeUnlockHelper => 'Saisissez vos chiffres';
 
   @override
   String get secretCodeWrong => 'Code incorrect';
@@ -195,7 +204,7 @@ class AppTextFr extends AppText {
 
   @override
   String get errorPhoneAlreadyRegistered =>
-      'Ce numéro a déjà un compte. Connecte-toi.';
+      'Ce numéro a déjà un compte. Connectez-vous.';
 
   @override
   String get errorSecretCodeIncorrect => 'Code secret incorrect.';
@@ -233,16 +242,16 @@ class AppTextFr extends AppText {
 
   @override
   String demoSecretCodeUnlock(String code) {
-    return 'Celui que tu as choisi à la création — $code si tu as suivi la suggestion.';
+    return 'Celui que vous avez choisi à la création — $code si vous avez suivi la suggestion.';
   }
 
   @override
   String demoSignIn(String code) {
-    return 'Serveur simulé : le code est celui que tu as posé à l\'inscription — $code si tu as suivi la suggestion.';
+    return 'Serveur simulé : le code est celui que vous avez posé à l\'inscription — $code si vous avez suivi la suggestion.';
   }
 
   @override
-  String get privacyTitle => 'Tes données';
+  String get privacyTitle => 'Vos données';
 
   @override
   String get privacyIntro =>
@@ -256,37 +265,37 @@ class AppTextFr extends AppText {
       'Urim traite des textes. Il ne produit aucun jugement, score ou profil sur un membre, un fidèle ou un collaborateur.';
 
   @override
-  String get privacyOwnershipTitle => 'Tes préparations restent à toi';
+  String get privacyOwnershipTitle => 'Vos préparations restent les vôtres';
 
   @override
   String get privacyOwnershipBody =>
-      'Elles ne sont lues par personne d\'autre — ni par ton église, ni par Dorea, ni par un responsable.';
+      'Elles ne sont lues par personne d\'autre — ni par votre église, ni par Dorea, ni par un responsable.';
 
   @override
   String get privacyNoResaleTitle => 'Rien n\'est revendu';
 
   @override
   String get privacyNoResaleBody =>
-      'Aucun partage à un tiers, aucune publicité, aucun entraînement de modèle sur ton contenu.';
+      'Aucun partage à un tiers, aucune publicité, aucun entraînement de modèle sur votre contenu.';
 
   @override
   String get privacyRetainedLabel => 'CE QUI EST CONSERVÉ';
 
   @override
   String get privacyRetainedPhone =>
-      'Ton numéro de téléphone, pour te reconnaître.';
+      'Votre numéro de téléphone, pour vous reconnaître.';
 
   @override
   String get privacyRetainedWork =>
-      'Tes préparations et enregistrements, jusqu\'à ce que tu les supprimes.';
+      'Vos préparations et enregistrements, jusqu\'à ce que vous les supprimiez.';
 
   @override
   String get privacyRetainedDevices =>
-      'Les appareils sur lesquels tu t\'es connecté.';
+      'Les appareils sur lesquels vous vous êtes connecté.';
 
   @override
   String get privacyLegalNotice =>
-      'Traitement soumis à la loi ivoirienne n° 2013-450 relative à la protection des données à caractère personnel. Tu peux supprimer ton compte et tout son contenu à tout moment.';
+      'Traitement soumis à la loi ivoirienne n° 2013-450 relative à la protection des données à caractère personnel. Vous pouvez supprimer votre compte et tout son contenu à tout moment.';
 
   @override
   String get privacyAccept => 'J\'ai lu et j\'accepte';
@@ -357,7 +366,7 @@ class AppTextFr extends AppText {
 
   @override
   String get settingsWifiOnlyPending =>
-      'Rien n\'est encore synchronisé : tes préparations ne quittent pas cet appareil.';
+      'Rien n\'est encore synchronisé : vos préparations ne quittent pas cet appareil.';
 
   @override
   String get settingsReminderInProgress => 'Préparation en cours';
@@ -383,7 +392,7 @@ class AppTextFr extends AppText {
 
   @override
   String get preparationExportDone =>
-      'Préparation copiée. Colle-la où tu veux.';
+      'Préparation copiée. Collez-la où vous voulez.';
 
   @override
   String get settingsExport => 'Exporter mes préparations';
@@ -401,7 +410,7 @@ class AppTextFr extends AppText {
 
   @override
   String get settingsTrainingNotice =>
-      'Urim n\'utilise jamais tes préparations pour entraîner un modèle.';
+      'Urim n\'utilise jamais vos préparations pour entraîner un modèle.';
 
   @override
   String get settingsSaveFailed => 'Ce réglage n\'a pas pu être enregistré.';
@@ -429,11 +438,11 @@ class AppTextFr extends AppText {
   String get profileSectionChurches => 'Églises';
 
   @override
-  String get profileSecretCodeChangeTitle => 'Changer ton code secret ?';
+  String get profileSecretCodeChangeTitle => 'Changer votre code secret ?';
 
   @override
   String profileSecretCodeChangeBody(String phone) {
-    return 'Un code te sera envoyé par SMS au $phone. Tes autres appareils devront se reconnecter : changer la serrure laisse rarement les anciennes clés en circulation.';
+    return 'Un code vous sera envoyé par SMS au $phone. Vos autres appareils devront se reconnecter : changer la serrure laisse rarement les anciennes clés en circulation.';
   }
 
   @override
@@ -477,7 +486,7 @@ class AppTextFr extends AppText {
 
   @override
   String get profileDisplayNameExplanation =>
-      'Ce nom ne sort pas de l\'application : il sert à te reconnaître sur cet écran, et à former ton monogramme.';
+      'Ce nom ne sort pas de l\'application : il sert à vous reconnaître sur cet écran, et à former votre monogramme.';
 
   @override
   String get profileNoNameAvatar => 'Aucun nom défini';
@@ -502,10 +511,10 @@ class AppTextFr extends AppText {
 
   @override
   String get searchEmpty =>
-      'Rien pour l’instant. Écris une référence, ou un mot de l’original.';
+      'Rien pour l’instant. Écrivez une référence, ou un mot de l’original.';
 
   @override
-  String get searchUnitsTitle => 'Les unités qui couvrent ta demande';
+  String get searchUnitsTitle => 'Les unités qui couvrent votre demande';
 
   @override
   String searchReviewedBy(String qui) {
@@ -546,7 +555,7 @@ class AppTextFr extends AppText {
 
   @override
   String get preparationSupportsIntro =>
-      'Dans ton ordre, pas celui du canon : l’annonce avant l’accomplissement. Écris comme tu notes — « Hb 2v29 » se lit.';
+      'Dans votre ordre, pas celui du canon : l’annonce avant l’accomplissement. Écrivez comme vous notez — « Hb 2v29 » se lit.';
 
   @override
   String get preparationSupportsAdd => 'Ajouter un texte';
@@ -555,7 +564,7 @@ class AppTextFr extends AppText {
   String get preparationSupportsSave => 'Vérifier et enregistrer';
 
   @override
-  String get preparationSupportsSaved => 'Ta chaîne est enregistrée.';
+  String get preparationSupportsSaved => 'Votre chaîne est enregistrée.';
 
   @override
   String get preparationSupportsHint => 'Hb 2v29';
@@ -592,7 +601,7 @@ class AppTextFr extends AppText {
 
   @override
   String preparationDocumentReady(String dossier) {
-    return 'Ton document est dans « $dossier ».';
+    return 'Votre document est dans « $dossier ».';
   }
 
   @override
@@ -608,13 +617,13 @@ class AppTextFr extends AppText {
 
   @override
   String get preparationPlanIntro =>
-      'Le document met en page ce que tu écris. Rien n’est imposé : une section vide reste vide.';
+      'Le document met en page ce que vous écrivez. Rien n’est imposé : une section vide reste vide.';
 
   @override
   String get preparationPlanSave => 'Enregistrer';
 
   @override
-  String get preparationPlanSaved => 'Ton plan est enregistré.';
+  String get preparationPlanSaved => 'Votre plan est enregistré.';
 
   @override
   String get preparationPlanAdd => 'Ajouter une section';
@@ -622,6 +631,61 @@ class AppTextFr extends AppText {
   @override
   String get preparationPlanPointsHint =>
       'Au moins un point : c’est ce que le document exige avant de sortir.';
+
+  @override
+  String get preparationMaterialTitle => 'Le texte et le contexte';
+
+  @override
+  String get preparationThinking => 'Urim cherche…';
+
+  @override
+  String preparationPlanNotes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count notes écrites dans le fil',
+      one: '1 note écrite dans le fil',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get preparationPlanPromote => 'En faire mon point';
+
+  @override
+  String get preparationPlanPromoted =>
+      'Ajouté à la fin de votre point. À vous de le retailler.';
+
+  @override
+  String get preparationPlanArticulate => 'Faire articuler ce point';
+
+  @override
+  String get preparationPlanArticulateTitle => 'Ce qu’Urim propose';
+
+  @override
+  String get preparationPlanArticulateTransition => 'Pour enchaîner';
+
+  @override
+  String get preparationPlanArticulateNotice =>
+      'Rien n’entre dans votre document tant que vous ne l’avez pas repris.';
+
+  @override
+  String get preparationPlanArticulateTake => 'Reprendre dans mon point';
+
+  @override
+  String get preparationPlanArticulateTaken =>
+      'Repris à la suite de votre point. À vous de le retailler.';
+
+  @override
+  String get preparationPlanArticulateClose => 'Fermer';
+
+  @override
+  String get preparationPlanArticulateUnavailable =>
+      'Urim n’a pas de proposition ici. Votre point reste écrit, et vous le développez comme vous l’avez toujours fait.';
+
+  @override
+  String get preparationPlanArticulateEmpty =>
+      'Écrivez d’abord ce point : Urim articule ce que vous avez écrit, il ne l’écrit pas.';
 
   @override
   String get preparationSectionTitre => 'Titre';
@@ -670,7 +734,7 @@ class AppTextFr extends AppText {
 
   @override
   String get preparationActionAVenir =>
-      'Le serveur accepte déjà tes points ; l\'écran pour les écrire n\'existe pas encore.';
+      'Le serveur accepte déjà vos points ; l\'écran pour les écrire n\'existe pas encore.';
 
   @override
   String get profilePhone => 'Numéro de téléphone';
@@ -687,10 +751,10 @@ class AppTextFr extends AppText {
 
   @override
   String get profilePhoneChangeFailed =>
-      'Le code n\'est pas parti. Ton numéro n\'a pas changé.';
+      'Le code n\'est pas parti. Votre numéro n\'a pas changé.';
 
   @override
-  String get profilePhoneChangeDone => 'Ton numéro a été changé.';
+  String get profilePhoneChangeDone => 'Votre numéro a été changé.';
 
   @override
   String get profileSecretCode => 'Code à 4 chiffres';
@@ -711,11 +775,11 @@ class AppTextFr extends AppText {
 
   @override
   String get profileChurchRecognised =>
-      'Ton numéro y est reconnu. Tes préparations n\'y sont pas visibles.';
+      'Votre numéro y est reconnu. Vos préparations n\'y sont pas visibles.';
 
   @override
   String get profileChurchesNote =>
-      'Une seule identité, plusieurs églises possibles. Ce que tu écris dans Urim ne traverse jamais vers elles.';
+      'Une seule identité, plusieurs églises possibles. Ce que vous écrivez dans Urim ne traverse jamais vers elles.';
 
   @override
   String get profileDeviceCurrent => 'Cet appareil · actif maintenant';
@@ -754,14 +818,165 @@ class AppTextFr extends AppText {
   String get save => 'Enregistrer';
 
   @override
-  String get homeOpenTask => 'Ouvrir une tâche';
+  String get drawerNewPreparation => 'Nouvelle préparation';
+
+  @override
+  String get drawerPreparations => 'PRÉPARATIONS';
+
+  @override
+  String get drawerPreached => 'PRÉDICATIONS';
+
+  @override
+  String get drawerEmptyPreached =>
+      'Rien encore. Enregistrez votre prochain culte.';
+
+  @override
+  String get drawerProjects => 'Projets';
+
+  @override
+  String get drawerProjectsPending => 'Bientôt';
+
+  @override
+  String get drawerEmpty => 'Rien encore. Écrivez votre première phrase.';
+
+  @override
+  String get homeSwitchTitle => 'Voulez-vous basculer à…';
+
+  @override
+  String get homeSwitchPrepare => 'Préparer un message';
+
+  @override
+  String get homeSwitchPrepareBody =>
+      'Faites-vous assister pour accélérer votre préparation.';
+
+  @override
+  String get homeSwitchPreach => 'Mes prédications';
+
+  @override
+  String get homeSwitchPreachBody => 'Donnez vie à votre prédication.';
+
+  @override
+  String get preachedMark => 'J\'ai prêché celle-ci';
+
+  @override
+  String preachedMarkDone(String date) {
+    return 'Consignée comme prêchée le $date.';
+  }
+
+  @override
+  String get archiveTitle => 'Ce que vous avez prêché';
+
+  @override
+  String get archiveEmpty =>
+      'Rien de consigné. Marquez une préparation comme prêchée, ou consignez un message prêché ailleurs.';
+
+  @override
+  String get archiveRecordManual => 'Consigner une prédication';
+
+  @override
+  String get archiveRecordHint => 'Actes 1:1-14 — ou Hb 2v29, comme vous notez';
+
+  @override
+  String get archiveRecordDate => 'Quand l\'avez-vous prêchée ?';
+
+  @override
+  String get archiveRecordSubmit => 'Consigner';
+
+  @override
+  String get archiveRecordDone => 'Prédication consignée.';
+
+  @override
+  String get archiveUnfiled => 'Non rangé';
+
+  @override
+  String get coverageTitle => 'Où vous êtes allé';
+
+  @override
+  String coverageBooks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count livres',
+      one: '1 livre',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String coveragePassages(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count passages',
+      one: '1 passage',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String coveragePreachings(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count prédications',
+      one: '1 prédication',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String coverageUntouched(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count livres sans sermon rangé',
+      one: '1 livre sans sermon rangé',
+      zero: 'Aucun livre sans sermon rangé',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get coverageNotice =>
+      '« Aucun sermon rangé ici » ne veut pas dire que vous ne l\'avez jamais prêché : un texte peut l\'avoir été sous une autre unité, ou sans axe retenu.';
+
+  @override
+  String get homeComposerHint =>
+      'Une phrase, une référence, ou ce qui pèse cette semaine';
+
+  @override
+  String get homeTabPreach => 'Prédications';
+
+  @override
+  String get homeTabPrepare => 'Préparations';
+
+  @override
+  String get homeRecordSermon => 'Enregistrer la prédication';
+
+  @override
+  String get homeServiceToday => 'Culte aujourd\'hui';
+
+  @override
+  String get homeServiceTodayPending => 'rien n\'est encore capté';
+
+  @override
+  String homeGroupPreached(int count) {
+    return 'PRÊCHÉS · $count';
+  }
+
+  @override
+  String get homePreachedEmptyTitle => 'Aucune prédication captée.';
+
+  @override
+  String get homePreachedEmptyBody =>
+      'Enregistrez le culte : la prédication s\'ajoutera ici, dans votre voix.';
 
   @override
   String get homeEmptyTitle => 'Rien en cours.';
 
   @override
   String get homeEmptyBody =>
-      'Ouvre une tâche : écris ce que tu veux dire, ou verse un enregistrement.';
+      'Écrivez ce que vous voulez dire : une phrase, une référence, ou ce qui pèse cette semaine.';
 
   @override
   String get homeReadFailed => 'La liste n\'a pas pu être lue.';
@@ -789,7 +1004,7 @@ class AppTextFr extends AppText {
 
   @override
   String homeCardMetaWithService(String activity, String service) {
-    return '· $activity · dimanche $service';
+    return '· $activity · $service';
   }
 
   @override
@@ -818,8 +1033,11 @@ class AppTextFr extends AppText {
 
   @override
   String turnSignature(String signature) {
-    return 'Unité signée $signature';
+    return 'Découpage relu par $signature';
   }
+
+  @override
+  String get turnSignatureMachine => 'Découpage proposé par l’IA, non relu';
 
   @override
   String turnFoldedBearings(int count) {
@@ -928,72 +1146,77 @@ class AppTextFr extends AppText {
   String get stateFeedbackReady => 'Retour disponible';
 
   @override
-  String get taskSheetTitle => 'Quelle tâche ?';
+  String get homeRecordStop => 'Arrêter l\'enregistrement';
 
   @override
-  String get taskSheetSubtitle =>
-      'Deux travaux différents, pas deux façons d\'écrire.';
+  String get homeCaptureRunning => 'Enregistrement';
 
   @override
-  String get taskWriteTitle => 'Préparer un message';
+  String get homeCaptureStop => 'Arrêter';
 
   @override
-  String get taskWriteBody =>
-      'Urim t\'accompagne question par question — l\'axe, le texte, les bornes — jusqu\'à ton squelette.';
-
-  @override
-  String get taskTranscribeTitle => 'Transcrire une prédication';
-
-  @override
-  String get taskTranscribeBody =>
-      'Mise en texte, puis une synthèse que tu valides avant qu\'elle ne soit lue à voix haute.';
-
-  @override
-  String get taskTranscribePending =>
-      'Le moteur de transcription n\'est pas encore retenu. Un exemple transcrit est visible depuis l\'accueil.';
-
-  @override
-  String get newPreparationTitle => 'Nouvelle préparation';
-
-  @override
-  String get newPreparationIntro =>
-      'Une référence, une phrase que tu as en tête, ou ce que tu veux dire. Écris comme ça vient.';
-
-  @override
-  String get newPreparationHint =>
-      'Romains 8:15 — ou : que l\'amour fraternel continue — ou : je veux parler de la persévérance à des étudiants qui décrochent';
-
-  @override
-  String get newPreparationDictate =>
-      'Ou dicte — Urim te fera confirmer avant d\'aller plus loin. La dictée attend le moteur de reconnaissance.';
-
-  @override
-  String get newPreparationServiceSection => 'Pour quel dimanche';
-
-  @override
-  String get newPreparationServiceDate => 'Date du culte';
-
-  @override
-  String get newPreparationServiceDateEmpty => 'À définir';
-
-  @override
-  String newPreparationServiceDateValue(String date) {
-    return 'dim. $date';
+  String homeCaptureSaved(String duree) {
+    return 'Prédication captée · $duree';
   }
 
   @override
-  String get newPreparationSpace => 'Espace';
+  String get homeCaptureMicRefused =>
+      'Urim a besoin du micro pour enregistrer votre prédication. Autorisez-le dans les réglages de l\'appareil.';
 
   @override
-  String get newPreparationSpacePersonal => 'Personnel';
+  String get homeCaptureNoMicrophone =>
+      'Cet appareil n\'a pas de micro utilisable.';
 
   @override
-  String get newPreparationSpacePending =>
-      'Le partage avec une église attend que le rattachement existe.';
+  String get homeCaptureStorageFull =>
+      'Il n\'y a plus de place pour l\'audio. Libérez quelques centaines de mégaoctets.';
 
   @override
-  String get newPreparationNoModeNotice =>
-      'Aucun mode à choisir. Le moteur regarde si les mots que tu écris se suivent comme dans l\'Écriture — c\'est l\'ordre des mots qui décide, jamais le vocabulaire.';
+  String get homeCaptureFailed =>
+      'L\'enregistrement n\'a pas pu commencer. Réessayez.';
+
+  @override
+  String get homeCaptureInterrupted => 'Interrompue';
+
+  @override
+  String homeCaptureAudioLeft(int jours) {
+    return 'audio effacé dans $jours j';
+  }
+
+  @override
+  String get homeCaptureAudioToday => 'audio effacé aujourd\'hui';
+
+  @override
+  String get homeCaptureNotSent => 'sur cet appareil, pas encore transcrite';
+
+  @override
+  String get homeRecordPending =>
+      'Le moteur de transcription n\'est pas encore retenu. Les prédications déjà transcrites restent lisibles ici.';
+
+  @override
+  String get newPreparationDictateListening =>
+      'Urim vous écoute. Appuyez pour arrêter.';
+
+  @override
+  String get newPreparationDictateStart => 'Dicter';
+
+  @override
+  String get newPreparationDictateStop => 'Arrêter la dictée';
+
+  @override
+  String get newPreparationDictateNoEngine =>
+      'Cet appareil n\'a pas de reconnaissance vocale. Écrivez votre phrase.';
+
+  @override
+  String get newPreparationDictateMicRefused =>
+      'Urim a besoin du micro pour écrire ce que vous dites. Autorisez-le dans les réglages de l\'appareil.';
+
+  @override
+  String get newPreparationDictateFailed =>
+      'La dictée s\'est arrêtée. Réessayez, ou écrivez votre phrase.';
+
+  @override
+  String get newPreparationServiceDate => 'Date du culte';
 
   @override
   String get newPreparationOpen => 'Ouvrir la préparation';
@@ -1004,16 +1227,17 @@ class AppTextFr extends AppText {
 
   @override
   String get newPreparationNeedsNetwork =>
-      'Ouvrir demande le réseau : Urim consulte les textes pour lire ta phrase. Elle est gardée — tu la retrouveras ici.';
+      'Ouvrir demande le réseau : Urim consulte les textes pour lire votre phrase. Elle est gardée — vous la retrouverez ici.';
 
   @override
-  String get preparationEmpty => 'Pose ta première idée en bas de l\'écran.';
+  String get preparationEmpty =>
+      'Posez votre première idée en bas de l\'écran.';
 
   @override
   String get preparationLoadFailed => 'Chargement impossible.';
 
   @override
-  String get preparationComposerHint => 'Écris ta réponse, ou choisis…';
+  String get preparationComposerHint => 'Écrivez votre réponse, ou choisissez…';
 
   @override
   String get preparationDictationSoon => 'Dictée — bientôt disponible';
@@ -1045,7 +1269,7 @@ class AppTextFr extends AppText {
 
   @override
   String get lociUnavailable =>
-      'La liste des loci n\'est pas encore écrite. Les trois axes proposés viennent de ta phrase ; les sept autres attendent que le moteur existe.';
+      'La liste des loci n\'est pas encore écrite. Les trois axes proposés viennent de votre phrase ; les sept autres attendent que le moteur existe.';
 
   @override
   String get stanceSubject => 'Ce texte en fait son sujet';
@@ -1086,7 +1310,7 @@ class AppTextFr extends AppText {
   String get transcriptionSectionFragments => 'Fragments';
 
   @override
-  String get transcriptionSectionConvoked => 'Ce que tu as convoqué';
+  String get transcriptionSectionConvoked => 'Ce que vous avez convoqué';
 
   @override
   String get transcriptionAllAcknowledged =>
@@ -1112,7 +1336,7 @@ class AppTextFr extends AppText {
 
   @override
   String transcriptionPlanned(String reference) {
-    return '$reference — prévu dans ta préparation';
+    return '$reference — prévu dans votre préparation';
   }
 
   @override
@@ -1151,14 +1375,14 @@ class AppTextFr extends AppText {
 
   @override
   String get synthesisSealBodyDraft =>
-      'Tant que tu n\'as pas validé, cette synthèse n\'existe que pour toi. Aucun membre ne la voit, aucune voix ne la lit.';
+      'Tant que vous n\'avez pas validé, cette synthèse n\'existe que pour vous. Aucun membre ne la voit, aucune voix ne la lit.';
 
   @override
-  String get synthesisSealTitleValidated => 'Validée par toi.';
+  String get synthesisSealTitleValidated => 'Validée par vous.';
 
   @override
   String get synthesisSealBodyValidated =>
-      'Elle peut être lue à voix haute. Tu restes le seul à pouvoir la modifier.';
+      'Elle peut être lue à voix haute. Vous restez le seul à pouvoir la modifier.';
 
   @override
   String get synthesisSectionCapsules => 'Ce qu\'Urim a retenu';
@@ -1169,14 +1393,15 @@ class AppTextFr extends AppText {
   }
 
   @override
-  String get synthesisCapsuleSource => 'Voir où c\'est dit dans ta prédication';
+  String get synthesisCapsuleSource =>
+      'Voir où c\'est dit dans votre prédication';
 
   @override
   String get synthesisSectionVerse => 'Le verset, non réécrit';
 
   @override
   String get synthesisModelNotice =>
-      'Les capsules sont écrites par un modèle à partir de ta transcription. Les versets, eux, viennent de la Bible — jamais du modèle. Relis avant de valider.';
+      'Les capsules sont écrites par un modèle à partir de votre transcription. Les versets, eux, viennent de la Bible — jamais du modèle. Relisez avant de valider.';
 
   @override
   String get synthesisValidate => 'Valider cette synthèse';
@@ -1201,7 +1426,7 @@ class AppTextFr extends AppText {
 
   @override
   String get synthesisReadAloudOpen =>
-      'La lecture reprend la synthèse telle que tu l\'as validée.';
+      'La lecture reprend la synthèse telle que vous l\'avez validée.';
 
   @override
   String get synthesisVoiceComing => 'Lecture à venir';

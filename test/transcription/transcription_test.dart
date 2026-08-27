@@ -189,6 +189,18 @@ void main() {
       );
       await tester.pumpAndSettle();
 
+      // Les prédications ne sont plus dans le fil des préparations : elles ont
+      // leur page, et l'icône du haut y mène — en demandant d'abord.
+      await tester.tap(
+        find.ancestor(
+          of: find.byIcon(Icons.record_voice_over_outlined),
+          matching: find.byType(IconButton),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(texte.homeSwitchPreach));
+      await tester.pumpAndSettle();
+
       // Une prédication transcrite s'ouvre sur sa relecture.
       await tester.tap(find.text('Hébreux 13:1-6 — prêché le 9 août'));
       await tester.pumpAndSettle();

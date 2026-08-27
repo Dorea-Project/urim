@@ -8,11 +8,11 @@
   "@profileDeleteAccount": {
     "description": "Rangée destructrice du profil, promise par la politique."
   },
-  "profileDeleteAccountTitle": "Supprimer ton compte ?",
+  "profileDeleteAccountTitle": "Supprimer votre compte ?",
   "@profileDeleteAccountTitle": {
     "description": "Titre du dialogue de suppression."
   },
-  "profileDeleteAccountBody": "Tes préparations, tes enregistrements et ton compte seront effacés — sur cet appareil comme sur le serveur. Rien n'est récupérable.\n\nUn code va partir par SMS : il faut le saisir pour confirmer.",
+  "profileDeleteAccountBody": "Vos préparations, vos enregistrements et votre compte seront effacés — sur cet appareil comme sur le serveur. Rien n'est récupérable.\n\nUn code va partir par SMS : il faut le saisir pour confirmer.",
   "@profileDeleteAccountBody": {
     "description": "Dit ce qui part, et par quoi il faut passer pour le confirmer."
   },
@@ -20,11 +20,11 @@
   "@profileDeleteAccountConfirm": {
     "description": "Bouton qui déclenche l'envoi du SMS de suppression."
   },
-  "profileDeleteAccountDone": "Ton compte et son contenu ont été supprimés.",
+  "profileDeleteAccountDone": "Votre compte et son contenu ont été supprimés.",
   "@profileDeleteAccountDone": {
     "description": "Confirmation après une suppression réussie."
   },
-  "profileDeleteAccountFailed": "Le code n'est pas parti. Ton compte est intact.",
+  "profileDeleteAccountFailed": "Le code n'est pas parti. Votre compte est intact.",
   "@profileDeleteAccountFailed": {
     "description": "Refus du serveur au moment de demander le code de suppression."
   },
@@ -36,7 +36,7 @@
   "@profileSignOutTitle": {
     "description": "Titre du dialogue de déconnexion."
   },
-  "profileSignOutBody": "Tes préparations restent sur cet appareil. Il faudra ton code secret, ou un nouveau code par SMS si l'appareil n'est plus reconnu.",
+  "profileSignOutBody": "Vos préparations restent sur cet appareil. Il faudra votre code secret, ou un nouveau code par SMS si l'appareil n'est plus reconnu.",
   "@profileSignOutBody": {
     "description": "Dit ce que la déconnexion ne détruit pas, et ce qu'il faudra pour revenir."
   },
@@ -72,7 +72,7 @@
   "@onboardingSignIn": {
     "description": "La seconde porte : la connexion d'un compte existant."
   },
-  "onboardingSaveFailed": "Impossible d'enregistrer ta progression. La présentation réapparaîtra au prochain lancement.",
+  "onboardingSaveFailed": "Impossible d'enregistrer votre progression. La présentation réapparaîtra au prochain lancement.",
   "@onboardingSaveFailed": {
     "description": "Échec de l'écriture locale. Dit la conséquence, pas la cause technique."
   },
@@ -88,32 +88,44 @@
       }
     }
   },
-  "onboardingWeighingTitle": "Écris ta phrase.\nUrim cherche le texte dedans.",
+  "onboardingWeighingTitle": "Écrivez votre phrase.\nUrim cherche le texte dedans.",
   "@onboardingWeighingTitle": {
     "description": "Titre de la première étape. Le retour à la ligne porte le rythme de la phrase."
   },
-  "onboardingWeighingBody": "Une référence, une citation approximative, ou juste une intention. Tu n'as aucun mode à choisir — la porte regarde si les mots se suivent comme dans l'Écriture.",
+  "onboardingWeighingBody": "Une référence, une citation approximative, ou juste une intention. Vous n'avez aucun mode à choisir — la porte regarde si les mots se suivent comme dans l'Écriture.",
   "onboardingHandbackTitle": "Il s'arrête\net te rend la main.",
-  "onboardingHandbackBody": "Chaque étage dit pourquoi il a fait ce qu'il a fait. Quand il ne peut pas trancher seul, il te pose la question au lieu de choisir à ta place.",
+  "onboardingHandbackBody": "Chaque étage dit pourquoi il a fait ce qu'il a fait. Quand il ne peut pas trancher seul, il vous pose la question au lieu de choisir à votre place.",
   "onboardingResistanceTitle": "Il te montre les textes qui te résistent.",
-  "onboardingResistanceBody": "Ceux qui ne vont pas dans le sens de ta lecture. C'est le seul moyen de ne pas faire dire au texte ce qu'on avait décidé d'y trouver.",
+  "onboardingResistanceBody": "Ceux qui ne vont pas dans le sens de votre lecture. C'est le seul moyen de ne pas faire dire au texte ce qu'on avait décidé d'y trouver.",
   "back": "Retour",
   "@back": {
     "description": "Infobulle du bouton de retour, partout."
   },
   "retry": "Réessayer",
   "cancel": "Annuler",
-  "authPhoneTitleSignIn": "Ton numéro",
+  "authPhoneTitleSignIn": "Votre numéro",
   "@authPhoneTitleSignIn": {
     "description": "Titre de l'écran du numéro, porte « connexion »."
   },
-  "authPhoneTitleRegistration": "Ton numéro valide",
+  "authPhoneTitleRegistration": "Votre numéro valide",
   "@authPhoneTitleRegistration": {
     "description": "Titre du même écran, porte « inscription » : le numéro doit être joignable, un SMS y part."
   },
   "authPhoneHint": "07 47 76 9069",
   "@authPhoneHint": {
     "description": "Exemple de saisie, format ivoirien."
+  },
+  "authSwitchToSignIn": "Déjà un compte ? Se connecter",
+  "@authSwitchToSignIn": {
+    "description": "Bascule vers la connexion depuis l’écran du numéro."
+  },
+  "authSwitchToRegistration": "Pas encore de compte ? En créer un",
+  "@authSwitchToRegistration": {
+    "description": "Bascule vers l’inscription depuis l’écran du numéro."
+  },
+  "authGoToSignIn": "Se connecter",
+  "@authGoToSignIn": {
+    "description": "Sortie offerte quand le serveur répond que le numéro est déjà inscrit."
   },
   "authPhoneSubmit": "Soumettre",
   "authPrivacyConsent": "J'ai lu et j'accepte la ",
@@ -158,8 +170,8 @@
       }
     }
   },
-  "secretCodeChooseTitle": "Choisis un code secret",
-  "secretCodeConfirmTitle": "Confirme ton code secret",
+  "secretCodeChooseTitle": "Choisissez un code secret",
+  "secretCodeConfirmTitle": "Confirmez votre code secret",
   "secretCodeChooseHelper": "{count} chiffres, demandés à chaque ouverture",
   "@secretCodeChooseHelper": {
     "description": "Dit ce que le code engage : il reviendra à chaque fois.",
@@ -169,9 +181,9 @@
       }
     }
   },
-  "secretCodeConfirmHelper": "Saisis-le une seconde fois",
-  "secretCodeUnlockTitle": "Ton code secret",
-  "secretCodeUnlockHelper": "Saisis tes chiffres",
+  "secretCodeConfirmHelper": "Saisissez-le une seconde fois",
+  "secretCodeUnlockTitle": "Votre code secret",
+  "secretCodeUnlockHelper": "Saisissez vos chiffres",
   "secretCodeWrong": "Code incorrect",
   "signInForgotten": "Code oublié ?",
   "errorOtpExpired": "Ce code a expiré. Demandes-en un nouveau.",
@@ -181,7 +193,7 @@
   "errorOtpInvalid": "Code incorrect.",
   "errorOtpTooManyAttempts": "Trop d'essais sur ce code. Demandes-en un nouveau.",
   "errorOtpTooManyRequests": "Trop de codes demandés. Patiente quelques minutes.",
-  "errorPhoneAlreadyRegistered": "Ce numéro a déjà un compte. Connecte-toi.",
+  "errorPhoneAlreadyRegistered": "Ce numéro a déjà un compte. Connectez-vous.",
   "errorSecretCodeIncorrect": "Code secret incorrect.",
   "errorTooManyAttempts": "Trop d'essais. Attends quelques minutes avant de réessayer.",
   "@errorTooManyAttempts": {
@@ -211,7 +223,7 @@
       }
     }
   },
-  "demoSecretCodeUnlock": "Celui que tu as choisi à la création — {code} si tu as suivi la suggestion.",
+  "demoSecretCodeUnlock": "Celui que vous avez choisi à la création — {code} si vous avez suivi la suggestion.",
   "@demoSecretCodeUnlock": {
     "placeholders": {
       "code": {
@@ -219,7 +231,7 @@
       }
     }
   },
-  "demoSignIn": "Serveur simulé : le code est celui que tu as posé à l'inscription — {code} si tu as suivi la suggestion.",
+  "demoSignIn": "Serveur simulé : le code est celui que vous avez posé à l'inscription — {code} si vous avez suivi la suggestion.",
   "@demoSignIn": {
     "placeholders": {
       "code": {
@@ -227,7 +239,7 @@
       }
     }
   },
-  "privacyTitle": "Tes données",
+  "privacyTitle": "Vos données",
   "@privacyTitle": {
     "description": "Titre de l'écran, et son nom dans le profil."
   },
@@ -237,15 +249,15 @@
   },
   "privacyNoProfilingTitle": "Aucune analyse de personne",
   "privacyNoProfilingBody": "Urim traite des textes. Il ne produit aucun jugement, score ou profil sur un membre, un fidèle ou un collaborateur.",
-  "privacyOwnershipTitle": "Tes préparations restent à toi",
-  "privacyOwnershipBody": "Elles ne sont lues par personne d'autre — ni par ton église, ni par Dorea, ni par un responsable.",
+  "privacyOwnershipTitle": "Vos préparations restent les vôtres",
+  "privacyOwnershipBody": "Elles ne sont lues par personne d'autre — ni par votre église, ni par Dorea, ni par un responsable.",
   "privacyNoResaleTitle": "Rien n'est revendu",
-  "privacyNoResaleBody": "Aucun partage à un tiers, aucune publicité, aucun entraînement de modèle sur ton contenu.",
+  "privacyNoResaleBody": "Aucun partage à un tiers, aucune publicité, aucun entraînement de modèle sur votre contenu.",
   "privacyRetainedLabel": "CE QUI EST CONSERVÉ",
-  "privacyRetainedPhone": "Ton numéro de téléphone, pour te reconnaître.",
-  "privacyRetainedWork": "Tes préparations et enregistrements, jusqu'à ce que tu les supprimes.",
-  "privacyRetainedDevices": "Les appareils sur lesquels tu t'es connecté.",
-  "privacyLegalNotice": "Traitement soumis à la loi ivoirienne n° 2013-450 relative à la protection des données à caractère personnel. Tu peux supprimer ton compte et tout son contenu à tout moment.",
+  "privacyRetainedPhone": "Votre numéro de téléphone, pour vous reconnaître.",
+  "privacyRetainedWork": "Vos préparations et enregistrements, jusqu'à ce que vous les supprimiez.",
+  "privacyRetainedDevices": "Les appareils sur lesquels vous vous êtes connecté.",
+  "privacyLegalNotice": "Traitement soumis à la loi ivoirienne n° 2013-450 relative à la protection des données à caractère personnel. Vous pouvez supprimer votre compte et tout son contenu à tout moment.",
   "@privacyLegalNotice": {
     "description": "Mention légale. Le numéro de loi ne se traduit pas — il se remplace par la référence locale."
   },
@@ -276,7 +288,7 @@
   "settingsTranscribeOnDevice": "Transcrire sur l'appareil",
   "settingsTranscribeOnDevicePending": "L'audio ne quittera jamais le téléphone. Le moteur de transcription reste à retenir.",
   "settingsWifiOnly": "Synchroniser en Wi-Fi seulement",
-  "settingsWifiOnlyPending": "Rien n'est encore synchronisé : tes préparations ne quittent pas cet appareil.",
+  "settingsWifiOnlyPending": "Rien n'est encore synchronisé : vos préparations ne quittent pas cet appareil.",
   "settingsReminderInProgress": "Préparation en cours",
   "settingsReminderInProgressPending": "Un rappel le samedi si un message n'est pas terminé — dès qu'une préparation saura dire qu'elle ne l'est pas.",
   "exportStartingPoint": "Point de départ",
@@ -299,7 +311,7 @@
   "@preparationExport": {
     "description": "Menu de la préparation : met son contenu dans le presse-papiers."
   },
-  "preparationExportDone": "Préparation copiée. Colle-la où tu veux.",
+  "preparationExportDone": "Préparation copiée. Collez-la où vous voulez.",
   "@preparationExportDone": {
     "description": "Confirmation après copie dans le presse-papiers."
   },
@@ -307,7 +319,7 @@
   "settingsExportPending": "Une par une, depuis le menu d'une préparation. L'export de tout, et le PDF, restent à faire.",
   "settingsStorageUsed": "Espace utilisé",
   "settingsStorageUsedPending": "Mesurable une fois le stockage des préparations choisi.",
-  "settingsTrainingNotice": "Urim n'utilise jamais tes préparations pour entraîner un modèle.",
+  "settingsTrainingNotice": "Urim n'utilise jamais vos préparations pour entraîner un modèle.",
   "@settingsTrainingNotice": {
     "description": "Rappel de la politique, posé là où l'on s'interroge sur ce qui sort de l'appareil."
   },
@@ -322,14 +334,18 @@
   },
   "profileSectionAccount": "Compte",
   "profileSectionChurches": "Églises",
-  "profileSecretCodeChangeTitle": "Changer ton code secret ?",
+  "profileSecretCodeChangeTitle": "Changer votre code secret ?",
   "@profileSecretCodeChangeTitle": {
     "description": "Titre du dialogue lancé depuis le profil."
   },
-  "profileSecretCodeChangeBody": "Un code te sera envoyé par SMS au {phone}. Tes autres appareils devront se reconnecter : changer la serrure laisse rarement les anciennes clés en circulation.",
+  "profileSecretCodeChangeBody": "Un code vous sera envoyé par SMS au {phone}. Vos autres appareils devront se reconnecter : changer la serrure laisse rarement les anciennes clés en circulation.",
   "@profileSecretCodeChangeBody": {
     "description": "Dit ce que le changement entraîne, avant de le lancer.",
-    "placeholders": { "phone": { "type": "String" } }
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
   },
   "profileSecretCodeChangeConfirm": "Recevoir le code",
   "@profileSecretCodeChangeConfirm": {
@@ -344,8 +360,12 @@
   "@profileDevicesCount": {
     "description": "Occupation des places d'appareils, à côté du titre de section.",
     "placeholders": {
-      "count": { "type": "int" },
-      "max": { "type": "int" }
+      "count": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
     }
   },
   "profileDevicesFull": "Deux appareils au maximum. Pour en lier un nouveau, retire d'abord l'un de ceux-ci — sinon la connexion y sera refusée.",
@@ -355,7 +375,11 @@
   "profileDevicesRoom": "{count, plural, =1{Une place reste pour un autre appareil.} other{{count} places restent pour d'autres appareils.}}",
   "@profileDevicesRoom": {
     "description": "Affiché quand il reste de la place.",
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "profileDisplayName": "Nom affiché",
   "profileDisplayNameEmpty": "À définir",
@@ -363,7 +387,7 @@
   "@profileDisplayNameHint": {
     "description": "Exemple de saisie dans la boîte de dialogue. Un nom ivoirien courant."
   },
-  "profileDisplayNameExplanation": "Ce nom ne sort pas de l'application : il sert à te reconnaître sur cet écran, et à former ton monogramme.",
+  "profileDisplayNameExplanation": "Ce nom ne sort pas de l'application : il sert à vous reconnaître sur cet écran, et à former votre monogramme.",
   "profileNoNameAvatar": "Aucun nom défini",
   "@profileNoNameAvatar": {
     "description": "Annonce vocale de la silhouette qui remplace les initiales. Jamais affichée."
@@ -392,17 +416,21 @@
   "@searchAction": {
     "description": "Libellé de l’écran de recherche."
   },
-  "searchEmpty": "Rien pour l’instant. Écris une référence, ou un mot de l’original.",
+  "searchEmpty": "Rien pour l’instant. Écrivez une référence, ou un mot de l’original.",
   "@searchEmpty": {
     "description": "État vide de l’écran de recherche."
   },
-  "searchUnitsTitle": "Les unités qui couvrent ta demande",
+  "searchUnitsTitle": "Les unités qui couvrent votre demande",
   "@searchUnitsTitle": {
     "description": "Quand le passage chevauche plusieurs unités relues."
   },
   "searchReviewedBy": "Relu par {qui}",
   "@searchReviewedBy": {
-    "placeholders": { "qui": { "type": "String" } },
+    "placeholders": {
+      "qui": {
+        "type": "String"
+      }
+    },
     "description": "Qui a signé l’unité — la seule chose qui distingue un énoncé relu d’un énoncé jamais lu."
   },
   "searchNotReviewed": "Proposé par le modèle, non relu",
@@ -427,12 +455,20 @@
   },
   "searchOccurrences": "{total} occurrences dans le corpus",
   "@searchOccurrences": {
-    "placeholders": { "total": { "type": "int" } },
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    },
     "description": "Le compte réel, indépendant de ce qui est montré."
   },
   "searchTruncated": "Voici les {montrees} premières — un extrait présenté comme un tout ferait conclure d’un échantillon.",
   "@searchTruncated": {
-    "placeholders": { "montrees": { "type": "int" } },
+    "placeholders": {
+      "montrees": {
+        "type": "int"
+      }
+    },
     "description": "Dit qu’on ne montre pas tout."
   },
   "searchNoGloss": "Le corpus ne porte pas le sens de ce mot. Voici où il paraît — c’est ce que je peux soutenir.",
@@ -443,7 +479,7 @@
   "@preparationSupportsTitle": {
     "description": "Titre de l’écran des textes d’appui."
   },
-  "preparationSupportsIntro": "Dans ton ordre, pas celui du canon : l’annonce avant l’accomplissement. Écris comme tu notes — « Hb 2v29 » se lit.",
+  "preparationSupportsIntro": "Dans votre ordre, pas celui du canon : l’annonce avant l’accomplissement. Écrivez comme vous notez — « Hb 2v29 » se lit.",
   "@preparationSupportsIntro": {
     "description": "Dit que l’ordre est le sien et que sa notation est comprise."
   },
@@ -455,7 +491,7 @@
   "@preparationSupportsSave": {
     "description": "Bouton qui envoie la chaîne au contrôle de référence."
   },
-  "preparationSupportsSaved": "Ta chaîne est enregistrée.",
+  "preparationSupportsSaved": "Votre chaîne est enregistrée.",
   "@preparationSupportsSaved": {
     "description": "Confirmation après envoi."
   },
@@ -493,16 +529,24 @@
   },
   "preparationDeckSlide": "Diapositive {rang}",
   "@preparationDeckSlide": {
-    "placeholders": { "rang": { "type": "int" } },
+    "placeholders": {
+      "rang": {
+        "type": "int"
+      }
+    },
     "description": "En-tête d’une diapositive, numérotée comme le serveur la numérote."
   },
   "preparationDocumentWorking": "Je prépare le document…",
   "@preparationDocumentWorking": {
     "description": "Pendant la soumission et le rendu."
   },
-  "preparationDocumentReady": "Ton document est dans « {dossier} ».",
+  "preparationDocumentReady": "Votre document est dans « {dossier} ».",
   "@preparationDocumentReady": {
-    "placeholders": { "dossier": { "type": "String" } },
+    "placeholders": {
+      "dossier": {
+        "type": "String"
+      }
+    },
     "description": "Dit où le fichier a été posé."
   },
   "preparationDocumentRefusedTitle": "Une citation ne correspond pas au corpus",
@@ -517,7 +561,7 @@
   "@preparationPlanTitle": {
     "description": "Titre de l’écran du squelette homilétique."
   },
-  "preparationPlanIntro": "Le document met en page ce que tu écris. Rien n’est imposé : une section vide reste vide.",
+  "preparationPlanIntro": "Le document met en page ce que vous écrivez. Rien n’est imposé : une section vide reste vide.",
   "@preparationPlanIntro": {
     "description": "Ce que l’écran promet en haut, repris du document."
   },
@@ -525,7 +569,7 @@
   "@preparationPlanSave": {
     "description": "Bouton qui envoie le squelette au serveur."
   },
-  "preparationPlanSaved": "Ton plan est enregistré.",
+  "preparationPlanSaved": "Votre plan est enregistré.",
   "@preparationPlanSaved": {
     "description": "Confirmation après envoi."
   },
@@ -536,6 +580,67 @@
   "preparationPlanPointsHint": "Au moins un point : c’est ce que le document exige avant de sortir.",
   "@preparationPlanPointsHint": {
     "description": "Dit le seuil du livrable, là où il se joue."
+  },
+  "preparationMaterialTitle": "Le texte et le contexte",
+  "@preparationMaterialTitle": {
+    "description": "Entrée de menu qui ouvre ce que la préparation porte. Il ne se recolle plus à la fin de chaque échange."
+  },
+  "preparationThinking": "Urim cherche…",
+  "@preparationThinking": {
+    "description": "Ce que dit la bulle pendant que le moteur travaille. « Cherche » et non « écrit » : il ne rédige pas."
+  },
+  "preparationPlanNotes": "{count, plural, =1{1 note écrite dans le fil} other{{count} notes écrites dans le fil}}",
+  "@preparationPlanNotes": {
+    "description": "Ce que le pasteur a écrit dans la conversation en désignant ce point. Gardé, rangé — et pas encore dans son plan.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "preparationPlanPromote": "En faire mon point",
+  "@preparationPlanPromote": {
+    "description": "Le seul geste qui fait entrer une note dans le document. Il ajoute à la fin du point, il ne remplace jamais."
+  },
+  "preparationPlanPromoted": "Ajouté à la fin de votre point. À vous de le retailler.",
+  "@preparationPlanPromoted": {
+    "description": "Confirmation après reprise. Dit où le texte est allé, et à qui il appartient maintenant."
+  },
+  "preparationPlanArticulate": "Faire articuler ce point",
+  "@preparationPlanArticulate": {
+    "description": "Demande une proposition sur un point déjà écrit. La seule prose qu’Urim produise."
+  },
+  "preparationPlanArticulateTitle": "Ce qu’Urim propose",
+  "@preparationPlanArticulateTitle": {
+    "description": "Titre de la feuille. « Propose » et non « écrit » : le texte reste à côté du plan."
+  },
+  "preparationPlanArticulateTransition": "Pour enchaîner",
+  "@preparationPlanArticulateTransition": {
+    "description": "Intitulé de la phrase de transition, quand le modèle en propose une."
+  },
+  "preparationPlanArticulateNotice": "Rien n’entre dans votre document tant que vous ne l’avez pas repris.",
+  "@preparationPlanArticulateNotice": {
+    "description": "Ce qui reste vrai quoi qu’il arrive : la proposition vit à côté du plan. La signature du modèle a été retirée le 22/08 — elle est gardée en base, pas montrée."
+  },
+  "preparationPlanArticulateTake": "Reprendre dans mon point",
+  "@preparationPlanArticulateTake": {
+    "description": "Le geste explicite qui fait entrer la proposition dans le champ. Jamais automatique."
+  },
+  "preparationPlanArticulateTaken": "Repris à la suite de votre point. À vous de le retailler.",
+  "@preparationPlanArticulateTaken": {
+    "description": "Confirmation après reprise. Dit où le texte est allé, et à qui il appartient maintenant."
+  },
+  "preparationPlanArticulateClose": "Fermer",
+  "@preparationPlanArticulateClose": {
+    "description": "Referme la feuille sans rien reprendre."
+  },
+  "preparationPlanArticulateUnavailable": "Urim n’a pas de proposition ici. Votre point reste écrit, et vous le développez comme vous l’avez toujours fait.",
+  "@preparationPlanArticulateUnavailable": {
+    "description": "Aucun modèle branché, plafond atteint, ou point vide. État de production, jamais une erreur."
+  },
+  "preparationPlanArticulateEmpty": "Écrivez d’abord ce point : Urim articule ce que vous avez écrit, il ne l’écrit pas.",
+  "@preparationPlanArticulateEmpty": {
+    "description": "Le geste est demandé sur une section vide. On ne part pas au serveur pour l’apprendre."
   },
   "preparationSectionTitre": "Titre",
   "@preparationSectionTitre": {
@@ -597,7 +702,7 @@
   "@preparationSectionTemoignage": {
     "description": "Nom d’une section du squelette homilétique."
   },
-  "preparationActionAVenir": "Le serveur accepte déjà tes points ; l'écran pour les écrire n'existe pas encore.",
+  "preparationActionAVenir": "Le serveur accepte déjà vos points ; l'écran pour les écrire n'existe pas encore.",
   "@preparationActionAVenir": {
     "description": "Motif d'un geste que le contrat sert et que l'application ne sait pas encore ouvrir."
   },
@@ -605,15 +710,15 @@
   "profilePhoneChangeTitle": "Changer de numéro",
   "profilePhoneChangeBody": "Le code partira sur le nouveau numéro : il faut l'avoir en main.",
   "profilePhoneChangeConfirm": "Recevoir le code",
-  "profilePhoneChangeFailed": "Le code n'est pas parti. Ton numéro n'a pas changé.",
-  "profilePhoneChangeDone": "Ton numéro a été changé.",
+  "profilePhoneChangeFailed": "Le code n'est pas parti. Votre numéro n'a pas changé.",
+  "profilePhoneChangeDone": "Votre numéro a été changé.",
   "profileSecretCode": "Code à 4 chiffres",
   "profileSecretCodeAction": "Modifier",
   "profileSecretCodePending": "Le changement passera par l'écran de création, encore réservé au premier accès.",
   "profileNoChurch": "Aucune église rattachée",
   "profileNoChurchHint": "Le rattachement viendra de l'annuaire de la plateforme, pas d'Urim.",
-  "profileChurchRecognised": "Ton numéro y est reconnu. Tes préparations n'y sont pas visibles.",
-  "profileChurchesNote": "Une seule identité, plusieurs églises possibles. Ce que tu écris dans Urim ne traverse jamais vers elles.",
+  "profileChurchRecognised": "Votre numéro y est reconnu. Vos préparations n'y sont pas visibles.",
+  "profileChurchesNote": "Une seule identité, plusieurs églises possibles. Ce que vous écrivez dans Urim ne traverse jamais vers elles.",
   "@profileChurchesNote": {
     "description": "Promesse d'étanchéité, pas une préférence d'affichage : le code doit la garantir."
   },
@@ -644,9 +749,135 @@
     "description": "Anomalie, pas un état vide : l'écran n'est atteignable qu'une fois l'accès ouvert."
   },
   "save": "Enregistrer",
-  "homeOpenTask": "Ouvrir une tâche",
+  "drawerNewPreparation": "Nouvelle préparation",
+  "@drawerNewPreparation": {
+    "description": "Première entrée du tiroir. Ouvre un champ vide : la conversation en cours n'est pas perdue, elle reste dans l'historique juste en dessous."
+  },
+  "drawerPreparations": "PRÉPARATIONS",
+  "@drawerPreparations": {
+    "description": "En-tête de l'historique. Le fil a quitté l'accueil pour le tiroir le jour où l'accueil est devenu la conversation elle-même."
+  },
+  "drawerPreached": "PRÉDICATIONS",
+  "@drawerPreached": {
+    "description": "En-tête du tiroir sur l'écran des prédications. Le tiroir suit le travail en cours : l'historique qu'il porte est celui de l'écran où l'on se trouve."
+  },
+  "drawerEmptyPreached": "Rien encore. Enregistrez votre prochain culte.",
+  "drawerProjects": "Projets",
+  "drawerProjectsPending": "Bientôt",
+  "@drawerProjectsPending": {
+    "description": "L'entrée s'affiche inactive et dit ce qu'elle attend, plutôt que de disparaître (D13)."
+  },
+  "drawerEmpty": "Rien encore. Écrivez votre première phrase.",
+  "homeSwitchTitle": "Voulez-vous basculer à…",
+  "@homeSwitchTitle": {
+    "description": "Feuille ouverte par l'icône de bascule. Une icône seule n'explique pas où elle emmène — c'est le reproche fait à tout bouton qui bascule sans rien dire."
+  },
+  "homeSwitchPrepare": "Préparer un message",
+  "homeSwitchPrepareBody": "Faites-vous assister pour accélérer votre préparation.",
+  "homeSwitchPreach": "Mes prédications",
+  "homeSwitchPreachBody": "Donnez vie à votre prédication.",
+  "preachedMark": "J'ai prêché celle-ci",
+  "@preachedMark": {
+    "description": "Le geste, dans le menu de la préparation. Rien ne s'archive parce qu'une date est passée : c'est un geste du pasteur, jamais une déduction du calendrier."
+  },
+  "preachedMarkDone": "Consignée comme prêchée le {date}.",
+  "@preachedMarkDone": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "archiveTitle": "Ce que vous avez prêché",
+  "archiveEmpty": "Rien de consigné. Marquez une préparation comme prêchée, ou consignez un message prêché ailleurs.",
+  "archiveRecordManual": "Consigner une prédication",
+  "@archiveRecordManual": {
+    "description": "Un sermon sans préparation — prêché ailleurs, ou avant Dorea. Sans lui, l'archive ne mesurerait que ce qui est passé par l'outil, ce qui n'est pas le ministère de quelqu'un."
+  },
+  "archiveRecordHint": "Actes 1:1-14 — ou Hb 2v29, comme vous notez",
+  "@archiveRecordHint": {
+    "description": "La référence part dans la notation du pasteur : c'est le serveur qui la lit et la vérifie contre le corpus. On n'impose pas un format."
+  },
+  "archiveRecordDate": "Quand l'avez-vous prêchée ?",
+  "archiveRecordSubmit": "Consigner",
+  "archiveRecordDone": "Prédication consignée.",
+  "archiveUnfiled": "Non rangé",
+  "@archiveUnfiled": {
+    "description": "Axe nul. Hors unité curée il n'y a aucun axe à retenir : on le nomme plutôt que de masquer la ligne."
+  },
+  "coverageTitle": "Où vous êtes allé",
+  "coverageBooks": "{count, plural, =1{1 livre} other{{count} livres}}",
+  "@coverageBooks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "coveragePassages": "{count, plural, =1{1 passage} other{{count} passages}}",
+  "@coveragePassages": {
+    "description": "Des lieux distincts. Prêcher deux fois le même texte n'élargit pas un canon.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "coveragePreachings": "{count, plural, =1{1 prédication} other{{count} prédications}}",
+  "@coveragePreachings": {
+    "description": "Des événements. Deux assemblées ont entendu — ce nombre ne s'additionne jamais au précédent.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "coverageUntouched": "{count, plural, =0{Aucun livre sans sermon rangé} =1{1 livre sans sermon rangé} other{{count} livres sans sermon rangé}}",
+  "@coverageUntouched": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "coverageNotice": "« Aucun sermon rangé ici » ne veut pas dire que vous ne l'avez jamais prêché : un texte peut l'avoir été sous une autre unité, ou sans axe retenu.",
+  "@coverageNotice": {
+    "description": "⚠️ Cet écran ne propose jamais de sermon. Un rayon vide se montre, il ne se comble pas — aucun score, aucune série, aucun pourcentage : ce serait mesurer la fidélité d'un pasteur."
+  },
+  "homeComposerHint": "Une phrase, une référence, ou ce qui pèse cette semaine",
+  "@homeComposerHint": {
+    "description": "Le champ du bas de l'accueil. Deux entrées possibles dans le même champ — une référence, une intention — et c'est l'exemple qui le dit, pas un mode à cocher. Il a remplacé un bouton qui menait à un écran qui portait un champ : trois gestes pour une phrase."
+  },
+  "homeTabPreach": "Prédications",
+  "@homeTabPreach": {
+    "description": "Infobulle de l'icône qui mène aux prédications. Elle nomme la destination, jamais la page où l'on se trouve — l'inverse fait reculer celui qui croyait avancer."
+  },
+  "homeTabPrepare": "Préparations",
+  "@homeTabPrepare": {
+    "description": "Infobulle de l'icône du retour, sur la page des prédications."
+  },
+  "homeRecordSermon": "Enregistrer la prédication",
+  "@homeRecordSermon": {
+    "description": "Bouton du bas, page « prêcher ». Affiché inactif tant que le moteur de transcription n'est pas retenu (Q2, D13) : masquer sa place ferait croire que la page n'a pas de geste."
+  },
+  "homeServiceToday": "Culte aujourd'hui",
+  "@homeServiceToday": {
+    "description": "Dit pourquoi l'application s'est ouverte sur les prédications plutôt que sur les préparations. Un automatisme qui ne se justifie pas passe pour une panne."
+  },
+  "homeServiceTodayPending": "rien n'est encore capté",
+  "homeGroupPreached": "PRÊCHÉS · {count}",
+  "@homeGroupPreached": {
+    "description": "En-tête du corpus. Le compte est l'argument : c'est le nombre qui monte, semaine après semaine, dans la voix du pasteur.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homePreachedEmptyTitle": "Aucune prédication captée.",
+  "homePreachedEmptyBody": "Enregistrez le culte : la prédication s'ajoutera ici, dans votre voix.",
   "homeEmptyTitle": "Rien en cours.",
-  "homeEmptyBody": "Ouvre une tâche : écris ce que tu veux dire, ou verse un enregistrement.",
+  "homeEmptyBody": "Écrivez ce que vous voulez dire : une phrase, une référence, ou ce qui pèse cette semaine.",
   "homeReadFailed": "La liste n'a pas pu être lue.",
   "homeGroupThisWeek": "CETTE SEMAINE",
   "homeGroupEarlier": "PLUS TÔT",
@@ -677,9 +908,9 @@
       }
     }
   },
-  "homeCardMetaWithService": "· {activity} · dimanche {service}",
+  "homeCardMetaWithService": "· {activity} · {service}",
   "@homeCardMetaWithService": {
-    "description": "Dernière activité, puis le dimanche visé.",
+    "description": "Dernière activité, puis le culte visé. Le jour vient de la date — il était écrit « dimanche » en dur, et un pasteur ne prêche pas que le dimanche.",
     "placeholders": {
       "activity": {
         "type": "String"
@@ -715,42 +946,70 @@
       }
     }
   },
-  "turnSignature": "Unité signée {signature}",
+  "turnSignature": "Découpage relu par {signature}",
   "@turnSignature": {
-    "description": "Qui a signé le découpage de l'unité — « ia-mistral », ou le nom d'un relecteur. Sans cela, une structure générée arriverait sur l'écran du pasteur exactement comme une structure relue par un bibliste.",
+    "description": "Un homme a relu ce découpage et le signe. Sur 4 561 unités du corpus, une seule est dans ce cas au 22/08/2026.",
     "placeholders": {
       "signature": {
         "type": "String"
       }
     }
   },
+  "turnSignatureMachine": "Découpage proposé par l’IA, non relu",
+  "@turnSignatureMachine": {
+    "description": "Le cas de 4 552 unités sur 4 561. On ne nomme plus le modèle — le pasteur n’a que faire de « ia-mistral » — mais on dit ce que ça change : personne ne l’a vérifié. Sans cette ligne, une structure générée arriverait à l’écran exactement comme une structure relue par un bibliste."
+  },
   "turnFoldedBearings": "{count, plural, =1{Ce que le texte porte — 1 axe} other{Ce que le texte porte — {count} axes}}",
   "@turnFoldedBearings": {
     "description": "Le decor ambiant replie. Le nombre est dedans exprès : replier n'est pas cacher, et le pasteur doit savoir ce qu'il n'a pas sous les yeux.",
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "turnFoldedFeasibility": "{count, plural, =1{Les plans que ce texte tient — 1} other{Les plans que ce texte tient — {count}}}",
   "@turnFoldedFeasibility": {
     "description": "Idem. Les refuses voyagent toujours avec les faisables, replies sous ce nombre.",
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "turnFoldedChips": "{count, plural, =1{1 autre proposition} other{{count} autres propositions}}",
   "@turnFoldedChips": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "turnFoldedUnits": "{count, plural, =1{1 texte relu} other{{count} textes relus}}",
   "@turnFoldedUnits": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "studyText": "{count, plural, =1{Le texte — 1 verset} other{Le texte — {count} versets}}",
   "@studyText": {
     "description": "Les versets servis par le corpus. Aucun bloc du tour ne les porte : le pasteur travaillait sur un passage qu'il ne voyait nulle part.",
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "studyContext": "{count, plural, =1{Le contexte} other{Le contexte — {count} notes}}",
   "@studyContext": {
-    "description": "Calcule a l'ouverture et jamais montre. Absent du corpus sur certaines unites : on n'affiche alors rien plutot qu'une section vide."
-    , "placeholders": { "count": { "type": "int" } }
+    "description": "Calcule a l'ouverture et jamais montre. Absent du corpus sur certaines unites : on n'affiche alors rien plutot qu'une section vide.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "studyContextLiterary": "Littéraire",
   "studyContextHistorical": "Historique",
@@ -801,44 +1060,66 @@
   "@stateFeedbackReady": {
     "description": "Une prédication déjà prêchée dont Urim a quelque chose à dire. Ne vient pas du moteur de préparation mais de la branche transcription, qui reste une maquette."
   },
-  "taskSheetTitle": "Quelle tâche ?",
-  "taskSheetSubtitle": "Deux travaux différents, pas deux façons d'écrire.",
-  "taskWriteTitle": "Préparer un message",
-  "taskWriteBody": "Urim t'accompagne question par question — l'axe, le texte, les bornes — jusqu'à ton squelette.",
-  "taskTranscribeTitle": "Transcrire une prédication",
-  "taskTranscribeBody": "Mise en texte, puis une synthèse que tu valides avant qu'elle ne soit lue à voix haute.",
-  "taskTranscribePending": "Le moteur de transcription n'est pas encore retenu. Un exemple transcrit est visible depuis l'accueil.",
-  "newPreparationTitle": "Nouvelle préparation",
-  "newPreparationIntro": "Une référence, une phrase que tu as en tête, ou ce que tu veux dire. Écris comme ça vient.",
-  "newPreparationHint": "Romains 8:15 — ou : que l'amour fraternel continue — ou : je veux parler de la persévérance à des étudiants qui décrochent",
-  "@newPreparationHint": {
-    "description": "Trois entrées possibles dans le même champ : une référence, une citation, une intention. C'est l'exemple qui le dit, pas un mode à cocher."
+  "homeRecordStop": "Arrêter l'enregistrement",
+  "homeCaptureRunning": "Enregistrement",
+  "@homeCaptureRunning": {
+    "description": "Le bandeau qui traverse les deux pages. Il ne disparaît pas quand on change de travail : un pasteur qui va chercher son plan pendant qu'il prêche croirait avoir coupé le micro."
   },
-  "newPreparationDictate": "Ou dicte — Urim te fera confirmer avant d'aller plus loin. La dictée attend le moteur de reconnaissance.",
-  "newPreparationServiceSection": "Pour quel dimanche",
-  "newPreparationServiceDate": "Date du culte",
-  "newPreparationServiceDateEmpty": "À définir",
-  "newPreparationServiceDateValue": "dim. {date}",
-  "@newPreparationServiceDateValue": {
+  "homeCaptureStop": "Arrêter",
+  "homeCaptureSaved": "Prédication captée · {duree}",
+  "@homeCaptureSaved": {
+    "description": "Confirmation à l'arrêt. Dit la durée pour que le pasteur sache que quelque chose a bien été écrit.",
     "placeholders": {
-      "date": {
+      "duree": {
         "type": "String"
       }
     }
   },
-  "newPreparationSpace": "Espace",
-  "newPreparationSpacePersonal": "Personnel",
-  "newPreparationSpacePending": "Le partage avec une église attend que le rattachement existe.",
-  "newPreparationNoModeNotice": "Aucun mode à choisir. Le moteur regarde si les mots que tu écris se suivent comme dans l'Écriture — c'est l'ordre des mots qui décide, jamais le vocabulaire.",
+  "homeCaptureMicRefused": "Urim a besoin du micro pour enregistrer votre prédication. Autorisez-le dans les réglages de l'appareil.",
+  "homeCaptureNoMicrophone": "Cet appareil n'a pas de micro utilisable.",
+  "homeCaptureStorageFull": "Il n'y a plus de place pour l'audio. Libérez quelques centaines de mégaoctets.",
+  "homeCaptureFailed": "L'enregistrement n'a pas pu commencer. Réessayez.",
+  "@homeCaptureFailed": {
+    "description": "Quatre refus, quatre phrases : « refusé » tout court laisse le pasteur devant un bouton mort sans savoir quoi faire."
+  },
+  "homeCaptureInterrupted": "Interrompue",
+  "@homeCaptureInterrupted": {
+    "description": "L'enregistrement s'est arrêté seul — application tuée, batterie vide. La capture apparaît quand même : la faire disparaître serait le pire des silences."
+  },
+  "homeCaptureAudioLeft": "audio effacé dans {jours} j",
+  "@homeCaptureAudioLeft": {
+    "description": "Le compte à rebours des sept jours, porté par la carte. La disparition ne doit surprendre personne.",
+    "placeholders": {
+      "jours": {
+        "type": "int"
+      }
+    }
+  },
+  "homeCaptureAudioToday": "audio effacé aujourd'hui",
+  "homeCaptureNotSent": "sur cet appareil, pas encore transcrite",
+  "@homeCaptureNotSent": {
+    "description": "L'étape 1 s'arrête à la capture : le transcript attend le moteur (Q2). Le dire évite de laisser croire qu'il y a un texte quelque part."
+  },
+  "homeRecordPending": "Le moteur de transcription n'est pas encore retenu. Les prédications déjà transcrites restent lisibles ici.",
+  "@homeRecordPending": {
+    "description": "Sous le bouton d'enregistrement inactif. Dit ce qu'il attend plutôt que de disparaître (D13). Les libellés de l'ancienne feuille « quelle tâche ? » sont partis avec elle : la bascule du haut pose la même question sans modale."
+  },
+  "newPreparationDictateListening": "Urim vous écoute. Appuyez pour arrêter.",
+  "newPreparationDictateStart": "Dicter",
+  "newPreparationDictateStop": "Arrêter la dictée",
+  "newPreparationDictateNoEngine": "Cet appareil n'a pas de reconnaissance vocale. Écrivez votre phrase.",
+  "newPreparationDictateMicRefused": "Urim a besoin du micro pour écrire ce que vous dites. Autorisez-le dans les réglages de l'appareil.",
+  "newPreparationDictateFailed": "La dictée s'est arrêtée. Réessayez, ou écrivez votre phrase.",
+  "newPreparationServiceDate": "Date du culte",
   "newPreparationOpen": "Ouvrir la préparation",
   "newPreparationFailed": "Cette préparation n'a pas pu être ouverte.",
-  "newPreparationNeedsNetwork": "Ouvrir demande le réseau : Urim consulte les textes pour lire ta phrase. Elle est gardée — tu la retrouveras ici.",
+  "newPreparationNeedsNetwork": "Ouvrir demande le réseau : Urim consulte les textes pour lire votre phrase. Elle est gardée — vous la retrouverez ici.",
   "@newPreparationNeedsNetwork": {
     "description": "La reponse a l'etape 5 de Q4. Ouvrir est le seul geste qui ne peut pas attendre le reseau : lire une phrase demande le corpus, et il n'est pas sur l'appareil. Dit la raison, et que le brouillon garde la phrase (D32) — sans quoi le pasteur croirait avoir perdu ce qu'il venait d'ecrire."
   },
-  "preparationEmpty": "Pose ta première idée en bas de l'écran.",
+  "preparationEmpty": "Posez votre première idée en bas de l'écran.",
   "preparationLoadFailed": "Chargement impossible.",
-  "preparationComposerHint": "Écris ta réponse, ou choisis…",
+  "preparationComposerHint": "Écrivez votre réponse, ou choisissez…",
   "preparationDictationSoon": "Dictée — bientôt disponible",
   "preparationSend": "Ajouter au fil",
   "blockUrim": "URIM",
@@ -867,7 +1148,7 @@
       }
     }
   },
-  "lociUnavailable": "La liste des loci n'est pas encore écrite. Les trois axes proposés viennent de ta phrase ; les sept autres attendent que le moteur existe.",
+  "lociUnavailable": "La liste des loci n'est pas encore écrite. Les trois axes proposés viennent de votre phrase ; les sept autres attendent que le moteur existe.",
   "stanceSubject": "Ce texte en fait son sujet",
   "stanceSupports": "Ce texte le soutient",
   "stanceComplicates": "Ce texte le complique",
@@ -896,7 +1177,7 @@
     }
   },
   "transcriptionSectionFragments": "Fragments",
-  "transcriptionSectionConvoked": "Ce que tu as convoqué",
+  "transcriptionSectionConvoked": "Ce que vous avez convoqué",
   "transcriptionAllAcknowledged": "Tous les fragments sont acquittés.",
   "transcriptionFragmentsPending": "{count, plural, =1{Un fragment attend le réseau. Il partira seul, dans l'ordre.} other{{count} fragments attendent le réseau. Ils partiront seuls, dans l'ordre.}}",
   "@transcriptionFragmentsPending": {
@@ -909,7 +1190,7 @@
   },
   "transcriptionConvokedAnnounced": "ANNONCÉ À VOIX HAUTE",
   "transcriptionConvokedRecognised": "RECONNU DANS LA CITATION",
-  "transcriptionPlanned": "{reference} — prévu dans ta préparation",
+  "transcriptionPlanned": "{reference} — prévu dans votre préparation",
   "@transcriptionPlanned": {
     "placeholders": {
       "reference": {
@@ -934,12 +1215,12 @@
   "synthesisTitleValidated": "Synthèse — validée",
   "synthesisNotFound": "Cette prédication n'a pas de synthèse.",
   "synthesisSealTitleDraft": "Rien n'est encore parti.",
-  "synthesisSealBodyDraft": "Tant que tu n'as pas validé, cette synthèse n'existe que pour toi. Aucun membre ne la voit, aucune voix ne la lit.",
+  "synthesisSealBodyDraft": "Tant que vous n'avez pas validé, cette synthèse n'existe que pour vous. Aucun membre ne la voit, aucune voix ne la lit.",
   "@synthesisSealBodyDraft": {
     "description": "Promesse tenue par le code : la lecture reste fermée tant que le drapeau est faux."
   },
-  "synthesisSealTitleValidated": "Validée par toi.",
-  "synthesisSealBodyValidated": "Elle peut être lue à voix haute. Tu restes le seul à pouvoir la modifier.",
+  "synthesisSealTitleValidated": "Validée par vous.",
+  "synthesisSealBodyValidated": "Elle peut être lue à voix haute. Vous restez le seul à pouvoir la modifier.",
   "synthesisSectionCapsules": "Ce qu'Urim a retenu",
   "synthesisCapsuleLabel": "CAPSULE {index} · DIT À {at}",
   "@synthesisCapsuleLabel": {
@@ -952,16 +1233,16 @@
       }
     }
   },
-  "synthesisCapsuleSource": "Voir où c'est dit dans ta prédication",
+  "synthesisCapsuleSource": "Voir où c'est dit dans votre prédication",
   "synthesisSectionVerse": "Le verset, non réécrit",
-  "synthesisModelNotice": "Les capsules sont écrites par un modèle à partir de ta transcription. Les versets, eux, viennent de la Bible — jamais du modèle. Relis avant de valider.",
+  "synthesisModelNotice": "Les capsules sont écrites par un modèle à partir de votre transcription. Les versets, eux, viennent de la Bible — jamais du modèle. Relisez avant de valider.",
   "synthesisValidate": "Valider cette synthèse",
   "synthesisValidated": "Synthèse validée",
   "synthesisValidatedToast": "Synthèse validée. Elle peut maintenant être lue.",
   "synthesisSectionReadAloud": "Lire à voix haute",
   "synthesisReadAloudIntro": "Pour ceux de l'assemblée qui écouteront plutôt que de lire.",
   "synthesisReadAloudLocked": "Disponible une fois la synthèse validée.",
-  "synthesisReadAloudOpen": "La lecture reprend la synthèse telle que tu l'as validée.",
+  "synthesisReadAloudOpen": "La lecture reprend la synthèse telle que vous l'avez validée.",
   "synthesisVoiceComing": "Lecture à venir",
   "synthesisVoiceLocked": "Disponible une fois la synthèse validée",
   "synthesisSpokenMinutes": "{minutes} min",

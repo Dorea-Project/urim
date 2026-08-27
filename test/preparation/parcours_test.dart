@@ -13,7 +13,6 @@ import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/l10n/generated/app_text_fr.dart';
 import 'package:urim/presentation/common/domain_labels.dart';
 import 'package:urim/presentation/home/home_page.dart';
-import 'package:urim/presentation/preparation/new_preparation_page.dart';
 import 'package:urim/presentation/preparation/preparation_page.dart';
 
 import '../support/pump_app.dart';
@@ -21,8 +20,8 @@ import '../support/pump_app.dart';
 /// Les libelles viennent de la meme source que l'ecran.
 final texte = AppTextFr();
 
-/// Le parcours des maquettes, d'un bout à l'autre : l'accueil, la feuille des
-/// tâches, le formulaire, puis le fil.
+/// Le parcours des maquettes, d'un bout a l'autre : l'accueil — qui **est** la
+/// conversation — son tiroir, sa bascule, et le champ qui ouvre un travail neuf.
 final class _FixedClock implements Clock {
   const _FixedClock(this._now);
   final DateTime _now;
@@ -49,8 +48,8 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
 
-    // Un routeur réduit aux écrans du parcours : la redirection d'accès
-    // demanderait une session, et ce n'est pas ce qui est vérifié ici.
+    // Un routeur reduit aux ecrans du parcours : la redirection d'acces
+    // demanderait une session, et ce n'est pas ce qui est verifie ici.
     final router = GoRouter(
       initialLocation: AppRoutes.homePath,
       routes: [
@@ -58,11 +57,6 @@ void main() {
           path: AppRoutes.homePath,
           name: AppRoutes.homeName,
           builder: (context, state) => const HomePage(),
-        ),
-        GoRoute(
-          path: AppRoutes.newPreparationPath,
-          name: AppRoutes.newPreparationName,
-          builder: (context, state) => const NewPreparationPage(),
         ),
         GoRoute(
           path: AppRoutes.preparationPath,
@@ -88,142 +82,197 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  group('accueil', () {
-    testWidgets('les travaux sont groupés par récence', (tester) async {
-      await pumpParcours(tester);
+  /// Le tiroir s'ouvre par son geste, pas par un bouton qu'on cherche.
+  Future<void> ouvrirTiroir(WidgetTester tester) async {
+    tester.state<ScaffoldState>(find.byType(Scaffold).first).openDrawer();
+    await tester.pumpAndSettle();
+  }
 
-      expect(find.text(texte.homeGroupThisWeek), findsOneWidget);
-      expect(find.text(texte.homeGroupEarlier), findsOneWidget);
-      expect(find.text('Amour fraternel'), findsOneWidget);
-      expect(find.text('Actes 2:42-47'), findsOneWidget);
-    });
-
-    testWidgets('la carte dit où le moteur s\'est arrêté', (tester) async {
-      await pumpParcours(tester);
-
-      // Le vocabulaire affiché est celui du moteur, traduit une seule fois :
-      // « rend la main » **est** `await_decision`. Les états inventés côté
-      // application ont disparu du fil, et ce test empêche leur retour.
-      for (final outcome in [
-        TurnOutcome.handsBack,
-        TurnOutcome.kept,
-        TurnOutcome.refused,
-      ]) {
-        final libelle = turnOutcomeLabel(texte, outcome);
-
-        expect(
-          find.text(libelle),
-          findsWidgets,
-          reason: 'l\'issue « $libelle » doit se lire sur la liste',
-        );
-      }
-    });
-
-    testWidgets('une prédication déjà prêchée ne porte pas de pastille',
+  group('l\'accueil est la conversation', () {
+    testWidgets('on arrive dans le travail qui attend une reponse',
         (tester) async {
       await pumpParcours(tester);
 
-      // « Retour disponible » ne vient pas du moteur de préparation mais de la
-      // branche transcription, qui reste une maquette. Tant qu'aucune issue ne
-      // le porte côté serveur, la carte se tait plutôt que d'inventer.
-      expect(find.text(texte.stateFeedbackReady), findsNothing);
+      // Plus de redirection : ce qu'Urim a demande est deja la, sous la barre.
+      expect(find.text('Lequel retenez-vous ?'), findsOneWidget);
     });
 
-    testWidgets('ouvrir une carte mène à son fil', (tester) async {
+    testWidgets('aucune liste ne s\'interpose', (tester) async {
       await pumpParcours(tester);
 
-      await tester.tap(find.text('Amour fraternel'));
-      await tester.pumpAndSettle();
-
-      expect(find.byType(PreparationPage), findsOneWidget);
-      // Ce que la carte annonçait — « Rend la main » — se retrouve derrière
-      // elle : le moteur s'est arrêté sur une question.
-      expect(find.text('Lequel retenez-vous ?'), findsOneWidget);
+      // 🔴 Le fil groupe par recence occupait l'accueil, et la conversation
+      // vivait un ecran plus loin. Il est passe au tiroir.
+      expect(find.text(texte.homeGroupThisWeek), findsNothing);
+      expect(find.text(texte.homeGroupEarlier), findsNothing);
     });
   });
 
-  group('feuille des tâches', () {
-    testWidgets('deux travaux, dont un encore fermé', (tester) async {
+  group('le tiroir', () {
+    testWidgets('il porte l\'historique, et dit ce qui attend', (tester) async {
       await pumpParcours(tester);
+      await ouvrirTiroir(tester);
 
-      await tester.tap(find.text(texte.homeOpenTask));
+      expect(find.text(texte.drawerNewPreparation), findsOneWidget);
+      expect(find.text(texte.drawerPreparations), findsOneWidget);
+      expect(find.text('Amour fraternel'), findsWidgets);
+      expect(find.text('Actes 2:42-47'), findsWidgets);
+
+      // Le vocabulaire du moteur passe entier : « rend la main » **est**
+      // `await_decision`, et le tiroir sert justement a retrouver ce qu'on a
+      // laisse en plan.
+      expect(
+        find.text(turnOutcomeLabel(texte, TurnOutcome.handsBack)),
+        findsWidgets,
+      );
+    });
+
+    testWidgets('une predication transcrite n\'est pas dans l\'historique',
+        (tester) async {
+      await pumpParcours(tester);
+      await ouvrirTiroir(tester);
+
+      // Elle a sa page. Sans quoi la bascule montrerait deux fois la meme.
+      expect(find.textContaining('prêché le'), findsNothing);
+    });
+
+    testWidgets('en choisir une la met a l\'ecran', (tester) async {
+      await pumpParcours(tester);
+      await ouvrirTiroir(tester);
+
+      await tester.tap(find.text('Actes 2:42-47').last);
       await tester.pumpAndSettle();
 
-      expect(find.text(texte.taskSheetTitle), findsOneWidget);
-      expect(find.text(texte.taskWriteTitle), findsOneWidget);
-      expect(find.text(texte.taskTranscribeTitle), findsOneWidget);
+      // On n'a pas quitte l'accueil pour autant : la conversation s'y monte.
+      expect(find.byType(HomePage), findsOneWidget);
+      expect(find.byType(PreparationConversation), findsOneWidget);
+    });
+
+    testWidgets('« Nouvelle preparation » rend le champ vide', (tester) async {
+      await pumpParcours(tester);
+      await ouvrirTiroir(tester);
+
+      await tester.tap(find.text(texte.drawerNewPreparation));
+      await tester.pumpAndSettle();
+
+      expect(find.text(texte.homeEmptyTitle), findsOneWidget);
+      expect(find.byType(TextField), findsOneWidget);
+    });
+
+    testWidgets('il suit l\'ecran : cote predications, il change', (tester) async {
+      await pumpParcours(tester);
+
+      await tester.tap(
+        find.ancestor(
+          of: find.byIcon(Icons.record_voice_over_outlined),
+          matching: find.byType(IconButton),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(texte.homeSwitchPreach));
+      await tester.pumpAndSettle();
+      await ouvrirTiroir(tester);
+
+      // Le geste neuf devient celui du travail en cours, et l'historique aussi.
+      expect(find.text(texte.drawerPreached), findsOneWidget);
+      expect(find.text(texte.drawerNewPreparation), findsNothing);
+      expect(find.text(texte.drawerPreparations), findsNothing);
+    });
+  });
+
+  group('la bascule', () {
+    Finder icone(IconData icon) => find.ancestor(
+          of: find.byIcon(icon),
+          matching: find.byType(IconButton),
+        );
+
+    testWidgets('elle demande avant d\'agir', (tester) async {
+      await pumpParcours(tester);
+
+      await tester.tap(icone(Icons.record_voice_over_outlined));
+      await tester.pumpAndSettle();
+
+      // Une icone seule n'explique pas ou elle emmene : la feuille pose la
+      // question et nomme la destination.
+      expect(find.text(texte.homeSwitchTitle), findsOneWidget);
+      expect(find.text(texte.homeSwitchPreach), findsOneWidget);
+
+      // 🔴 **Une seule destination.** La feuille montrait les deux travaux, dont
+      // celui qu'on avait deja sous les yeux : une liste a relire pour retrouver
+      // ou l'on etait, alors que l'ecran le disait deja.
+      expect(find.text(texte.homeSwitchPrepare), findsNothing);
+    });
+
+    testWidgets('choisir l\'autre travail change d\'ecran', (tester) async {
+      await pumpParcours(tester);
+
+      await tester.tap(icone(Icons.record_voice_over_outlined));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(texte.homeSwitchPreach));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('prêché le'), findsOneWidget);
+
+      // 🔴 **Le bouton a pris vie.** Il est resté inactif tant que Q2 n'était
+      // pas tranchée ; l'étage 1 ne dépend pas du moteur de transcription —
+      // capter, conserver, purger. Ce qui reste en attente est le transcript,
+      // et la ligne du dessous le dit toujours.
+      final bouton = tester.widget<FilledButton>(
+        find.widgetWithText(FilledButton, texte.homeRecordSermon),
+      );
+      expect(bouton.onPressed, isNotNull);
       expect(
         find.textContaining('moteur de transcription n\'est pas encore'),
         findsOneWidget,
       );
     });
-
-    testWidgets('« Préparer un message » ouvre le formulaire', (tester) async {
-      await pumpParcours(tester);
-
-      await tester.tap(find.text(texte.homeOpenTask));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(texte.taskWriteTitle));
-      await tester.pumpAndSettle();
-
-      expect(find.byType(NewPreparationPage), findsOneWidget);
-      expect(find.text(texte.newPreparationServiceSection.toUpperCase()), findsOneWidget);
-    });
   });
 
-  group('formulaire', () {
-    Future<void> openForm(WidgetTester tester) async {
+  group('le composeur', () {
+    /// Le champ n'apparait que quand il n'y a rien a reprendre : autrement,
+    /// c'est la conversation qui occupe l'ecran.
+    Future<void> champVide(WidgetTester tester) async {
       await pumpParcours(tester);
-      await tester.tap(find.text(texte.homeOpenTask));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(texte.taskWriteTitle));
+      await ouvrirTiroir(tester);
+      await tester.tap(find.text(texte.drawerNewPreparation));
       await tester.pumpAndSettle();
     }
 
-    testWidgets('le bouton attend une phrase', (tester) async {
-      await openForm(tester);
+    Future<void> ecrire(WidgetTester tester, String phrase) async {
+      await tester.enterText(find.byType(TextField), phrase);
+      await tester.pumpAndSettle();
+    }
 
-      final button = tester.widget<FilledButton>(
-        find.widgetWithText(FilledButton, texte.newPreparationOpen),
-      );
+    testWidgets('rien a ouvrir tant que rien n\'est ecrit', (tester) async {
+      await champVide(tester);
 
-      expect(button.onPressed, isNull);
+      expect(find.byTooltip(texte.newPreparationOpen), findsNothing);
     });
 
-    testWidgets('écrire puis ouvrir mène au fil, avec la phrase dedans',
+    testWidgets('la date du culte n\'apparait qu\'avec la phrase',
         (tester) async {
-      await openForm(tester);
+      await champVide(tester);
 
-      await tester.enterText(
-        find.byType(TextField),
-        'Que l\'amour fraternel continue.',
-      );
-      await tester.pumpAndSettle();
+      expect(find.text(texte.newPreparationServiceDate), findsNothing);
 
-      await tester.tap(find.text(texte.newPreparationOpen));
-      await tester.pumpAndSettle();
+      await ecrire(tester, 'Romains 8:15');
 
-      expect(find.byType(PreparationPage), findsOneWidget);
-      // La phrase d'ouverture est la seule chose que le pasteur ait dite que
-      // le serveur garde vraiment : elle ouvre le fil, et tient lieu de titre
-      // tant qu'aucune unité n'est bornée.
-      expect(find.text('Que l\'amour fraternel continue.'), findsNWidgets(2));
+      expect(find.text(texte.newPreparationServiceDate), findsOneWidget);
+      expect(find.byTooltip(texte.newPreparationOpen), findsOneWidget);
     });
 
-    testWidgets('la préparation ouverte rejoint l\'accueil', (tester) async {
-      await openForm(tester);
+    testWidgets('ouvrir continue sur place, sans changer d\'ecran',
+        (tester) async {
+      await champVide(tester);
+      await ecrire(tester, 'Que l\'amour fraternel continue.');
 
-      await tester.enterText(find.byType(TextField), 'Romains 8:15');
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(texte.newPreparationOpen));
-      await tester.pumpAndSettle();
-
-      // Retour à l'accueil : le formulaire a été remplacé, donc un seul retour.
-      await tester.tap(find.byTooltip(texte.back));
+      await tester.tap(find.byTooltip(texte.newPreparationOpen));
       await tester.pumpAndSettle();
 
+      // 🔴 La repetition d'avant : le champ poussait un ecran portant un second
+      // champ identique. La conversation prend la place du champ vide.
       expect(find.byType(HomePage), findsOneWidget);
-      expect(find.text('Romains 8:15'), findsOneWidget);
+      expect(find.byType(PreparationConversation), findsOneWidget);
+      expect(find.text(texte.homeEmptyTitle), findsNothing);
     });
   });
 }

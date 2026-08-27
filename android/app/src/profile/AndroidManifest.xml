@@ -4,4 +4,19 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- ⚠️ **Même autorisation qu'en débogage, et pour la même raison.**
+         Un serveur de développement servi en `http://` — sur le poste, ou sur
+         le tailnet — est injoignable depuis Android 9 sans cette ligne, et
+         l'échec ressemble à une panne réseau plutôt qu'à un refus de politique.
+
+         La variante `profile` existe pour éprouver l'application **compilée**
+         contre les vraies données : un build `debug` répondrait aussi, mais
+         avec la lenteur de la machine virtuelle, et on prendrait ses saccades
+         pour celles du produit.
+
+         Ce fichier ne fusionne ni dans `main` ni dans `release` : une version
+         publiée garde le refus. C'est la seule raison pour laquelle ce réglage
+         est acceptable ici. -->
+    <application android:usesCleartextTraffic="true" />
 </manifest>

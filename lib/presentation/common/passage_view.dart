@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:urim/domain/entities/preparation/preparation_block.dart';
 import 'package:urim/l10n/generated/app_text.dart';
-import 'package:urim/presentation/common/french_dates.dart';
+import 'package:urim/core/text/french_dates.dart';
 import 'package:urim/presentation/common/ruled_content.dart';
 import 'package:urim/presentation/settings/settings_view_model.dart';
 import 'package:urim/presentation/theme/app_colors.dart';

@@ -4,4 +4,14 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- ⚠️ **En débogage seulement, et jamais ailleurs.** Depuis Android 9, le
+         trafic en clair est refusé par défaut : un serveur de développement
+         servi en `http://` sur le poste du développeur est injoignable, et
+         l'échec ressemble à une panne réseau plutôt qu'à un refus de politique.
+
+         Ce fichier ne fusionne que dans la variante `debug`. Le manifeste
+         principal reste muet, donc une version publiée garde le refus — c'est
+         la seule raison pour laquelle ce réglage est acceptable ici. -->
+    <application android:usesCleartextTraffic="true" />
 </manifest>

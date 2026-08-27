@@ -8,7 +8,6 @@ import 'package:urim/domain/entities/preparation/study.dart';
 import 'package:urim/l10n/generated/app_text_fr.dart';
 import 'package:urim/presentation/preparation/preparation_page.dart';
 import 'package:urim/presentation/preparation/widgets/study_material.dart';
-import 'package:urim/presentation/preparation/widgets/turn_views.dart';
 import '../support/pump_app.dart';
 import '../support/tours_reels.dart';
 
@@ -23,12 +22,15 @@ import '../support/tours_reels.dart';
 final texte = AppTextFr();
 const _telephone = Size(390, 844);
 
-/// La matiere vit **sous** le tour, et la liste est paresseuse : un element
-/// sous le pli n'est pas construit du tout. On descend, comme le pasteur.
-Future<void> descendre(WidgetTester tester) async {
-  final position =
-      tester.state<ScrollableState>(find.byType(Scrollable).first).position;
-  position.jumpTo(position.maxScrollExtent);
+/// La matiere vit **dans le menu** depuis le 22/08.
+///
+/// Elle se recollait sous le dernier tour, donc elle se rappelait a la fin de
+/// **chaque** echange — deux replis fermes qui closaient la conversation au
+/// lieu de la servir. Elle reste a un geste ; elle ne s'impose plus.
+Future<void> ouvrirLaMatiere(WidgetTester tester) async {
+  await tester.tap(find.byIcon(Icons.more_vert));
+  await tester.pumpAndSettle();
+  await tester.tap(find.text(texte.preparationMaterialTitle));
   await tester.pumpAndSettle();
 }
 
@@ -81,80 +83,72 @@ void main() {
     });
   });
 
-  group('l\'ecran l\'offre', () {
-    testWidgets('le texte et le contexte sont nommes sous le tour',
+  group("l'ecran l'offre", () {
+    testWidgets("la matiere ne ferme plus les echanges", (tester) async {
+      // 🔴 Le defaut du 22/08, trouve sur telephone : « pas besoin de le
+      // mentionner a la fin des echanges ». Le fil se termine sur le tour.
+      await pumpEtude(tester, ToursReels.etude(ToursReels.bartimee));
+
+      expect(find.byType(StudyMaterial), findsNothing);
+      expect(find.text(texte.studyText(7)), findsNothing);
+    });
+
+    testWidgets("le texte et le contexte s'ouvrent depuis le menu",
         (tester) async {
-      final etude = ToursReels.etude(ToursReels.bartimee);
-      await pumpEtude(tester, etude);
-      await descendre(tester);
+      await pumpEtude(tester, ToursReels.etude(ToursReels.bartimee));
+      await ouvrirLaMatiere(tester);
 
       expect(find.byType(StudyMaterial), findsOneWidget);
       expect(find.text(texte.studyText(7)), findsOneWidget);
       expect(find.text(texte.studyContext(1)), findsOneWidget);
     });
 
-    testWidgets('replie par defaut : le tour garde la premiere place',
+    testWidgets("replie par defaut : on ouvre ce qu'on veut lire",
         (tester) async {
-      final etude = ToursReels.etude(ToursReels.bartimee);
-      await pumpEtude(tester, etude);
-      await descendre(tester);
+      await pumpEtude(tester, ToursReels.etude(ToursReels.bartimee));
+      await ouvrirLaMatiere(tester);
 
       // Nomme, pas deplie — sinon on remplacerait un defilement par un autre.
-      expect(find.textContaining('Ils arrivèrent à Jéricho'), findsNothing);
-      expect(find.textContaining('10:35-45'), findsNothing);
+      expect(find.textContaining("Ils arrivèrent à Jéricho"), findsNothing);
+      expect(find.textContaining("10:35-45"), findsNothing);
     });
 
-    testWidgets('la matiere ne s\'interpose pas entre le geste et sa reponse',
-        (tester) async {
-      // ⚠️ Le bandeau d'attente reste **le dernier** element : c'est la que le
-      // pasteur regarde apres avoir touche. La matiere se range au-dessus.
-      final etude = ToursReels.etude(ToursReels.bartimee);
-      await pumpEtude(tester, etude);
-      await descendre(tester);
-
-      final materiel = tester.getRect(find.byType(StudyMaterial));
-      final tour = tester.getRect(find.byType(TurnView).last);
-
-      expect(materiel.top, greaterThanOrEqualTo(tour.bottom - 1));
-    });
-
-    testWidgets('le contexte s\'ouvre — et c\'etait la reponse a la question',
+    testWidgets("le contexte s'ouvre — et c'etait la reponse a la question",
         (tester) async {
       // « Est-ce que je peux avoir le contexte historique du livre de Marc ? »
       // La reponse etait deja dans la preparation, et personne ne la montrait.
-      final etude = ToursReels.etude(ToursReels.bartimee);
-      await pumpEtude(tester, etude);
-      await descendre(tester);
+      await pumpEtude(tester, ToursReels.etude(ToursReels.bartimee));
+      await ouvrirLaMatiere(tester);
 
       await tester.tap(find.text(texte.studyContext(1)));
       await tester.pumpAndSettle();
 
-      expect(find.textContaining('10:35-45'), findsOneWidget);
+      expect(find.textContaining("10:35-45"), findsOneWidget);
       expect(find.text(texte.studyContextLiterary), findsOneWidget);
     });
 
-    testWidgets('le texte s\'ouvre, verset par verset', (tester) async {
-      final etude = ToursReels.etude(ToursReels.bartimee);
-      await pumpEtude(tester, etude);
-      await descendre(tester);
+    testWidgets("le texte s'ouvre, verset par verset", (tester) async {
+      await pumpEtude(tester, ToursReels.etude(ToursReels.bartimee));
+      await ouvrirLaMatiere(tester);
 
       await tester.tap(find.text(texte.studyText(7)));
       await tester.pumpAndSettle();
 
-      expect(find.textContaining('Jéricho'), findsWidgets);
+      expect(find.textContaining("Jéricho"), findsWidgets);
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('rien ne s\'affiche quand il n\'y a rien a offrir',
-        (tester) async {
-      // Un tour d'ouverture : aucune unite bornee, donc aucun verset.
+    testWidgets("rien a offrir : le menu ne le propose pas", (tester) async {
+      // Un tour d'ouverture : aucune unite bornee, donc aucun verset. Une
+      // entree de menu qui ouvrirait le vide serait pire que pas d'entree.
       final etude = ToursReels.etude(ToursReels.ouverture);
       expect(etude.verses, isEmpty);
 
       await pumpEtude(tester, etude);
-      await descendre(tester);
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
 
-      expect(find.byType(StudyMaterial), findsNothing);
+      expect(find.text(texte.preparationMaterialTitle), findsNothing);
     });
   });
 }

@@ -66,5 +66,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Urim ouvre le micro quand tu dictes ta phrase de départ. Rien n’est enregistré : ce qui est reconnu s’écrit dans le champ, et tu le relis avant d’ouvrir ta préparation.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>La reconnaissance vocale transforme ce que tu dis en texte, pour que tu n’aies pas à taper ta phrase de départ.</string>
 </dict>
 </plist>

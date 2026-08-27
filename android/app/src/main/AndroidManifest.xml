@@ -1,4 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- La dictee ouvre le micro sur l'ecran d'ouverture d'une preparation.
+         L'audio ne devient jamais un document d'Urim : il traverse le moteur du
+         systeme et ce qui en ressort est du texte, dans un champ que le pasteur
+         relit avant d'ouvrir. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <application
         android:label="urim"
         android:name="${applicationName}"
@@ -37,6 +42,13 @@
 
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
     <queries>
+        <!-- Depuis Android 11, une application ne voit pas les services
+             installes qu'elle n'a pas declares. Sans cette entree, le moteur de
+             reconnaissance vocale reste introuvable et la dictee echoue en
+             disant qu'aucun moteur n'existe. -->
+        <intent>
+            <action android:name="android.speech.RecognitionService"/>
+        </intent>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>

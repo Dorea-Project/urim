@@ -4,6 +4,7 @@ import 'package:urim/core/error/failure.dart';
 import 'package:urim/domain/entities/bible/passage_detail.dart';
 import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/bible/search_view_model.dart';
+import 'package:urim/presentation/common/domain_labels.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
 
@@ -127,12 +128,12 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 
 /// Qui a signé cette unité — ou l'aveu qu'aucun homme ne l'a fait.
 ///
-/// `ia-mistral` n'est pas un relecteur : c'est le modèle qui a écrit. Les
-/// confondre reviendrait à faire passer une production pour une relecture.
-String _signature(AppText text, String? relu) =>
-    relu == null || relu.startsWith('ia-') || relu == 'semis-demo'
-        ? text.searchNotReviewed
-        : text.searchReviewedBy(relu);
+/// Le libellé est propre à la recherche ; **le jugement ne l'est pas** — il vit
+/// dans `signedByMachine`, avec le fil. Cette version-ci comparait `relu` sans
+/// abaisser la casse : une signature `IA-Mistral` serait passée pour un homme.
+String _signature(AppText text, String? relu) => signedByMachine(relu)
+    ? text.searchNotReviewed
+    : text.searchReviewedBy(relu!);
 
 class _Message extends StatelessWidget {
   const _Message({required this.body});

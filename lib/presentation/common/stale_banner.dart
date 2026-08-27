@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:urim/l10n/generated/app_text.dart';
-import 'package:urim/presentation/common/french_dates.dart';
+import 'package:urim/core/text/french_dates.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
 

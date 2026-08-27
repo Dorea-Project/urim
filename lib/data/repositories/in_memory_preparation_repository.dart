@@ -5,8 +5,10 @@ import 'package:urim/core/error/failure.dart';
 import 'package:urim/core/id/id_generator.dart';
 import 'package:urim/core/id/id_generator_provider.dart';
 import 'package:urim/core/result/result.dart';
+import 'package:urim/core/text/french_dates.dart';
 import 'package:urim/core/time/clock.dart';
 import 'package:urim/core/time/clock_provider.dart';
+import 'package:urim/core/time/sundays.dart';
 import 'package:urim/domain/entities/bible/scripture_reference.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/domain/entities/preparation/preparation_block.dart';
@@ -201,11 +203,26 @@ final class InMemoryPreparationRepository implements PreparationRepository {
 
     _add(_brotherlyLove(now.subtract(const Duration(hours: 13))));
     _add(_actsPericope(now.subtract(const Duration(days: 4))));
-    _add(_hebrewsPreached(now.subtract(const Duration(days: 6))));
+    _add(_hebrewsPreached(_heureDuCulte(lastSunday(now))));
     _add(_openMicrophone(now.subtract(const Duration(days: 11))));
   }
 
   void _add(Preparation preparation) => _store[preparation.id] = preparation;
+
+  /// 🔴 **Le jeu d'exemple rendait la règle d'ouverture (D50) inobservable.**
+  /// La prédication transcrite était ancrée à « il y a six jours » : le jour de
+  /// culte que le corpus enseigne tombait donc sur *demain*, quel que soit le
+  /// jour où l'on lançait l'application, et la dérogation ne pouvait se
+  /// déclencher aucun jour de l'année. Rien n'échouait — c'est bien le
+  /// problème : la démonstration ne rejouait qu'une moitié du schéma, et il a
+  /// fallu l'installer sur un téléphone pour s'en apercevoir.
+  ///
+  /// Un dimanche est ce que le corpus doit apprendre. Du lundi au samedi
+  /// l'accueil s'ouvre donc sur les préparations, et le dimanche sur les
+  /// prédications tant que rien n'est capté : les deux branches se voient, à
+  /// leur tour, sans rien changer au code.
+  DateTime _heureDuCulte(DateTime dimanche) =>
+      DateTime(dimanche.year, dimanche.month, dimanche.day, 10, 30);
 
   /// « L'amour fraternel n'existe plus dans l'église » — le fil guidé des
   /// maquettes, jusqu'à la question sur les bornes du passage.
@@ -385,14 +402,16 @@ final class InMemoryPreparationRepository implements PreparationRepository {
 
     return Preparation(
       id: _ids.newId(),
-      title: 'Hébreux 13:1-6 — prêché le 9 août',
+      title: 'Hébreux 13:1-6 — prêché le ${frenchDayMonth(at)}',
       summary: 'Transcrit. Trois textes convoqués sans avoir été prévus. '
           'Un mouvement non repéré.',
       origin: PreparationOrigin.transcribed,
       createdAt: at,
       updatedAt: at,
       state: PreparationState.feedbackReady,
-      serviceDate: DateTime(at.year, 8, 9),
+      // Le culte porte la date de son dimanche, et le titre la répète : deux
+      // valeurs figées se contrediraient au premier changement d'ancrage.
+      serviceDate: DateTime(at.year, at.month, at.day),
       blocks: [
         UrimTurn(
           id: _ids.newId(),

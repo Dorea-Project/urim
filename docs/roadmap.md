@@ -146,6 +146,16 @@ raisonnement.
 convoqués — annoncés ou reconnus, prévus ou non — constats, et la réserve sur
 la séparation des locuteurs.
 
+**La porte d'entrée est faite aussi, et elle est vide.** L'accueil s'est scindé
+en deux pages — préparer, prêcher — avec une bascule dans la barre du haut
+(D49), et l'application décide seule laquelle s'ouvre : sur « prêcher » le jour
+du culte, tant que rien n'a été capté (D50). Le corpus a donc sa place, son
+compte et son geste. Ce geste ne répond pas : le bouton « Enregistrer la
+prédication » est affiché inactif, avec ce qu'il attend écrit dessous. C'est la
+coque de l'étape 1, prête à recevoir la capture le jour où **Q2** est tranchée —
+et d'ici là, la seule chose que la règle d'ouverture puisse offrir un dimanche
+matin est une page dont le bouton est fermé.
+
 Dépend de **Q2**, et de la contradiction sur les fragments qui « attendent le
 réseau » alors que la transcription est promise sur l'appareil. La capture
 elle-même n'existe pas : « Reprendre l'enregistrement » est inactif.

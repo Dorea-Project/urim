@@ -33,6 +33,18 @@ final class SpokenByPastor extends ThreadEntry {
   final String text;
 }
 
+/// Ce qu'Urim a dit **à un tour passé**, relu en base.
+///
+/// 🔴 Il n'existait pas, et c'est pourquoi le fil disparaissait : un tour ancien
+/// ne peut pas être rejoué — ses pastilles ne mènent plus nulle part, et sa
+/// phrase venait d'un modèle à un instant. Seule la phrase survit, et elle
+/// suffit à ce que le pasteur relise sa séance.
+final class SaidByUrim extends ThreadEntry {
+  const SaidByUrim(this.text);
+
+  final String text;
+}
+
 /// Un tour rendu par le moteur.
 final class ServedTurn extends ThreadEntry {
   const ServedTurn(this.turn, {required this.live});
@@ -52,6 +64,7 @@ final class ThreadState {
     this.entries = const [],
     this.receivedAt,
     this.pending = const [],
+    this.thinking = false,
   });
 
   final Study study;
@@ -73,6 +86,14 @@ final class ThreadState {
   /// pour une réponse d'aujourd'hui serait un mensonge que le pasteur
   /// découvrirait au pire moment.
   final DateTime? receivedAt;
+
+  /// Le moteur travaille — l'écran le dit, au lieu de laisser un blanc.
+  ///
+  /// ⚠️ **Distinct de [isWaitingToSend]**, et il ne faut pas les confondre :
+  /// celui-ci veut dire « c'est parti, on attend la réponse », l'autre veut
+  /// dire « ce n'est pas parti du tout ». Le premier rassure, le second
+  /// prévient.
+  final bool thinking;
 
   bool get isStale => receivedAt != null;
 
@@ -129,11 +150,26 @@ final class PreparationThread extends AsyncNotifier<ThreadState> {
         entries: _entrees(study),
       );
 
+  /// Le compte rendu de la séance — **relu, et non plus perdu**.
+  ///
+  /// 🔴 *« Le fil de discussion disparaît lorsqu'on revient dans la
+  /// discussion. »* L'écran n'y était pour rien : le serveur ne gardait que la
+  /// saisie d'ouverture, et tout le reste vivait ici, en mémoire, jusqu'à ce
+  /// qu'on quitte.
+  ///
+  /// Il vient maintenant de `study.fil`, écrit tour après tour. Le dernier tour
+  /// reste vivant — ses pastilles mènent quelque part ; les précédents sont des
+  /// paroles, lisibles et inertes.
   List<ThreadEntry> _entrees(Study study) => [
-        // Ce que le pasteur a écrit en ouvrant — la seule chose qu'il ait dite
-        // que le serveur garde vraiment. Tout le reste de ce qu'il dit vit
-        // dans ses décisions, pas dans des phrases.
-        if (study.rawInput.isNotEmpty) SpokenByPastor(study.rawInput),
+        if (study.fil.isEmpty && study.rawInput.isNotEmpty)
+          // Une préparation d'avant le fil gardé : il ne reste que ce qu'elle
+          // porte en propre. Mieux que rien, et honnête sur ce qui manque.
+          SpokenByPastor(study.rawInput),
+        for (final ligne in study.fil)
+          if (ligne.estDuPasteur)
+            SpokenByPastor(ligne.body)
+          else
+            SaidByUrim(ligne.body),
         if (study.turn case final Turn turn) ServedTurn(turn, live: true),
       ];
 
@@ -245,7 +281,9 @@ final class PreparationThread extends AsyncNotifier<ThreadState> {
       if (said != null) SpokenByPastor(said),
     ];
 
-    state = AsyncData(ThreadState(study: courant.study, entries: entries));
+    state = AsyncData(
+      ThreadState(study: courant.study, entries: entries, thinking: true),
+    );
 
     final result = await action(ref.read(studyRepositoryProvider), studyId);
 
@@ -277,7 +315,22 @@ final class PreparationThread extends AsyncNotifier<ThreadState> {
         }
         return null;
       },
-      onFailure: (failure) async => failure,
+      onFailure: (failure) async {
+        // ⚠️ **Une bulle qui s'allume doit avoir quelqu'un pour l'éteindre sur
+        // *chaque* chemin.** Sans ceci, un envoi refusé laissait les trois
+        // points tourner indéfiniment sous une phrase qui n'était jamais
+        // partie — l'écran promettait une réponse qui ne viendrait pas.
+        //
+        // 🔴 Trouvé par `brouillon_test`, pas par une relecture : c'est le
+        // même défaut que la roue de l'articulation, deux heures plus tôt.
+        state = AsyncData(ThreadState(
+          study: courant.study,
+          entries: entries,
+          receivedAt: courant.receivedAt,
+          pending: courant.pending,
+        ));
+        return failure;
+      },
     );
   }
 }

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/core/router/app_routes.dart';
+import 'package:urim/core/time/clock_provider.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/presentation/common/domain_labels.dart';
-import 'package:urim/presentation/common/french_dates.dart';
+import 'package:urim/core/text/french_dates.dart';
 import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/common/ruled_content.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
@@ -65,7 +66,7 @@ class PreparationCard extends ConsumerWidget {
               ],
               Flexible(
                 child: Text(
-                  _meta(text, summary),
+                  _meta(text, summary, now: ref.watch(clockProvider).now()),
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: colors.textSecondary,
@@ -139,7 +140,7 @@ String _meta(AppText text, StudySummary summary, {DateTime? now}) {
   );
 
   if (summary.serviceDate case final DateTime service) {
-    return text.homeCardMetaWithService(activity, frenchDayMonth(service));
+    return text.homeCardMetaWithService(activity, frenchShortDate(service));
   }
 
   return text.homeCardMeta(activity);

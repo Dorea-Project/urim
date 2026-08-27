@@ -39,12 +39,10 @@ abstract final class AppRoutes {
   static const String homePath = '/';
   static const String homeName = 'home';
 
-  /// Ouverture d'une préparation écrite.
-  ///
-  /// Déclarée **avant** `/preparation/:id` dans la table : sans cela,
-  /// « nouvelle » serait pris pour un identifiant.
-  static const String newPreparationPath = '/preparation/nouvelle';
-  static const String newPreparationName = 'newPreparation';
+  // Il y avait ici `/preparation/nouvelle`, l'écran d'ouverture. La phrase de
+  // départ s'écrit désormais dans le composeur, au bas de l'accueil : un
+  // bouton qui menait à un écran qui portait un champ faisait trois gestes
+  // pour une phrase (D51).
 
   /// Une préparation et son fil.
   static const String preparationPath = '/preparation/:id';
@@ -57,6 +55,10 @@ abstract final class AppRoutes {
   /// Synthèse d'une prédication, à valider.
   static const String synthesisPath = '/preparation/:id/synthese';
   static const String synthesisName = 'synthesis';
+
+  /// Ce qui a été prêché, et la couverture du canon.
+  static const String archivePath = '/archive';
+  static const String archiveName = 'archive';
 
   static const String profilePath = '/profil';
   static const String profileName = 'profile';

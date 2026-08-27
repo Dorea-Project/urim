@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:urim/core/router/app_routes.dart';
 import 'package:urim/domain/entities/preparation/recording.dart';
 import 'package:urim/domain/entities/transcription/transcription_review.dart';
-import 'package:urim/presentation/common/french_dates.dart';
+import 'package:urim/core/text/french_dates.dart';
 import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/common/domain_labels.dart';
 import 'package:urim/presentation/common/ruled_content.dart';

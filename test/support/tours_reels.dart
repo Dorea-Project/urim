@@ -5,9 +5,11 @@ import 'package:urim/core/result/cached.dart';
 import 'package:urim/core/result/result.dart';
 import 'package:urim/data/datasources/urim_remote_data_source.dart';
 import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
+import 'package:urim/domain/entities/preparation/preached.dart';
 import 'package:urim/domain/entities/preparation/pending_gesture.dart';
 import 'package:urim/core/error/failure.dart';
 import 'package:urim/domain/entities/bible/passage_detail.dart';
+import 'package:urim/domain/entities/preparation/articulation.dart';
 import 'package:urim/domain/entities/preparation/deliverable.dart';
 import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
@@ -90,6 +92,95 @@ base class DepotFige implements StudyRepository {
 
   /// Ce que l'ecran a soumis au controle.
   List<Slide> diapositivesSoumises = const [];
+
+  /// Les notes promues pendant le test, dans l'ordre.
+  final List<String> promotions = [];
+
+  @override
+  Future<Result<Study>> promote({
+    required String studyId,
+    required String entryId,
+    String? elementCode,
+    int? ordinal,
+  }) async {
+    promotions.add(entryId);
+    return Result.success(etude);
+  }
+
+  /// Ce que le serveur proposera pour un point. Nul = indisponible, qui est un
+  /// etat de production et non une panne.
+  Articulation? articulationRendue;
+
+  /// Les points pour lesquels une articulation a ete demandee, dans l'ordre.
+  final List<(String, int)> articulationsDemandees = [];
+
+  /// Les preparations archivees pendant le test — « j'ai preche celle-ci ».
+  final List<String> prechees = [];
+
+  /// Ce que le depot rend comme archive. Vide par defaut : un pasteur qui vient
+  /// d'arriver n'a rien preche, et c'est un etat normal — pas une panne.
+  List<PreachedSermon> archive = const [];
+
+  PreachingCoverage couverture = const PreachingCoverage(
+    books: [],
+    axes: [],
+    booksUntouched: 0,
+  );
+
+  @override
+  Future<Result<PreachedSermon>> markPreached({
+    required String studyId,
+    DateTime? preachedOn,
+  }) async {
+    prechees.add(studyId);
+
+    return Result.success(
+      PreachedSermon(
+        id: 'preche-$studyId',
+        preachedOn: preachedOn ?? DateTime(2026, 8, 23),
+        reference: '',
+        preparationId: studyId,
+      ),
+    );
+  }
+
+  @override
+  Future<Result<PreachedSermon>> recordPreached({
+    required String reference,
+    required DateTime preachedOn,
+    String? axisCode,
+    String? theme,
+  }) async =>
+      Result.success(
+        PreachedSermon(
+          id: 'preche-manuel',
+          preachedOn: preachedOn,
+          reference: reference,
+          axisCode: axisCode,
+          theme: theme,
+        ),
+      );
+
+  @override
+  Future<Result<List<PreachedSermon>>> listPreached() async =>
+      Result.success(archive);
+
+  @override
+  Future<Result<PreachingCoverage>> preachingCoverage() async =>
+      Result.success(couverture);
+
+  @override
+  Future<Result<Articulation>> articulate({
+    required String studyId,
+    required String elementCode,
+    required int ordinal,
+  }) async {
+    articulationsDemandees.add((elementCode, ordinal));
+
+    return Result.success(
+      articulationRendue ?? const Articulation.indisponible(),
+    );
+  }
 
   @override
   Future<Result<Deliverable>> submitDeliverable({

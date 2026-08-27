@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/core/error/failure.dart';
+import 'package:urim/core/text/french_dates.dart';
+import 'package:urim/presentation/archive/archive_view_model.dart';
 import 'package:urim/data/datasources/draft_local_data_source.dart';
 import 'package:urim/presentation/common/draft_keeper.dart';
 import 'package:urim/presentation/common/stale_banner.dart';
@@ -17,6 +19,7 @@ import 'package:urim/presentation/preparation/study_export.dart';
 import 'package:urim/presentation/preparation/widgets/pending_banner.dart';
 import 'package:urim/presentation/preparation/widgets/study_material.dart';
 import 'package:urim/presentation/preparation/widgets/turn_views.dart';
+import 'package:urim/presentation/preparation/widgets/urim_is_thinking.dart';
 import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
 import 'package:urim/presentation/theme/app_dimensions.dart';
@@ -82,6 +85,29 @@ class PreparationPage extends ConsumerWidget {
                     AppText.of(menuContext).preparationSupportsTitle,
                   ),
                 ),
+                // ⚠️ **La matière a quitté le fil le 22/08.** Elle s'y
+                // recollait sous le dernier tour, donc elle se rappelait à la
+                // fin de **chaque** échange — deux replis fermés qui closaient
+                // la conversation au lieu de la servir. Elle reste à un geste,
+                // elle ne s'impose plus.
+                if (study.verses.isNotEmpty || study.context.isNotEmpty)
+                  PopupMenuItem<void>(
+                    onTap: () => _showMaterial(context, study),
+                    child: Text(AppText.of(menuContext).preparationMaterialTitle),
+                  ),
+                // « J'ai prêché celle-ci » — un geste, jamais une déduction du
+                // calendrier. Rien ne s'archive parce qu'une date est passée :
+                // une préparation datée du dimanche prochain n'a pas été
+                // prêchée pour autant.
+                //
+                // Il reste offert même sur une préparation déjà archivée : le
+                // serveur ne déduplique pas, et c'est voulu — *prêcher deux
+                // fois le même texte, dans deux annexes ou deux dimanches, ce
+                // sont deux faits datés*.
+                PopupMenuItem<void>(
+                  onTap: () => _markPreached(context, ref, study),
+                  child: Text(AppText.of(menuContext).preachedMark),
+                ),
                 PopupMenuItem<void>(
                   onTap: () => _copyStudy(context, study),
                   child: Text(AppText.of(menuContext).preparationExport),
@@ -91,33 +117,74 @@ class PreparationPage extends ConsumerWidget {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            // La provenance avant le contenu : on dit d'où ça vient avant que
-            // le pasteur ne se mette à lire, pas après.
-            if (thread.value?.receivedAt case final DateTime recu)
-              StaleBanner(receivedAt: recu),
-            if (thread.value?.study.corpusDrifted ?? false)
-              const DriftNotice(),
-            Expanded(
-              child: switch (thread) {
-                AsyncData(:final value) => _Thread(
-                    state: value,
-                    preparationId: preparationId,
-                  ),
-                AsyncError(:final error) => _ThreadError(error: error),
-                _ => const Center(child: CircularProgressIndicator()),
-              },
-            ),
-            // La barre ne se ferme jamais, quel que soit `expects` : les
-            // pastilles sont des raccourcis, pas des barreaux.
-            _Composer(preparationId: preparationId),
-          ],
-        ),
+        child: PreparationConversation(preparationId: preparationId),
       ),
     );
   }
 }
+
+/// La conversation elle-même : ce qui a été dit, et de quoi répondre.
+///
+/// **Sans barre de titre ni écran autour**, et c'est tout l'intérêt : l'accueil
+/// la monte directement sous sa propre barre. Il y avait là une répétition que
+/// personne n'aurait défendue — un champ à l'accueil qui, une fois soumis,
+/// poussait un écran portant un second champ identique. Une conversation ne se
+/// visite pas, elle se continue.
+class PreparationConversation extends ConsumerWidget {
+  const PreparationConversation({super.key, required this.preparationId});
+
+  final String preparationId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final thread = ref.watch(preparationThreadProvider(preparationId));
+
+    return Column(
+      children: [
+        // La provenance avant le contenu : on dit d'où ça vient avant que le
+        // pasteur ne se mette à lire, pas après.
+        if (thread.value?.receivedAt case final DateTime recu)
+          StaleBanner(receivedAt: recu),
+        if (thread.value?.study.corpusDrifted ?? false) const DriftNotice(),
+        Expanded(
+          child: switch (thread) {
+            AsyncData(:final value) => _Thread(
+                state: value,
+                preparationId: preparationId,
+              ),
+            AsyncError(:final error) => _ThreadError(error: error),
+            _ => const Center(child: CircularProgressIndicator()),
+          },
+        ),
+        // La barre ne se ferme jamais, quel que soit `expects` : les pastilles
+        // sont des raccourcis, pas des barreaux.
+        _Composer(preparationId: preparationId),
+      ],
+    );
+  }
+}
+
+/// Ce que la préparation porte — **à la demande**.
+///
+/// Le pasteur travaille sur un passage : il doit pouvoir le lire. Ce qui a
+/// changé n'est pas l'accès, c'est le moment — il l'ouvre quand il le veut, au
+/// lieu de le retrouver sous chaque réponse.
+Future<void> _showMaterial(BuildContext context, Study study) =>
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (sheetContext) => SafeArea(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(sheetContext).size.height * 0.85,
+          ),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: StudyMaterial(study: study),
+          ),
+        ),
+      ),
+    );
 
 /// Met la préparation dans le presse-papiers.
 ///
@@ -125,6 +192,43 @@ class PreparationPage extends ConsumerWidget {
 /// greffon, fonctionne sur les cinq plateformes, et le pasteur colle où il
 /// veut — un carnet, un message, un document. Le partage de fichier reste à
 /// décider.
+/// Consigner la prédication, et le dire.
+///
+/// ⚠️ **Le geste ferme la préparation côté serveur** (D57), mais seulement
+/// quand c'est son auteur qui archive : la route accepte aussi un lecteur, et
+/// fermer sans cette garde clôturerait le travail de quelqu'un d'autre parce
+/// qu'un confrère l'a prêché.
+Future<void> _markPreached(
+  BuildContext context,
+  WidgetRef ref,
+  Study study,
+) async {
+  final messager = ScaffoldMessenger.of(context);
+  final text = AppText.of(context);
+
+  final (sermon, failure) =
+      await ref.read(preachedMarkerProvider.notifier).mark(study.id);
+
+  if (sermon == null) {
+    messager.showSnackBar(
+      SnackBar(
+        content: Text(
+          failure is Failure ? failure.message : text.homeReadFailed,
+        ),
+      ),
+    );
+    return;
+  }
+
+  messager.showSnackBar(
+    SnackBar(
+      content: Text(
+        text.preachedMarkDone(frenchShortDate(sermon.preachedOn)),
+      ),
+    ),
+  );
+}
+
 Future<void> _copyStudy(BuildContext context, Study study) async {
   final text = AppText.of(context);
 
@@ -137,14 +241,86 @@ Future<void> _copyStudy(BuildContext context, Study study) async {
   );
 }
 
-class _Thread extends ConsumerWidget {
+class _Thread extends ConsumerStatefulWidget {
   const _Thread({required this.state, required this.preparationId});
 
   final ThreadState state;
   final String preparationId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_Thread> createState() => _ThreadListState();
+}
+
+class _ThreadListState extends ConsumerState<_Thread> {
+  /// ⚠️ **Le fil ne suivait rien.** La liste n'avait aucun contrôleur : une
+  /// réponse arrivait sous le pli, et le pasteur devait descendre à la main
+  /// pour lire ce qu'il venait de demander. Sur un téléphone, un tour du
+  /// moteur fait facilement deux écrans.
+  final ScrollController _defilement = ScrollController();
+
+  /// Ce qu'on suivait au dernier passage. On ne défile que si **quelque chose
+  /// est apparu** : refaire le geste à chaque reconstruction arracherait
+  /// l'écran des mains d'un pasteur en train de relire un tour ancien.
+  int _suivi = 0;
+
+  @override
+  void dispose() {
+    _defilement.dispose();
+    super.dispose();
+  }
+
+  /// La clé du dernier élément — c'est **son haut** qu'on amène, pas le bas de
+  /// la liste.
+  ///
+  /// ⚠️ **La différence n'est pas cosmétique, et un test l'a prouvée.** Un tour
+  /// réel fait deux à trois écrans : seize pastilles, un motif de 1 400
+  /// caractères, dix pesées. Défiler jusqu'au bas de la liste dépose le pasteur
+  /// à la fin de ce qu'il n'a pas encore lu, et laisse au-dessus de lui les
+  /// options qu'il doit toucher. On aligne donc le **début** du tour sur le
+  /// haut de l'écran : il lit dans le sens où c'est écrit.
+  final GlobalKey _dernier = GlobalKey();
+
+  /// Après la trame, jamais pendant : la hauteur de ce qui vient d'arriver
+  /// n'est connue qu'une fois la mise en page faite.
+  void _suivreLeDernier() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_defilement.hasClients) return;
+
+      final arrivee = _dernier.currentContext;
+      if (arrivee == null) {
+        // L'élément n'est pas construit : la liste est paresseuse, et il est
+        // loin sous le pli. Le bas de la liste est alors la seule cible
+        // atteignable, et c'est aussi la bonne — on venait de très haut.
+        _defilement.animateTo(
+          _defilement.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeOut,
+        );
+        return;
+      }
+
+      Scrollable.ensureVisible(
+        arrivee,
+        alignment: 0,
+        duration: const Duration(milliseconds: 280),
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = widget.state;
+    final preparationId = widget.preparationId;
+
+    // La bulle d'attente compte comme une arrivée : c'est elle qu'il faut
+    // montrer, sinon le pasteur ne voit pas que sa parole est partie.
+    final compte = state.entries.length + (state.thinking ? 1 : 0);
+    if (compte != _suivi) {
+      _suivi = compte;
+      _suivreLeDernier();
+    }
+
     if (state.entries.isEmpty) {
       return Center(
         child: Padding(
@@ -172,15 +348,19 @@ class _Thread extends ConsumerWidget {
       );
     }
 
-    // Sous le dernier tour : ce que la preparation porte et que personne ne
-    // montrait — le texte, le contexte. Puis le bandeau d'attente, qui reste
-    // **dernier** : c'est la ou le pasteur regarde apres avoir touche.
+    // En queue de fil : **rien que l'attente**. La matière est passée au menu
+    // le 22/08 — elle se rappelait à la fin de chaque échange, et fermait la
+    // conversation au lieu de la nourrir.
+    //
+    // La bulle vient avant le bandeau : l'une dit « c'est parti, j'attends »,
+    // l'autre « ce n'est pas parti ». Les deux ne sont jamais vraies ensemble.
     final apres = <Widget>[
-      if (_porteDeLaMatiere(state)) StudyMaterial(study: state.study),
+      if (state.thinking) const UrimIsThinking(),
       if (state.isWaitingToSend) PendingBanner(pending: state.pending),
     ];
 
     return ListView.builder(
+      controller: _defilement,
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.lg,
         AppSpacing.lg,
@@ -188,10 +368,18 @@ class _Thread extends ConsumerWidget {
         AppSpacing.sm,
       ),
       itemCount: state.entries.length + apres.length,
-      itemBuilder: (context, index) => index >= state.entries.length
+      itemBuilder: (context, index) => KeyedSubtree(
+        // La clé voyage sur le dernier élément affiché — le tour qui vient
+        // d'arriver, ou la bulle qui dit qu'il arrive.
+        key: index == state.entries.length + apres.length - 1 ? _dernier : null,
+        child: index >= state.entries.length
           ? apres[index - state.entries.length]
           : switch (state.entries[index]) {
         SpokenByPastor(:final text) => _PastorSaid(text: text),
+        // Une parole d'un tour passé : lisible, inerte. Ses pastilles ne mènent
+        // plus nulle part — le moteur a avancé — et les rendre touchables
+        // enverrait une décision à un étage qui n'attend plus.
+        SaidByUrim(:final text) => _UrimSaid(text: text),
         ServedTurn(:final turn, :final live) => TurnView(
             turn: turn,
             live: live,
@@ -213,13 +401,47 @@ class _Thread extends ConsumerWidget {
             onAction: (code) => _geste(context, ref, state.study, code),
           ),
         },
+      ),
     );
   }
 }
 
-/// La preparation porte-t-elle de quoi offrir quelque chose ?
-bool _porteDeLaMatiere(ThreadState state) =>
-    state.study.verses.isNotEmpty || state.study.context.isNotEmpty;
+/// Ce qu'Urim a dit à un tour passé.
+///
+/// La même voix que le tour vivant, sans ses gestes : le fil se relit, il ne se
+/// rejoue pas.
+class _UrimSaid extends StatelessWidget {
+  const _UrimSaid({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Container(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          decoration: BoxDecoration(
+            border: Border(
+              left: BorderSide(color: colors.border, width: 2),
+            ),
+          ),
+          child: Text(
+            text,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: colors.textSecondary,
+                  height: 1.5,
+                ),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 /// Ce que le pasteur a dit : une bulle pleine, calée à droite.
 class _PastorSaid extends StatelessWidget {

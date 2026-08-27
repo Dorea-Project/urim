@@ -108,13 +108,13 @@ abstract class AppText {
   /// Titre du dialogue de suppression.
   ///
   /// In fr, this message translates to:
-  /// **'Supprimer ton compte ?'**
+  /// **'Supprimer votre compte ?'**
   String get profileDeleteAccountTitle;
 
   /// Dit ce qui part, et par quoi il faut passer pour le confirmer.
   ///
   /// In fr, this message translates to:
-  /// **'Tes préparations, tes enregistrements et ton compte seront effacés — sur cet appareil comme sur le serveur. Rien n\'est récupérable.\n\nUn code va partir par SMS : il faut le saisir pour confirmer.'**
+  /// **'Vos préparations, vos enregistrements et votre compte seront effacés — sur cet appareil comme sur le serveur. Rien n\'est récupérable.\n\nUn code va partir par SMS : il faut le saisir pour confirmer.'**
   String get profileDeleteAccountBody;
 
   /// Bouton qui déclenche l'envoi du SMS de suppression.
@@ -126,13 +126,13 @@ abstract class AppText {
   /// Confirmation après une suppression réussie.
   ///
   /// In fr, this message translates to:
-  /// **'Ton compte et son contenu ont été supprimés.'**
+  /// **'Votre compte et son contenu ont été supprimés.'**
   String get profileDeleteAccountDone;
 
   /// Refus du serveur au moment de demander le code de suppression.
   ///
   /// In fr, this message translates to:
-  /// **'Le code n\'est pas parti. Ton compte est intact.'**
+  /// **'Le code n\'est pas parti. Votre compte est intact.'**
   String get profileDeleteAccountFailed;
 
   /// Ferme la session sur cet appareil, depuis le profil.
@@ -150,7 +150,7 @@ abstract class AppText {
   /// Dit ce que la déconnexion ne détruit pas, et ce qu'il faudra pour revenir.
   ///
   /// In fr, this message translates to:
-  /// **'Tes préparations restent sur cet appareil. Il faudra ton code secret, ou un nouveau code par SMS si l\'appareil n\'est plus reconnu.'**
+  /// **'Vos préparations restent sur cet appareil. Il faudra votre code secret, ou un nouveau code par SMS si l\'appareil n\'est plus reconnu.'**
   String get profileSignOutBody;
 
   /// Option du dialogue : ferme aussi les sessions des autres appareils.
@@ -204,7 +204,7 @@ abstract class AppText {
   /// Échec de l'écriture locale. Dit la conséquence, pas la cause technique.
   ///
   /// In fr, this message translates to:
-  /// **'Impossible d\'enregistrer ta progression. La présentation réapparaîtra au prochain lancement.'**
+  /// **'Impossible d\'enregistrer votre progression. La présentation réapparaîtra au prochain lancement.'**
   String get onboardingSaveFailed;
 
   /// Annonce vocale de la progression. Lu par les lecteurs d'écran, jamais affiché.
@@ -216,13 +216,13 @@ abstract class AppText {
   /// Titre de la première étape. Le retour à la ligne porte le rythme de la phrase.
   ///
   /// In fr, this message translates to:
-  /// **'Écris ta phrase.\nUrim cherche le texte dedans.'**
+  /// **'Écrivez votre phrase.\nUrim cherche le texte dedans.'**
   String get onboardingWeighingTitle;
 
   /// No description provided for @onboardingWeighingBody.
   ///
   /// In fr, this message translates to:
-  /// **'Une référence, une citation approximative, ou juste une intention. Tu n\'as aucun mode à choisir — la porte regarde si les mots se suivent comme dans l\'Écriture.'**
+  /// **'Une référence, une citation approximative, ou juste une intention. Vous n\'avez aucun mode à choisir — la porte regarde si les mots se suivent comme dans l\'Écriture.'**
   String get onboardingWeighingBody;
 
   /// No description provided for @onboardingHandbackTitle.
@@ -234,7 +234,7 @@ abstract class AppText {
   /// No description provided for @onboardingHandbackBody.
   ///
   /// In fr, this message translates to:
-  /// **'Chaque étage dit pourquoi il a fait ce qu\'il a fait. Quand il ne peut pas trancher seul, il te pose la question au lieu de choisir à ta place.'**
+  /// **'Chaque étage dit pourquoi il a fait ce qu\'il a fait. Quand il ne peut pas trancher seul, il vous pose la question au lieu de choisir à votre place.'**
   String get onboardingHandbackBody;
 
   /// No description provided for @onboardingResistanceTitle.
@@ -246,7 +246,7 @@ abstract class AppText {
   /// No description provided for @onboardingResistanceBody.
   ///
   /// In fr, this message translates to:
-  /// **'Ceux qui ne vont pas dans le sens de ta lecture. C\'est le seul moyen de ne pas faire dire au texte ce qu\'on avait décidé d\'y trouver.'**
+  /// **'Ceux qui ne vont pas dans le sens de votre lecture. C\'est le seul moyen de ne pas faire dire au texte ce qu\'on avait décidé d\'y trouver.'**
   String get onboardingResistanceBody;
 
   /// Infobulle du bouton de retour, partout.
@@ -270,13 +270,13 @@ abstract class AppText {
   /// Titre de l'écran du numéro, porte « connexion ».
   ///
   /// In fr, this message translates to:
-  /// **'Ton numéro'**
+  /// **'Votre numéro'**
   String get authPhoneTitleSignIn;
 
   /// Titre du même écran, porte « inscription » : le numéro doit être joignable, un SMS y part.
   ///
   /// In fr, this message translates to:
-  /// **'Ton numéro valide'**
+  /// **'Votre numéro valide'**
   String get authPhoneTitleRegistration;
 
   /// Exemple de saisie, format ivoirien.
@@ -284,6 +284,24 @@ abstract class AppText {
   /// In fr, this message translates to:
   /// **'07 47 76 9069'**
   String get authPhoneHint;
+
+  /// Bascule vers la connexion depuis l’écran du numéro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déjà un compte ? Se connecter'**
+  String get authSwitchToSignIn;
+
+  /// Bascule vers l’inscription depuis l’écran du numéro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas encore de compte ? En créer un'**
+  String get authSwitchToRegistration;
+
+  /// Sortie offerte quand le serveur répond que le numéro est déjà inscrit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se connecter'**
+  String get authGoToSignIn;
 
   /// No description provided for @authPhoneSubmit.
   ///
@@ -348,13 +366,13 @@ abstract class AppText {
   /// No description provided for @secretCodeChooseTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Choisis un code secret'**
+  /// **'Choisissez un code secret'**
   String get secretCodeChooseTitle;
 
   /// No description provided for @secretCodeConfirmTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Confirme ton code secret'**
+  /// **'Confirmez votre code secret'**
   String get secretCodeConfirmTitle;
 
   /// Dit ce que le code engage : il reviendra à chaque fois.
@@ -366,19 +384,19 @@ abstract class AppText {
   /// No description provided for @secretCodeConfirmHelper.
   ///
   /// In fr, this message translates to:
-  /// **'Saisis-le une seconde fois'**
+  /// **'Saisissez-le une seconde fois'**
   String get secretCodeConfirmHelper;
 
   /// No description provided for @secretCodeUnlockTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Ton code secret'**
+  /// **'Votre code secret'**
   String get secretCodeUnlockTitle;
 
   /// No description provided for @secretCodeUnlockHelper.
   ///
   /// In fr, this message translates to:
-  /// **'Saisis tes chiffres'**
+  /// **'Saisissez vos chiffres'**
   String get secretCodeUnlockHelper;
 
   /// No description provided for @secretCodeWrong.
@@ -420,7 +438,7 @@ abstract class AppText {
   /// No description provided for @errorPhoneAlreadyRegistered.
   ///
   /// In fr, this message translates to:
-  /// **'Ce numéro a déjà un compte. Connecte-toi.'**
+  /// **'Ce numéro a déjà un compte. Connectez-vous.'**
   String get errorPhoneAlreadyRegistered;
 
   /// No description provided for @errorSecretCodeIncorrect.
@@ -480,19 +498,19 @@ abstract class AppText {
   /// No description provided for @demoSecretCodeUnlock.
   ///
   /// In fr, this message translates to:
-  /// **'Celui que tu as choisi à la création — {code} si tu as suivi la suggestion.'**
+  /// **'Celui que vous avez choisi à la création — {code} si vous avez suivi la suggestion.'**
   String demoSecretCodeUnlock(String code);
 
   /// No description provided for @demoSignIn.
   ///
   /// In fr, this message translates to:
-  /// **'Serveur simulé : le code est celui que tu as posé à l\'inscription — {code} si tu as suivi la suggestion.'**
+  /// **'Serveur simulé : le code est celui que vous avez posé à l\'inscription — {code} si vous avez suivi la suggestion.'**
   String demoSignIn(String code);
 
   /// Titre de l'écran, et son nom dans le profil.
   ///
   /// In fr, this message translates to:
-  /// **'Tes données'**
+  /// **'Vos données'**
   String get privacyTitle;
 
   /// Texte à portée juridique : toute modification engage. À relire avec le même soin qu'un contrat.
@@ -516,13 +534,13 @@ abstract class AppText {
   /// No description provided for @privacyOwnershipTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Tes préparations restent à toi'**
+  /// **'Vos préparations restent les vôtres'**
   String get privacyOwnershipTitle;
 
   /// No description provided for @privacyOwnershipBody.
   ///
   /// In fr, this message translates to:
-  /// **'Elles ne sont lues par personne d\'autre — ni par ton église, ni par Dorea, ni par un responsable.'**
+  /// **'Elles ne sont lues par personne d\'autre — ni par votre église, ni par Dorea, ni par un responsable.'**
   String get privacyOwnershipBody;
 
   /// No description provided for @privacyNoResaleTitle.
@@ -534,7 +552,7 @@ abstract class AppText {
   /// No description provided for @privacyNoResaleBody.
   ///
   /// In fr, this message translates to:
-  /// **'Aucun partage à un tiers, aucune publicité, aucun entraînement de modèle sur ton contenu.'**
+  /// **'Aucun partage à un tiers, aucune publicité, aucun entraînement de modèle sur votre contenu.'**
   String get privacyNoResaleBody;
 
   /// No description provided for @privacyRetainedLabel.
@@ -546,25 +564,25 @@ abstract class AppText {
   /// No description provided for @privacyRetainedPhone.
   ///
   /// In fr, this message translates to:
-  /// **'Ton numéro de téléphone, pour te reconnaître.'**
+  /// **'Votre numéro de téléphone, pour vous reconnaître.'**
   String get privacyRetainedPhone;
 
   /// No description provided for @privacyRetainedWork.
   ///
   /// In fr, this message translates to:
-  /// **'Tes préparations et enregistrements, jusqu\'à ce que tu les supprimes.'**
+  /// **'Vos préparations et enregistrements, jusqu\'à ce que vous les supprimiez.'**
   String get privacyRetainedWork;
 
   /// No description provided for @privacyRetainedDevices.
   ///
   /// In fr, this message translates to:
-  /// **'Les appareils sur lesquels tu t\'es connecté.'**
+  /// **'Les appareils sur lesquels vous vous êtes connecté.'**
   String get privacyRetainedDevices;
 
   /// Mention légale. Le numéro de loi ne se traduit pas — il se remplace par la référence locale.
   ///
   /// In fr, this message translates to:
-  /// **'Traitement soumis à la loi ivoirienne n° 2013-450 relative à la protection des données à caractère personnel. Tu peux supprimer ton compte et tout son contenu à tout moment.'**
+  /// **'Traitement soumis à la loi ivoirienne n° 2013-450 relative à la protection des données à caractère personnel. Vous pouvez supprimer votre compte et tout son contenu à tout moment.'**
   String get privacyLegalNotice;
 
   /// No description provided for @privacyAccept.
@@ -696,7 +714,7 @@ abstract class AppText {
   /// No description provided for @settingsWifiOnlyPending.
   ///
   /// In fr, this message translates to:
-  /// **'Rien n\'est encore synchronisé : tes préparations ne quittent pas cet appareil.'**
+  /// **'Rien n\'est encore synchronisé : vos préparations ne quittent pas cet appareil.'**
   String get settingsWifiOnlyPending;
 
   /// No description provided for @settingsReminderInProgress.
@@ -744,7 +762,7 @@ abstract class AppText {
   /// Confirmation après copie dans le presse-papiers.
   ///
   /// In fr, this message translates to:
-  /// **'Préparation copiée. Colle-la où tu veux.'**
+  /// **'Préparation copiée. Collez-la où vous voulez.'**
   String get preparationExportDone;
 
   /// No description provided for @settingsExport.
@@ -774,7 +792,7 @@ abstract class AppText {
   /// Rappel de la politique, posé là où l'on s'interroge sur ce qui sort de l'appareil.
   ///
   /// In fr, this message translates to:
-  /// **'Urim n\'utilise jamais tes préparations pour entraîner un modèle.'**
+  /// **'Urim n\'utilise jamais vos préparations pour entraîner un modèle.'**
   String get settingsTrainingNotice;
 
   /// No description provided for @settingsSaveFailed.
@@ -828,13 +846,13 @@ abstract class AppText {
   /// Titre du dialogue lancé depuis le profil.
   ///
   /// In fr, this message translates to:
-  /// **'Changer ton code secret ?'**
+  /// **'Changer votre code secret ?'**
   String get profileSecretCodeChangeTitle;
 
   /// Dit ce que le changement entraîne, avant de le lancer.
   ///
   /// In fr, this message translates to:
-  /// **'Un code te sera envoyé par SMS au {phone}. Tes autres appareils devront se reconnecter : changer la serrure laisse rarement les anciennes clés en circulation.'**
+  /// **'Un code vous sera envoyé par SMS au {phone}. Vos autres appareils devront se reconnecter : changer la serrure laisse rarement les anciennes clés en circulation.'**
   String profileSecretCodeChangeBody(String phone);
 
   /// Bouton qui déclenche l'envoi du SMS.
@@ -894,7 +912,7 @@ abstract class AppText {
   /// No description provided for @profileDisplayNameExplanation.
   ///
   /// In fr, this message translates to:
-  /// **'Ce nom ne sort pas de l\'application : il sert à te reconnaître sur cet écran, et à former ton monogramme.'**
+  /// **'Ce nom ne sort pas de l\'application : il sert à vous reconnaître sur cet écran, et à former votre monogramme.'**
   String get profileDisplayNameExplanation;
 
   /// Annonce vocale de la silhouette qui remplace les initiales. Jamais affichée.
@@ -942,13 +960,13 @@ abstract class AppText {
   /// État vide de l’écran de recherche.
   ///
   /// In fr, this message translates to:
-  /// **'Rien pour l’instant. Écris une référence, ou un mot de l’original.'**
+  /// **'Rien pour l’instant. Écrivez une référence, ou un mot de l’original.'**
   String get searchEmpty;
 
   /// Quand le passage chevauche plusieurs unités relues.
   ///
   /// In fr, this message translates to:
-  /// **'Les unités qui couvrent ta demande'**
+  /// **'Les unités qui couvrent votre demande'**
   String get searchUnitsTitle;
 
   /// Qui a signé l’unité — la seule chose qui distingue un énoncé relu d’un énoncé jamais lu.
@@ -1014,7 +1032,7 @@ abstract class AppText {
   /// Dit que l’ordre est le sien et que sa notation est comprise.
   ///
   /// In fr, this message translates to:
-  /// **'Dans ton ordre, pas celui du canon : l’annonce avant l’accomplissement. Écris comme tu notes — « Hb 2v29 » se lit.'**
+  /// **'Dans votre ordre, pas celui du canon : l’annonce avant l’accomplissement. Écrivez comme vous notez — « Hb 2v29 » se lit.'**
   String get preparationSupportsIntro;
 
   /// Libellé de l’écran de la chaîne de textes.
@@ -1032,7 +1050,7 @@ abstract class AppText {
   /// Confirmation après envoi.
   ///
   /// In fr, this message translates to:
-  /// **'Ta chaîne est enregistrée.'**
+  /// **'Votre chaîne est enregistrée.'**
   String get preparationSupportsSaved;
 
   /// Exemple de notation, affiché dans le champ.
@@ -1098,7 +1116,7 @@ abstract class AppText {
   /// Dit où le fichier a été posé.
   ///
   /// In fr, this message translates to:
-  /// **'Ton document est dans « {dossier} ».'**
+  /// **'Votre document est dans « {dossier} ».'**
   String preparationDocumentReady(String dossier);
 
   /// Titre du dossier de refus.
@@ -1122,7 +1140,7 @@ abstract class AppText {
   /// Ce que l’écran promet en haut, repris du document.
   ///
   /// In fr, this message translates to:
-  /// **'Le document met en page ce que tu écris. Rien n’est imposé : une section vide reste vide.'**
+  /// **'Le document met en page ce que vous écrivez. Rien n’est imposé : une section vide reste vide.'**
   String get preparationPlanIntro;
 
   /// Bouton qui envoie le squelette au serveur.
@@ -1134,7 +1152,7 @@ abstract class AppText {
   /// Confirmation après envoi.
   ///
   /// In fr, this message translates to:
-  /// **'Ton plan est enregistré.'**
+  /// **'Votre plan est enregistré.'**
   String get preparationPlanSaved;
 
   /// Ouvre les sections que Braga ne nomme pas.
@@ -1148,6 +1166,90 @@ abstract class AppText {
   /// In fr, this message translates to:
   /// **'Au moins un point : c’est ce que le document exige avant de sortir.'**
   String get preparationPlanPointsHint;
+
+  /// Entrée de menu qui ouvre ce que la préparation porte. Il ne se recolle plus à la fin de chaque échange.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le texte et le contexte'**
+  String get preparationMaterialTitle;
+
+  /// Ce que dit la bulle pendant que le moteur travaille. « Cherche » et non « écrit » : il ne rédige pas.
+  ///
+  /// In fr, this message translates to:
+  /// **'Urim cherche…'**
+  String get preparationThinking;
+
+  /// Ce que le pasteur a écrit dans la conversation en désignant ce point. Gardé, rangé — et pas encore dans son plan.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 note écrite dans le fil} other{{count} notes écrites dans le fil}}'**
+  String preparationPlanNotes(int count);
+
+  /// Le seul geste qui fait entrer une note dans le document. Il ajoute à la fin du point, il ne remplace jamais.
+  ///
+  /// In fr, this message translates to:
+  /// **'En faire mon point'**
+  String get preparationPlanPromote;
+
+  /// Confirmation après reprise. Dit où le texte est allé, et à qui il appartient maintenant.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouté à la fin de votre point. À vous de le retailler.'**
+  String get preparationPlanPromoted;
+
+  /// Demande une proposition sur un point déjà écrit. La seule prose qu’Urim produise.
+  ///
+  /// In fr, this message translates to:
+  /// **'Faire articuler ce point'**
+  String get preparationPlanArticulate;
+
+  /// Titre de la feuille. « Propose » et non « écrit » : le texte reste à côté du plan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce qu’Urim propose'**
+  String get preparationPlanArticulateTitle;
+
+  /// Intitulé de la phrase de transition, quand le modèle en propose une.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour enchaîner'**
+  String get preparationPlanArticulateTransition;
+
+  /// Ce qui reste vrai quoi qu’il arrive : la proposition vit à côté du plan. La signature du modèle a été retirée le 22/08 — elle est gardée en base, pas montrée.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien n’entre dans votre document tant que vous ne l’avez pas repris.'**
+  String get preparationPlanArticulateNotice;
+
+  /// Le geste explicite qui fait entrer la proposition dans le champ. Jamais automatique.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reprendre dans mon point'**
+  String get preparationPlanArticulateTake;
+
+  /// Confirmation après reprise. Dit où le texte est allé, et à qui il appartient maintenant.
+  ///
+  /// In fr, this message translates to:
+  /// **'Repris à la suite de votre point. À vous de le retailler.'**
+  String get preparationPlanArticulateTaken;
+
+  /// Referme la feuille sans rien reprendre.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermer'**
+  String get preparationPlanArticulateClose;
+
+  /// Aucun modèle branché, plafond atteint, ou point vide. État de production, jamais une erreur.
+  ///
+  /// In fr, this message translates to:
+  /// **'Urim n’a pas de proposition ici. Votre point reste écrit, et vous le développez comme vous l’avez toujours fait.'**
+  String get preparationPlanArticulateUnavailable;
+
+  /// Le geste est demandé sur une section vide. On ne part pas au serveur pour l’apprendre.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écrivez d’abord ce point : Urim articule ce que vous avez écrit, il ne l’écrit pas.'**
+  String get preparationPlanArticulateEmpty;
 
   /// Nom d’une section du squelette homilétique.
   ///
@@ -1242,7 +1344,7 @@ abstract class AppText {
   /// Motif d'un geste que le contrat sert et que l'application ne sait pas encore ouvrir.
   ///
   /// In fr, this message translates to:
-  /// **'Le serveur accepte déjà tes points ; l\'écran pour les écrire n\'existe pas encore.'**
+  /// **'Le serveur accepte déjà vos points ; l\'écran pour les écrire n\'existe pas encore.'**
   String get preparationActionAVenir;
 
   /// No description provided for @profilePhone.
@@ -1272,13 +1374,13 @@ abstract class AppText {
   /// No description provided for @profilePhoneChangeFailed.
   ///
   /// In fr, this message translates to:
-  /// **'Le code n\'est pas parti. Ton numéro n\'a pas changé.'**
+  /// **'Le code n\'est pas parti. Votre numéro n\'a pas changé.'**
   String get profilePhoneChangeFailed;
 
   /// No description provided for @profilePhoneChangeDone.
   ///
   /// In fr, this message translates to:
-  /// **'Ton numéro a été changé.'**
+  /// **'Votre numéro a été changé.'**
   String get profilePhoneChangeDone;
 
   /// No description provided for @profileSecretCode.
@@ -1314,13 +1416,13 @@ abstract class AppText {
   /// No description provided for @profileChurchRecognised.
   ///
   /// In fr, this message translates to:
-  /// **'Ton numéro y est reconnu. Tes préparations n\'y sont pas visibles.'**
+  /// **'Votre numéro y est reconnu. Vos préparations n\'y sont pas visibles.'**
   String get profileChurchRecognised;
 
   /// Promesse d'étanchéité, pas une préférence d'affichage : le code doit la garantir.
   ///
   /// In fr, this message translates to:
-  /// **'Une seule identité, plusieurs églises possibles. Ce que tu écris dans Urim ne traverse jamais vers elles.'**
+  /// **'Une seule identité, plusieurs églises possibles. Ce que vous écrivez dans Urim ne traverse jamais vers elles.'**
   String get profileChurchesNote;
 
   /// No description provided for @profileDeviceCurrent.
@@ -1383,11 +1485,227 @@ abstract class AppText {
   /// **'Enregistrer'**
   String get save;
 
-  /// No description provided for @homeOpenTask.
+  /// Première entrée du tiroir. Ouvre un champ vide : la conversation en cours n'est pas perdue, elle reste dans l'historique juste en dessous.
   ///
   /// In fr, this message translates to:
-  /// **'Ouvrir une tâche'**
-  String get homeOpenTask;
+  /// **'Nouvelle préparation'**
+  String get drawerNewPreparation;
+
+  /// En-tête de l'historique. Le fil a quitté l'accueil pour le tiroir le jour où l'accueil est devenu la conversation elle-même.
+  ///
+  /// In fr, this message translates to:
+  /// **'PRÉPARATIONS'**
+  String get drawerPreparations;
+
+  /// En-tête du tiroir sur l'écran des prédications. Le tiroir suit le travail en cours : l'historique qu'il porte est celui de l'écran où l'on se trouve.
+  ///
+  /// In fr, this message translates to:
+  /// **'PRÉDICATIONS'**
+  String get drawerPreached;
+
+  /// No description provided for @drawerEmptyPreached.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien encore. Enregistrez votre prochain culte.'**
+  String get drawerEmptyPreached;
+
+  /// No description provided for @drawerProjects.
+  ///
+  /// In fr, this message translates to:
+  /// **'Projets'**
+  String get drawerProjects;
+
+  /// L'entrée s'affiche inactive et dit ce qu'elle attend, plutôt que de disparaître (D13).
+  ///
+  /// In fr, this message translates to:
+  /// **'Bientôt'**
+  String get drawerProjectsPending;
+
+  /// No description provided for @drawerEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien encore. Écrivez votre première phrase.'**
+  String get drawerEmpty;
+
+  /// Feuille ouverte par l'icône de bascule. Une icône seule n'explique pas où elle emmène — c'est le reproche fait à tout bouton qui bascule sans rien dire.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voulez-vous basculer à…'**
+  String get homeSwitchTitle;
+
+  /// No description provided for @homeSwitchPrepare.
+  ///
+  /// In fr, this message translates to:
+  /// **'Préparer un message'**
+  String get homeSwitchPrepare;
+
+  /// No description provided for @homeSwitchPrepareBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Faites-vous assister pour accélérer votre préparation.'**
+  String get homeSwitchPrepareBody;
+
+  /// No description provided for @homeSwitchPreach.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mes prédications'**
+  String get homeSwitchPreach;
+
+  /// No description provided for @homeSwitchPreachBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Donnez vie à votre prédication.'**
+  String get homeSwitchPreachBody;
+
+  /// Le geste, dans le menu de la préparation. Rien ne s'archive parce qu'une date est passée : c'est un geste du pasteur, jamais une déduction du calendrier.
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'ai prêché celle-ci'**
+  String get preachedMark;
+
+  /// No description provided for @preachedMarkDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Consignée comme prêchée le {date}.'**
+  String preachedMarkDone(String date);
+
+  /// No description provided for @archiveTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que vous avez prêché'**
+  String get archiveTitle;
+
+  /// No description provided for @archiveEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien de consigné. Marquez une préparation comme prêchée, ou consignez un message prêché ailleurs.'**
+  String get archiveEmpty;
+
+  /// Un sermon sans préparation — prêché ailleurs, ou avant Dorea. Sans lui, l'archive ne mesurerait que ce qui est passé par l'outil, ce qui n'est pas le ministère de quelqu'un.
+  ///
+  /// In fr, this message translates to:
+  /// **'Consigner une prédication'**
+  String get archiveRecordManual;
+
+  /// La référence part dans la notation du pasteur : c'est le serveur qui la lit et la vérifie contre le corpus. On n'impose pas un format.
+  ///
+  /// In fr, this message translates to:
+  /// **'Actes 1:1-14 — ou Hb 2v29, comme vous notez'**
+  String get archiveRecordHint;
+
+  /// No description provided for @archiveRecordDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quand l\'avez-vous prêchée ?'**
+  String get archiveRecordDate;
+
+  /// No description provided for @archiveRecordSubmit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Consigner'**
+  String get archiveRecordSubmit;
+
+  /// No description provided for @archiveRecordDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prédication consignée.'**
+  String get archiveRecordDone;
+
+  /// Axe nul. Hors unité curée il n'y a aucun axe à retenir : on le nomme plutôt que de masquer la ligne.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non rangé'**
+  String get archiveUnfiled;
+
+  /// No description provided for @coverageTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Où vous êtes allé'**
+  String get coverageTitle;
+
+  /// No description provided for @coverageBooks.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 livre} other{{count} livres}}'**
+  String coverageBooks(int count);
+
+  /// Des lieux distincts. Prêcher deux fois le même texte n'élargit pas un canon.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 passage} other{{count} passages}}'**
+  String coveragePassages(int count);
+
+  /// Des événements. Deux assemblées ont entendu — ce nombre ne s'additionne jamais au précédent.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 prédication} other{{count} prédications}}'**
+  String coveragePreachings(int count);
+
+  /// No description provided for @coverageUntouched.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun livre sans sermon rangé} =1{1 livre sans sermon rangé} other{{count} livres sans sermon rangé}}'**
+  String coverageUntouched(int count);
+
+  /// ⚠️ Cet écran ne propose jamais de sermon. Un rayon vide se montre, il ne se comble pas — aucun score, aucune série, aucun pourcentage : ce serait mesurer la fidélité d'un pasteur.
+  ///
+  /// In fr, this message translates to:
+  /// **'« Aucun sermon rangé ici » ne veut pas dire que vous ne l\'avez jamais prêché : un texte peut l\'avoir été sous une autre unité, ou sans axe retenu.'**
+  String get coverageNotice;
+
+  /// Le champ du bas de l'accueil. Deux entrées possibles dans le même champ — une référence, une intention — et c'est l'exemple qui le dit, pas un mode à cocher. Il a remplacé un bouton qui menait à un écran qui portait un champ : trois gestes pour une phrase.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une phrase, une référence, ou ce qui pèse cette semaine'**
+  String get homeComposerHint;
+
+  /// Infobulle de l'icône qui mène aux prédications. Elle nomme la destination, jamais la page où l'on se trouve — l'inverse fait reculer celui qui croyait avancer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prédications'**
+  String get homeTabPreach;
+
+  /// Infobulle de l'icône du retour, sur la page des prédications.
+  ///
+  /// In fr, this message translates to:
+  /// **'Préparations'**
+  String get homeTabPrepare;
+
+  /// Bouton du bas, page « prêcher ». Affiché inactif tant que le moteur de transcription n'est pas retenu (Q2, D13) : masquer sa place ferait croire que la page n'a pas de geste.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer la prédication'**
+  String get homeRecordSermon;
+
+  /// Dit pourquoi l'application s'est ouverte sur les prédications plutôt que sur les préparations. Un automatisme qui ne se justifie pas passe pour une panne.
+  ///
+  /// In fr, this message translates to:
+  /// **'Culte aujourd\'hui'**
+  String get homeServiceToday;
+
+  /// No description provided for @homeServiceTodayPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'rien n\'est encore capté'**
+  String get homeServiceTodayPending;
+
+  /// En-tête du corpus. Le compte est l'argument : c'est le nombre qui monte, semaine après semaine, dans la voix du pasteur.
+  ///
+  /// In fr, this message translates to:
+  /// **'PRÊCHÉS · {count}'**
+  String homeGroupPreached(int count);
+
+  /// No description provided for @homePreachedEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune prédication captée.'**
+  String get homePreachedEmptyTitle;
+
+  /// No description provided for @homePreachedEmptyBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrez le culte : la prédication s\'ajoutera ici, dans votre voix.'**
+  String get homePreachedEmptyBody;
 
   /// No description provided for @homeEmptyTitle.
   ///
@@ -1398,7 +1716,7 @@ abstract class AppText {
   /// No description provided for @homeEmptyBody.
   ///
   /// In fr, this message translates to:
-  /// **'Ouvre une tâche : écris ce que tu veux dire, ou verse un enregistrement.'**
+  /// **'Écrivez ce que vous voulez dire : une phrase, une référence, ou ce qui pèse cette semaine.'**
   String get homeEmptyBody;
 
   /// No description provided for @homeReadFailed.
@@ -1437,10 +1755,10 @@ abstract class AppText {
   /// **'· {activity}'**
   String homeCardMeta(String activity);
 
-  /// Dernière activité, puis le dimanche visé.
+  /// Dernière activité, puis le culte visé. Le jour vient de la date — il était écrit « dimanche » en dur, et un pasteur ne prêche pas que le dimanche.
   ///
   /// In fr, this message translates to:
-  /// **'· {activity} · dimanche {service}'**
+  /// **'· {activity} · {service}'**
   String homeCardMetaWithService(String activity, String service);
 
   /// Un geste noté sur l'appareil, pas encore parti. Le tour suivant est ce que le pipeline aurait répondu : on ne peut pas le fabriquer ici sans inventer une phrase d'Urim (D29). L'écran dit donc où en est l'envoi, et rien de plus.
@@ -1467,11 +1785,17 @@ abstract class AppText {
   /// **'Gardé sur cet appareil · {when}'**
   String servedFromDevice(String when);
 
-  /// Qui a signé le découpage de l'unité — « ia-mistral », ou le nom d'un relecteur. Sans cela, une structure générée arriverait sur l'écran du pasteur exactement comme une structure relue par un bibliste.
+  /// Un homme a relu ce découpage et le signe. Sur 4 561 unités du corpus, une seule est dans ce cas au 22/08/2026.
   ///
   /// In fr, this message translates to:
-  /// **'Unité signée {signature}'**
+  /// **'Découpage relu par {signature}'**
   String turnSignature(String signature);
+
+  /// Le cas de 4 552 unités sur 4 561. On ne nomme plus le modèle — le pasteur n’a que faire de « ia-mistral » — mais on dit ce que ça change : personne ne l’a vérifié. Sans cette ligne, une structure générée arriverait à l’écran exactement comme une structure relue par un bibliste.
+  ///
+  /// In fr, this message translates to:
+  /// **'Découpage proposé par l’IA, non relu'**
+  String get turnSignatureMachine;
 
   /// Le decor ambiant replie. Le nombre est dedans exprès : replier n'est pas cacher, et le pasteur doit savoir ce qu'il n'a pas sous les yeux.
   ///
@@ -1587,119 +1911,125 @@ abstract class AppText {
   /// **'Retour disponible'**
   String get stateFeedbackReady;
 
-  /// No description provided for @taskSheetTitle.
+  /// No description provided for @homeRecordStop.
   ///
   /// In fr, this message translates to:
-  /// **'Quelle tâche ?'**
-  String get taskSheetTitle;
+  /// **'Arrêter l\'enregistrement'**
+  String get homeRecordStop;
 
-  /// No description provided for @taskSheetSubtitle.
+  /// Le bandeau qui traverse les deux pages. Il ne disparaît pas quand on change de travail : un pasteur qui va chercher son plan pendant qu'il prêche croirait avoir coupé le micro.
   ///
   /// In fr, this message translates to:
-  /// **'Deux travaux différents, pas deux façons d\'écrire.'**
-  String get taskSheetSubtitle;
+  /// **'Enregistrement'**
+  String get homeCaptureRunning;
 
-  /// No description provided for @taskWriteTitle.
+  /// No description provided for @homeCaptureStop.
   ///
   /// In fr, this message translates to:
-  /// **'Préparer un message'**
-  String get taskWriteTitle;
+  /// **'Arrêter'**
+  String get homeCaptureStop;
 
-  /// No description provided for @taskWriteBody.
+  /// Confirmation à l'arrêt. Dit la durée pour que le pasteur sache que quelque chose a bien été écrit.
   ///
   /// In fr, this message translates to:
-  /// **'Urim t\'accompagne question par question — l\'axe, le texte, les bornes — jusqu\'à ton squelette.'**
-  String get taskWriteBody;
+  /// **'Prédication captée · {duree}'**
+  String homeCaptureSaved(String duree);
 
-  /// No description provided for @taskTranscribeTitle.
+  /// No description provided for @homeCaptureMicRefused.
   ///
   /// In fr, this message translates to:
-  /// **'Transcrire une prédication'**
-  String get taskTranscribeTitle;
+  /// **'Urim a besoin du micro pour enregistrer votre prédication. Autorisez-le dans les réglages de l\'appareil.'**
+  String get homeCaptureMicRefused;
 
-  /// No description provided for @taskTranscribeBody.
+  /// No description provided for @homeCaptureNoMicrophone.
   ///
   /// In fr, this message translates to:
-  /// **'Mise en texte, puis une synthèse que tu valides avant qu\'elle ne soit lue à voix haute.'**
-  String get taskTranscribeBody;
+  /// **'Cet appareil n\'a pas de micro utilisable.'**
+  String get homeCaptureNoMicrophone;
 
-  /// No description provided for @taskTranscribePending.
+  /// No description provided for @homeCaptureStorageFull.
   ///
   /// In fr, this message translates to:
-  /// **'Le moteur de transcription n\'est pas encore retenu. Un exemple transcrit est visible depuis l\'accueil.'**
-  String get taskTranscribePending;
+  /// **'Il n\'y a plus de place pour l\'audio. Libérez quelques centaines de mégaoctets.'**
+  String get homeCaptureStorageFull;
 
-  /// No description provided for @newPreparationTitle.
+  /// Quatre refus, quatre phrases : « refusé » tout court laisse le pasteur devant un bouton mort sans savoir quoi faire.
   ///
   /// In fr, this message translates to:
-  /// **'Nouvelle préparation'**
-  String get newPreparationTitle;
+  /// **'L\'enregistrement n\'a pas pu commencer. Réessayez.'**
+  String get homeCaptureFailed;
 
-  /// No description provided for @newPreparationIntro.
+  /// L'enregistrement s'est arrêté seul — application tuée, batterie vide. La capture apparaît quand même : la faire disparaître serait le pire des silences.
   ///
   /// In fr, this message translates to:
-  /// **'Une référence, une phrase que tu as en tête, ou ce que tu veux dire. Écris comme ça vient.'**
-  String get newPreparationIntro;
+  /// **'Interrompue'**
+  String get homeCaptureInterrupted;
 
-  /// Trois entrées possibles dans le même champ : une référence, une citation, une intention. C'est l'exemple qui le dit, pas un mode à cocher.
+  /// Le compte à rebours des sept jours, porté par la carte. La disparition ne doit surprendre personne.
   ///
   /// In fr, this message translates to:
-  /// **'Romains 8:15 — ou : que l\'amour fraternel continue — ou : je veux parler de la persévérance à des étudiants qui décrochent'**
-  String get newPreparationHint;
+  /// **'audio effacé dans {jours} j'**
+  String homeCaptureAudioLeft(int jours);
 
-  /// No description provided for @newPreparationDictate.
+  /// No description provided for @homeCaptureAudioToday.
   ///
   /// In fr, this message translates to:
-  /// **'Ou dicte — Urim te fera confirmer avant d\'aller plus loin. La dictée attend le moteur de reconnaissance.'**
-  String get newPreparationDictate;
+  /// **'audio effacé aujourd\'hui'**
+  String get homeCaptureAudioToday;
 
-  /// No description provided for @newPreparationServiceSection.
+  /// L'étape 1 s'arrête à la capture : le transcript attend le moteur (Q2). Le dire évite de laisser croire qu'il y a un texte quelque part.
   ///
   /// In fr, this message translates to:
-  /// **'Pour quel dimanche'**
-  String get newPreparationServiceSection;
+  /// **'sur cet appareil, pas encore transcrite'**
+  String get homeCaptureNotSent;
+
+  /// Sous le bouton d'enregistrement inactif. Dit ce qu'il attend plutôt que de disparaître (D13). Les libellés de l'ancienne feuille « quelle tâche ? » sont partis avec elle : la bascule du haut pose la même question sans modale.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le moteur de transcription n\'est pas encore retenu. Les prédications déjà transcrites restent lisibles ici.'**
+  String get homeRecordPending;
+
+  /// No description provided for @newPreparationDictateListening.
+  ///
+  /// In fr, this message translates to:
+  /// **'Urim vous écoute. Appuyez pour arrêter.'**
+  String get newPreparationDictateListening;
+
+  /// No description provided for @newPreparationDictateStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dicter'**
+  String get newPreparationDictateStart;
+
+  /// No description provided for @newPreparationDictateStop.
+  ///
+  /// In fr, this message translates to:
+  /// **'Arrêter la dictée'**
+  String get newPreparationDictateStop;
+
+  /// No description provided for @newPreparationDictateNoEngine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet appareil n\'a pas de reconnaissance vocale. Écrivez votre phrase.'**
+  String get newPreparationDictateNoEngine;
+
+  /// No description provided for @newPreparationDictateMicRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Urim a besoin du micro pour écrire ce que vous dites. Autorisez-le dans les réglages de l\'appareil.'**
+  String get newPreparationDictateMicRefused;
+
+  /// No description provided for @newPreparationDictateFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'La dictée s\'est arrêtée. Réessayez, ou écrivez votre phrase.'**
+  String get newPreparationDictateFailed;
 
   /// No description provided for @newPreparationServiceDate.
   ///
   /// In fr, this message translates to:
   /// **'Date du culte'**
   String get newPreparationServiceDate;
-
-  /// No description provided for @newPreparationServiceDateEmpty.
-  ///
-  /// In fr, this message translates to:
-  /// **'À définir'**
-  String get newPreparationServiceDateEmpty;
-
-  /// No description provided for @newPreparationServiceDateValue.
-  ///
-  /// In fr, this message translates to:
-  /// **'dim. {date}'**
-  String newPreparationServiceDateValue(String date);
-
-  /// No description provided for @newPreparationSpace.
-  ///
-  /// In fr, this message translates to:
-  /// **'Espace'**
-  String get newPreparationSpace;
-
-  /// No description provided for @newPreparationSpacePersonal.
-  ///
-  /// In fr, this message translates to:
-  /// **'Personnel'**
-  String get newPreparationSpacePersonal;
-
-  /// No description provided for @newPreparationSpacePending.
-  ///
-  /// In fr, this message translates to:
-  /// **'Le partage avec une église attend que le rattachement existe.'**
-  String get newPreparationSpacePending;
-
-  /// No description provided for @newPreparationNoModeNotice.
-  ///
-  /// In fr, this message translates to:
-  /// **'Aucun mode à choisir. Le moteur regarde si les mots que tu écris se suivent comme dans l\'Écriture — c\'est l\'ordre des mots qui décide, jamais le vocabulaire.'**
-  String get newPreparationNoModeNotice;
 
   /// No description provided for @newPreparationOpen.
   ///
@@ -1716,13 +2046,13 @@ abstract class AppText {
   /// La reponse a l'etape 5 de Q4. Ouvrir est le seul geste qui ne peut pas attendre le reseau : lire une phrase demande le corpus, et il n'est pas sur l'appareil. Dit la raison, et que le brouillon garde la phrase (D32) — sans quoi le pasteur croirait avoir perdu ce qu'il venait d'ecrire.
   ///
   /// In fr, this message translates to:
-  /// **'Ouvrir demande le réseau : Urim consulte les textes pour lire ta phrase. Elle est gardée — tu la retrouveras ici.'**
+  /// **'Ouvrir demande le réseau : Urim consulte les textes pour lire votre phrase. Elle est gardée — vous la retrouverez ici.'**
   String get newPreparationNeedsNetwork;
 
   /// No description provided for @preparationEmpty.
   ///
   /// In fr, this message translates to:
-  /// **'Pose ta première idée en bas de l\'écran.'**
+  /// **'Posez votre première idée en bas de l\'écran.'**
   String get preparationEmpty;
 
   /// No description provided for @preparationLoadFailed.
@@ -1734,7 +2064,7 @@ abstract class AppText {
   /// No description provided for @preparationComposerHint.
   ///
   /// In fr, this message translates to:
-  /// **'Écris ta réponse, ou choisis…'**
+  /// **'Écrivez votre réponse, ou choisissez…'**
   String get preparationComposerHint;
 
   /// No description provided for @preparationDictationSoon.
@@ -1788,7 +2118,7 @@ abstract class AppText {
   /// No description provided for @lociUnavailable.
   ///
   /// In fr, this message translates to:
-  /// **'La liste des loci n\'est pas encore écrite. Les trois axes proposés viennent de ta phrase ; les sept autres attendent que le moteur existe.'**
+  /// **'La liste des loci n\'est pas encore écrite. Les trois axes proposés viennent de votre phrase ; les sept autres attendent que le moteur existe.'**
   String get lociUnavailable;
 
   /// No description provided for @stanceSubject.
@@ -1860,7 +2190,7 @@ abstract class AppText {
   /// No description provided for @transcriptionSectionConvoked.
   ///
   /// In fr, this message translates to:
-  /// **'Ce que tu as convoqué'**
+  /// **'Ce que vous avez convoqué'**
   String get transcriptionSectionConvoked;
 
   /// No description provided for @transcriptionAllAcknowledged.
@@ -1890,7 +2220,7 @@ abstract class AppText {
   /// No description provided for @transcriptionPlanned.
   ///
   /// In fr, this message translates to:
-  /// **'{reference} — prévu dans ta préparation'**
+  /// **'{reference} — prévu dans votre préparation'**
   String transcriptionPlanned(String reference);
 
   /// No description provided for @transcriptionUnplanned.
@@ -1956,19 +2286,19 @@ abstract class AppText {
   /// Promesse tenue par le code : la lecture reste fermée tant que le drapeau est faux.
   ///
   /// In fr, this message translates to:
-  /// **'Tant que tu n\'as pas validé, cette synthèse n\'existe que pour toi. Aucun membre ne la voit, aucune voix ne la lit.'**
+  /// **'Tant que vous n\'avez pas validé, cette synthèse n\'existe que pour vous. Aucun membre ne la voit, aucune voix ne la lit.'**
   String get synthesisSealBodyDraft;
 
   /// No description provided for @synthesisSealTitleValidated.
   ///
   /// In fr, this message translates to:
-  /// **'Validée par toi.'**
+  /// **'Validée par vous.'**
   String get synthesisSealTitleValidated;
 
   /// No description provided for @synthesisSealBodyValidated.
   ///
   /// In fr, this message translates to:
-  /// **'Elle peut être lue à voix haute. Tu restes le seul à pouvoir la modifier.'**
+  /// **'Elle peut être lue à voix haute. Vous restez le seul à pouvoir la modifier.'**
   String get synthesisSealBodyValidated;
 
   /// No description provided for @synthesisSectionCapsules.
@@ -1986,7 +2316,7 @@ abstract class AppText {
   /// No description provided for @synthesisCapsuleSource.
   ///
   /// In fr, this message translates to:
-  /// **'Voir où c\'est dit dans ta prédication'**
+  /// **'Voir où c\'est dit dans votre prédication'**
   String get synthesisCapsuleSource;
 
   /// No description provided for @synthesisSectionVerse.
@@ -1998,7 +2328,7 @@ abstract class AppText {
   /// No description provided for @synthesisModelNotice.
   ///
   /// In fr, this message translates to:
-  /// **'Les capsules sont écrites par un modèle à partir de ta transcription. Les versets, eux, viennent de la Bible — jamais du modèle. Relis avant de valider.'**
+  /// **'Les capsules sont écrites par un modèle à partir de votre transcription. Les versets, eux, viennent de la Bible — jamais du modèle. Relisez avant de valider.'**
   String get synthesisModelNotice;
 
   /// No description provided for @synthesisValidate.
@@ -2040,7 +2370,7 @@ abstract class AppText {
   /// No description provided for @synthesisReadAloudOpen.
   ///
   /// In fr, this message translates to:
-  /// **'La lecture reprend la synthèse telle que tu l\'as validée.'**
+  /// **'La lecture reprend la synthèse telle que vous l\'avez validée.'**
   String get synthesisReadAloudOpen;
 
   /// No description provided for @synthesisVoiceComing.

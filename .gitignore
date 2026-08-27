@@ -43,3 +43,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Un depot Flutter n'a pas de paquets npm. Ce fichier est tombe ici par
+# accident — vide, 83 octets, aucun paquet — et le commiter ferait croire a
+# une dependance qui n'existe pas.
+package-lock.json
+node_modules/

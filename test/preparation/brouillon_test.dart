@@ -15,7 +15,7 @@ import 'package:urim/domain/entities/preparation/gesture_outcome.dart';
 import 'package:urim/domain/repositories/study_repository.dart';
 import 'package:urim/presentation/common/draft_keeper.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
-import 'package:urim/presentation/preparation/new_preparation_page.dart';
+import 'package:urim/presentation/home/widgets/preparation_composer.dart';
 import 'package:urim/presentation/preparation/preparation_page.dart';
 import '../support/fake_documents.dart';
 import '../support/pump_app.dart';
@@ -194,7 +194,7 @@ void main() {
               _DepotQuiRefuse(ToursReels.etude(ToursReels.ouverture)),
             ),
           ],
-          child: wrapScreen(const NewPreparationPage()),
+          child: wrapScreen(Scaffold(body: PreparationComposer(onOpened: (_) {}))),
         ),
       );
       await tester.pumpAndSettle();
@@ -204,7 +204,7 @@ void main() {
         'l\'amour fraternel n\'existe plus dans l\'eglise',
       );
       await tester.pump(const Duration(milliseconds: 400));
-      await tester.tap(find.text(texte.newPreparationOpen));
+      await tester.tap(find.byTooltip(texte.newPreparationOpen));
       await tester.pumpAndSettle();
 
       expect(find.text(texte.newPreparationNeedsNetwork), findsOneWidget);

@@ -197,6 +197,20 @@ class _OtpPageState extends ConsumerState<OtpPage> {
                 alignment: Alignment.centerRight,
                 child: _Countdown(remaining: _remaining, failure: state.failure),
               ),
+              // ⚠️ **Un refus doit orienter.** « Ce numéro est déjà inscrit »
+              // est vrai et sans issue : le pasteur lit qu'il doit se
+              // connecter, et rien à l'écran ne l'y emmène. La porte s'ouvre
+              // ici, avec son numéro déjà saisi.
+              if (state.failure?.code == AuthErrorCodes.phoneAlreadyRegistered)
+                TextButton(
+                  onPressed: () {
+                    ref
+                        .read(authFlowViewModelProvider.notifier)
+                        .setDoor(AuthDoor.signIn);
+                    context.goNamed(AppRoutes.signInSecretCodeName);
+                  },
+                  child: Text(text.authGoToSignIn),
+                ),
               const SizedBox(height: AppSpacing.xl),
               FilledButton(
                 onPressed: state.isSubmitting || !complete || expired

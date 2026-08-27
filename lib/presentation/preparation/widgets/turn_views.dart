@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:urim/domain/entities/preparation/turn.dart';
 import 'package:urim/l10n/generated/app_text.dart';
+import 'package:urim/presentation/common/domain_labels.dart';
 import 'package:urim/presentation/common/ruled_content.dart';
 import 'package:urim/presentation/preparation/widgets/folded_section.dart';
 import 'package:urim/presentation/theme/app_colors.dart';
@@ -158,7 +159,7 @@ class TurnView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: AppSpacing.xl),
               child: Text(
-                AppText.of(context).turnSignature(signature),
+                _signature(AppText.of(context), signature),
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: colors.textSecondary,
                 ),
@@ -173,6 +174,23 @@ class TurnView extends StatelessWidget {
 
 /// Le `switch` est exhaustif sur un type scellé : un bloc nouveau fera échouer
 /// la compilation ici, ce qui est exactement le rappel voulu.
+/// Ce que dit la signature d'une unité — **sans nommer le modèle**.
+///
+/// 🔴 Le 22/08 sur téléphone : « Unité signée ia-mistral ». Deux défauts en
+/// quatre mots. Le nom du modèle n'apprend rien au pasteur ; et « signée »
+/// laisse croire qu'un travail a été relu, alors que c'est le contraire.
+///
+/// Le chiffre qui justifie cette ligne : **4 552 unités sur 4 561 sont
+/// produites par le modèle et n'ont jamais été relues.** Une seule porte un nom
+/// d'homme. La retirer rendrait les deux indiscernables ; la garder telle
+/// quelle mentait sur ce qu'elle montrait.
+/// Le libellé est propre au fil ; **le jugement ne l'est pas** — il vit dans
+/// `signedByMachine`, avec la recherche, parce que deux copies de cette règle
+/// avaient déjà divergé.
+String _signature(AppText text, String signature) => signedByMachine(signature)
+    ? text.turnSignatureMachine
+    : text.turnSignature(signature);
+
 class _BlockView extends StatelessWidget {
   const _BlockView({
     required this.block,

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:urim/domain/entities/preparation/thread_line.dart';
 import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/domain/entities/preparation/turn.dart';
@@ -29,6 +30,7 @@ final class Study extends Equatable {
     this.context = const [],
     this.elements = const [],
     this.supports = const [],
+    this.fil = const [],
   });
 
   final String id;
@@ -87,6 +89,11 @@ final class Study extends Equatable {
   /// Vide tant qu'il n'a rien posé — et c'est l'état normal d'une préparation
   /// qui vient de s'ouvrir. Le livrable, lui, en exige au moins un point.
   final List<PlanElement> elements;
+
+  /// Ce qui s'est dit, dans l'ordre — **lu, jamais rejoué**.
+  ///
+  /// 🔴 Sans lui, la conversation disparaissait dès qu'on quittait l'écran.
+  final List<ThreadLine> fil;
 
   /// Le plan porte-t-il au moins un point ? C'est le seuil du document : « les
   /// diapositives mettent en page ce que vous avez écrit ; le moteur ne l'écrit

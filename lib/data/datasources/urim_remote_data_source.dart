@@ -2,10 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:urim/core/network/dio_error_mapper.dart';
 import 'package:urim/data/datasources/turn_cache_local_data_source.dart';
 import 'package:urim/domain/entities/bible/passage_detail.dart';
+import 'package:urim/domain/entities/preparation/articulation.dart';
+import 'package:urim/domain/entities/preparation/preached.dart';
 import 'package:urim/domain/entities/preparation/deliverable.dart';
 import 'package:urim/domain/entities/preparation/plan_element.dart';
 import 'package:urim/domain/entities/preparation/preparation.dart';
 import 'package:urim/domain/entities/preparation/study.dart';
+import 'package:urim/domain/entities/preparation/thread_line.dart';
 import 'package:urim/domain/entities/preparation/study_summary.dart';
 import 'package:urim/domain/entities/preparation/turn.dart';
 
@@ -48,6 +51,108 @@ final class UrimRemoteDataSource {
         'raw_input': rawInput,
         if (serviceDate != null) 'service_date': _dayOf(serviceDate),
       }));
+
+  /// `POST /urim/studies/{id}/preached` — « j'ai prêché celle-ci ».
+  ///
+  /// ⚠️ **Le jour par défaut est aujourd'hui, jamais `service_date`.** Le
+  /// serveur le pose ainsi, et pour une raison qu'il faut respecter côté écran :
+  /// *une préparation datée du dimanche prochain n'a pas été prêchée pour
+  /// autant*. Rien ne s'archive parce qu'une date est passée.
+  Future<PreachedSermon> markPreached({
+    required String studyId,
+    DateTime? preachedOn,
+    String captureKind = 'saisie',
+  }) async {
+    final json = await _post('/urim/studies/$studyId/preached', {
+      if (preachedOn != null) 'preached_on': _dayOf(preachedOn),
+      'capture_kind': captureKind,
+    });
+
+    // ⚠️ **Un accusé illisible n'est pas un échec.** L'écriture a eu lieu côté
+    // serveur ; lever ici afficherait au pasteur « Null check operator used on
+    // a null value » pour une archive qui est bien enregistrée. On reconstruit
+    // donc le reçu **avec ce qu'on a envoyé** — rien n'est inventé, et la
+    // prochaine lecture de l'archive dira la vérité complète.
+    return _preached(json) ??
+        PreachedSermon(
+          id: '',
+          preachedOn: preachedOn ?? DateTime.now(),
+          reference: '',
+          preparationId: studyId,
+          captureKind: captureKind,
+        );
+  }
+
+  /// `POST /urim/preached` — un sermon prêché ailleurs, ou avant Dorea.
+  ///
+  /// Sans lui, l'archive ne mesurerait que ce qui est passé par l'outil — *ce
+  /// qui n'est pas la même chose que le ministère de quelqu'un*.
+  ///
+  /// La référence part **dans la notation du pasteur** : le serveur lit
+  /// « Hb 2v29 » comme « Jn14v28 », et vérifie contre le corpus. Un refus dit ce
+  /// qui manque au corpus, jamais ce qui manque au pasteur — l'écran rend donc
+  /// son message tel quel.
+  Future<PreachedSermon> recordPreached({
+    required String reference,
+    required DateTime preachedOn,
+    String? churchId,
+    String? axisCode,
+    String? theme,
+    String captureKind = 'import',
+  }) async {
+    final json = await _post('/urim/preached', {
+      'reference': reference,
+      'preached_on': _dayOf(preachedOn),
+      'church_id': ?churchId,
+      'axis_code': ?axisCode,
+      'theme': ?theme,
+      'capture_kind': captureKind,
+    });
+
+    // Même règle que ci-dessus : l'écriture a eu lieu, le reçu se reconstruit.
+    return _preached(json) ??
+        PreachedSermon(
+          id: '',
+          preachedOn: preachedOn,
+          reference: reference,
+          axisCode: axisCode,
+          theme: theme,
+          captureKind: captureKind,
+        );
+  }
+
+  /// `GET /urim/preached` — l'archive, la plus récente d'abord.
+  Future<List<PreachedSermon>> listPreached() async {
+    final rows = await _get<List<dynamic>>('/urim/preached') ?? const [];
+
+    return [
+      for (final row in rows)
+        if (_preached(row as Map<String, dynamic>?) case final PreachedSermon s)
+          s,
+    ];
+  }
+
+  /// `GET /urim/preached/couverture` — où le pasteur est allé dans l'Écriture.
+  ///
+  /// ⚠️ **Des faits, aucune consigne.** Le serveur le pose dans son contrat :
+  /// *un rayon vide se montre, il ne se comble pas*. L'écran qui lira ceci ne
+  /// propose jamais de sermon — ce serait mesurer la fidélité d'un pasteur.
+  Future<PreachingCoverage> preachingCoverage() async {
+    final json = await _get<Map<String, dynamic>>('/urim/preached/couverture');
+
+    return PreachingCoverage(
+      books: [
+        for (final row in (json?['books'] as List<dynamic>? ?? const []))
+          if (_bookCoverage(row as Map<String, dynamic>) case final BookCoverage b)
+            b,
+      ],
+      axes: [
+        for (final row in (json?['axes'] as List<dynamic>? ?? const []))
+          if (_axisTally(row as Map<String, dynamic>) case final AxisTally a) a,
+      ],
+      booksUntouched: (json?['books_untouched'] as num?)?.toInt() ?? 0,
+    );
+  }
 
   /// `GET /urim/studies/{id}` — la trace est rejouée, jamais relue.
   Future<Study> getStudy(String studyId) async =>
@@ -124,6 +229,47 @@ final class UrimRemoteDataSource {
               'body': element.body,
             },
         ],
+      }));
+
+  /// `POST /urim/studies/{id}/thread/{entryId}/promotion` — la note devient un
+  /// point.
+  ///
+  /// Le serveur refuse la seconde reprise, et refuse une note sans adresse en
+  /// disant laquelle il attend. Les deux refus sont des phrases, pas des codes.
+  Future<Study> promote({
+    required String studyId,
+    required String entryId,
+    String? elementCode,
+    int? ordinal,
+  }) async =>
+      _study(await _post(
+        '/urim/studies/$studyId/thread/$entryId/promotion',
+        {
+          'element_code': ?elementCode,
+          'ordinal': ?ordinal,
+        },
+      ));
+
+  /// `POST /urim/studies/{id}/articulations` — faire articuler **un** point.
+  ///
+  /// Le serveur travaille sur le point **tel qu'il l'a en base**, désigné par
+  /// son code et son rang. Deux conséquences que l'appelant doit tenir :
+  ///
+  /// - il faut avoir **enregistré** le plan avant de demander, sinon la
+  ///   proposition porte sur une phrase que le pasteur vient de remplacer ;
+  /// - redemander sur un point inchangé ne coûte rien : le serveur garde son
+  ///   mémo sur une empreinte du texte et rend la même réponse.
+  ///
+  /// ⚠️ **`disponible: false` n'est pas une erreur** — pas de modèle branché,
+  /// plafond atteint, ou point vide. L'atelier fonctionne sans.
+  Future<Articulation> articulate({
+    required String studyId,
+    required String elementCode,
+    required int ordinal,
+  }) async =>
+      _articulation(await _post('/urim/studies/$studyId/articulations', {
+        'element_code': elementCode,
+        'ordinal': ordinal,
       }));
 
   /// `POST /urim/studies/{id}/deliverable` — soumettre ce qui sortira.
@@ -280,6 +426,19 @@ final class UrimRemoteDataSource {
     }
   }
 
+  /// Un corps absent n'est **pas** une proposition vide : c'est une réponse
+  /// qu'on n'a pas comprise, et la seule lecture sûre est « indisponible ».
+  Articulation _articulation(Map<String, dynamic>? json) {
+    if (json == null) return const Articulation.indisponible();
+
+    return Articulation(
+      body: json['body'] as String? ?? '',
+      transition: json['transition'] as String? ?? '',
+      model: json['model'] as String? ?? '',
+      available: json['disponible'] == true,
+    );
+  }
+
   Deliverable _deliverable(Map<String, dynamic>? json) {
     final charge = json ?? const {};
 
@@ -406,6 +565,17 @@ Study _studyFromJson(Map<String, dynamic> json) => Study(
             body: e['body'] as String?,
           ),
       ],
+      fil: [
+        for (final l in json['fil'] as List<dynamic>? ?? const [])
+          ThreadLine(
+            id: (l as Map<String, dynamic>)['id'] as String? ?? '',
+            speaker: l['speaker'] as String? ?? 'urim',
+            body: l['body'] as String? ?? '',
+            elementCode: l['element_code'] as String?,
+            elementOrdinal: (l['element_ordinal'] as num?)?.toInt(),
+            promue: l['promue'] == true,
+          ),
+      ],
       supports: [
         for (final s in json['supports'] as List<dynamic>? ?? const [])
           SupportText(
@@ -527,6 +697,63 @@ ActionItem _actionFromJson(Map<String, dynamic> json) => ActionItem(
       enabled: json['enabled'] == true,
       unavailableReason: json['unavailable_reason'] as String? ?? '',
     );
+
+/// Une ligne d'archive, ou nulle si elle n'a pas de jour.
+///
+/// ⚠️ **La date n'est jamais inventée.** Partout ailleurs on se rabat sur un
+/// défaut — `lastActivity` prend l'ouverture faute de tour. Ici, non : la date
+/// est ce qui **ordonne** l'archive et ce qui nourrit la couverture. Poser
+/// « aujourd'hui » sur un sermon de l'an dernier le remonterait en tête et
+/// fausserait le canon. Une ligne sans jour est donc écartée, sans bruit —
+/// comme un dossier sans fragment n'est pas une capture.
+PreachedSermon? _preached(Map<String, dynamic>? json) {
+  if (json == null) return null;
+
+  final jour = _dateFrom(json['preached_on']);
+  final id = json['id'] as String?;
+  if (jour == null || id == null) return null;
+
+  return PreachedSermon(
+    id: id,
+    preachedOn: jour,
+    reference: json['reference'] as String? ?? '',
+    pericopeLabel: json['pericope_label'] as String?,
+    // Nul = **non rangé**, et l'écran doit le nommer plutôt que de cacher la
+    // ligne : hors unité curée, il n'y a aucun axe à retenir.
+    axisCode: json['axis_code'] as String?,
+    theme: json['theme'] as String?,
+    captureKind: json['capture_kind'] as String?,
+    preparationId: json['preparation_id'] as String?,
+    churchId: json['church_id'] as String?,
+  );
+}
+
+BookCoverage? _bookCoverage(Map<String, dynamic> json) {
+  final jour = _dateFrom(json['last_preached_on']);
+  final livre = json['book'] as String?;
+  if (jour == null || livre == null) return null;
+
+  return BookCoverage(
+    book: livre,
+    // Deux nombres, jamais additionnés : des lieux distincts d'un côté, des
+    // événements de l'autre.
+    passages: (json['passages'] as num?)?.toInt() ?? 0,
+    preachings: (json['preachings'] as num?)?.toInt() ?? 0,
+    lastPreachedOn: jour,
+  );
+}
+
+AxisTally? _axisTally(Map<String, dynamic> json) {
+  final jour = _dateFrom(json['last_preached_on']);
+  if (jour == null) return null;
+
+  return AxisTally(
+    // Nul se garde : c'est le rayon « non rangé », et il s'affiche.
+    axisCode: json['axis_code'] as String?,
+    preachings: (json['preachings'] as num?)?.toInt() ?? 0,
+    lastPreachedOn: jour,
+  );
+}
 
 DateTime? _dateFrom(Object? value) =>
     value is String ? DateTime.tryParse(value)?.toLocal() : null;

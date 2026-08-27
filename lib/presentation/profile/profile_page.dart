@@ -9,7 +9,7 @@ import 'package:urim/domain/entities/account/user_profile.dart';
 import 'package:urim/domain/entities/auth/phone_number.dart';
 import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/presentation/auth/auth_flow_view_model.dart';
-import 'package:urim/presentation/common/french_dates.dart';
+import 'package:urim/core/text/french_dates.dart';
 import 'package:urim/presentation/common/section_card.dart';
 import 'package:urim/presentation/profile/profile_view_model.dart';
 import 'package:urim/presentation/profile/sign_out_view_model.dart';

@@ -1,0 +1,18 @@
+# Ce qui ne tourne pas quand on lance la suite.
+#
+# `test/live/` vise le **vrai** serveur : il lui faut une machine qui écoute et
+# un jeton passé au build. Son en-tête le disait déjà — *« exclu de la suite »* —
+# mais rien ne l'excluait : `flutter test test/` les prenait, et six échecs
+# rouges accompagnaient chaque exécution honnête.
+#
+# 🔴 Ce que ça coûtait, et ce n'est pas six lignes de sortie : une suite qui ne
+# peut jamais être verte n'apprend plus rien. On cesse de la lire, et le jour où
+# un vrai test casse, il se range parmi les rouges habituels.
+#
+# Pour les lancer, quand un serveur écoute :
+#
+#     python scripts/urim_dev_login.py          # côté back-dorea, un jeton local
+#     flutter test test/live --tags live --dart-define=TOKEN=eyJ...
+tags:
+  live:
+    skip: "hors machine — lancer avec --tags live et --dart-define=TOKEN=..."
