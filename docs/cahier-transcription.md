@@ -109,9 +109,20 @@ d'une pièce.
 
 ```
   enregistrement → édition → LA PIÈCE ├──► publication (Dorea app)
-                                      ├──► transcription (si besoin) ──► synthèse ──► epub
+                                      ├──► transcription ──► synthèse ──► epub
+                                      │    (sur la pièce, jamais le brut)
                                       └──► l'équipe Dorea écoute ─────► interprétation
 ```
+
+⛔ **La transcription part de la pièce, jamais de la matière brute** (D71). Le
+découpage est le consentement ; transcrire le brut le contournerait par la porte
+de derrière. Le port `Transcriber` change donc de sujet : il prendra une pièce,
+pas les fragments d'une capture.
+
+🔴 **Et le pasteur voit le transcript *et* la synthèse, jamais la synthèse
+seule.** C'est une parade, pas du confort : il sait ce qu'il a prêché, donc il
+repère une invention dans le texte — là où une synthèse seule la lui servirait
+fluide et plausible.
 
 | Étape | État |
 |---|---|
