@@ -1647,5 +1647,49 @@
   "editorSafety": "La matière reste entière. Tailler écrit une pièce à côté ; vous pouvez recommencer autant de fois qu'il faut.",
   "@editorSafety": {
     "description": "Dit que le geste est réversible, parce qu'un pasteur qui craint d'effacer son culte n'osera pas couper."
+  },
+  "editorName": "Nom de la pièce",
+  "@editorName": {
+    "description": "Libellé du champ de titre. Sans nom, deux pièces d'un même dimanche ne se distinguent pas dans une liste."
+  },
+  "editorNameHint": "Prédication, prière…",
+  "@editorNameHint": {
+    "description": "Exemple de nom, tiré du dimanche réel d'un pasteur : une prédication puis une prière."
+  },
+  "piecesTitle": "Les pièces taillées",
+  "@piecesTitle": {
+    "description": "Titre de la liste des pièces d'un culte."
+  },
+  "piecesEmpty": "Rien n'a encore été taillé dans ce culte. L'audio brut disparaît au septième jour ; une pièce, non.",
+  "@piecesEmpty": {
+    "description": "Liste vide — et elle dit l'enjeu du délai plutôt que de constater le vide."
+  },
+  "piecesCut": "Tailler une pièce",
+  "@piecesCut": {
+    "description": "Ouvre l'éditeur depuis le culte."
+  },
+  "piecesFrom": "de {from} à {to}",
+  "@piecesFrom": {
+    "description": "D'où vient une pièce dans le culte d'origine.",
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "piecesPlay": "Écouter",
+  "@piecesPlay": {
+    "description": "Joue une pièce."
+  },
+  "piecesStop": "Arrêter",
+  "@piecesStop": {
+    "description": "Arrête la lecture d'une pièce."
+  },
+  "piecesSurvives": "Ces pièces survivent à la purge du septième jour.",
+  "@piecesSurvives": {
+    "description": "Dit ce que le pasteur ne peut pas deviner : la matière disparaît, les pièces restent."
   }
 }

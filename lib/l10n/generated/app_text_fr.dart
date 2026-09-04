@@ -1878,4 +1878,35 @@ class AppTextFr extends AppText {
   @override
   String get editorSafety =>
       'La matière reste entière. Tailler écrit une pièce à côté ; vous pouvez recommencer autant de fois qu\'il faut.';
+
+  @override
+  String get editorName => 'Nom de la pièce';
+
+  @override
+  String get editorNameHint => 'Prédication, prière…';
+
+  @override
+  String get piecesTitle => 'Les pièces taillées';
+
+  @override
+  String get piecesEmpty =>
+      'Rien n\'a encore été taillé dans ce culte. L\'audio brut disparaît au septième jour ; une pièce, non.';
+
+  @override
+  String get piecesCut => 'Tailler une pièce';
+
+  @override
+  String piecesFrom(String from, String to) {
+    return 'de $from à $to';
+  }
+
+  @override
+  String get piecesPlay => 'Écouter';
+
+  @override
+  String get piecesStop => 'Arrêter';
+
+  @override
+  String get piecesSurvives =>
+      'Ces pièces survivent à la purge du septième jour.';
 }

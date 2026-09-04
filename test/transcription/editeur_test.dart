@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:urim/core/audio/capture_playback.dart';
 import 'package:urim/core/audio/piece_cutter.dart';
+import 'package:urim/core/audio/piece_store.dart';
 import 'package:urim/core/audio/sermon_capture.dart';
 import 'package:urim/core/audio/track_player.dart';
 import 'package:urim/core/audio/waveform.dart';
@@ -73,6 +74,9 @@ void main() {
           pieceCutterProvider.overrideWithValue(
             PieceCutter(directory: () async => racine),
           ),
+          pieceStoreProvider.overrideWithValue(
+            PieceStore(directory: () async => racine),
+          ),
           localCapturesProvider.overrideWith(
             (ref) async => [
               CapturedSermon(
@@ -104,7 +108,7 @@ void main() {
       tester.element(find.byType(PieceEditorPage)),
     );
     await tester.runAsync(
-      () => conteneur.read(pieceEditorProvider(culte.path).future),
+      () => conteneur.read(pieceEditorProvider((captureId: 'c', chemin: culte.path)).future),
     );
     await tester.pumpAndSettle();
 
@@ -135,7 +139,7 @@ void main() {
     );
 
     // Les deux bornes au même endroit : il n'y a plus de pièce.
-    final vm = modele.read(pieceEditorProvider(culte.path).notifier)
+    final vm = modele.read(pieceEditorProvider((captureId: 'c', chemin: culte.path)).notifier)
       ..poserDebut()
       ..poserFin();
     await tester.pumpAndSettle();
@@ -166,7 +170,7 @@ void main() {
     final conteneur = ProviderScope.containerOf(
       tester.element(find.byType(PieceEditorPage)),
     );
-    final vm = conteneur.read(pieceEditorProvider(culte.path).notifier);
+    final vm = conteneur.read(pieceEditorProvider((captureId: 'c', chemin: culte.path)).notifier);
 
     await vm.allerA(const Duration(seconds: 2));
     await tester.pumpAndSettle();
@@ -185,7 +189,7 @@ void main() {
     final conteneur = ProviderScope.containerOf(
       tester.element(find.byType(PieceEditorPage)),
     );
-    final vm = conteneur.read(pieceEditorProvider(culte.path).notifier);
+    final vm = conteneur.read(pieceEditorProvider((captureId: 'c', chemin: culte.path)).notifier);
 
     await vm.allerA(const Duration(seconds: 1));
     vm.poserDebut();
@@ -195,15 +199,26 @@ void main() {
 
     // Tailler écrit vraiment sur le disque : la future est créée dans le temps
     // réel, sinon l'horloge factice du test ne pomperait jamais sa fin.
-    final chemin = await tester.runAsync(vm.tailler);
+    final chemin = await tester.runAsync(() => vm.tailler(titre: 'La priere'));
     await tester.pumpAndSettle();
 
     expect(chemin, isNotNull);
-    expect(File(chemin!).existsSync(), isTrue);
+    expect(chemin!.title, 'La priere');
+    expect(chemin.captureId, 'c');
+    expect(chemin.duration, const Duration(seconds: 3));
+    expect(File(chemin.path).existsSync(), isTrue);
     expect(
-      File(chemin).lengthSync(),
+      File(chemin.path).lengthSync(),
       CaptureFormat.wavHeaderBytes + 3 * CaptureFormat.bytesPerSecond,
     );
+
+    // 🔴 La piece est rangee : son compagnon la rend listable, et elle porte le
+    // nom que le pasteur a ecrit plutot qu'un identifiant.
+    final rangees = await tester.runAsync(
+      () => PieceStore(directory: () async => racine).forCapture('c'),
+    );
+    expect(rangees, hasLength(1));
+    expect(rangees!.single.title, 'La priere');
 
     // 🔴 La matière est intacte : on peut recommencer autant qu'il faut.
     expect(
@@ -221,7 +236,7 @@ void main() {
     final conteneur = ProviderScope.containerOf(
       tester.element(find.byType(PieceEditorPage)),
     );
-    final vm = conteneur.read(pieceEditorProvider(culte.path).notifier);
+    final vm = conteneur.read(pieceEditorProvider((captureId: 'c', chemin: culte.path)).notifier);
 
     // La prédication : du début à la troisième seconde.
     await vm.allerA(const Duration(seconds: 3));

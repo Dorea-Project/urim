@@ -191,24 +191,37 @@ sans les chants ni le bruit du début.
 
 ---
 
-## 4. La pièce comme objet de premier rang
+## 4. La pièce comme objet de premier rang — ✅ **côté application, le 06/09**
 
-C'est l'étape qui coûte le plus, et tout ce qui suit en dépend.
+**Livré** : `SermonPiece`, `PieceStore`, le titre saisi dans l'éditeur, et la
+liste des pièces dans l'onglet « sortie » d'un culte — qui n'attendait jusque-là
+qu'une synthèse validée qui ne viendra pas.
 
-**Côté application** — un modèle et un magasin, sur le patron de
-`voice_track_store` : un index tenu à côté du disque est **assumé** ici, parce
-qu'aucune promesse de purge ne pèse sur la pièce (c'est la règle de
-`CaptureStore` qui ne s'applique pas, pas une entorse).
+Le magasin suit le patron de `voice_track_store` : un compagnon JSON à côté de
+l'audio, et **l'audio fait juge** — un compagnon orphelin ne rend pas de pièce,
+parce que l'offrir à l'écoute promettrait un son qui n'existe plus.
 
-**Côté serveur** — une table `urim_piece` : la capture d'origine, les bornes,
-le titre, l'état, la date de publication.
+🔴 **Un index tenu à côté du disque est assumé ici**, alors que `CaptureStore` le
+refuse. Sa règle protège une promesse de suppression : une application qui croit
+avoir effacé un audio encore présent ment sur quelque chose de grave. **Cette
+promesse n'existe pas pour une pièce** — rien n'y expire, le seul effacement est
+demandé. Ce n'est pas une entorse, c'est une règle qui ne s'applique pas.
+
+**Un choix d'interface** : le titre n'est pas obligatoire. Imposer un nom avant
+de couper mettrait une question entre le pasteur et son geste ; à défaut on
+prend les bornes, deux pièces restent distinguables, et il renomme quand il
+veut. Le champ se vide après chaque coupe — « prière » collé à la prédication
+serait une erreur qu'on ne verrait qu'après publication.
+
+### Ce qui reste de l'étape 4 — **côté serveur**
+
+Une table `urim_piece` : la capture d'origine, les bornes, le titre, l'état, la
+date de publication. Elle ne devient nécessaire qu'à l'étape 6, quand une pièce
+doit exister ailleurs que sur le téléphone.
 
 ⚠️ **Et une contrainte à desserrer** : `urim_reflection.capture_id` est **unique
 et non nul** — un Retour par culte. Un dimanche donne maintenant plusieurs
 pièces. C'est une migration, pas un réglage.
-
-**Sortie mesurable :** un dimanche produit deux pièces nommées, qui survivent à
-la purge du brut au septième jour.
 
 ---
 

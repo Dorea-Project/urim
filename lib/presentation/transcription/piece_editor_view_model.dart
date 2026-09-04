@@ -4,9 +4,12 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:urim/core/audio/capture_playback.dart';
 import 'package:urim/core/audio/piece_cutter.dart';
+import 'package:urim/core/audio/piece_store.dart';
 import 'package:urim/core/audio/track_player.dart';
 import 'package:urim/core/audio/waveform.dart';
 import 'package:urim/core/id/id_generator_provider.dart';
+import 'package:urim/core/time/clock_provider.dart';
+import 'package:urim/domain/entities/transcription/sermon_piece.dart';
 
 /// Ce que l'éditeur montre, et où il en est.
 final class EditeurState extends Equatable {
@@ -55,8 +58,8 @@ final class EditeurState extends Equatable {
 
   final PlaybackRefusal? refus;
 
-  /// Le chemin de la dernière pièce taillée, pour la dire à l'écran.
-  final String? derniere;
+  /// La dernière pièce taillée, pour la dire à l'écran.
+  final SermonPiece? derniere;
 
   Duration get fenetreFin {
     final fin = fenetreDebut + fenetreEtendue;
@@ -85,7 +88,7 @@ final class EditeurState extends Equatable {
     String? chemin,
     PlaybackRefusal? refus,
     bool effacerRefus = false,
-    String? derniere,
+    SermonPiece? derniere,
     bool effacerDerniere = false,
   }) =>
       EditeurState(
@@ -137,9 +140,12 @@ final class EditeurState extends Equatable {
 /// seule chose irréversible du chantier reste la purge, et elle ne dépend pas
 /// de cet écran.
 final class PieceEditorViewModel extends AsyncNotifier<EditeurState> {
-  PieceEditorViewModel(this.cheminCapture);
+  PieceEditorViewModel(this.cible);
 
-  final String cheminCapture;
+  /// Le culte visé — **son identifiant autant que son dossier**. La pièce doit
+  /// dire de quel culte elle vient, et elle le dira encore quand le dossier
+  /// aura été purgé.
+  final CibleEditeur cible;
 
   StreamSubscription<Duration>? _position;
   StreamSubscription<void>? _fin;
@@ -166,10 +172,10 @@ final class PieceEditorViewModel extends AsyncNotifier<EditeurState> {
     });
 
     final onde =
-        await ref.read(waveformDigestProvider).preparer(cheminCapture) ??
+        await ref.read(waveformDigestProvider).preparer(cible.chemin) ??
             Waveform.vide;
     final chemin =
-        await ref.read(capturePlaybackProvider).preparer(cheminCapture);
+        await ref.read(capturePlaybackProvider).preparer(cible.chemin);
 
     _position?.cancel();
     _position = lecteur.onPosition.listen((position) {
@@ -330,8 +336,14 @@ final class PieceEditorViewModel extends AsyncNotifier<EditeurState> {
     ));
   }
 
-  /// Écrit la pièce. Rend son chemin, ou `null` si rien n'a été taillé.
-  Future<String?> tailler() async {
+  /// Écrit la pièce, puis la range. Rend `null` si rien n'a été taillé.
+  ///
+  /// ⚠️ **Deux gestes, dans cet ordre, et l'ordre compte.** Le tailleur écrit
+  /// les octets ; le magasin écrit le compagnon qui leur donne un nom. Si le
+  /// second échoue, il reste un `.wav` orphelin que `PieceStore` ignore — une
+  /// pièce invisible plutôt qu'une pièce sans nom. L'inverse aurait laissé un
+  /// nom qui promet un son absent.
+  Future<SermonPiece?> tailler({required String titre}) async {
     final courant = state.value;
     if (courant == null || !courant.selectionUtile || courant.taille) {
       return null;
@@ -339,16 +351,32 @@ final class PieceEditorViewModel extends AsyncNotifier<EditeurState> {
 
     state = AsyncData(courant.copyWith(taille: true, effacerDerniere: true));
 
+    final id = ref.read(idGeneratorProvider).newId();
     final chemin = await ref.read(pieceCutterProvider).decouper(
-          cheminCapture,
+          cible.chemin,
           debut: courant.selDebut,
           fin: courant.selFin,
-          id: ref.read(idGeneratorProvider).newId(),
+          id: id,
         );
 
+    SermonPiece? piece;
+    if (chemin != null) {
+      piece = SermonPiece(
+        id: id,
+        captureId: cible.captureId,
+        title: titre.trim(),
+        start: courant.selDebut,
+        end: courant.selFin,
+        path: chemin,
+        cutAt: ref.read(clockProvider).now(),
+      );
+      await ref.read(pieceStoreProvider).save(piece);
+      ref.invalidate(piecesDeLaCaptureProvider(cible.captureId));
+    }
+
     final apres = state.value ?? courant;
-    state = AsyncData(apres.copyWith(taille: false, derniere: chemin));
-    return chemin;
+    state = AsyncData(apres.copyWith(taille: false, derniere: piece));
+    return piece;
   }
 
   /// Après une pièce, enchaîner sur la suivante — **le geste de son dimanche**.
@@ -368,7 +396,10 @@ final class PieceEditorViewModel extends AsyncNotifier<EditeurState> {
   }
 }
 
+/// Ce qu'il faut pour ouvrir l'éditeur : l'identifiant du culte et son dossier.
+typedef CibleEditeur = ({String captureId, String chemin});
+
 final pieceEditorProvider = AsyncNotifierProvider.autoDispose
-    .family<PieceEditorViewModel, EditeurState, String>(
+    .family<PieceEditorViewModel, EditeurState, CibleEditeur>(
   PieceEditorViewModel.new,
 );

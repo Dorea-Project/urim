@@ -65,7 +65,9 @@ class PieceEditorPage extends ConsumerWidget {
         child: switch (captures) {
           AsyncLoading() => _Attente(motif: text.editorPreparing),
           _ when capture == null => _Attente(motif: text.editorEmpty),
-          _ => _Editeur(cheminCapture: capture.path),
+          _ => _Editeur(
+              cible: (captureId: captureId, chemin: capture.path),
+            ),
         },
       ),
     );
@@ -73,14 +75,14 @@ class PieceEditorPage extends ConsumerWidget {
 }
 
 class _Editeur extends ConsumerWidget {
-  const _Editeur({required this.cheminCapture});
+  const _Editeur({required this.cible});
 
-  final String cheminCapture;
+  final CibleEditeur cible;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final text = AppText.of(context);
-    final etat = ref.watch(pieceEditorProvider(cheminCapture));
+    final etat = ref.watch(pieceEditorProvider(cible));
 
     return switch (etat) {
       AsyncLoading() => _Attente(motif: text.editorPreparing),
@@ -89,7 +91,7 @@ class _Editeur extends ConsumerWidget {
         _Attente(motif: text.editorEmpty),
       AsyncData(:final value) => _Etabli(
           etat: value,
-          modele: ref.read(pieceEditorProvider(cheminCapture).notifier),
+          modele: ref.read(pieceEditorProvider(cible).notifier),
         ),
     };
   }
@@ -116,14 +118,49 @@ class _Attente extends StatelessWidget {
       );
 }
 
-class _Etabli extends StatelessWidget {
+class _Etabli extends StatefulWidget {
   const _Etabli({required this.etat, required this.modele});
 
   final EditeurState etat;
   final PieceEditorViewModel modele;
 
   @override
+  State<_Etabli> createState() => _EtabliState();
+}
+
+class _EtabliState extends State<_Etabli> {
+  final _titre = TextEditingController();
+
+  @override
+  void dispose() {
+    _titre.dispose();
+    super.dispose();
+  }
+
+  /// Taille la pièce, et **ne laisse jamais un titre vide** partir en base.
+  ///
+  /// ⚠️ Le champ n'est pas obligatoire, et c'est délibéré : imposer un nom avant
+  /// de couper mettrait une question entre le pasteur et son geste. À défaut, on
+  /// prend les bornes — deux pièces d'un même dimanche restent distinguables, et
+  /// il renomme quand il veut.
+  Future<void> _tailler(AppText text) async {
+    final defaut = text.editorRange(
+      formatElapsed(widget.etat.selDebut),
+      formatElapsed(widget.etat.selFin),
+    );
+    final saisi = _titre.text.trim();
+
+    await widget.modele.tailler(titre: saisi.isEmpty ? defaut : saisi);
+
+    // Le nom ne se reporte pas sur la pièce suivante : « prière » collé à la
+    // prédication serait une erreur qu'on ne verrait qu'après publication.
+    _titre.clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final etat = widget.etat;
+    final modele = widget.modele;
     final text = AppText.of(context);
     final couleurs = context.colors;
     final styles = Theme.of(context).textTheme;
@@ -272,9 +309,19 @@ class _Etabli extends StatelessWidget {
         _Recapitulatif(etat: etat, modele: modele),
 
         const SizedBox(height: AppSpacing.lg),
+        TextField(
+          controller: _titre,
+          textInputAction: TextInputAction.done,
+          decoration: InputDecoration(
+            labelText: text.editorName,
+            hintText: text.editorNameHint,
+          ),
+        ),
+
+        const SizedBox(height: AppSpacing.lg),
         FilledButton(
           onPressed: etat.selectionUtile && !etat.taille
-              ? () => modele.tailler()
+              ? () => _tailler(text)
               : null,
           child: Text(etat.taille ? text.editorCutting : text.editorCut),
         ),

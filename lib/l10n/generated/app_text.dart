@@ -3062,6 +3062,60 @@ abstract class AppText {
   /// In fr, this message translates to:
   /// **'La matière reste entière. Tailler écrit une pièce à côté ; vous pouvez recommencer autant de fois qu\'il faut.'**
   String get editorSafety;
+
+  /// Libellé du champ de titre. Sans nom, deux pièces d'un même dimanche ne se distinguent pas dans une liste.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom de la pièce'**
+  String get editorName;
+
+  /// Exemple de nom, tiré du dimanche réel d'un pasteur : une prédication puis une prière.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prédication, prière…'**
+  String get editorNameHint;
+
+  /// Titre de la liste des pièces d'un culte.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les pièces taillées'**
+  String get piecesTitle;
+
+  /// Liste vide — et elle dit l'enjeu du délai plutôt que de constater le vide.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien n\'a encore été taillé dans ce culte. L\'audio brut disparaît au septième jour ; une pièce, non.'**
+  String get piecesEmpty;
+
+  /// Ouvre l'éditeur depuis le culte.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tailler une pièce'**
+  String get piecesCut;
+
+  /// D'où vient une pièce dans le culte d'origine.
+  ///
+  /// In fr, this message translates to:
+  /// **'de {from} à {to}'**
+  String piecesFrom(String from, String to);
+
+  /// Joue une pièce.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écouter'**
+  String get piecesPlay;
+
+  /// Arrête la lecture d'une pièce.
+  ///
+  /// In fr, this message translates to:
+  /// **'Arrêter'**
+  String get piecesStop;
+
+  /// Dit ce que le pasteur ne peut pas deviner : la matière disparaît, les pièces restent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ces pièces survivent à la purge du septième jour.'**
+  String get piecesSurvives;
 }
 
 class _AppTextDelegate extends LocalizationsDelegate<AppText> {
