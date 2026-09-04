@@ -54,6 +54,12 @@ dependencies:
   path_provider: ^2.1.6
   speech_to_text: ^7.4.0
   record: ^6.2.1
+  # Le moteur de transcription embarqué — whisper.cpp, sur l'appareil (D52).
+  # ⚠️ Le gabarit reste à décider au banc : ce paquet les sert tous.
+  whisper_ggml: ^2.6.0
+  flutter_tts: ^4.2.5
+  audioplayers: ^6.7.1
+  share_plus: ^13.3.0
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:urim/core/audio/file_sharer.dart';
 import 'package:urim/core/audio/piece_store.dart';
 import 'package:urim/core/audio/track_player.dart';
 import 'package:urim/core/router/app_routes.dart';
@@ -121,6 +122,24 @@ class _PieceState extends ConsumerState<_Piece> {
             icon: Icon(_joue ? Icons.stop : Icons.play_arrow),
             tooltip: _joue ? text.piecesStop : text.piecesPlay,
           ),
+          IconButton(
+            onPressed: _envoyer,
+            icon: const Icon(Icons.ios_share),
+            tooltip: text.piecesShare,
+          ),
+          PopupMenuButton<_Geste>(
+            onSelected: _choisir,
+            itemBuilder: (_) => [
+              PopupMenuItem(
+                value: _Geste.renommer,
+                child: Text(text.piecesRename),
+              ),
+              PopupMenuItem(
+                value: _Geste.supprimer,
+                child: Text(text.piecesDelete),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -137,5 +156,142 @@ class _PieceState extends ConsumerState<_Piece> {
 
     final refus = await lecteur.play(widget.piece.path);
     if (mounted) setState(() => _joue = refus == null);
+  }
+
+  /// Propose la pièce aux applications du téléphone.
+  ///
+  /// ⚠️ **Un refus se lit, il ne se devine pas.** Le pasteur appuie et attend ;
+  /// si rien ne s'ouvre, il doit apprendre pourquoi plutôt que de conclure que
+  /// l'application est cassée. Une feuille qu'il referme lui-même, en revanche,
+  /// n'est pas un échec et ne dit rien.
+  Future<void> _envoyer() async {
+    final text = AppText.of(context);
+    final refus = await ref.read(fileSharerProvider).partager(
+          widget.piece.path,
+          titre: widget.piece.title,
+        );
+
+    if (!mounted || refus == null) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          refus == ShareRefusal.fileMissing
+              ? text.piecesShareMissing
+              : text.piecesShareFailed,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _choisir(_Geste geste) async {
+    switch (geste) {
+      case _Geste.renommer:
+        await _renommer();
+      case _Geste.supprimer:
+        await _supprimer();
+    }
+  }
+
+  Future<void> _renommer() async {
+    final nouveau = await showDialog<String>(
+      context: context,
+      builder: (_) => _Renommage(initial: widget.piece.title),
+    );
+
+    if (nouveau == null || !mounted) return;
+
+    await ref.read(pieceStoreProvider).renommer(widget.piece.id, nouveau);
+    if (mounted) {
+      ref.invalidate(piecesDeLaCaptureProvider(widget.piece.captureId));
+    }
+  }
+
+  /// 🔴 **Le seul geste irréversible de cet écran, et il se confirme.**
+  ///
+  /// Une pièce supprimée ne se retaille pas : si le culte a passé ses sept
+  /// jours, la matière dont elle est tirée n'existe plus. La confirmation le
+  /// dit — elle ne demande pas « êtes-vous sûr », elle explique ce qui se perd.
+  Future<void> _supprimer() async {
+    final text = AppText.of(context);
+
+    final confirme = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(text.piecesDeleteTitle),
+        content: Text(text.piecesDeleteBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(text.piecesRenameCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(text.piecesDelete),
+          ),
+        ],
+      ),
+    );
+
+    if (confirme != true || !mounted) return;
+
+    await ref.read(trackPlayerProvider).stop();
+    await ref.read(pieceStoreProvider).remove(widget.piece.id);
+    if (mounted) {
+      ref.invalidate(piecesDeLaCaptureProvider(widget.piece.captureId));
+    }
+  }
+}
+
+enum _Geste { renommer, supprimer }
+
+/// La boîte qui renomme — **et qui possède son propre champ**.
+///
+/// ⚠️ **Un contrôleur libéré par l'appelant est un défaut, pas un détail.** Une
+/// boîte de dialogue ne disparaît pas à l'instant où elle rend sa valeur : elle
+/// se referme en s'animant, et le champ se reconstruit pendant ce temps. Libérer
+/// le contrôleur juste après `showDialog` fait donc lever *« a
+/// TextEditingController was used after being disposed »* — au mieux une trace
+/// rouge, au pire un écran cassé. La boîte le tient, la boîte le libère.
+class _Renommage extends StatefulWidget {
+  const _Renommage({required this.initial});
+
+  final String initial;
+
+  @override
+  State<_Renommage> createState() => _RenommageState();
+}
+
+class _RenommageState extends State<_Renommage> {
+  late final _champ = TextEditingController(text: widget.initial);
+
+  @override
+  void dispose() {
+    _champ.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final text = AppText.of(context);
+
+    return AlertDialog(
+      title: Text(text.piecesRename),
+      content: TextField(
+        controller: _champ,
+        autofocus: true,
+        decoration: InputDecoration(hintText: text.editorNameHint),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(text.piecesRenameCancel),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.of(context).pop(_champ.text),
+          child: Text(text.piecesRenameSave),
+        ),
+      ],
+    );
   }
 }

@@ -1691,5 +1691,41 @@
   "piecesSurvives": "Ces pièces survivent à la purge du septième jour.",
   "@piecesSurvives": {
     "description": "Dit ce que le pasteur ne peut pas deviner : la matière disparaît, les pièces restent."
+  },
+  "piecesShare": "Envoyer",
+  "@piecesShare": {
+    "description": "Propose la pièce aux applications du téléphone. Le canal réel d'une assemblée est WhatsApp, pas une plateforme."
+  },
+  "piecesShareMissing": "Ce fichier n'est plus sur le téléphone.",
+  "@piecesShareMissing": {
+    "description": "Refus de partage : l'audio a disparu. Le dire plutôt que de se taire."
+  },
+  "piecesShareFailed": "Le partage n'a pas pu s'ouvrir sur cet appareil.",
+  "@piecesShareFailed": {
+    "description": "Refus de partage : aucun canal, ou le greffon a lâché."
+  },
+  "piecesRename": "Renommer",
+  "@piecesRename": {
+    "description": "Change le nom d'une pièce."
+  },
+  "piecesRenameSave": "Enregistrer",
+  "@piecesRenameSave": {
+    "description": "Valide le nouveau nom."
+  },
+  "piecesRenameCancel": "Annuler",
+  "@piecesRenameCancel": {
+    "description": "Ferme sans renommer."
+  },
+  "piecesDelete": "Supprimer",
+  "@piecesDelete": {
+    "description": "Retire une pièce et son audio."
+  },
+  "piecesDeleteTitle": "Supprimer cette pièce ?",
+  "@piecesDeleteTitle": {
+    "description": "Titre de la confirmation."
+  },
+  "piecesDeleteBody": "L'audio part avec elle, et ne se retrouvera pas. Si le culte a passé sept jours, il n'y a plus de quoi la retailler.",
+  "@piecesDeleteBody": {
+    "description": "Dit ce qui est irréversible, et pourquoi : la matière d'origine peut avoir déjà été purgée."
   }
 }

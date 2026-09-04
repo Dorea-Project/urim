@@ -160,12 +160,26 @@ doit mourir avec elle au septième jour.
 `TrackPlayer` : un isolat et une écriture disque ne répondent pas sous
 `flutter_test`, et les brancher en dur rendait l'éditeur intestable.
 
-### Ce qui reste de l'étape 3
+### Le partage — ✅ **livré le 06/09, et le mur n'existait plus**
 
-**Le partage.** Une pièce est écrite dans `pieces/`, et rien ne la sort encore de
-l'application. `share_plus` est bloqué par le conflit de dépendances déjà connu ;
-le contournement des documents — poser le fichier dans un dossier que le pasteur
-ouvre — s'applique tel quel.
+⚠️ **`share_plus` n'était plus bloqué depuis un moment, et personne ne l'avait
+regardé.** Le conflit était `win32 ^5` contre un coffre à secrets en `^4` ; le
+coffre est passé en `^11` entre-temps. Vérifié en résolvant les dépendances,
+pas en relisant la note — qui disait encore le contraire dans `decisions.md`.
+
+Une pièce s'envoie donc par la feuille de partage du téléphone. 🔴 **C'est le
+seul débouché qui existe aujourd'hui, et il compte plus que la publication sur
+Dorea app** : le canal réel d'une assemblée est WhatsApp, pas une plateforme qui
+n'existe pas encore.
+
+**Livré avec** : renommer une pièce, et la supprimer — le magasin savait déjà le
+faire, il manquait les gestes. La suppression se confirme, et la confirmation ne
+demande pas « êtes-vous sûr » : elle dit que si le culte a passé ses sept jours,
+la matière n'existe plus et rien ne se retaille.
+
+⚠️ **La même dette reste ouverte pour les documents.** La fiche de chaire et les
+diapositives sont toujours posées dans un dossier que le pasteur doit aller
+ouvrir. Le mur est tombé pour elles aussi ; le bouton n'est pas posé.
 
 **L'arithmétique, pour mémoire :**
 

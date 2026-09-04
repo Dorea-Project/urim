@@ -1909,4 +1909,33 @@ class AppTextFr extends AppText {
   @override
   String get piecesSurvives =>
       'Ces pièces survivent à la purge du septième jour.';
+
+  @override
+  String get piecesShare => 'Envoyer';
+
+  @override
+  String get piecesShareMissing => 'Ce fichier n\'est plus sur le téléphone.';
+
+  @override
+  String get piecesShareFailed =>
+      'Le partage n\'a pas pu s\'ouvrir sur cet appareil.';
+
+  @override
+  String get piecesRename => 'Renommer';
+
+  @override
+  String get piecesRenameSave => 'Enregistrer';
+
+  @override
+  String get piecesRenameCancel => 'Annuler';
+
+  @override
+  String get piecesDelete => 'Supprimer';
+
+  @override
+  String get piecesDeleteTitle => 'Supprimer cette pièce ?';
+
+  @override
+  String get piecesDeleteBody =>
+      'L\'audio part avec elle, et ne se retrouvera pas. Si le culte a passé sept jours, il n\'y a plus de quoi la retailler.';
 }

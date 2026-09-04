@@ -3116,6 +3116,60 @@ abstract class AppText {
   /// In fr, this message translates to:
   /// **'Ces pièces survivent à la purge du septième jour.'**
   String get piecesSurvives;
+
+  /// Propose la pièce aux applications du téléphone. Le canal réel d'une assemblée est WhatsApp, pas une plateforme.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer'**
+  String get piecesShare;
+
+  /// Refus de partage : l'audio a disparu. Le dire plutôt que de se taire.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce fichier n\'est plus sur le téléphone.'**
+  String get piecesShareMissing;
+
+  /// Refus de partage : aucun canal, ou le greffon a lâché.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le partage n\'a pas pu s\'ouvrir sur cet appareil.'**
+  String get piecesShareFailed;
+
+  /// Change le nom d'une pièce.
+  ///
+  /// In fr, this message translates to:
+  /// **'Renommer'**
+  String get piecesRename;
+
+  /// Valide le nouveau nom.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get piecesRenameSave;
+
+  /// Ferme sans renommer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get piecesRenameCancel;
+
+  /// Retire une pièce et son audio.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get piecesDelete;
+
+  /// Titre de la confirmation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer cette pièce ?'**
+  String get piecesDeleteTitle;
+
+  /// Dit ce qui est irréversible, et pourquoi : la matière d'origine peut avoir déjà été purgée.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'audio part avec elle, et ne se retrouvera pas. Si le culte a passé sept jours, il n\'y a plus de quoi la retailler.'**
+  String get piecesDeleteBody;
 }
 
 class _AppTextDelegate extends LocalizationsDelegate<AppText> {
