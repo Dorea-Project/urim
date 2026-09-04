@@ -54,6 +54,23 @@ abstract final class AppRoutes {
 
   /// Synthèse d'une prédication, à valider.
   static const String synthesisPath = '/preparation/:id/synthese';
+
+  /// Un culte capté — **et non une préparation**.
+  ///
+  /// 🔴 Chemin séparé parce que l'objet l'est : une capture n'a pas de
+  /// préparation, et l'accrocher à `/preparation/:id` aurait forcé un
+  /// identifiant qui n'existe pas.
+  static const String capturePath = '/capture/:id';
+  static const String captureName = 'capture';
+
+  /// Tailler une pièce dans un culte capté (D70).
+  ///
+  /// ⚠️ **Par identifiant, jamais par chemin.** L'éditeur travaille sur un
+  /// dossier de l'appareil ; le mettre dans l'URL exposerait une arborescence
+  /// et casserait au premier changement de stockage. L'écran résout le dossier
+  /// depuis l'identifiant, comme la coque de la capture le fait déjà.
+  static const String pieceEditorPath = '/capture/:id/tailler';
+  static const String pieceEditorName = 'tailler';
   static const String synthesisName = 'synthesis';
 
   /// Ce qui a été prêché, et la couverture du canon.

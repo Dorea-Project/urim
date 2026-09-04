@@ -104,23 +104,54 @@ qui passe pour un résumé de sermon est la même erreur qu'une invention de mod
 
 ---
 
-## 2. Se déplacer dans la réécoute — **petit, et le plus bloquant**
+## 2. Se déplacer dans la réécoute — ✅ **fait, et plus petit qu'annoncé**
 
-`capture_playback` sait rejouer et ne sait rien d'autre : ni chercher, ni mettre
-en pause, ni donner une position. Sur 1 h 30, retrouver la fin de la prédication
-en lecture linéaire prendrait **une heure**.
+⚠️ **Correction du 06/09 : j'avais écrit que rien ne savait chercher. C'est
+faux.** `CapturePlayback` est un assembleur de fichier, pas un lecteur — il ne
+cherche pas parce que ce n'est pas son travail. Le port `TrackPlayer`, lui,
+porte déjà `seek`, `pause`, `resume`, `onPosition` et `onDuration`, avec des
+commentaires qui expliquent pourquoi. **L'étage manquant n'était pas le lecteur,
+c'était l'écran qui s'en sert.**
 
-`audioplayers` (déjà au dépôt, `^6.7.1`) le fait. L'application ne l'expose pas.
-
-**À écrire :** position courante, durée totale, `seek()`, pause et reprise, et
-une barre qu'on tire. Rien de neuf en dépendances.
-
-**Sortie mesurable :** le pasteur trouve la frontière prédication / prière en
-quelques secondes, et l'écoute des deux côtés pour la placer juste.
+Livré avec l'éditeur (§3) : tête de lecture, ±10 s, pause qui garde l'endroit,
+appui sur l'onde pour se déplacer, et suivi automatique quand la lecture sort du
+cadre.
 
 ---
 
-## 3. Couper — **de l'arithmétique, pas du traitement du signal**
+## 3. Couper — ✅ **livré le 06/09**
+
+L'éditeur existe : `PieceCutter`, l'onde (`Waveform`), les deux vues et l'écran
+`PieceEditorPage`, sur la route `/capture/:id/tailler`. Trente-cinq tests.
+
+🔴 **Le choix d'interface qui gouverne l'écran, et qui n'était pas évident.**
+Sur un téléphone, une heure et demie fait huit secondes par pixel : une poignée
+qu'on traîne au doigt couvre une minute de prédication. **On ne tire donc pas
+les bornes, on les pose** — le pasteur écoute, s'arrête à la frontière, appuie
+sur « début ici ». L'onde sert à viser grossièrement et à se repérer ; l'oreille
+tranche. Et deux ondes plutôt qu'une : l'aperçu du culte entier dit *où l'on
+est*, le détail zoomé permet de viser.
+
+**Ce que l'onde a coûté, et pourquoi elle en valait la peine.** 173 Mo ne se
+relisent pas à chaque image : on calcule **dix crêtes par seconde, une fois**,
+dans un isolat, et on les garde à côté des fragments — 54 000 octets pour
+quatre-vingt-dix minutes, trois mille fois plus léger que la matière. Le
+condensé vit **dans** le dossier de la capture : il décrit la matière brute, il
+doit mourir avec elle au septième jour.
+
+⚠️ **Deux ports sont devenus des interfaces au passage** — `WaveformDigest` et
+`CapturePlayback` — pour la raison que le dépôt donne déjà à propos de
+`TrackPlayer` : un isolat et une écriture disque ne répondent pas sous
+`flutter_test`, et les brancher en dur rendait l'éditeur intestable.
+
+### Ce qui reste de l'étape 3
+
+**Le partage.** Une pièce est écrite dans `pieces/`, et rien ne la sort encore de
+l'application. `share_plus` est bloqué par le conflit de dépendances déjà connu ;
+le contournement des documents — poser le fichier dans un dossier que le pasteur
+ouvre — s'applique tel quel.
+
+**L'arithmétique, pour mémoire :**
 
 Le PCM est à débit constant : **32 000 octets valent une seconde**. Une coupe à
 la 62ᵉ minute est un décalage de 119 040 000 octets. Pas de décodage, pas de

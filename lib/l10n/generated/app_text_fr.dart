@@ -276,7 +276,7 @@ class AppTextFr extends AppText {
 
   @override
   String get privacyNoResaleBody =>
-      'Aucun partage à un tiers, aucune publicité, aucun entraînement de modèle sur votre contenu.';
+      'Aucune publicité, aucun entraînement de modèle sur votre contenu. Les traitements techniques passent par des prestataires qui agissent pour Dorea, jamais pour leur propre compte.';
 
   @override
   String get privacyRetainedLabel => 'CE QUI EST CONSERVÉ';
@@ -1155,6 +1155,42 @@ class AppTextFr extends AppText {
   String get homeCaptureStop => 'Arrêter';
 
   @override
+  String get sermonTabSaid => 'Ce qui a été dit';
+
+  @override
+  String get sermonTabSynthesis => 'La synthèse';
+
+  @override
+  String get sermonTabOutput => 'La sortie';
+
+  @override
+  String homeCaptureFragments(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count fragments écrits',
+      one: '1 fragment écrit',
+      zero: 'aucun fragment écrit',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeCapturePending(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count fragments attendent le réseau',
+      one: '1 fragment attend le réseau',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get homeCaptureStaysHere =>
+      'Cet enregistrement reste sur ce téléphone. Il ne se retrouvera pas sur une autre tablette, même connectée au même compte.';
+
+  @override
   String homeCaptureSaved(String duree) {
     return 'Prédication captée · $duree';
   }
@@ -1188,6 +1224,172 @@ class AppTextFr extends AppText {
 
   @override
   String get homeCaptureNotSent => 'sur cet appareil, pas encore transcrite';
+
+  @override
+  String captureTitle(String date) {
+    return 'Culte du $date';
+  }
+
+  @override
+  String get captureSectionState => 'CE QUI A ÉTÉ CAPTÉ';
+
+  @override
+  String captureDuration(String duration) {
+    return '$duration enregistrées';
+  }
+
+  @override
+  String captureFragments(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count fragments de trente secondes',
+      one: '1 fragment de trente secondes',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get captureUploadAllSent => 'Tout est arrivé au serveur.';
+
+  @override
+  String captureUploadPending(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count fragments attendent de partir',
+      one: '1 fragment attend de partir',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get captureUploadNoChurch =>
+      'Cette capture attend de savoir devant quelle assemblée elle a été prêchée. Sans elle, elle ne peut pas partir.';
+
+  @override
+  String get captureInterrupted =>
+      'L\'enregistrement s\'est arrêté tout seul. Ce qui a été capté avant est intact.';
+
+  @override
+  String capturePurgeIn(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'L\'audio est effacé dans $days jours',
+      one: 'L\'audio est effacé demain',
+      zero: 'L\'audio est effacé aujourd\'hui',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get transcribeOfferTitle => 'Lire ce culte';
+
+  @override
+  String transcribeOfferBody(int megaoctets) {
+    return 'Urim peut transcrire cet enregistrement sur ce téléphone. Il doit d\'abord télécharger son modèle : $megaoctets Mo, une seule fois. L\'audio, lui, ne partira pas.';
+  }
+
+  @override
+  String transcribeModelChip(String gabarit, int megaoctets) {
+    return '$gabarit · $megaoctets Mo';
+  }
+
+  @override
+  String get transcribeDownload => 'Télécharger le modèle';
+
+  @override
+  String transcribeDownloading(int received, int total) {
+    return 'Téléchargement… $received Mo sur $total';
+  }
+
+  @override
+  String get transcribeStart => 'Transcrire ce culte';
+
+  @override
+  String get transcribeResume => 'Reprendre la transcription';
+
+  @override
+  String transcribeRunning(int done, int total) {
+    return '$done fragment sur $total';
+  }
+
+  @override
+  String get transcribeSectionText => 'CE QUI A ÉTÉ DIT';
+
+  @override
+  String get transcribeAdditive =>
+      'Le texte s\'ajoute par blocs et ne se corrige pas tout seul : ce que vous avez lu ne changera pas.';
+
+  @override
+  String get transcribeFailedModel =>
+      'Le téléchargement n\'a pas abouti. Réessayez quand le réseau sera meilleur — rien n\'est perdu.';
+
+  @override
+  String get transcribeFailedAudio => 'Cet enregistrement n\'est pas lisible.';
+
+  @override
+  String get transcribeFailedEngine =>
+      'La transcription s\'est arrêtée. Ce qui était déjà lu est gardé.';
+
+  @override
+  String get captureSaidPending =>
+      'Rien n\'a encore été transcrit. Le moteur qui lira cet audio n\'est pas retenu : son gabarit se décide en le mesurant sur un vrai téléphone, pas en le décrétant.';
+
+  @override
+  String get captureSynthesisPending =>
+      'La synthèse résume ce qui a été dit. Elle attend donc la transcription — résumer un enregistrement qu\'on n\'a pas lu serait inventer.';
+
+  @override
+  String get captureOutputPending =>
+      'La lecture à voix haute et l\'interprétation partent d\'une synthèse validée. Elles attendent celle-ci.';
+
+  @override
+  String get captureListenResume => 'Reprendre';
+
+  @override
+  String get captureListenPause => 'Pause';
+
+  @override
+  String get captureNameIt => 'Nommer ce culte';
+
+  @override
+  String get captureNameHint => 'Nouvelle naissance, Actes 2…';
+
+  @override
+  String get captureNameSave => 'Enregistrer';
+
+  @override
+  String get captureNameCancel => 'Annuler';
+
+  @override
+  String get captureNameRemove => 'Retirer le nom';
+
+  @override
+  String captureUnnamed(String date) {
+    return 'Culte du $date';
+  }
+
+  @override
+  String get captureListen => 'Réécouter ce culte';
+
+  @override
+  String get captureListenStop => 'Arrêter';
+
+  @override
+  String get captureListenPreparing => 'Préparation de la lecture…';
+
+  @override
+  String get captureListenEmpty =>
+      'Il n\'y a rien à réécouter : aucun fragment n\'a été écrit.';
+
+  @override
+  String get captureListenFailed => 'La lecture n\'a pas pu commencer.';
+
+  @override
+  String get captureLocalOnly =>
+      'Cet enregistrement reste sur ce téléphone. Il ne se retrouvera pas sur une autre tablette, même connectée au même compte.';
 
   @override
   String get homeRecordPending =>
@@ -1388,6 +1590,11 @@ class AppTextFr extends AppText {
   String get synthesisSectionCapsules => 'Ce qu\'Urim a retenu';
 
   @override
+  String synthesisCapsuleLabelPlain(int index) {
+    return 'CAPSULE $index';
+  }
+
+  @override
   String synthesisCapsuleLabel(int index, String at) {
     return 'CAPSULE $index · DIT À $at';
   }
@@ -1435,6 +1642,129 @@ class AppTextFr extends AppText {
   String get synthesisVoiceLocked => 'Disponible une fois la synthèse validée';
 
   @override
+  String get synthesisVoiceRead => 'Écouter la synthèse';
+
+  @override
+  String get synthesisVoiceStop => 'Arrêter la lecture';
+
+  @override
+  String get synthesisVoiceNoLanguage =>
+      'Cette voix n\'est pas installée sur ce téléphone. Elle se télécharge depuis les réglages, dans « Synthèse vocale ».';
+
+  @override
+  String get synthesisVoiceNoEngine =>
+      'Ce téléphone n\'a pas de synthèse vocale.';
+
+  @override
+  String get synthesisVoiceFailed => 'La lecture n\'a pas pu commencer.';
+
+  @override
+  String get synthesisVoiceNotValidated =>
+      'Validez la synthèse avant de la faire lire.';
+
+  @override
+  String get synthesisVoiceEnglish => 'Anglais';
+
+  @override
+  String get voiceFrenchLabel => 'Français';
+
+  @override
+  String get voiceFrenchNote => 'Voix de synthèse, sur cet appareil';
+
+  @override
+  String get voiceEnglishNote => 'Voix de synthèse, sur cet appareil';
+
+  @override
+  String get voiceOwnLabel => 'Votre propre voix';
+
+  @override
+  String get voiceOwnNote =>
+      'Enregistrez-vous disant la synthèse dans la langue de votre assemblée — rien à traduire, rien à générer';
+
+  @override
+  String get voiceMalinkeLabel => 'Malinké';
+
+  @override
+  String get voiceMalinkeNote =>
+      'Interprétée par l\'équipe Dorea — la langue que nous savons tenir aujourd\'hui';
+
+  @override
+  String get trackRecordStart => 'Enregistrer votre voix';
+
+  @override
+  String get trackRecordStop => 'Arrêter l\'enregistrement';
+
+  @override
+  String get trackListen => 'Écouter votre piste';
+
+  @override
+  String get trackListenStop => 'Arrêter';
+
+  @override
+  String get trackRedo => 'Refaire';
+
+  @override
+  String get trackRedoHint => 'Un nouvel enregistrement remplace celui-ci.';
+
+  @override
+  String get trackLanguageTitle => 'Dans quelle langue ?';
+
+  @override
+  String get trackLanguageBody =>
+      'Nommez-la comme vous la nommez. Ce n\'est pas une liste : c\'est la langue de votre assemblée.';
+
+  @override
+  String get trackLanguageHint => 'Baoulé, dioula, français…';
+
+  @override
+  String get trackLanguageCancel => 'Annuler';
+
+  @override
+  String get trackLanguageConfirm => 'Ouvrir le micro';
+
+  @override
+  String trackRecordingIn(String language) {
+    return 'Enregistrement en $language';
+  }
+
+  @override
+  String trackSaved(String language, String duration) {
+    return 'Piste enregistrée en $language · $duration';
+  }
+
+  @override
+  String get trackNotValidated =>
+      'Validez la synthèse avant d\'enregistrer votre voix.';
+
+  @override
+  String get trackEmpty =>
+      'Le micro s\'est fermé sans rien enregistrer. Rien n\'a été gardé.';
+
+  @override
+  String get trackMicRefused =>
+      'Le micro n\'est pas autorisé. Ouvrez les réglages du téléphone pour le permettre.';
+
+  @override
+  String get trackNoMicrophone => 'Ce téléphone n\'a pas de micro utilisable.';
+
+  @override
+  String get trackStorageFull =>
+      'Plus assez de place pour enregistrer. Libérez quelques mégaoctets.';
+
+  @override
+  String get trackEngineFailed => 'L\'enregistrement n\'a pas pu commencer.';
+
+  @override
+  String get trackFileMissing =>
+      'Le fichier de cette piste n\'est plus sur le téléphone.';
+
+  @override
+  String get trackNoPlayer => 'Ce téléphone ne sait pas jouer cette piste.';
+
+  @override
+  String get trackPlaybackFailed => 'La lecture n\'a pas pu commencer.';
+
+  @override
   String synthesisSpokenMinutes(int minutes) {
     return '$minutes min';
   }
@@ -1466,4 +1796,86 @@ class AppTextFr extends AppText {
   String synthesisPointRange(String from, String to) {
     return '  — $from à $to';
   }
+
+  @override
+  String get editorTitle => 'Tailler une pièce';
+
+  @override
+  String get editorPreparing => 'Lecture de l\'onde…';
+
+  @override
+  String get editorEmpty =>
+      'Il n\'y a rien à tailler : aucun fragment n\'a été écrit.';
+
+  @override
+  String get editorGesture =>
+      'Écoutez, arrêtez-vous à la frontière, puis posez la borne. L\'onde sert à viser ; l\'oreille tranche.';
+
+  @override
+  String get editorPlay => 'Écouter';
+
+  @override
+  String get editorPause => 'Pause';
+
+  @override
+  String get editorBack => 'Reculer de dix secondes';
+
+  @override
+  String get editorForward => 'Avancer de dix secondes';
+
+  @override
+  String get editorZoomIn => 'Resserrer';
+
+  @override
+  String get editorZoomOut => 'Élargir';
+
+  @override
+  String editorPosition(String position, String duration) {
+    return '$position sur $duration';
+  }
+
+  @override
+  String get editorSetStart => 'Début ici';
+
+  @override
+  String get editorSetEnd => 'Fin ici';
+
+  @override
+  String get editorPiece => 'La pièce';
+
+  @override
+  String editorRange(String from, String to) {
+    return '$from → $to';
+  }
+
+  @override
+  String editorLength(String duration) {
+    return '$duration de pièce';
+  }
+
+  @override
+  String get editorHearStart => 'Écouter le début';
+
+  @override
+  String get editorHearEnd => 'Écouter la fin';
+
+  @override
+  String get editorCut => 'Tailler cette pièce';
+
+  @override
+  String get editorCutting => 'Découpage…';
+
+  @override
+  String get editorTooShort => 'Une pièce fait au moins une seconde.';
+
+  @override
+  String get editorCutDone =>
+      'Pièce taillée. Elle vit avec sa publication, et ne disparaîtra pas au septième jour.';
+
+  @override
+  String get editorNext => 'Enchaîner sur la suite';
+
+  @override
+  String get editorSafety =>
+      'La matière reste entière. Tailler écrit une pièce à côté ; vous pouvez recommencer autant de fois qu\'il faut.';
 }

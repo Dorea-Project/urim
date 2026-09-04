@@ -252,7 +252,10 @@
   "privacyOwnershipTitle": "Vos préparations restent les vôtres",
   "privacyOwnershipBody": "Elles ne sont lues par personne d'autre — ni par votre église, ni par Dorea, ni par un responsable.",
   "privacyNoResaleTitle": "Rien n'est revendu",
-  "privacyNoResaleBody": "Aucun partage à un tiers, aucune publicité, aucun entraînement de modèle sur votre contenu.",
+  "privacyNoResaleBody": "Aucune publicité, aucun entraînement de modèle sur votre contenu. Les traitements techniques passent par des prestataires qui agissent pour Dorea, jamais pour leur propre compte.",
+  "@privacyNoResaleBody": {
+    "description": "⚠️ Corrigé le 29/08. La phrase disait « aucun partage à un tiers », qui se lit naturellement comme « mon texte ne quitte pas Dorea ». Or le texte des préparations part chez un fournisseur de modèle à chaque tour, pour résoudre les références et peser les axes. La promesse forte reste entière là où elle compte — rien n'est revendu, rien n'entraîne un modèle — mais elle cesse d'affirmer une étanchéité qui n'existe pas. Le prestataire n'est pas nommé : Dorea est responsable du traitement et endosse ce que ses sous-traitants font pour elle."
+  },
   "privacyRetainedLabel": "CE QUI EST CONSERVÉ",
   "privacyRetainedPhone": "Votre numéro de téléphone, pour vous reconnaître.",
   "privacyRetainedWork": "Vos préparations et enregistrements, jusqu'à ce que vous les supprimiez.",
@@ -1066,6 +1069,40 @@
     "description": "Le bandeau qui traverse les deux pages. Il ne disparaît pas quand on change de travail : un pasteur qui va chercher son plan pendant qu'il prêche croirait avoir coupé le micro."
   },
   "homeCaptureStop": "Arrêter",
+  "sermonTabSaid": "Ce qui a été dit",
+  "@sermonTabSaid": {
+    "description": "A3.2 — onglet 1. Vide tant que le modèle embarqué n'est pas retenu (D52), et il le dit."
+  },
+  "sermonTabSynthesis": "La synthèse",
+  "@sermonTabSynthesis": {
+    "description": "A3.3 — onglet 2."
+  },
+  "sermonTabOutput": "La sortie",
+  "@sermonTabOutput": {
+    "description": "A3.4 — onglet 3 : ce qu'on porte à la voix."
+  },
+  "homeCaptureFragments": "{count, plural, =0{aucun fragment écrit} =1{1 fragment écrit} other{{count} fragments écrits}}",
+  "@homeCaptureFragments": {
+    "description": "A2 — ce qui est POSÉ sur le disque, atomiquement, et survit à une application tuée. Pas « enregistré » : écrit.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeCapturePending": "{count, plural, =1{1 fragment attend le réseau} other{{count} fragments attendent le réseau}}",
+  "@homeCapturePending": {
+    "description": "B1.11 — la file monte quand le réseau revient. Rien n'est perdu en attendant.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeCaptureStaysHere": "Cet enregistrement reste sur ce téléphone. Il ne se retrouvera pas sur une autre tablette, même connectée au même compte.",
+  "@homeCaptureStaysHere": {
+    "description": "🔴 A2.4 — la promesse manquante. La capture est le PREMIER objet d'Urim qui ne se synchronise pas, et rien ne le disait. À formuler AVANT le premier pilote : le jour où un pasteur enregistre sur son téléphone et cherche la relecture sur sa tablette, il ne doit pas découvrir le vide."
+  },
   "homeCaptureSaved": "Prédication captée · {duree}",
   "@homeCaptureSaved": {
     "description": "Confirmation à l'arrêt. Dit la durée pour que le pasteur sache que quelque chose a bien été écrit.",
@@ -1100,6 +1137,101 @@
   "@homeCaptureNotSent": {
     "description": "L'étape 1 s'arrête à la capture : le transcript attend le moteur (Q2). Le dire évite de laisser croire qu'il y a un texte quelque part."
   },
+  "captureTitle": "Culte du {date}",
+  "@captureTitle": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "captureSectionState": "CE QUI A ÉTÉ CAPTÉ",
+  "captureDuration": "{duration} enregistrées",
+  "@captureDuration": {
+    "placeholders": { "duration": { "type": "String" } }
+  },
+  "captureFragments": "{count, plural, =1{1 fragment de trente secondes} other{{count} fragments de trente secondes}}",
+  "@captureFragments": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "captureUploadAllSent": "Tout est arrivé au serveur.",
+  "captureUploadPending": "{count, plural, =1{1 fragment attend de partir} other{{count} fragments attendent de partir}}",
+  "@captureUploadPending": {
+    "description": "L'attente n'est pas une panne : les fragments restent sept jours sur l'appareil et la file reprend là où elle s'est arrêtée.",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "captureUploadNoChurch": "Cette capture attend de savoir devant quelle assemblée elle a été prêchée. Sans elle, elle ne peut pas partir.",
+  "@captureUploadNoChurch": {
+    "description": "🔴 Le silence le plus coûteux du chantier : sans ce message, le compteur monte et rien ne dit pourquoi rien ne part."
+  },
+  "captureInterrupted": "L'enregistrement s'est arrêté tout seul. Ce qui a été capté avant est intact.",
+  "capturePurgeIn": "{days, plural, =0{L'audio est effacé aujourd'hui} =1{L'audio est effacé demain} other{L'audio est effacé dans {days} jours}}",
+  "@capturePurgeIn": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "transcribeOfferTitle": "Lire ce culte",
+  "transcribeOfferBody": "Urim peut transcrire cet enregistrement sur ce téléphone. Il doit d'abord télécharger son modèle : {megaoctets} Mo, une seule fois. L'audio, lui, ne partira pas.",
+  "@transcribeOfferBody": {
+    "description": "🔴 Le téléchargement se demande, il ne se déclenche pas. L'application promet que l'audio ne quitte pas le téléphone ; faire descendre 31 Mo n'est pas rompre cette promesse, mais c'est du réseau que le pasteur doit voir venir.",
+    "placeholders": { "megaoctets": { "type": "int" } }
+  },
+  "transcribeModelChip": "{gabarit} · {megaoctets} Mo",
+  "@transcribeModelChip": {
+    "description": "Le sélecteur de gabarit montre le poids parce que le poids décide : sur un forfait à Abidjan, 466 Mo contre 75 n'est pas un détail d'ergonomie.",
+    "placeholders": {
+      "gabarit": { "type": "String" },
+      "megaoctets": { "type": "int" }
+    }
+  },
+  "transcribeDownload": "Télécharger le modèle",
+  "transcribeDownloading": "Téléchargement… {received} Mo sur {total}",
+  "@transcribeDownloading": {
+    "description": "⚠️ En mégaoctets, jamais en pourcentage seul : « 60 % » ne dit pas s'il reste 5 Mo à descendre ou 150, et c'est cette différence qui décide de continuer ou d'attendre le wifi.",
+    "placeholders": {
+      "received": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "transcribeStart": "Transcrire ce culte",
+  "transcribeResume": "Reprendre la transcription",
+  "transcribeRunning": "{done} fragment sur {total}",
+  "@transcribeRunning": {
+    "placeholders": { "done": { "type": "int" }, "total": { "type": "int" } }
+  },
+  "transcribeSectionText": "CE QUI A ÉTÉ DIT",
+  "transcribeAdditive": "Le texte s'ajoute par blocs et ne se corrige pas tout seul : ce que vous avez lu ne changera pas.",
+  "@transcribeAdditive": {
+    "description": "D58 — un texte qui se corrige sous les yeux est pire qu'un texte qui tarde."
+  },
+  "transcribeFailedModel": "Le téléchargement n'a pas abouti. Réessayez quand le réseau sera meilleur — rien n'est perdu.",
+  "transcribeFailedAudio": "Cet enregistrement n'est pas lisible.",
+  "transcribeFailedEngine": "La transcription s'est arrêtée. Ce qui était déjà lu est gardé.",
+  "captureSaidPending": "Rien n'a encore été transcrit. Le moteur qui lira cet audio n'est pas retenu : son gabarit se décide en le mesurant sur un vrai téléphone, pas en le décrétant.",
+  "@captureSaidPending": {
+    "description": "D52 — « Whisper » nomme une famille, pas une décision finie. Dire ce qu'on attend vaut mieux qu'un écran vide (D13)."
+  },
+  "captureSynthesisPending": "La synthèse résume ce qui a été dit. Elle attend donc la transcription — résumer un enregistrement qu'on n'a pas lu serait inventer.",
+  "captureOutputPending": "La lecture à voix haute et l'interprétation partent d'une synthèse validée. Elles attendent celle-ci.",
+  "captureListenResume": "Reprendre",
+  "captureListenPause": "Pause",
+  "captureNameIt": "Nommer ce culte",
+  "@captureNameIt": {
+    "description": "Une date n'est pas un nom : au bout de quatre dimanches, « dim. 6 septembre » ne dit plus rien."
+  },
+  "captureNameHint": "Nouvelle naissance, Actes 2…",
+  "captureNameSave": "Enregistrer",
+  "captureNameCancel": "Annuler",
+  "captureNameRemove": "Retirer le nom",
+  "captureUnnamed": "Culte du {date}",
+  "@captureUnnamed": {
+    "description": "Le repli quand rien n'a été nommé — vrai, mais muet.",
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "captureListen": "Réécouter ce culte",
+  "@captureListen": {
+    "description": "Le seul geste que la branche « prêcher » offre aujourd'hui : le pasteur entend ce qu'il a dit, sans attendre aucun moteur."
+  },
+  "captureListenStop": "Arrêter",
+  "captureListenPreparing": "Préparation de la lecture…",
+  "captureListenEmpty": "Il n'y a rien à réécouter : aucun fragment n'a été écrit.",
+  "captureListenFailed": "La lecture n'a pas pu commencer.",
+  "captureLocalOnly": "Cet enregistrement reste sur ce téléphone. Il ne se retrouvera pas sur une autre tablette, même connectée au même compte.",
   "homeRecordPending": "Le moteur de transcription n'est pas encore retenu. Les prédications déjà transcrites restent lisibles ici.",
   "@homeRecordPending": {
     "description": "Sous le bouton d'enregistrement inactif. Dit ce qu'il attend plutôt que de disparaître (D13). Les libellés de l'ancienne feuille « quelle tâche ? » sont partis avec elle : la bascule du haut pose la même question sans modale."
@@ -1222,6 +1354,15 @@
   "synthesisSealTitleValidated": "Validée par vous.",
   "synthesisSealBodyValidated": "Elle peut être lue à voix haute. Vous restez le seul à pouvoir la modifier.",
   "synthesisSectionCapsules": "Ce qu'Urim a retenu",
+  "synthesisCapsuleLabelPlain": "CAPSULE {index}",
+  "@synthesisCapsuleLabelPlain": {
+    "description": "Une capsule née d'une préparation n'a aucun instant à pointer : le plan n'a pas encore été prêché. Afficher « DIT À 0:00 » ferait mentir l'écran poliment.",
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
   "synthesisCapsuleLabel": "CAPSULE {index} · DIT À {at}",
   "@synthesisCapsuleLabel": {
     "placeholders": {
@@ -1245,6 +1386,87 @@
   "synthesisReadAloudOpen": "La lecture reprend la synthèse telle que vous l'avez validée.",
   "synthesisVoiceComing": "Lecture à venir",
   "synthesisVoiceLocked": "Disponible une fois la synthèse validée",
+  "synthesisVoiceRead": "Écouter la synthèse",
+  "synthesisVoiceStop": "Arrêter la lecture",
+  "synthesisVoiceNoLanguage": "Cette voix n'est pas installée sur ce téléphone. Elle se télécharge depuis les réglages, dans « Synthèse vocale ».",
+  "@synthesisVoiceNoLanguage": {
+    "description": "Le refus le plus fréquent, et le seul que le pasteur peut lever lui-même — on lui dit donc où aller."
+  },
+  "synthesisVoiceNoEngine": "Ce téléphone n'a pas de synthèse vocale.",
+  "synthesisVoiceFailed": "La lecture n'a pas pu commencer.",
+  "synthesisVoiceNotValidated": "Validez la synthèse avant de la faire lire.",
+  "@synthesisVoiceNotValidated": {
+    "description": "La garde, dite plutôt que subie : rien ne sort d'une synthèse que le pasteur n'a pas signée."
+  },
+  "synthesisVoiceEnglish": "Anglais",
+  "voiceFrenchLabel": "Français",
+  "voiceFrenchNote": "Voix de synthèse, sur cet appareil",
+  "voiceEnglishNote": "Voix de synthèse, sur cet appareil",
+  "@voiceFrenchNote": {
+    "description": "Ce que vaut cette lecture. « Sur cet appareil » n'est pas décoratif : c'est la promesse que rien ne sort pour la produire."
+  },
+  "voiceOwnLabel": "Votre propre voix",
+  "voiceOwnNote": "Enregistrez-vous disant la synthèse dans la langue de votre assemblée — rien à traduire, rien à générer",
+  "@voiceOwnNote": {
+    "description": "La seule des quatre qui ne demande aucun modèle, et la plus juste : c'est la voix que l'assemblée reconnaît (D60)."
+  },
+  "voiceMalinkeLabel": "Malinké",
+  "voiceMalinkeNote": "Interprétée par l'équipe Dorea — la langue que nous savons tenir aujourd'hui",
+  "@voiceMalinkeNote": {
+    "description": "D63 : la proposition dit ce que Dorea sait faire, jamais ce que le pasteur est censé parler. Une langue est une identité ; présumer serait pire que ne rien proposer."
+  },
+  "trackRecordStart": "Enregistrer votre voix",
+  "@trackRecordStart": {
+    "description": "Le geste de la piste : le pasteur dit lui-même sa synthèse dans la langue de son assemblée."
+  },
+  "trackRecordStop": "Arrêter l'enregistrement",
+  "trackListen": "Écouter votre piste",
+  "trackListenStop": "Arrêter",
+  "trackRedo": "Refaire",
+  "trackRedoHint": "Un nouvel enregistrement remplace celui-ci.",
+  "trackLanguageTitle": "Dans quelle langue ?",
+  "trackLanguageBody": "Nommez-la comme vous la nommez. Ce n'est pas une liste : c'est la langue de votre assemblée.",
+  "trackLanguageHint": "Baoulé, dioula, français…",
+  "trackLanguageCancel": "Annuler",
+  "trackLanguageConfirm": "Ouvrir le micro",
+  "trackRecordingIn": "Enregistrement en {language}",
+  "@trackRecordingIn": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "trackSaved": "Piste enregistrée en {language} · {duration}",
+  "@trackSaved": {
+    "description": "Ce que l'écran montre d'une piste rangée : la langue telle que le pasteur l'a nommée, et sa durée.",
+    "placeholders": {
+      "language": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "trackNotValidated": "Validez la synthèse avant d'enregistrer votre voix.",
+  "@trackNotValidated": {
+    "description": "La garde du produit, dite plutôt que subie — même règle que la lecture à voix haute."
+  },
+  "trackEmpty": "Le micro s'est fermé sans rien enregistrer. Rien n'a été gardé.",
+  "@trackEmpty": {
+    "description": "Un succès muet serait pire : le pasteur croirait avoir une piste qui n'existe pas."
+  },
+  "trackMicRefused": "Le micro n'est pas autorisé. Ouvrez les réglages du téléphone pour le permettre.",
+  "trackNoMicrophone": "Ce téléphone n'a pas de micro utilisable.",
+  "trackStorageFull": "Plus assez de place pour enregistrer. Libérez quelques mégaoctets.",
+  "trackEngineFailed": "L'enregistrement n'a pas pu commencer.",
+  "trackFileMissing": "Le fichier de cette piste n'est plus sur le téléphone.",
+  "@trackFileMissing": {
+    "description": "Stockage vidé, appareil restauré : le dire vaut mieux qu'un bouton qui ne fait rien."
+  },
+  "trackNoPlayer": "Ce téléphone ne sait pas jouer cette piste.",
+  "trackPlaybackFailed": "La lecture n'a pas pu commencer.",
   "synthesisSpokenMinutes": "{minutes} min",
   "@synthesisSpokenMinutes": {
     "placeholders": {
@@ -1308,5 +1530,122 @@
         "type": "String"
       }
     }
+  },
+  "editorTitle": "Tailler une pièce",
+  "@editorTitle": {
+    "description": "Titre de l'éditeur audio, où le pasteur découpe son culte."
+  },
+  "editorPreparing": "Lecture de l'onde…",
+  "@editorPreparing": {
+    "description": "Le condensé de l'onde se calcule ; sur une heure et demie, cela prend quelques secondes."
+  },
+  "editorEmpty": "Il n'y a rien à tailler : aucun fragment n'a été écrit.",
+  "@editorEmpty": {
+    "description": "Une capture vide ne s'édite pas."
+  },
+  "editorGesture": "Écoutez, arrêtez-vous à la frontière, puis posez la borne. L'onde sert à viser ; l'oreille tranche.",
+  "@editorGesture": {
+    "description": "Explique le geste de l'éditeur, parce qu'on ne place pas une coupe au doigt sur une heure et demie."
+  },
+  "editorPlay": "Écouter",
+  "@editorPlay": {
+    "description": "Lance la lecture depuis la tête."
+  },
+  "editorPause": "Pause",
+  "@editorPause": {
+    "description": "Suspend la lecture sans perdre l'endroit."
+  },
+  "editorBack": "Reculer de dix secondes",
+  "@editorBack": {
+    "description": "Infobulle du recul."
+  },
+  "editorForward": "Avancer de dix secondes",
+  "@editorForward": {
+    "description": "Infobulle de l'avance."
+  },
+  "editorZoomIn": "Resserrer",
+  "@editorZoomIn": {
+    "description": "Réduit la fenêtre affichée pour viser plus fin."
+  },
+  "editorZoomOut": "Élargir",
+  "@editorZoomOut": {
+    "description": "Élargit la fenêtre affichée pour se repérer."
+  },
+  "editorPosition": "{position} sur {duration}",
+  "@editorPosition": {
+    "description": "Où en est la lecture dans le culte entier.",
+    "placeholders": {
+      "position": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "editorSetStart": "Début ici",
+  "@editorSetStart": {
+    "description": "Pose la borne de gauche de la pièce à la position d'écoute."
+  },
+  "editorSetEnd": "Fin ici",
+  "@editorSetEnd": {
+    "description": "Pose la borne de droite de la pièce à la position d'écoute."
+  },
+  "editorPiece": "La pièce",
+  "@editorPiece": {
+    "description": "Titre du bandeau qui récapitule les bornes."
+  },
+  "editorRange": "{from} → {to}",
+  "@editorRange": {
+    "description": "Les deux bornes de la pièce.",
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "editorLength": "{duration} de pièce",
+  "@editorLength": {
+    "description": "Durée de ce qui sera taillé.",
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "editorHearStart": "Écouter le début",
+  "@editorHearStart": {
+    "description": "Rejoue les secondes autour de la borne de gauche : une borne posée à l'œil tombe souvent au milieu d'un mot."
+  },
+  "editorHearEnd": "Écouter la fin",
+  "@editorHearEnd": {
+    "description": "Rejoue les secondes autour de la borne de droite."
+  },
+  "editorCut": "Tailler cette pièce",
+  "@editorCut": {
+    "description": "Écrit la pièce. Rien n'est détruit : la matière reste entière."
+  },
+  "editorCutting": "Découpage…",
+  "@editorCutting": {
+    "description": "La pièce s'écrit."
+  },
+  "editorTooShort": "Une pièce fait au moins une seconde.",
+  "@editorTooShort": {
+    "description": "Refus quand les deux bornes se touchent."
+  },
+  "editorCutDone": "Pièce taillée. Elle vit avec sa publication, et ne disparaîtra pas au septième jour.",
+  "@editorCutDone": {
+    "description": "Confirmation, qui dit surtout ce que le pasteur ne peut pas deviner : la pièce survit à la purge, la matière non."
+  },
+  "editorNext": "Enchaîner sur la suite",
+  "@editorNext": {
+    "description": "Place la borne de gauche à la fin de la pièce qu'on vient de tailler — le geste du dimanche : la prédication, puis la prière."
+  },
+  "editorSafety": "La matière reste entière. Tailler écrit une pièce à côté ; vous pouvez recommencer autant de fois qu'il faut.",
+  "@editorSafety": {
+    "description": "Dit que le geste est réversible, parce qu'un pasteur qui craint d'effacer son culte n'osera pas couper."
   }
 }

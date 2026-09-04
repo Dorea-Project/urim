@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:equatable/equatable.dart';
 
 /// Capter la prédication — **l'étage 1, et rien de plus**.
@@ -36,6 +38,37 @@ abstract interface class SermonCapture {
   /// Sert au bandeau qui traverse l'application : il doit pouvoir dire depuis
   /// combien de temps on enregistre sans que l'écran ait à le compter.
   CaptureInProgress? get current;
+
+  /// 🔴 **La preuve que le micro entend** — A2.
+  ///
+  /// L'écran de capture était muet : un chronomètre qui avance, et rien
+  /// d'autre. Or un chronomètre avance aussi quand le micro est coupé, quand
+  /// une housse le bouche, quand une autre application l'a pris. Le pasteur ne
+  /// l'apprenait qu'après le culte, sur un fichier vide — et *ce qui n'est pas
+  /// capté dimanche est perdu pour toujours*.
+  ///
+  /// ⚠️ **Un flux, jamais un état interrogeable.** Un niveau qu'on relit à la
+  /// demande serait faux entre deux lectures ; ce qui rassure est le mouvement,
+  /// pas la valeur.
+  Stream<CaptureSignal> get signal;
+}
+
+/// Ce que le micro entend, à l'instant.
+final class CaptureSignal {
+  const CaptureSignal({required this.level, required this.fragments});
+
+  /// Le niveau, de 0 à 1 — **une crête, pas une moyenne**.
+  ///
+  /// Une moyenne sur trente secondes de prédication reste plate : les silences
+  /// entre les phrases la tirent vers le bas, et la barre ne bougerait plus.
+  /// C'est le mouvement qui dit que ça entend.
+  final double level;
+
+  /// Combien de fragments sont **posés sur le disque**.
+  ///
+  /// ⚠️ Pas « enregistrés » : écrits, atomiquement, et donc survivants à une
+  /// application tuée. C'est le seul nombre qui compte pour le pasteur.
+  final int fragments;
 }
 
 /// Le format de la capture — **choisi pour ce qui le lira**.
@@ -72,6 +105,74 @@ abstract final class CaptureFormat {
   static Duration durationOf(int bytes) =>
       Duration(milliseconds: bytes * 1000 ~/ bytesPerSecond);
 
+  /// Le chemin inverse — **et il s'aligne sur l'échantillon, toujours**.
+  ///
+  /// 🔴 **Un échantillon fait deux octets, et une coupe impaire les décale
+  /// tous.** Chaque paire d'octets serait lue à cheval sur deux échantillons :
+  /// la sortie ne serait pas décalée d'un poil, elle serait du bruit blanc à la
+  /// place de la parole. C'est la seule façon de se tromper silencieusement ici
+  /// — le fichier aurait la bonne taille, la bonne durée, et ne contiendrait
+  /// rien d'audible. On arrondit donc **vers le bas**, jamais vers le haut :
+  /// mieux vaut un millième de seconde en moins que le premier échantillon
+  /// coupé en deux.
+  static int bytesOf(Duration position) {
+    final brut = position.inMilliseconds * bytesPerSecond ~/ 1000;
+    return brut - (brut % 2);
+  }
+
+  static const int wavHeaderBytes = 44;
+
+  /// L'en-tête WAV canonique — **quarante-quatre octets, et rien de plus**.
+  ///
+  /// 🔴 **Le PCM brut ne se joue pas.** Aucun lecteur du téléphone ne sait
+  /// ouvrir un fragment : rien dedans ne dit la fréquence, le nombre de canaux
+  /// ni la profondeur. Cet en-tête ne convertit rien et ne perd rien — il décrit
+  /// ce que la capture est déjà. **Le WAV n'est pas un autre format, c'est le
+  /// même PCM avec sa carte d'identité devant.**
+  ///
+  /// ⚠️ **Il vit ici, avec le format qu'il décrit, parce que deux écrivains s'en
+  /// servent** — la réécoute d'un culte entier et le découpage d'une pièce. Deux
+  /// copies de quarante lignes d'octets finiraient par diverger, et la panne
+  /// serait un fichier illisible qu'aucun test de logique n'attraperait.
+  static Uint8List wavHeader(int octetsAudio) {
+    final entete = ByteData(wavHeaderBytes);
+    var i = 0;
+
+    void ascii(String texte) {
+      for (final unite in texte.codeUnits) {
+        entete.setUint8(i++, unite);
+      }
+    }
+
+    void u32(int valeur) {
+      entete.setUint32(i, valeur, Endian.little);
+      i += 4;
+    }
+
+    void u16(int valeur) {
+      entete.setUint16(i, valeur, Endian.little);
+      i += 2;
+    }
+
+    const bits = 16;
+
+    ascii('RIFF');
+    u32(36 + octetsAudio); // tout ce qui suit ces quatre octets
+    ascii('WAVE');
+    ascii('fmt ');
+    u32(16); // longueur du bloc de format, PCM
+    u16(1); // 1 = PCM non compressé
+    u16(channels);
+    u32(sampleRate);
+    u32(bytesPerSecond);
+    u16(channels * bits ~/ 8); // alignement d'un échantillon
+    u16(bits);
+    ascii('data');
+    u32(octetsAudio);
+
+    return entete.buffer.asUint8List();
+  }
+
   /// `0000.pcm`, `0001.pcm`… — l'ordre est dans le nom, et il se trie.
   static String fragmentName(int index) =>
       '${index.toString().padLeft(4, '0')}.pcm';
@@ -86,6 +187,34 @@ abstract final class CaptureFormat {
   /// Le témoin d'un arrêt propre. Son **absence** dit que la capture s'est
   /// interrompue toute seule.
   static const String endMarker = 'fin';
+
+  /// L'assemblée devant laquelle ce culte a été prêché.
+  ///
+  /// 🔴 **Elle vit avec la capture, pas avec le pasteur.** Un profil porterait
+  /// « son » église ; or dix pasteurs desservent sept assemblées, et celui qui
+  /// en dessert deux prêche dans **l'une** d'elles ce dimanche-là. Une valeur
+  /// par défaut serait fausse une fois sur deux, et fausse en silence.
+  ///
+  /// ⚠️ **Elle s'écrit à l'arrêt, jamais au démarrage.** *Rien ne s'interpose*
+  /// entre le pasteur et son micro : on ne lui demande pas où il est pendant
+  /// qu'il monte en chaire. On le lui demande une fois le culte fini, s'il y a
+  /// lieu de le demander.
+  ///
+  /// Son absence n'est pas une erreur — c'est une capture qui n'a pas encore
+  /// trouvé son assemblée, et qui attend plutôt que de partir au hasard.
+  static const String churchMarker = 'eglise';
+
+  /// Le titre que le pasteur donne à son culte.
+  ///
+  /// 🔴 **Une date n'est pas un nom.** Trois cultes du même mois se lisent
+  /// « sam. 29 août », « dim. 30 août », « dim. 6 septembre » — et au bout de
+  /// quatre dimanches, plus personne ne sait lequel portait quoi. Le pasteur
+  /// doit pouvoir écrire « Nouvelle naissance » ou « Actes 2, matin ».
+  ///
+  /// ⚠️ **Facultatif, et il le reste.** Son absence n'est pas un défaut : la
+  /// date suffit le jour même. Le réclamer à l'arrêt du micro serait un geste
+  /// de plus au moment précis où *rien ne doit s'interposer*.
+  static const String titleMarker = 'titre';
 }
 
 /// Ce que rend l'ouverture du micro.
@@ -139,6 +268,11 @@ final class CaptureInProgress extends Equatable {
   final String id;
   final DateTime startedAt;
 
+  /// Le nom que le pasteur lui a donné, ou nul.
+  ///
+  /// Nul veut dire *pas encore nommé* — jamais *sans importance*. L'écran
+  /// retombe alors sur la date, qui est vraie mais muette.
+
   /// Le **dossier** en train de se remplir. Sur l'appareil, jamais ailleurs.
   final String path;
 
@@ -158,6 +292,7 @@ final class CapturedSermon extends Equatable {
     required this.path,
     required this.fragments,
     this.interrupted = false,
+    this.title,
   });
 
   final String id;
@@ -180,6 +315,15 @@ final class CapturedSermon extends Equatable {
   /// pas : il croyait avoir enregistré.
   final bool interrupted;
 
+  /// Le nom que le pasteur lui a donné, ou nul.
+  ///
+  /// 🔴 **Une date n'est pas un nom.** Quatre dimanches se lisent « dim. 30
+  /// août », « dim. 6 septembre »… et plus personne ne sait lequel portait quoi.
+  ///
+  /// Nul veut dire *pas encore nommé*, jamais *sans importance* : l'écran
+  /// retombe sur la date, qui est vraie mais muette.
+  final String? title;
+
   /// Le jour où l'audio doit disparaître.
   ///
   /// ⚠️ **Sept jours, et la promesse se tient bruyamment.** Le domaine du
@@ -196,5 +340,5 @@ final class CapturedSermon extends Equatable {
 
   @override
   List<Object?> get props =>
-      [id, startedAt, duration, path, fragments, interrupted];
+      [id, startedAt, duration, path, fragments, interrupted, title];
 }

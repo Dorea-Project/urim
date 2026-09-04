@@ -549,10 +549,10 @@ abstract class AppText {
   /// **'Rien n\'est revendu'**
   String get privacyNoResaleTitle;
 
-  /// No description provided for @privacyNoResaleBody.
+  /// ⚠️ Corrigé le 29/08. La phrase disait « aucun partage à un tiers », qui se lit naturellement comme « mon texte ne quitte pas Dorea ». Or le texte des préparations part chez un fournisseur de modèle à chaque tour, pour résoudre les références et peser les axes. La promesse forte reste entière là où elle compte — rien n'est revendu, rien n'entraîne un modèle — mais elle cesse d'affirmer une étanchéité qui n'existe pas. Le prestataire n'est pas nommé : Dorea est responsable du traitement et endosse ce que ses sous-traitants font pour elle.
   ///
   /// In fr, this message translates to:
-  /// **'Aucun partage à un tiers, aucune publicité, aucun entraînement de modèle sur votre contenu.'**
+  /// **'Aucune publicité, aucun entraînement de modèle sur votre contenu. Les traitements techniques passent par des prestataires qui agissent pour Dorea, jamais pour leur propre compte.'**
   String get privacyNoResaleBody;
 
   /// No description provided for @privacyRetainedLabel.
@@ -1929,6 +1929,42 @@ abstract class AppText {
   /// **'Arrêter'**
   String get homeCaptureStop;
 
+  /// A3.2 — onglet 1. Vide tant que le modèle embarqué n'est pas retenu (D52), et il le dit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce qui a été dit'**
+  String get sermonTabSaid;
+
+  /// A3.3 — onglet 2.
+  ///
+  /// In fr, this message translates to:
+  /// **'La synthèse'**
+  String get sermonTabSynthesis;
+
+  /// A3.4 — onglet 3 : ce qu'on porte à la voix.
+  ///
+  /// In fr, this message translates to:
+  /// **'La sortie'**
+  String get sermonTabOutput;
+
+  /// A2 — ce qui est POSÉ sur le disque, atomiquement, et survit à une application tuée. Pas « enregistré » : écrit.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{aucun fragment écrit} =1{1 fragment écrit} other{{count} fragments écrits}}'**
+  String homeCaptureFragments(int count);
+
+  /// B1.11 — la file monte quand le réseau revient. Rien n'est perdu en attendant.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 fragment attend le réseau} other{{count} fragments attendent le réseau}}'**
+  String homeCapturePending(int count);
+
+  /// 🔴 A2.4 — la promesse manquante. La capture est le PREMIER objet d'Urim qui ne se synchronise pas, et rien ne le disait. À formuler AVANT le premier pilote : le jour où un pasteur enregistre sur son téléphone et cherche la relecture sur sa tablette, il ne doit pas découvrir le vide.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet enregistrement reste sur ce téléphone. Il ne se retrouvera pas sur une autre tablette, même connectée au même compte.'**
+  String get homeCaptureStaysHere;
+
   /// Confirmation à l'arrêt. Dit la durée pour que le pasteur sache que quelque chose a bien été écrit.
   ///
   /// In fr, this message translates to:
@@ -1982,6 +2018,240 @@ abstract class AppText {
   /// In fr, this message translates to:
   /// **'sur cet appareil, pas encore transcrite'**
   String get homeCaptureNotSent;
+
+  /// No description provided for @captureTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Culte du {date}'**
+  String captureTitle(String date);
+
+  /// No description provided for @captureSectionState.
+  ///
+  /// In fr, this message translates to:
+  /// **'CE QUI A ÉTÉ CAPTÉ'**
+  String get captureSectionState;
+
+  /// No description provided for @captureDuration.
+  ///
+  /// In fr, this message translates to:
+  /// **'{duration} enregistrées'**
+  String captureDuration(String duration);
+
+  /// No description provided for @captureFragments.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 fragment de trente secondes} other{{count} fragments de trente secondes}}'**
+  String captureFragments(int count);
+
+  /// No description provided for @captureUploadAllSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout est arrivé au serveur.'**
+  String get captureUploadAllSent;
+
+  /// L'attente n'est pas une panne : les fragments restent sept jours sur l'appareil et la file reprend là où elle s'est arrêtée.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 fragment attend de partir} other{{count} fragments attendent de partir}}'**
+  String captureUploadPending(int count);
+
+  /// 🔴 Le silence le plus coûteux du chantier : sans ce message, le compteur monte et rien ne dit pourquoi rien ne part.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette capture attend de savoir devant quelle assemblée elle a été prêchée. Sans elle, elle ne peut pas partir.'**
+  String get captureUploadNoChurch;
+
+  /// No description provided for @captureInterrupted.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'enregistrement s\'est arrêté tout seul. Ce qui a été capté avant est intact.'**
+  String get captureInterrupted;
+
+  /// No description provided for @capturePurgeIn.
+  ///
+  /// In fr, this message translates to:
+  /// **'{days, plural, =0{L\'audio est effacé aujourd\'hui} =1{L\'audio est effacé demain} other{L\'audio est effacé dans {days} jours}}'**
+  String capturePurgeIn(int days);
+
+  /// No description provided for @transcribeOfferTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire ce culte'**
+  String get transcribeOfferTitle;
+
+  /// 🔴 Le téléchargement se demande, il ne se déclenche pas. L'application promet que l'audio ne quitte pas le téléphone ; faire descendre 31 Mo n'est pas rompre cette promesse, mais c'est du réseau que le pasteur doit voir venir.
+  ///
+  /// In fr, this message translates to:
+  /// **'Urim peut transcrire cet enregistrement sur ce téléphone. Il doit d\'abord télécharger son modèle : {megaoctets} Mo, une seule fois. L\'audio, lui, ne partira pas.'**
+  String transcribeOfferBody(int megaoctets);
+
+  /// Le sélecteur de gabarit montre le poids parce que le poids décide : sur un forfait à Abidjan, 466 Mo contre 75 n'est pas un détail d'ergonomie.
+  ///
+  /// In fr, this message translates to:
+  /// **'{gabarit} · {megaoctets} Mo'**
+  String transcribeModelChip(String gabarit, int megaoctets);
+
+  /// No description provided for @transcribeDownload.
+  ///
+  /// In fr, this message translates to:
+  /// **'Télécharger le modèle'**
+  String get transcribeDownload;
+
+  /// ⚠️ En mégaoctets, jamais en pourcentage seul : « 60 % » ne dit pas s'il reste 5 Mo à descendre ou 150, et c'est cette différence qui décide de continuer ou d'attendre le wifi.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléchargement… {received} Mo sur {total}'**
+  String transcribeDownloading(int received, int total);
+
+  /// No description provided for @transcribeStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Transcrire ce culte'**
+  String get transcribeStart;
+
+  /// No description provided for @transcribeResume.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reprendre la transcription'**
+  String get transcribeResume;
+
+  /// No description provided for @transcribeRunning.
+  ///
+  /// In fr, this message translates to:
+  /// **'{done} fragment sur {total}'**
+  String transcribeRunning(int done, int total);
+
+  /// No description provided for @transcribeSectionText.
+  ///
+  /// In fr, this message translates to:
+  /// **'CE QUI A ÉTÉ DIT'**
+  String get transcribeSectionText;
+
+  /// D58 — un texte qui se corrige sous les yeux est pire qu'un texte qui tarde.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le texte s\'ajoute par blocs et ne se corrige pas tout seul : ce que vous avez lu ne changera pas.'**
+  String get transcribeAdditive;
+
+  /// No description provided for @transcribeFailedModel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le téléchargement n\'a pas abouti. Réessayez quand le réseau sera meilleur — rien n\'est perdu.'**
+  String get transcribeFailedModel;
+
+  /// No description provided for @transcribeFailedAudio.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet enregistrement n\'est pas lisible.'**
+  String get transcribeFailedAudio;
+
+  /// No description provided for @transcribeFailedEngine.
+  ///
+  /// In fr, this message translates to:
+  /// **'La transcription s\'est arrêtée. Ce qui était déjà lu est gardé.'**
+  String get transcribeFailedEngine;
+
+  /// D52 — « Whisper » nomme une famille, pas une décision finie. Dire ce qu'on attend vaut mieux qu'un écran vide (D13).
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien n\'a encore été transcrit. Le moteur qui lira cet audio n\'est pas retenu : son gabarit se décide en le mesurant sur un vrai téléphone, pas en le décrétant.'**
+  String get captureSaidPending;
+
+  /// No description provided for @captureSynthesisPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'La synthèse résume ce qui a été dit. Elle attend donc la transcription — résumer un enregistrement qu\'on n\'a pas lu serait inventer.'**
+  String get captureSynthesisPending;
+
+  /// No description provided for @captureOutputPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'La lecture à voix haute et l\'interprétation partent d\'une synthèse validée. Elles attendent celle-ci.'**
+  String get captureOutputPending;
+
+  /// No description provided for @captureListenResume.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reprendre'**
+  String get captureListenResume;
+
+  /// No description provided for @captureListenPause.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pause'**
+  String get captureListenPause;
+
+  /// Une date n'est pas un nom : au bout de quatre dimanches, « dim. 6 septembre » ne dit plus rien.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nommer ce culte'**
+  String get captureNameIt;
+
+  /// No description provided for @captureNameHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle naissance, Actes 2…'**
+  String get captureNameHint;
+
+  /// No description provided for @captureNameSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get captureNameSave;
+
+  /// No description provided for @captureNameCancel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get captureNameCancel;
+
+  /// No description provided for @captureNameRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer le nom'**
+  String get captureNameRemove;
+
+  /// Le repli quand rien n'a été nommé — vrai, mais muet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Culte du {date}'**
+  String captureUnnamed(String date);
+
+  /// Le seul geste que la branche « prêcher » offre aujourd'hui : le pasteur entend ce qu'il a dit, sans attendre aucun moteur.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réécouter ce culte'**
+  String get captureListen;
+
+  /// No description provided for @captureListenStop.
+  ///
+  /// In fr, this message translates to:
+  /// **'Arrêter'**
+  String get captureListenStop;
+
+  /// No description provided for @captureListenPreparing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Préparation de la lecture…'**
+  String get captureListenPreparing;
+
+  /// No description provided for @captureListenEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Il n\'y a rien à réécouter : aucun fragment n\'a été écrit.'**
+  String get captureListenEmpty;
+
+  /// No description provided for @captureListenFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'La lecture n\'a pas pu commencer.'**
+  String get captureListenFailed;
+
+  /// No description provided for @captureLocalOnly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet enregistrement reste sur ce téléphone. Il ne se retrouvera pas sur une autre tablette, même connectée au même compte.'**
+  String get captureLocalOnly;
 
   /// Sous le bouton d'enregistrement inactif. Dit ce qu'il attend plutôt que de disparaître (D13). Les libellés de l'ancienne feuille « quelle tâche ? » sont partis avec elle : la bascule du haut pose la même question sans modale.
   ///
@@ -2307,6 +2577,12 @@ abstract class AppText {
   /// **'Ce qu\'Urim a retenu'**
   String get synthesisSectionCapsules;
 
+  /// Une capsule née d'une préparation n'a aucun instant à pointer : le plan n'a pas encore été prêché. Afficher « DIT À 0:00 » ferait mentir l'écran poliment.
+  ///
+  /// In fr, this message translates to:
+  /// **'CAPSULE {index}'**
+  String synthesisCapsuleLabelPlain(int index);
+
   /// No description provided for @synthesisCapsuleLabel.
   ///
   /// In fr, this message translates to:
@@ -2385,6 +2661,222 @@ abstract class AppText {
   /// **'Disponible une fois la synthèse validée'**
   String get synthesisVoiceLocked;
 
+  /// No description provided for @synthesisVoiceRead.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écouter la synthèse'**
+  String get synthesisVoiceRead;
+
+  /// No description provided for @synthesisVoiceStop.
+  ///
+  /// In fr, this message translates to:
+  /// **'Arrêter la lecture'**
+  String get synthesisVoiceStop;
+
+  /// Le refus le plus fréquent, et le seul que le pasteur peut lever lui-même — on lui dit donc où aller.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette voix n\'est pas installée sur ce téléphone. Elle se télécharge depuis les réglages, dans « Synthèse vocale ».'**
+  String get synthesisVoiceNoLanguage;
+
+  /// No description provided for @synthesisVoiceNoEngine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce téléphone n\'a pas de synthèse vocale.'**
+  String get synthesisVoiceNoEngine;
+
+  /// No description provided for @synthesisVoiceFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'La lecture n\'a pas pu commencer.'**
+  String get synthesisVoiceFailed;
+
+  /// La garde, dite plutôt que subie : rien ne sort d'une synthèse que le pasteur n'a pas signée.
+  ///
+  /// In fr, this message translates to:
+  /// **'Validez la synthèse avant de la faire lire.'**
+  String get synthesisVoiceNotValidated;
+
+  /// No description provided for @synthesisVoiceEnglish.
+  ///
+  /// In fr, this message translates to:
+  /// **'Anglais'**
+  String get synthesisVoiceEnglish;
+
+  /// No description provided for @voiceFrenchLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Français'**
+  String get voiceFrenchLabel;
+
+  /// Ce que vaut cette lecture. « Sur cet appareil » n'est pas décoratif : c'est la promesse que rien ne sort pour la produire.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voix de synthèse, sur cet appareil'**
+  String get voiceFrenchNote;
+
+  /// No description provided for @voiceEnglishNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voix de synthèse, sur cet appareil'**
+  String get voiceEnglishNote;
+
+  /// No description provided for @voiceOwnLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre propre voix'**
+  String get voiceOwnLabel;
+
+  /// La seule des quatre qui ne demande aucun modèle, et la plus juste : c'est la voix que l'assemblée reconnaît (D60).
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrez-vous disant la synthèse dans la langue de votre assemblée — rien à traduire, rien à générer'**
+  String get voiceOwnNote;
+
+  /// No description provided for @voiceMalinkeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Malinké'**
+  String get voiceMalinkeLabel;
+
+  /// D63 : la proposition dit ce que Dorea sait faire, jamais ce que le pasteur est censé parler. Une langue est une identité ; présumer serait pire que ne rien proposer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Interprétée par l\'équipe Dorea — la langue que nous savons tenir aujourd\'hui'**
+  String get voiceMalinkeNote;
+
+  /// Le geste de la piste : le pasteur dit lui-même sa synthèse dans la langue de son assemblée.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer votre voix'**
+  String get trackRecordStart;
+
+  /// No description provided for @trackRecordStop.
+  ///
+  /// In fr, this message translates to:
+  /// **'Arrêter l\'enregistrement'**
+  String get trackRecordStop;
+
+  /// No description provided for @trackListen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écouter votre piste'**
+  String get trackListen;
+
+  /// No description provided for @trackListenStop.
+  ///
+  /// In fr, this message translates to:
+  /// **'Arrêter'**
+  String get trackListenStop;
+
+  /// No description provided for @trackRedo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Refaire'**
+  String get trackRedo;
+
+  /// No description provided for @trackRedoHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un nouvel enregistrement remplace celui-ci.'**
+  String get trackRedoHint;
+
+  /// No description provided for @trackLanguageTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dans quelle langue ?'**
+  String get trackLanguageTitle;
+
+  /// No description provided for @trackLanguageBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nommez-la comme vous la nommez. Ce n\'est pas une liste : c\'est la langue de votre assemblée.'**
+  String get trackLanguageBody;
+
+  /// No description provided for @trackLanguageHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Baoulé, dioula, français…'**
+  String get trackLanguageHint;
+
+  /// No description provided for @trackLanguageCancel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get trackLanguageCancel;
+
+  /// No description provided for @trackLanguageConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir le micro'**
+  String get trackLanguageConfirm;
+
+  /// No description provided for @trackRecordingIn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrement en {language}'**
+  String trackRecordingIn(String language);
+
+  /// Ce que l'écran montre d'une piste rangée : la langue telle que le pasteur l'a nommée, et sa durée.
+  ///
+  /// In fr, this message translates to:
+  /// **'Piste enregistrée en {language} · {duration}'**
+  String trackSaved(String language, String duration);
+
+  /// La garde du produit, dite plutôt que subie — même règle que la lecture à voix haute.
+  ///
+  /// In fr, this message translates to:
+  /// **'Validez la synthèse avant d\'enregistrer votre voix.'**
+  String get trackNotValidated;
+
+  /// Un succès muet serait pire : le pasteur croirait avoir une piste qui n'existe pas.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le micro s\'est fermé sans rien enregistrer. Rien n\'a été gardé.'**
+  String get trackEmpty;
+
+  /// No description provided for @trackMicRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le micro n\'est pas autorisé. Ouvrez les réglages du téléphone pour le permettre.'**
+  String get trackMicRefused;
+
+  /// No description provided for @trackNoMicrophone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce téléphone n\'a pas de micro utilisable.'**
+  String get trackNoMicrophone;
+
+  /// No description provided for @trackStorageFull.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus assez de place pour enregistrer. Libérez quelques mégaoctets.'**
+  String get trackStorageFull;
+
+  /// No description provided for @trackEngineFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'enregistrement n\'a pas pu commencer.'**
+  String get trackEngineFailed;
+
+  /// Stockage vidé, appareil restauré : le dire vaut mieux qu'un bouton qui ne fait rien.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le fichier de cette piste n\'est plus sur le téléphone.'**
+  String get trackFileMissing;
+
+  /// No description provided for @trackNoPlayer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce téléphone ne sait pas jouer cette piste.'**
+  String get trackNoPlayer;
+
+  /// No description provided for @trackPlaybackFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'La lecture n\'a pas pu commencer.'**
+  String get trackPlaybackFailed;
+
   /// No description provided for @synthesisSpokenMinutes.
   ///
   /// In fr, this message translates to:
@@ -2426,6 +2918,150 @@ abstract class AppText {
   /// In fr, this message translates to:
   /// **'  — {from} à {to}'**
   String synthesisPointRange(String from, String to);
+
+  /// Titre de l'éditeur audio, où le pasteur découpe son culte.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tailler une pièce'**
+  String get editorTitle;
+
+  /// Le condensé de l'onde se calcule ; sur une heure et demie, cela prend quelques secondes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecture de l\'onde…'**
+  String get editorPreparing;
+
+  /// Une capture vide ne s'édite pas.
+  ///
+  /// In fr, this message translates to:
+  /// **'Il n\'y a rien à tailler : aucun fragment n\'a été écrit.'**
+  String get editorEmpty;
+
+  /// Explique le geste de l'éditeur, parce qu'on ne place pas une coupe au doigt sur une heure et demie.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écoutez, arrêtez-vous à la frontière, puis posez la borne. L\'onde sert à viser ; l\'oreille tranche.'**
+  String get editorGesture;
+
+  /// Lance la lecture depuis la tête.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écouter'**
+  String get editorPlay;
+
+  /// Suspend la lecture sans perdre l'endroit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pause'**
+  String get editorPause;
+
+  /// Infobulle du recul.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reculer de dix secondes'**
+  String get editorBack;
+
+  /// Infobulle de l'avance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Avancer de dix secondes'**
+  String get editorForward;
+
+  /// Réduit la fenêtre affichée pour viser plus fin.
+  ///
+  /// In fr, this message translates to:
+  /// **'Resserrer'**
+  String get editorZoomIn;
+
+  /// Élargit la fenêtre affichée pour se repérer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Élargir'**
+  String get editorZoomOut;
+
+  /// Où en est la lecture dans le culte entier.
+  ///
+  /// In fr, this message translates to:
+  /// **'{position} sur {duration}'**
+  String editorPosition(String position, String duration);
+
+  /// Pose la borne de gauche de la pièce à la position d'écoute.
+  ///
+  /// In fr, this message translates to:
+  /// **'Début ici'**
+  String get editorSetStart;
+
+  /// Pose la borne de droite de la pièce à la position d'écoute.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fin ici'**
+  String get editorSetEnd;
+
+  /// Titre du bandeau qui récapitule les bornes.
+  ///
+  /// In fr, this message translates to:
+  /// **'La pièce'**
+  String get editorPiece;
+
+  /// Les deux bornes de la pièce.
+  ///
+  /// In fr, this message translates to:
+  /// **'{from} → {to}'**
+  String editorRange(String from, String to);
+
+  /// Durée de ce qui sera taillé.
+  ///
+  /// In fr, this message translates to:
+  /// **'{duration} de pièce'**
+  String editorLength(String duration);
+
+  /// Rejoue les secondes autour de la borne de gauche : une borne posée à l'œil tombe souvent au milieu d'un mot.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écouter le début'**
+  String get editorHearStart;
+
+  /// Rejoue les secondes autour de la borne de droite.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écouter la fin'**
+  String get editorHearEnd;
+
+  /// Écrit la pièce. Rien n'est détruit : la matière reste entière.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tailler cette pièce'**
+  String get editorCut;
+
+  /// La pièce s'écrit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Découpage…'**
+  String get editorCutting;
+
+  /// Refus quand les deux bornes se touchent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une pièce fait au moins une seconde.'**
+  String get editorTooShort;
+
+  /// Confirmation, qui dit surtout ce que le pasteur ne peut pas deviner : la pièce survit à la purge, la matière non.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pièce taillée. Elle vit avec sa publication, et ne disparaîtra pas au septième jour.'**
+  String get editorCutDone;
+
+  /// Place la borne de gauche à la fin de la pièce qu'on vient de tailler — le geste du dimanche : la prédication, puis la prière.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enchaîner sur la suite'**
+  String get editorNext;
+
+  /// Dit que le geste est réversible, parce qu'un pasteur qui craint d'effacer son culte n'osera pas couper.
+  ///
+  /// In fr, this message translates to:
+  /// **'La matière reste entière. Tailler écrit une pièce à côté ; vous pouvez recommencer autant de fois qu\'il faut.'**
+  String get editorSafety;
 }
 
 class _AppTextDelegate extends LocalizationsDelegate<AppText> {

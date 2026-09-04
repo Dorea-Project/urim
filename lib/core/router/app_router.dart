@@ -18,8 +18,9 @@ import 'package:urim/presentation/profile/profile_page.dart';
 import 'package:urim/presentation/archive/archive_page.dart';
 import 'package:urim/presentation/settings/settings_page.dart';
 import 'package:urim/presentation/splash/splash_page.dart';
-import 'package:urim/presentation/transcription/synthesis_page.dart';
-import 'package:urim/presentation/transcription/transcription_page.dart';
+import 'package:urim/presentation/transcription/capture_shell.dart';
+import 'package:urim/presentation/transcription/piece_editor_page.dart';
+import 'package:urim/presentation/transcription/sermon_shell.dart';
 
 /// Table de routage de l'application.
 ///
@@ -156,18 +157,37 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           preparationId: state.pathParameters['id']!,
         ),
       ),
+      // 🔴 **Les deux chemins mènent à la même coque** (A3), sur deux onglets
+      // différents. Les garder distincts n'est pas une hésitation : ce sont deux
+      // intentions — « montre-moi ce qui a été dit » et « montre-moi la
+      // synthèse » — et un lien profond doit continuer d'ouvrir l'un ou l'autre.
       GoRoute(
         path: AppRoutes.transcriptionPath,
         name: AppRoutes.transcriptionName,
-        builder: (context, state) => TranscriptionPage(
+        builder: (context, state) => SermonShell(
           preparationId: state.pathParameters['id']!,
+          initialTab: 0,
         ),
       ),
       GoRoute(
         path: AppRoutes.synthesisPath,
         name: AppRoutes.synthesisName,
-        builder: (context, state) => SynthesisPage(
+        builder: (context, state) => SermonShell(
           preparationId: state.pathParameters['id']!,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.capturePath,
+        name: AppRoutes.captureName,
+        builder: (context, state) => CaptureShell(
+          captureId: state.pathParameters['id']!,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.pieceEditorPath,
+        name: AppRoutes.pieceEditorName,
+        builder: (context, state) => PieceEditorPage(
+          captureId: state.pathParameters['id']!,
         ),
       ),
       GoRoute(
