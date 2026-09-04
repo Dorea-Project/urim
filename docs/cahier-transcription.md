@@ -61,6 +61,23 @@ du pasteur.
 **Le schéma reste juste comme intention.** Ce qui a changé est le chemin, pas la
 destination.
 
+🔴 **Et le 04/09, la branche ② a bougé à son tour (D70).** Le dessin la décrit
+comme *« transcription → synthèse → conversion en audio »* : le texte au milieu,
+l'audio à chaque bout. **C'est l'inverse.** Un pasteur enregistre 1 h 30, il
+découpe, il publie de l'audio — et il demande du texte le vendredi, sur une des
+deux pièces, s'il en veut.
+
+| | Avant | Depuis D70 |
+|---|---|---|
+| Le tronc | l'audio est un intrant du transcript | **l'audio retravaillé est le produit** |
+| Le transcript | obligatoire, tout passe par lui | **une branche optionnelle d'une pièce** |
+| L'interprétation | part de la synthèse validée | **part de l'audio écouté** — livrable aujourd'hui |
+| Ce que le verrou garde | toute la branche ② | **la seule flèche `transcription → synthèse`** |
+
+**La destination ne bouge toujours pas.** Ce qui bouge, une deuxième fois, c'est
+le chemin — et dans le même sens que D59 : *une étape attendait une matière dont
+elle n'avait pas besoin.*
+
 ---
 
 ## 3. L'état vérifié au 29 août
@@ -83,19 +100,45 @@ des documents.
 une piste audio dans la langue de son assemblée, sans interprète et sans que
 personne d'autre ne bouge.
 
-### Branche ② — enregistrer, transcrire
+### Branche ② — enregistrer, éditer, publier
+
+🔴 **Retitrée le 04/09 par D70.** Elle s'appelait « enregistrer, transcrire », et
+c'était le nom du problème : tout y passait par le texte. **Le tronc est
+l'audio retravaillé** ; la transcription est une branche optionnelle qui pend
+d'une pièce.
+
+```
+  enregistrement → édition → LA PIÈCE ├──► publication (Dorea app)
+                                      ├──► transcription (si besoin) ──► synthèse ──► epub
+                                      └──► l'équipe Dorea écoute ─────► interprétation
+```
 
 | Étape | État |
 |---|---|
 | Le micro, les fragments de 30 s, la purge à sept jours | ✅ livré |
-| La montée des fragments au serveur | ✅ **éprouvée le 29/08** — un culte réel est arrivé entier |
+| La montée des fragments au serveur | ✅ **éprouvée le 29/08** — mais sur 41,76 s |
 | La purge côté serveur | ✅ livrée |
-| **La transcription speech-to-text** | ❌ **n'existe pas** |
-| La synthèse depuis un transcript | 🔒 **verrouillée** — attend la mesure |
+| **Tenir 1 h 30 d'un seul tenant** | ❓ **jamais éprouvé** — 129 fois plus long que le seul essai réel |
+| Se déplacer dans la réécoute — avancer, mettre en pause | ❌ n'existe pas (`capture_playback` ne sait ni chercher ni donner une position) |
+| **Découper la matière en pièces** | ❌ n'existe pas — et c'est de l'arithmétique sur du PCM |
+| Publier une pièce sur Dorea app | ❌ n'existe pas |
+| L'interprétation par l'équipe Dorea | ❌ n'existe pas — **mais plus rien ne la bloque** |
+| La transcription speech-to-text | ❌ n'existe pas |
+| La synthèse depuis un transcript, et l'epub | 🔒 **verrouillée** — attend la mesure |
 
-⚠️ **La branche ② s'arrête au serveur.** Les captures y arrivent, y vivent sept
-jours, et personne ne les lit. C'est exactement ce que l'écran annonce déjà :
-*« Le moteur de transcription n'est pas encore retenu. »*
+⚠️ **Le verrou a changé de portée, pas de sévérité.** Il ne garde plus que la
+flèche `transcription → synthèse`. L'édition, la publication de l'audio et
+l'interprétation ne l'ont jamais traversé — elles attendaient un verrou qui ne
+les concernait pas.
+
+🔴 **La ligne à regarder avant toutes les autres est la quatrième.** La plus
+longue capture jamais éprouvée fait **41,76 secondes** ; le pasteur en veut
+**5 400**. L'espace disque (173 Mo), la mise en veille d'Android, la survie du
+service de premier plan pendant une heure et demie, la chauffe, la batterie, et
+la montée de 180 fragments sur la connexion d'une église : rien de tout cela n'a
+été vu à cette échelle. **Ce test se fait dimanche prochain avec le code
+d'aujourd'hui, et il ne demande aucune ligne neuve.** Si la capture ne tient pas
+1 h 30, tout le reste est de la théorie.
 
 ---
 
