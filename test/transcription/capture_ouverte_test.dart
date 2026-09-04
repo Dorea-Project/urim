@@ -144,30 +144,43 @@ void main() {
     expect(find.text(text.piecesEmpty), findsOneWidget);
   });
 
-  testWidgets('une capture sans assemblée le dit — le silence le plus coûteux',
-      (tester) async {
-    // 🔴 **Le défaut que cet écran existe pour fermer.** Sans église, rien ne
-    // partira jamais ; le compteur montait et aucun écran ne l'expliquait.
-    poser(fragments: 4, debut: maintenant, eglise: null);
-
-    await ouvrir(tester);
-    final text = AppText.of(tester.element(find.byType(CaptureShell)));
-
-    expect(find.text(text.captureUploadNoChurch), findsOneWidget);
-    expect(
-      find.text(text.captureUploadPending(4)),
-      findsNothing,
-      reason: '« en attente » ferait croire que ça va partir',
-    );
-  });
-
-  testWidgets('ce qui attend de partir se compte', (tester) async {
+  testWidgets('l\'écran ne promet plus aucun départ', (tester) async {
+    // ⛔ **Deux tests vivaient ici, et ils gardaient l'inverse.** L'un vérifiait
+    // que le compteur « 3 fragments attendent de partir » s'affiche, l'autre
+    // qu'une capture sans assemblée annonce qu'elle ne partira jamais.
+    //
+    // 🔴 **D71 a coupé la montée automatique** : le port `FragmentStore` n'a
+    // que `put` et `purge`, rien ne lit jamais les fragments montés, et on ne
+    // transcrit plus la matière brute. Ces trois phrases sont donc devenues
+    // fausses — et une phrase fausse sur le sort d'un culte est pire qu'une
+    // phrase absente. C'est cette absence que ce test garde.
     poser(fragments: 5, debut: maintenant, eglise: 'eglise-1', accuses: 2);
 
     await ouvrir(tester);
     final text = AppText.of(tester.element(find.byType(CaptureShell)));
 
-    expect(find.text(text.captureUploadPending(3)), findsOneWidget);
+    expect(find.text(text.captureUploadPending(3)), findsNothing);
+    expect(find.text(text.captureUploadAllSent), findsNothing);
+    expect(find.text(text.captureUploadNoChurch), findsNothing);
+
+    // Ce qui reste dit est vrai, et suffit : l'audio est ici, et il expire.
+    expect(find.text(text.captureLocalOnly), findsOneWidget);
+    expect(find.text(text.capturePurgeIn(7)), findsOneWidget);
+  });
+
+  testWidgets('une capture sans assemblée n\'annonce plus rien de faux',
+      (tester) async {
+    // ⚠️ **Le témoin d'église reste écrit** (D68) : dix pasteurs desservent
+    // sept assemblées, et un culte rangé sous la mauvaise fausserait la mesure.
+    // Ce qu'il débloquait a changé ; ce qu'il atteste, non. Mais l'écran ne dit
+    // plus « sans elle, elle ne peut pas partir » — plus rien ne part.
+    poser(fragments: 4, debut: maintenant, eglise: null);
+
+    await ouvrir(tester);
+    final text = AppText.of(tester.element(find.byType(CaptureShell)));
+
+    expect(find.text(text.captureUploadNoChurch), findsNothing);
+    expect(find.text(text.captureFragments(4)), findsOneWidget);
   });
 
   testWidgets('un enregistrement interrompu se signale sans alarmer',

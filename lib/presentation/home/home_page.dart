@@ -161,7 +161,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             // ⚠️ **Au-dessus de la bascule, pas dedans.** Un enregistrement en
             // cours se voit des deux côtés : c'est la seule chose qui traverse.
             if (capture.running case final CaptureInProgress encours)
-              CaptureBar(capture: encours),
+              CaptureBar(capture: encours, signal: capture),
             Expanded(
               child: switch (feed) {
                 AsyncError() => const _FeedError(),
@@ -481,6 +481,10 @@ class _PreachedFeed extends ConsumerWidget {
                 ),
           ),
         ),
+        // ⛔ **Le compteur « ce qui attend le réseau » est parti** (D71, 06/09).
+        // Il disait vrai tant que la file se vidait ; depuis qu'elle ne part
+        // plus, il aurait montré un nombre qui ne descend jamais — exactement
+        // la lecture qui inquiète, et que ce bandeau existait pour écarter.
         for (final captee in captees) ...[
           _CaptureCard(capture: captee, now: now),
           const SizedBox(height: AppSpacing.md),
@@ -513,11 +517,24 @@ class _CaptureCard extends StatelessWidget {
 
     final jours = capture.purgeAt.difference(now).inDays;
 
-    return Container(
+    // 🔴 **Elle s'ouvre depuis le 29/08.** C'était un `Container` : trois faits
+    // et aucun geste — le seul objet du produit sur lequel on ne pouvait rien
+    // faire. La retenue se défendait — *annoncer un transcript qui n'existe pas
+    // serait mentir* — mais l'écran qui s'ouvre ne promet rien : il montre
+    // l'état réel de l'enregistrement, et dit ce que le reste attend (D13).
+    return Material(
+      color: theme.colorScheme.surface,
+      borderRadius: BorderRadius.circular(AppRadius.lg),
+      child: InkWell(
+        onTap: () => context.pushNamed(
+          AppRoutes.captureName,
+          pathParameters: {'id': capture.id},
+        ),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        child: Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(AppRadius.lg),
         border: Border.all(color: colors.border),
       ),
@@ -533,6 +550,24 @@ class _CaptureCard extends StatelessWidget {
             '${formatElapsed(capture.duration)} · ${text.homeCaptureNotSent}',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: colors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          // 🔴 **A2.4 — la promesse manquante.** La capture est le PREMIER
+          // objet d'Urim qui ne se synchronise pas, et rien ne le disait. Tout
+          // le reste vit sur le serveur : le pasteur ouvre Urim sur sa tablette
+          // et retrouve son travail. Une capture, non.
+          //
+          // Ce n'est pas un défaut à corriger — c'est la conséquence de *« la
+          // capture n'est jamais refusée »*, qui interdit d'attendre le réseau.
+          // C'est donc une promesse à **formuler**, et avant le premier pilote :
+          // le jour où il cherche la relecture sur sa tablette, il ne doit pas
+          // découvrir le vide.
+          Text(
+            text.homeCaptureStaysHere,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: colors.textSecondary,
+              height: 1.4,
             ),
           ),
           const SizedBox(height: AppSpacing.md),
@@ -561,6 +596,8 @@ class _CaptureCard extends StatelessWidget {
             ],
           ),
         ],
+      ),
+        ),
       ),
     );
   }

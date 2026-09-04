@@ -5,13 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urim/core/audio/capture_playback.dart';
 import 'package:urim/core/audio/capture_store.dart';
-import 'package:urim/core/audio/fragment_outbox.dart';
 import 'package:urim/core/audio/track_player.dart';
 import 'package:urim/core/speech/transcriber.dart';
 import 'package:urim/presentation/transcription/transcription_capture_view_model.dart';
 import 'package:urim/core/audio/sermon_capture.dart';
 import 'package:urim/core/time/clock_provider.dart';
-import 'package:urim/data/datasources/fragment_remote_data_source.dart';
 import 'package:urim/l10n/generated/app_text.dart';
 import 'package:urim/core/text/french_dates.dart';
 import 'package:urim/presentation/home/capture_view_model.dart';
@@ -29,21 +27,20 @@ import 'package:urim/presentation/transcription/widgets/pieces_list.dart';
 /// mensonge : **un objet du produit sur lequel aucun geste n'existe**.
 ///
 /// Cette coque le remplace par la vérité complète. Trois onglets, comme pour une
-/// préparation, et **deux d'entre eux sont fermés en disant pourquoi** (D13) —
-/// un onglet absent ne se distingue pas d'un oubli, un onglet fermé qui explique
-/// se distingue d'une panne.
+/// préparation — le premier dit l'état du culte, le deuxième est **fermé en
+/// disant pourquoi** (D13), et le troisième offre d'en tailler des pièces.
 ///
 /// ## Ce que le premier onglet montre, faute de transcript
 ///
 /// ⚠️ **Il n'est pas vide, et c'est le point.** Ce qu'on sait d'une capture est
-/// réel : sa durée, ses fragments, ce qui est monté, ce qui attend, et le jour
-/// où l'audio disparaît. Le pasteur y lit **l'état de son enregistrement**, ce
-/// qu'aucun écran ne lui donnait.
+/// réel : sa durée, ses fragments, le fait qu'elle ne quitte pas ce téléphone,
+/// et le jour où l'audio disparaît.
 ///
-/// 🔴 **Et il nomme le silence le plus coûteux du chantier** : une capture qui
-/// n'a pas d'assemblée ne partira jamais, et jusqu'ici rien ne le disait — le
-/// compteur montait, l'écran promettait un envoi, et personne ne pouvait
-/// deviner que le rattachement manquait.
+/// ⛔ **Il disait aussi ce qui était monté et ce qui attendait le réseau. Plus
+/// maintenant** (D71, 06/09) : la montée automatique a été coupée, faute de
+/// lecteur — le port `FragmentStore` n'a que `put` et `purge`. Ces trois
+/// phrases seraient devenues fausses, et une phrase fausse sur le sort d'un
+/// culte est pire qu'une phrase absente.
 class CaptureShell extends ConsumerWidget {
   const CaptureShell({super.key, required this.captureId});
 
@@ -118,7 +115,6 @@ class _EtatDeLaCapture extends ConsumerWidget {
     final text = AppText.of(context);
 
     final jours = capture.purgeAt.difference(ref.watch(clockProvider).now()).inDays;
-    final envoi = ref.watch(_etatEnvoiProvider(capture.id));
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(
@@ -140,14 +136,14 @@ class _EtatDeLaCapture extends ConsumerWidget {
         _Ligne(icone: Icons.schedule, texte: text.captureDuration(formatElapsed(capture.duration))),
         _Ligne(icone: Icons.graphic_eq, texte: text.captureFragments(capture.fragments)),
 
-        // ⚠️ **L'état d'envoi est le seul qui puisse inquiéter, donc le seul qui
-        // doit être exact.** Trois cas, trois phrases : tout est parti, il reste
-        // à partir, ou **rien ne partira** faute d'assemblée.
-        switch (envoi) {
-          AsyncData(:final value) => _Envoi(etat: value),
-          _ => const SizedBox.shrink(),
-        },
-
+        // ⛔ **Il n'y a plus d'état d'envoi** (D71, 06/09). Cette ligne disait
+        // « tout est arrivé au serveur », « 3 fragments attendent de partir »,
+        // ou « rien ne partira faute d'assemblée ». Les trois sont devenues
+        // fausses le jour où la montée automatique a été coupée — et une phrase
+        // fausse sur le sort d'un culte est pire qu'une phrase absente.
+        //
+        // Rien ne la remplace ici : l'encadré plus bas dit déjà la seule chose
+        // vraie — l'audio est sur ce téléphone, et nulle part ailleurs.
         if (capture.interrupted)
           _Ligne(
             icone: Icons.warning_amber_outlined,
@@ -551,54 +547,6 @@ class _Transcription extends ConsumerWidget {
 }
 
 
-/// Ce que la file dit de cette capture, ou nul si elle n'y est plus.
-final _etatEnvoiProvider =
-    FutureProvider.family<OutboxStatus?, String>((ref, captureId) async {
-  final attente = await ref.watch(fragmentOutboxProvider).pending();
-
-  return attente
-      .where((etat) => etat.captureId == captureId)
-      .cast<OutboxStatus?>()
-      .firstOrNull;
-});
-
-class _Envoi extends StatelessWidget {
-  const _Envoi({required this.etat});
-
-  /// Nul quand la file ne connaît plus cette capture : tout est parti.
-  final OutboxStatus? etat;
-
-  @override
-  Widget build(BuildContext context) {
-    final text = AppText.of(context);
-    final colors = context.colors;
-
-    if (etat == null) {
-      return _Ligne(
-        icone: Icons.cloud_done_outlined,
-        texte: text.captureUploadAllSent,
-        couleur: colors.success,
-      );
-    }
-
-    // 🔴 **Sans assemblée, ce n'est pas « en attente », c'est « ça ne partira
-    // pas ».** Confondre les deux laissait le pasteur devant un compteur qui ne
-    // descendait jamais, sans rien à faire pour y remédier.
-    if (etat!.churchId == null) {
-      return _Ligne(
-        icone: Icons.help_outline,
-        texte: text.captureUploadNoChurch,
-        couleur: Theme.of(context).colorScheme.error,
-      );
-    }
-
-    return _Ligne(
-      icone: Icons.cloud_upload_outlined,
-      texte: text.captureUploadPending(etat!.pending),
-      couleur: colors.textSecondary,
-    );
-  }
-}
 
 class _Ligne extends StatelessWidget {
   const _Ligne({required this.icone, required this.texte, this.couleur});
