@@ -3170,6 +3170,18 @@ abstract class AppText {
   /// In fr, this message translates to:
   /// **'L\'audio part avec elle, et ne se retrouvera pas. Si le culte a passé sept jours, il n\'y a plus de quoi la retailler.'**
   String get piecesDeleteBody;
+
+  /// L'onglet éteint dit quoi et pourquoi (D13). Ce n'est pas une panne : la synthèse née de la préparation a été retirée le 06/09 (D72), et celle qui la remplace naît du transcript d'une pièce.
+  ///
+  /// In fr, this message translates to:
+  /// **'La synthèse ne se fabrique plus depuis votre plan. Un résumé du plan résume ce que vous comptiez dire, pas ce que vous avez dit — et lu à une assemblée, il présenterait un projet comme une parole prononcée.\n\nElle reviendra, tirée du texte de ce que vous avez réellement prêché.'**
+  String get synthesisFromPlanGone;
+
+  /// La sortie pendait à la synthèse du plan ; elle pend maintenant à celle de la pièce, qui n'existe pas encore.
+  ///
+  /// In fr, this message translates to:
+  /// **'La lecture à voix haute et l\'interprétation partent d\'une synthèse. Elles attendent celle qui naîtra de ce que vous avez prêché.'**
+  String get outputWaitsSynthesis;
 }
 
 class _AppTextDelegate extends LocalizationsDelegate<AppText> {

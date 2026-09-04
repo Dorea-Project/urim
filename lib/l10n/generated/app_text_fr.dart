@@ -1938,4 +1938,12 @@ class AppTextFr extends AppText {
   @override
   String get piecesDeleteBody =>
       'L\'audio part avec elle, et ne se retrouvera pas. Si le culte a passé sept jours, il n\'y a plus de quoi la retailler.';
+
+  @override
+  String get synthesisFromPlanGone =>
+      'La synthèse ne se fabrique plus depuis votre plan. Un résumé du plan résume ce que vous comptiez dire, pas ce que vous avez dit — et lu à une assemblée, il présenterait un projet comme une parole prononcée.\n\nElle reviendra, tirée du texte de ce que vous avez réellement prêché.';
+
+  @override
+  String get outputWaitsSynthesis =>
+      'La lecture à voix haute et l\'interprétation partent d\'une synthèse. Elles attendent celle qui naîtra de ce que vous avez prêché.';
 }
