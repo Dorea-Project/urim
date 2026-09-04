@@ -71,6 +71,39 @@ téléphone** sans un geste du pasteur.
 
 ---
 
+## 1bis. Éteindre la synthèse fabriquée depuis le plan — **la seconde soustraction**
+
+D72 renverse D59 : la préparation ne porte ni transcription ni synthèse.
+
+**Ce qui s'éteint** — `GET /studies/{id}/synthese`, `POST
+/studies/{id}/synthese/validation`, `synthese_service.py` et son dépôt. Avec eux
+tombe la raison d'être de D66 : la table reste, sa clé change — elle pendra d'une
+**pièce**, plus d'une étude.
+
+**Ce qui change d'attache sans être détruit** — la validation par signature,
+`aloud_reader`, `voice_track_*`. Les outils restent entiers. Et **les écrans ne
+bougent pas** : `synthesis_page.dart`, `capture_shell.dart`,
+`aloud_view_model.dart` et `voice_track_view_model.dart` vivent déjà sous
+`presentation/transcription/`.
+
+🔴 **Le prix, écrit ici pour qu'il ne surprenne personne.** La synthèse qui
+remplace celle-ci naît du transcript, et le transcript attend les quinze avis
+dans trois églises. **La synthèse, sa signature, sa lecture à voix haute et la
+piste de voix sont donc éteintes pour des mois, pas pour des jours.** La branche
+① ne va plus « de la première phrase à une voix que l'assemblée entend » : elle
+rend la conversation, le plan, la fiche de chaire et les diapositives.
+
+⚠️ **Et cette étape met D22 de côté délibérément** — *on ne démolit pas avant
+d'avoir remplacé*. C'est la seule du plan qui le fasse, le fondateur l'a tranché
+en connaissant le prix, et la raison est écrite dans D72 : un résumé d'intention
+qui passe pour un résumé de sermon est la même erreur qu'une invention de modèle
+— *rien plutôt qu'une vraisemblance*.
+
+**Sortie mesurable :** plus aucune route ne fabrique de synthèse à partir d'une
+étude.
+
+---
+
 ## 2. Se déplacer dans la réécoute — **petit, et le plus bloquant**
 
 `capture_playback` sait rejouer et ne sait rien d'autre : ni chercher, ni mettre

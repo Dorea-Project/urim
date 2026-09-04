@@ -85,20 +85,49 @@ elle n'avait pas besoin.*
 Relevé sur l'arbre et **éprouvé sur un téléphone réel** ce jour-là, pas déduit
 des documents.
 
-### Branche ① — préparer, puis faire entendre
+### Branche ① — préparer
 
 | Étape | État |
 |---|---|
 | La conversation qui pose les questions et oriente | ✅ livré |
 | L'écran où le pasteur écrit son plan | ✅ `plan_page.dart` |
-| La synthèse, fabriquée depuis la préparation | ✅ route serveur + dépôt client |
-| La validation — **une signature, pas un réglage** | ✅ tenue par une contrainte de base |
-| La lecture à voix haute, français et anglais | ✅ sur l'appareil, rien ne sort |
-| L'enregistrement de la voix du pasteur | ✅ enregistrer, réécouter, refaire |
+| La fiche de chaire et les diapositives | ✅ livrées |
+| ~~La synthèse, fabriquée depuis la préparation~~ | ⛔ **s'éteint** (D72) — passe en ② |
+| ~~La validation, la lecture à voix haute, la piste de voix~~ | ⛔ **passent en ②** — elles pendent d'une synthèse |
 
-🔴 **La branche ① est complète.** Un pasteur peut aller de sa première phrase à
+🔴 **Retitrée le 04/09 par D72 : la préparation ne porte ni transcription ni
+synthèse.** Prêcher tient les deux. Une synthèse bâtie sur le plan résume **une
+intention** — publiée, lue à une assemblée ou interprétée en malinké, elle
+présenterait un projet comme si c'était la parole prononcée. *Rien plutôt qu'une
+vraisemblance.*
+
+⚠️ **Les outils ne sont pas détruits, ils changent d'attache.** La signature,
+`aloud_reader` et `voice_track_*` restent entiers ; ils liront la synthèse d'une
+**pièce**. Et les écrans n'ont pas à bouger — `synthesis_page.dart`,
+`capture_shell.dart`, `aloud_view_model.dart` vivent déjà sous
+`presentation/transcription/`. Ce qui était mal placé n'était pas l'écran,
+c'était la source.
+
+🔴 ~~**La branche ① est complète.** Un pasteur peut aller de sa première phrase à
 une piste audio dans la langue de son assemblée, sans interprète et sans que
-personne d'autre ne bouge.
+personne d'autre ne bouge.~~
+
+⛔ **Cette phrase était vraie du 29/08 au 04/09. Elle ne l'est plus, et il faut
+le regarder en face.** D72 éteint la synthèse fabriquée depuis le plan ; celle
+qui la remplace naît du transcript d'une pièce, et le transcript attend les
+quinze avis dans trois églises. **Donc la synthèse, sa signature, sa lecture à
+voix haute et la piste de voix attendent aussi — des mois, pas des jours.**
+
+Ce que la branche ① rend encore, entier et livré : la conversation qui oriente,
+le plan écrit, la fiche de chaire, les diapositives. Ce n'est pas rien, et c'est
+ce qu'elle est censée faire. **Ce n'est plus « de la première phrase à une voix
+que l'assemblée entend ».**
+
+⚠️ **Et ceci met D22 de côté délibérément** — *on ne démolit pas avant d'avoir
+remplacé*. La règle tient partout ailleurs ; ici le remplacement est verrouillé
+pour des mois, et garder l'ancien pendant ce temps laisserait un résumé
+d'intention passer pour un résumé de sermon aussi longtemps que dure la mesure.
+**Le fondateur a tranché en connaissant ce prix.**
 
 ### Branche ② — enregistrer, éditer, publier
 
