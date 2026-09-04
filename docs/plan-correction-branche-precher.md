@@ -51,20 +51,36 @@ capture.
 
 ## 1. Couper la montée automatique du brut — **une soustraction**
 
-D71 dit que rien ne transcrit la matière brute. Or les fragments montent
-aujourd'hui **automatiquement**, pendant le culte. 🔴 **Il ne reste donc aucune
-raison de les envoyer** — et ils partent vers un dossier serveur nommé
-`media_uploads`, commenté *« dev »*, alors que D65 exige un stockage objet qui
-n'est pas construit.
+⚠️ **Trois corrections au 06/09, relevées dans le code plutôt que dans les
+notes.** La première version de cette étape en portait autant d'erreurs.
 
-⚠️ **À vérifier avant de couper, et c'est le seul risque de cette étape :** est-ce
-que quelque chose se sert des fragments montés ? Le pilote, la mesure des trois
-églises, un écran d'administration. Si oui, le nommer et le rattacher à la pièce
-plutôt que de le supprimer.
+**Les fragments ne montent pas pendant le culte.** Rien ne sort tant qu'il
+prêche. L'envoi part **à l'arrêt du micro** — le pasteur a encore le téléphone en
+main, c'est le meilleur moment — puis retente à chaque ouverture de
+l'application et à chaque retour au premier plan. Conséquence : **couper la
+montée ne change rien au test de 1 h 30**, contrairement à ce que cette étape
+affirmait. Ce n'est donc pas une urgence, et l'ordre 1-puis-0 n'a pas lieu
+d'être.
 
-**Le geste :** l'envoi automatique s'arrête ; `fragment_outbox` reste, sa file et
-son rejeu servent la pièce quand elle existera. `attacherEglise()` et
-`sansEglise()` ne bougent pas.
+**Le stockage objet de D65 est construit** : `S3FragmentStore` existe, avec sa
+bascule sur `s3_endpoint_url` et le même interrupteur que les médias. La note de
+D65 dit encore le contraire — elle date d'avant.
+
+**Et l'audio ne va pas dans `media_uploads`** mais dans `capture_audio_dir`, un
+réglage dédié.
+
+✅ **Le risque de cette étape est levé, et par le code.** Le port `FragmentStore`
+n'a que `put` et `purge` : **aucune lecture, nulle part**. Rien ne consomme les
+fragments montés — ni transcription, ni mesure, ni écran. Ils partent, ils
+dorment sept jours, ils sont effacés.
+
+🔴 **Ce qui reste, et qui suffit :** l'application transporte 173 Mo d'une vraie
+salle d'église — **avec les voix qui s'y trouvaient** — vers un serveur qui ne
+les ouvrira jamais. D71 a retiré la dernière raison de le faire.
+
+**Le geste :** l'envoi automatique s'arrête ; `FragmentOutbox` reste, sa file et
+son rejeu serviront la pièce. `attacherEglise()` et `sansEglise()` ne bougent
+pas.
 
 **Sortie mesurable :** un culte se capte de bout en bout et **rien ne quitte le
 téléphone** sans un geste du pasteur.
@@ -293,9 +309,10 @@ depuis D68, mais il bloque toujours la mesure — dont le seuil compte trois
 églises *distinctes*. Celui du pilote a été fabriqué à la main par un script qui
 dit lui-même qu'il tient une place vacante.
 
-**Le stockage objet** (D65) n'est pas construit ; l'audio du pilote est sur le
-disque du serveur, dans `media_uploads`. L'étape 1 réduit l'urgence sans la
-supprimer — les pièces publiées devront bien vivre quelque part.
+~~**Le stockage objet** (D65) n'est pas construit~~ — **faux, corrigé le 06/09** :
+`S3FragmentStore` existe et bascule sur `s3_endpoint_url`. Ce qui reste ouvert
+est plus étroit : **une pièce publiée devra vivre quelque part**, et ce n'est ni
+`capture_audio_dir` — que la purge visite — ni le téléphone.
 
 **Le délai de l'équipe d'interprétation**, qui décide si le parcours du samedi
 tient.
